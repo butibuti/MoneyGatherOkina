@@ -1,0 +1,25 @@
+cd Libs\Library\
+cd ButiBulletWrap\
+git pull
+cd ..\
+cd ButiScript\
+git pull
+cd ..\
+cd ButiMemorySystem\
+git pull
+cd ..\
+cd ButiUtil\
+git pull
+cd ..\
+cd ButiMath\
+git pull
+cd ..\
+cd ButiEventSystem\
+git pull
+cd ..\
+cd ButiFont\
+git pull
+cd ..\
+cd ButiRendering_Dx12\
+git pull
+

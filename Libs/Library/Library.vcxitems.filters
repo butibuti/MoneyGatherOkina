@@ -1,0 +1,645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="header">
+      <UniqueIdentifier>{6c63d5fb-ecb1-4bad-9506-5dc5c48e8e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{ed0f2fad-dc77-4b5c-a80f-0611d8f4089d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\Common">
+      <UniqueIdentifier>{65a90c64-97af-47cc-a7ff-a8bcb1d4eb7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\Device">
+      <UniqueIdentifier>{f60ec1b6-00d5-45df-8a63-444cf24465db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\GameObjects">
+      <UniqueIdentifier>{bf669686-1219-4315-bb0c-1c662c156b4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\GameParts">
+      <UniqueIdentifier>{a0459156-a78e-47af-a8a6-da32d7db1534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\Resources">
+      <UniqueIdentifier>{ff44a1b0-19d7-4161-aee7-bc39a64da886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Common">
+      <UniqueIdentifier>{0c1dc34c-bce2-4ea9-a29a-85dbfc09ef29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Device">
+      <UniqueIdentifier>{f95176c6-b828-45f3-a2bd-d2cc6a321055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\GameObjects">
+      <UniqueIdentifier>{abfeae90-c632-4d6e-86ed-57d1ad9c712a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\GameParts">
+      <UniqueIdentifier>{b07560f3-e143-4f0e-8d95-7f99cb58fdc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Resources">
+      <UniqueIdentifier>{6b7fc712-fb71-45d5-9a1e-7f151461d4b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\Scene">
+      <UniqueIdentifier>{ff87b168-4451-4fee-b25f-0c3752f281f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Scene">
+      <UniqueIdentifier>{f94c0282-e83b-4eaa-9f92-9930ed773455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\GameObjects\DefaultGameComponent">
+      <UniqueIdentifier>{0879c673-380d-43ae-b7c5-9d15bd15458a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\GameObjects\DefaultGameComponent">
+      <UniqueIdentifier>{18686c9d-d729-4b86-b142-2731ce22587d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\Resources\DrawData">
+      <UniqueIdentifier>{98de619c-0d85-4113-bd02-78e58930d348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Resources\DrawData">
+      <UniqueIdentifier>{f106ff55-6ee9-4de9-af04-35d4e39c044f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{a14c97c3-4154-4899-8c58-72410311a18e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\Camera.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\CBuffer.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\Transform.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\Timer.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\GameComponent.h">
+      <Filter>header\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\GameObject.h">
+      <Filter>header\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\Application.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\GameObjectManager.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\GameTime.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\GraphicDevice.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\Renderer.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Mesh.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Shader.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Texture.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\ShaderVariable.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\GameObjectTagManager.h">
+      <Filter>header\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\AbsoluteTimer.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\GameDevice.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\Input.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\Keys.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\MouseButtons.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\PadButtons.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Scene\Scene.h">
+      <Filter>header\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Scene\SceneInformation.h">
+      <Filter>header\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Scene\SceneManager.h">
+      <Filter>header\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Sound.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\WaveDatas.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\SoundManager.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\CBuffer_Dx12.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\GraphicDevice_Dx12.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\ResourceContainer.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Mesh_Dx12.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Shader_Dx12.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Sound.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Sound_XAudio2.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Texture_Dx12.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\Camera_Dx12.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\DescriptorHeapManager.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Material.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\Window.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\DrawData\DrawData_Dx12.h">
+      <Filter>header\Resources\DrawData</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\DrawData\IDrawData.h">
+      <Filter>header\Resources\DrawData</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\DrawData\ModelDrawData_Dx12.h">
+      <Filter>header\Resources\DrawData</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Bone.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\ModelAnimation.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Morph.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Material_Dx12.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Model.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\ApplicationBeffor.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\ResourceFactory_Dx12.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\FBXNodeStructure.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\ModelFileConverter.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\ResourceFileCreater.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\CArrayBuffer.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\CArrayBuffer_Dx12.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\ResourceFactory.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\PipelineStateManager.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\CollisionPrimitive.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\Geometry.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\CollisionLayer.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\CollisionManager.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Motion.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\IResources.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\Container.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameParts\GamePartsInterface.h">
+      <Filter>header\GameParts</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Scene\ComponentsLoader.h">
+      <Filter>header\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_RealTimeMesh.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_RealTimeMesh_Dx12.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\GUI.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\CerealUtill.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\MeshDrawComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ModelDrawComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\Particle_3D.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\Particle_Standard.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Texture_Dx12_RenderTarget.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\MeshDrawComponent_Static.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\DefaultGameComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Texture_Dx12_DepthStencil.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\DrawData\IDrawObject.h">
+      <Filter>header\Resources\DrawData</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\ApplicationCreater.h">
+      <Filter>header\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ShadowComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\SimpleBoneAnimator.Component.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\SpliteAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\TeamProject\CatchTheMoney\Libs\Library\Header\DirectXMathUse.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\RotationAnimationComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ScaleAnimationComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\PositionAnimationComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\OutlineDrawComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\RenderingPath.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Script.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\ImageFileIO.h">
+      <Filter>header\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_Font.h">
+      <Filter>header\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\SpriteAnimationComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ButiScriptBehavior.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ButiMath\ButiMath.h">
+      <Filter>header\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\RigidBodyComponent.h">
+      <Filter>header\GameObjects\DefaultGameComponent</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\Camera.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\Transform.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\Window.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\GameComponent.cpp">
+      <Filter>source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\GameObject.cpp">
+      <Filter>source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\Application.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\GameObjectManager.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\GameTime.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\GraphicDevice.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Mesh.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Shader.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Texture.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\Renderer.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\GameDevice.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\Input.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\MeshDrawComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\GameObjectTagManager.cpp">
+      <Filter>source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Scene\Scene.cpp">
+      <Filter>source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Scene\SceneInformation.cpp">
+      <Filter>source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Scene\SceneManager.cpp">
+      <Filter>source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Sound.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\WaveDatas.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\SoundManager.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\GraphicDevice_Dx12.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\ResourceContainer.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Mesh_Dx12.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Shader_Dx12.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Sound.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Sound_XAudio2.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Texture_Dx12.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\Camera_Dx12.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\DescriptorHeapManager.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\ResourceFactory_Dx12.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Material.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\DrawData\DrawData_Dx12.cpp">
+      <Filter>source\Resources\DrawData</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\DrawData\IDrawData.cpp">
+      <Filter>source\Resources\DrawData</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\DrawData\ModelDrawData_Dx12.cpp">
+      <Filter>source\Resources\DrawData</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Bone.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\ModelAnimation.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Morph.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Material_Dx12.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Model.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ModelDrawComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\FBXNodeStructure.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\ModelFileConverter.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\ResourceFileCreater.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\ResourceFactory.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\PipelineStateManager.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\CollisionPrimitive.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\Geometry.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ColliderComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\CollisionLayer.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\CollisionManager.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SimpleBoneAnimanotorComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Motion.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)imGUI\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)imGUI\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)imGUI\imgui_impl_dx12.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)imGUI\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)imGUI\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\ButiMath.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ChaseComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\LookAtComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SucideComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\CBuffer.cpp">
+      <Filter>source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\CameraMan.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Scene\ComponentsLoader.cpp">
+      <Filter>source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\Particle_3D.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\Particle_Standard.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SplineCurveMover.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\TransformAnimation.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_RealTimeMesh_Dx12.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Header\Resources\Resource_RealTimeMesh.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ImmediateParticleController.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\GUI.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Header\Resources\ShaderVariable.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameParts\ApplicationCreater.cpp">
+      <Filter>source\GameParts</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Texture_Dx12_RenderTarget.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\CubeTransformAnimation.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\PostEffectParamUpdater.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\MeshDrawComponent_Static.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\IKComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\UIComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\UIAnimation.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\FPSViewBehavior.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Texture_Dx12_DepthStencil.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ShadowComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SpriteAnimationComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\RotationAnimationComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ScaleAnimationComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\PositionAnimationComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\OutlineDrawComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\RenderingPath.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ButiScriptBehavior.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Script.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\Timer.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Device\ImageFileIO.cpp">
+      <Filter>source\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Font.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\TextDrawComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\RigidBodyComponent.cpp">
+      <Filter>source\GameObjects\DefaultGameComponent</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

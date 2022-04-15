@@ -1,0 +1,558 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_Editor|Win32">
+      <Configuration>Debug_Editor</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_Editor|x64">
+      <Configuration>Debug_Editor</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_imguiEditor|Win32">
+      <Configuration>Debug_imguiEditor</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_imguiEditor|x64">
+      <Configuration>Debug_imguiEditor</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Editor|Win32">
+      <Configuration>Release_Editor</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Editor|x64">
+      <Configuration>Release_Editor</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_imguiEditor|Win32">
+      <Configuration>Release_imguiEditor</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_imguiEditor|x64">
+      <Configuration>Release_imguiEditor</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{ee1db934-8a58-4a17-af89-8bcedcbd827a}</ProjectGuid>
+    <RootNamespace>ButiEngineUser</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ButiEngine\ButiEngine.props" />
+    <Import Project="..\ButiEngine\Editor.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+    <LibraryPath>$(GRPC_LIB)\Debug;$(GRPC_BUILT_THIRDPARTY)\zlib\Debug;$(GRPC_BUILT_THIRDPARTY)\protobuf\Debug;$(GRPC_BUILT_THIRDPARTY)\boringssl-with-bazel\Debug;$(GRPC_BUILT_THIRDPARTY)\re2\Debug;$(GRPC_BUILT_THIRDPARTY)\cares\cares\lib\Debug;$(GRPC_BUILT_THIRDPARTY)\abseil-cpp\absl\lib\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(GRPC_LIB)\Release;$(GRPC_BUILT_THIRDPARTY)\zlib\Release;$(GRPC_BUILT_THIRDPARTY)\protobuf\Release;$(GRPC_BUILT_THIRDPARTY)\boringssl-with-bazel\Release;$(GRPC_BUILT_THIRDPARTY)\re2\Release;$(GRPC_BUILT_THIRDPARTY)\cares\cares\lib\Release;$(GRPC_BUILT_THIRDPARTY)\abseil-cpp\absl\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)output\UserSample\$(Configuration)\</OutDir>
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ZDll.lib;ButiFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ZDll.lib;ButiFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ZDll.lib;ButiFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ZDll.lib;ButiFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ZDll.lib;ButiFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ZDll.lib;ButiFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_BUTIENGINEBUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\Library;$(SolutionDir)Libs\Library\cereal\include;$(SolutionDir)..\imgui;$(ProjectDir);$(SolutionDir)ButiEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx_u.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx_u.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Debug\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Debug\ZDll.lib;$(SolutionDir)\Libs\dll\Debug\ButiFont.lib;$(SolutionDir)\Libs\dll\Debug\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Debug\ButiBulletWrap.lib;$(SolutionDir)\Libs\lib\Debug\ButiUtil.lib;$(SolutionDir)\Libs\lib\Debug\ButiEngine.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_EDITORBUILD;_BUTIENGINEBUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\Library;$(SolutionDir)Libs\Library\cereal\include;$(SolutionDir)..\imgui;$(ABSEIL_INCLUDE);$(GRPC_INCLUDE);$(PROTBUF_INCLUDE);$(ProjectDir);$(SolutionDir)ButiEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx_u.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx_u.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Debug\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>address_sorting.lib;gpr.lib;grpc.lib;grpc_csharp_ext.lib;grpc_plugin_support.lib;grpc_unsecure.lib;grpc++.lib;grpc++_unsecure.lib;grpc++_reflection.lib;upb.lib;crypto.lib;ssl.lib;cares.lib;libprotobufd.lib;libprotobuf-lited.lib;libprotocd.lib;re2.lib;absl_graphcycles_internal.lib;absl_synchronization.lib;absl_base.lib;absl_bad_any_cast_impl.lib;absl_bad_optional_access.lib;absl_bad_variant_access.lib;absl_city.lib;absl_civil_time.lib;absl_cord.lib;absl_spinlock_wait.lib;absl_debugging_internal.lib;absl_demangle_internal.lib;absl_examine_stack.lib;absl_exponential_biased.lib;absl_failure_signal_handler.lib;absl_flags.lib;absl_flags_commandlineflag.lib;absl_flags_commandlineflag_internal.lib;absl_flags_config.lib;absl_flags_internal.lib;absl_flags_marshalling.lib;absl_flags_parse.lib;absl_flags_private_handle_accessor.lib;absl_flags_program_name.lib;absl_flags_reflection.lib;absl_flags_usage.lib;absl_flags_usage_internal.lib;absl_hash.lib;absl_hashtablez_sampler.lib;absl_int128.lib;absl_leak_check.lib;absl_leak_check_disable.lib;absl_log_severity.lib;absl_malloc_internal.lib;absl_periodic_sampler.lib;absl_random_distributions.lib;absl_random_internal_distribution_test_util.lib;absl_random_internal_platform.lib;absl_random_internal_pool_urbg.lib;absl_random_internal_randen.lib;absl_random_internal_randen_hwaes.lib;absl_random_internal_randen_hwaes_impl.lib;absl_random_internal_randen_slow.lib;absl_random_internal_seed_material.lib;absl_random_seed_gen_exception.lib;absl_random_seed_sequences.lib;absl_raw_hash_set.lib;absl_raw_logging_internal.lib;absl_scoped_set_env.lib;absl_stacktrace.lib;absl_status.lib;absl_statusor.lib;absl_str_format_internal.lib;absl_strerror.lib;absl_strings.lib;absl_strings_internal.lib;absl_symbolize.lib;absl_throw_delegate.lib;absl_time.lib;absl_time_zone.lib;absl_wyhash.lib;$(SolutionDir)\Libs\dll\Debug\ZDll.lib;$(SolutionDir)\Libs\dll\Debug\ButiFont.lib;$(SolutionDir)\Libs\dll\Debug\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Debug\ButiBulletWrap.lib</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd .\ProtBuf
+.\ProtToCpp.bat
+cd ..\</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_EDITORBUILD;_IMGUIEDITOR;_BUTIENGINEBUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\Library;$(SolutionDir)Libs\Library\cereal\include;$(SolutionDir)..\imgui;$(ABSEIL_INCLUDE);$(GRPC_INCLUDE);$(PROTBUF_INCLUDE);$(ProjectDir);$(SolutionDir)ButiEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx_u.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx_u.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Debug\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Debug\ZDll.lib;$(SolutionDir)\Libs\dll\Debug\ButiFont.lib;$(SolutionDir)\Libs\lib\Debug\ButiUtil.lib;$(SolutionDir)\Libs\dll\Debug\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Debug\ButiBulletWrap.lib;$(SolutionDir)\Libs\lib\Debug_imguiEditor\ButiEngine.lib</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd .\ProtBuf
+.\ProtToCpp.bat
+cd ..\</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_BUTIENGINEBUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx_u.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\Library;$(SolutionDir)Libs\Library\cereal\include;$(SolutionDir)..\imgui;$(ProjectDir);$(SolutionDir)ButiEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx_u.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Release\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Release\ZDll.lib;$(SolutionDir)\Libs\dll\Release\ButiFont.lib;$(SolutionDir)\Libs\dll\Release\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Release\ButiBulletWrap.lib;$(SolutionDir)\Libs\lib\Release\ButiUtil.lib;$(SolutionDir)\Libs\lib\Release\ButiEngine.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_EDITORBUILD;_BUTIENGINEBUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx_u.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\Library;$(SolutionDir)Libs\Library\cereal\include;$(SolutionDir)..\imgui;$(ProjectDir);$(SolutionDir)ButiEngine;$(ABSEIL_INCLUDE);$(GRPC_INCLUDE);$(PROTBUF_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx_u.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Release\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>address_sorting.lib;gpr.lib;grpc.lib;grpc_csharp_ext.lib;grpc_plugin_support.lib;grpc_unsecure.lib;grpc++.lib;grpc++_unsecure.lib;grpc++_reflection.lib;upb.lib;crypto.lib;ssl.lib;cares.lib;libprotobuf.lib;libprotobuf-lite.lib;libprotoc.lib;re2.lib;absl_graphcycles_internal.lib;absl_synchronization.lib;absl_base.lib;absl_bad_any_cast_impl.lib;absl_bad_optional_access.lib;absl_bad_variant_access.lib;absl_city.lib;absl_civil_time.lib;absl_cord.lib;absl_spinlock_wait.lib;absl_debugging_internal.lib;absl_demangle_internal.lib;absl_examine_stack.lib;absl_exponential_biased.lib;absl_failure_signal_handler.lib;absl_flags.lib;absl_flags_commandlineflag.lib;absl_flags_commandlineflag_internal.lib;absl_flags_config.lib;absl_flags_internal.lib;absl_flags_marshalling.lib;absl_flags_parse.lib;absl_flags_private_handle_accessor.lib;absl_flags_program_name.lib;absl_flags_reflection.lib;absl_flags_usage.lib;absl_flags_usage_internal.lib;absl_hash.lib;absl_hashtablez_sampler.lib;absl_int128.lib;absl_leak_check.lib;absl_leak_check_disable.lib;absl_log_severity.lib;absl_malloc_internal.lib;absl_periodic_sampler.lib;absl_random_distributions.lib;absl_random_internal_distribution_test_util.lib;absl_random_internal_platform.lib;absl_random_internal_pool_urbg.lib;absl_random_internal_randen.lib;absl_random_internal_randen_hwaes.lib;absl_random_internal_randen_hwaes_impl.lib;absl_random_internal_randen_slow.lib;absl_random_internal_seed_material.lib;absl_random_seed_gen_exception.lib;absl_random_seed_sequences.lib;absl_raw_hash_set.lib;absl_raw_logging_internal.lib;absl_scoped_set_env.lib;absl_stacktrace.lib;absl_status.lib;absl_statusor.lib;absl_str_format_internal.lib;absl_strerror.lib;absl_strings.lib;absl_strings_internal.lib;absl_symbolize.lib;absl_throw_delegate.lib;absl_time.lib;absl_time_zone.lib;absl_wyhash.lib;$(SolutionDir)\Libs\dll\Release\ZDll.lib;$(SolutionDir)\Libs\dll\Release\ButiFont.lib;$(SolutionDir)\Libs\dll\Release\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Release\ButiBulletWrap.lib</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd .\ProtBuf
+.\ProtToCpp.bat
+cd ..\</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_EDITORBUILD;_IMGUIEDITOR;_BUTIENGINEBUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx_u.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\Library;$(SolutionDir)Libs\Library\cereal\include;$(SolutionDir)..\imgui;$(ProjectDir);$(SolutionDir)ButiEngine;$(ABSEIL_INCLUDE);$(GRPC_INCLUDE);$(PROTBUF_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>stdafx_u.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Release\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Release\ZDll.lib;$(SolutionDir)\Libs\dll\Release\ButiFont.lib;$(SolutionDir)\Libs\dll\Release\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Release\ButiBulletWrap.lib;$(SolutionDir)\Libs\lib\Release\ButiUtil.lib;$(SolutionDir)\Libs\lib\Release_imguiEditor\ButiEngine.lib</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd .\ProtBuf
+.\ProtToCpp.bat
+cd ..\</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="DefaultGameComponent.cpp" />
+    <ClCompile Include="FluidSimulation.cpp" />
+    <ClCompile Include="HitChecker.cpp" />
+    <ClCompile Include="LogoSceneManager.cpp" />
+    <ClCompile Include="main.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="ShaderChecker.cpp" />
+    <ClCompile Include="SquareParticleEmitter.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_imguiEditor|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TestBehavior.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FluidSimulation.h" />
+    <ClInclude Include="HitChecker.h" />
+    <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="ShaderChecker.h" />
+    <ClInclude Include="SquareParticleEmitter.h" />
+    <ClInclude Include="stdafx_u.h" />
+    <ClInclude Include="TestBehavior.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
+    <None Include="ProtBuf\EngineEditorCommunicate.proto" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
