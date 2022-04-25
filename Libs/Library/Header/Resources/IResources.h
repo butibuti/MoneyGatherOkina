@@ -12,7 +12,7 @@ namespace ButiRendering {
 class MeshPrimitiveBase;
 }
 namespace Vertex {
-enum class VertexType;
+enum class VertexType:std::uint8_t;
 }
 
 class IResource_Mesh;
@@ -126,8 +126,9 @@ public:
 	virtual void ToPNG(const std::string& arg_textureFilePath) {}
 	virtual void* GetResourcePtr() { return nullptr; }
 	virtual GUIWindowReaction ShowTextureWindow(const std::string& arg_windowName="",const std::int32_t winFrag=0) { return GUIWindowReaction(); }
-	virtual const std::string& GetTexturePath() = 0;
+	virtual const std::string& GetTexturePath() const= 0;
 	virtual const unsigned char* GetRawData()=0;
+	virtual const std::string& GetTagName()const = 0;
 #ifdef _EDITORBUILD
 	virtual void SetEditorViewed(const bool arg_isViewed) {}
 	virtual bool GetEditorViewed()const { return false; }
@@ -136,7 +137,7 @@ public:
 };
 class IResource_Material :public IObject {
 public:
-	virtual void Attach(const std::uint32_t slotOffset, Value_ptr<IRenderer> arg_shp_renderer) = 0;
+	virtual void Attach(const std::uint32_t arg_slotOffset, Value_ptr<IRenderer> arg_vlp_renderer) = 0;
 	virtual const std::string& GetMaterialName() = 0;
 	virtual const std::string& GetMaterialNameEng() = 0;
 	virtual const std::string& GetMaterialComment() = 0;
@@ -144,18 +145,17 @@ public:
 	virtual void SetMaterialNameEng(const std::string& arg_name) = 0;
 	virtual void SetComment(const std::string& arg_comment) = 0;
 	virtual MaterialValue& GetMaterialVariable()  = 0;
-	virtual Value_ptr<IResource_Texture> GetTexture(const std::int32_t index = 0) = 0;
-	virtual Value_ptr<IResource_Texture> GetSphereTexture() = 0;
-	virtual TextureTag GetSphereTextureTag() const= 0;
-	virtual TextureTag GetTextureTag(const std::int32_t index=0)const = 0;
+	virtual Value_weak_ptr<IResource_Texture> GetTexture(const std::int32_t arg_index = 0)const = 0;
+	virtual Value_weak_ptr<IResource_Texture> GetSphereTexture()const = 0;
 	virtual void Update() = 0;
 	virtual std::uint32_t GetTextureCount()const =0;
-	virtual bool OnShowUI()=0;
 	virtual void SetMaterialIndex(const std::int32_t arg_index) = 0;
-	virtual void SetTextureTag(const std::uint32_t index,TextureTag arg_tag)=0;
+	virtual void SetTexture(const std::uint32_t arg_index, Value_weak_ptr<IResource_Texture>  arg_vwp_texture) = 0;
+	virtual void SetSphereTexture(Value_weak_ptr<IResource_Texture>  arg_vwp_texture)=0;
 	virtual void SetMaterialVariable(const MaterialValue& arg_var)=0;
 	virtual MaterialValue_Deferred GetMaterialDeferredValue() = 0;
-	virtual std::vector< TextureTag > GetTextureTags() = 0;
+	virtual const List<Value_weak_ptr<IResource_Texture>>& GetTextures() = 0;
+	virtual const std::string& GetTagName()const = 0;
 };
 class IResource_Mesh :public IObject {
 public:
@@ -166,33 +166,34 @@ public:
 	virtual std::uint32_t GetIndexCount() = 0;
 	virtual bool GetPosRayCast(Vector3* arg_p_pos, Vector3* arg_p_normal, const Line& arg_line)=0;
 	virtual const ButiRendering::MeshPrimitiveBase* GetBackUpdata(std::uint32_t arg_vertexType)const = 0;
+	virtual const std::string& GetTagName()const = 0;
 };
 class IResource_Model :public IObject {
 public:
-	virtual void SetMeshTag(const MeshTag& arg_meshTag) = 0;
-	virtual void SetMaterialVec(const std::vector<MaterialTag>& arg_materialTags) = 0;
-	virtual void SetName(const std::wstring& arg_name) = 0;
-	virtual void SetEngName(const std::wstring& arg_engName) = 0;
-	virtual void SetModelName(const std::wstring& arg_modelName) = 0;
-	virtual void SetEngModelName(const std::wstring& arg_engModelName) = 0;
-	virtual void SetComment(const std::wstring& arg_comment) = 0;
-	virtual void SetEngComment(const std::wstring& arg_engComment) = 0;
+	virtual void SetMesh(const Value_weak_ptr< IResource_Mesh>& arg_vwp_mesh) = 0;
+	virtual void SetMaterial(const List<Value_weak_ptr< IResource_Material>>& arg_list_vwp_material) = 0;
+	virtual void SetName(const std::string& arg_name) = 0;
+	virtual void SetEngName(const std::string& arg_engName) = 0;
+	virtual void SetModelName(const std::string& arg_modelName) = 0;
+	virtual void SetEngModelName(const std::string& arg_engModelName) = 0;
+	virtual void SetComment(const std::string& arg_comment) = 0;
+	virtual void SetEngComment(const std::string& arg_engComment) = 0;
 	virtual void AddBone(Bone& arg_bone) = 0;
 	virtual void AddMorph(Value_ptr<Morph::Morph> arg_morph) = 0;
-	virtual void AddMaterial(const MaterialTag& arg_materialTag) = 0;
 	virtual void SetVersion(const float arg_version) = 0;
 	virtual void SetSubset(const std::vector<std::uint32_t>& arg_subset) = 0;
-	virtual const MeshTag GetMeshTag() = 0;
-	virtual std::vector<MaterialTag>& GetMaterialTags() = 0;
 
 	virtual std::vector<std::uint32_t> GetSubset() = 0;
-	virtual const std::wstring& GetName() = 0;
-	virtual const std::wstring& GetEngName() = 0;
-	virtual const std::wstring& GetModelName() = 0;
-	virtual const std::wstring& GetEngModelName() = 0;
-	virtual const std::wstring& GetComment() = 0;
-	virtual const std::wstring& GetEngComment() = 0;
+	virtual const std::string& GetName() = 0;
+	virtual const std::string& GetEngName() = 0;
+	virtual const std::string& GetModelName() = 0;
+	virtual const std::string& GetEngModelName() = 0;
+	virtual const std::string& GetComment() = 0;
+	virtual const std::string& GetEngComment() = 0;
 	virtual std::vector<Value_ptr<Bone>> GetBone() = 0;
+	virtual Value_weak_ptr<IResource_Mesh> GetMesh()const = 0;
+	virtual const List<Value_weak_ptr<IResource_Material>>& GetMaterial()const = 0;
+	virtual List<Value_weak_ptr<IResource_Material>>& GetMaterial() = 0;
 };
 class IResource_Script :public IObject {
 public:

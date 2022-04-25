@@ -25,7 +25,7 @@ namespace ButiEngine {
 		std::vector< std::uint32_t> GetOutputPixelFormat()const override;
 	private:
 		Microsoft::WRL::ComPtr<ID3DBlob> pixelShaderBlob = nullptr;
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 		std::vector<std::int32_t> vec_formats;
 		std::string shaderName;
 		std::uint32_t outputPixelFormat;
@@ -45,7 +45,7 @@ namespace ButiEngine {
 	private:
 		Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderBlob = nullptr;
 		std::vector<D3D12_INPUT_ELEMENT_DESC> vec_inputElementDesc;
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 		std::string shaderName;
 		std::uint32_t inputVertexType=0;
 	};
@@ -60,7 +60,7 @@ namespace ButiEngine {
 		std::string GetName()const override;
 	private:
 		Microsoft::WRL::ComPtr<ID3DBlob> geometryShaderBlob = nullptr;
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 		std::string shaderName;
 	};
 }

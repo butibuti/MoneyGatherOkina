@@ -8,7 +8,7 @@ namespace ButiEngine {
 	class Resource_Texture_Dx12_RenderTarget :public Resource_Texture_Dx12,public IRenderTarget
 	{
 	public:
-		Resource_Texture_Dx12_RenderTarget(Value_ptr<ImageFileIO::TextureResourceData> arg_shp_imageData,const std::int32_t format, Value_ptr<GraphicDevice> arg_wkp_graphicDevice);
+		Resource_Texture_Dx12_RenderTarget(Value_ptr<ImageFileIO::TextureResourceData> arg_vlp_imageData,const std::int32_t format, Value_ptr<GraphicDevice> arg_vwp_graphicDevice);
 		void SetRenderTarget(Vector4& arg_clearColor)override;
 		void CreateTextureUploadHeap()override;
 		void Initialize()override;

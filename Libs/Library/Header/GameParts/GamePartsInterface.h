@@ -166,18 +166,18 @@ namespace ButiEngine
 		/// <summary>
 		/// 描画オブジェクトを登録
 		/// </summary>
-		/// <param name="arg_wkp_drawObject">描画オブジェクト</param>
+		/// <param name="arg_vwp_drawObject">描画オブジェクト</param>
 		/// <param name="arg_isAfterRendering">遅らせて描画するか(半透明オブジェクト等)</param>
 		/// <param name="arg_ret_pim">描画オブジェクトの形状</param>
 		/// <param name="arg_isShadow">影を生成するオブジェクトか</param>
-		virtual void Regist(Value_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_isAfterRendering, Value_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim = nullptr, const bool arg_isShadow = false) = 0;
+		virtual void Regist(Value_ptr< IDrawObject> arg_vwp_drawObject, const bool arg_isAfterRendering, Value_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim = nullptr, const bool arg_isShadow = false) = 0;
 		/// <summary>
 		/// 描画オブジェクトの登録解除
 		/// </summary>
-		/// <param name="arg_shp_drawObject">描画オブジェクト</param>
+		/// <param name="arg_vlp_drawObject">描画オブジェクト</param>
 		/// <param name="arg_isAfterRendering">描画を遅らせるか</param>
 		/// <param name="arg_isShadow">影を生成するオブジェクトか</param>
-		virtual void UnRegist(Value_ptr< IDrawObject> arg_shp_drawObject, const bool arg_isAfterRendering,  const bool arg_isShadow = false) = 0;
+		virtual void UnRegist(Value_ptr< IDrawObject> arg_vlp_drawObject, const bool arg_isAfterRendering,  const bool arg_isShadow = false) = 0;
 		/// <summary>
 		/// シャドウ撮影用カメラの登録
 		/// </summary>
@@ -290,19 +290,19 @@ namespace ButiEngine
 		/// <summary>
 		/// 描画オブジェクトの登録
 		/// </summary>
-		/// <param name="arg_shp_drawObject">描画オブジェクト</param>
+		/// <param name="arg_vlp_drawObject">描画オブジェクト</param>
 		/// <param name="arg_afterDraw">遅らせて描画するか(半透明オブジェクト等)</param>
 		/// <param name="arg_layerIndex">登録する描画レイヤーの番号</param>
 		/// <param name="isShadow">影を落とすか</param>
-		virtual void RegistDrawObject(Value_ptr< IDrawObject> arg_shp_drawObject, const bool arg_afterDraw, const std::uint32_t arg_layerIndex = 0, const bool isShadow = false) = 0;
+		virtual void RegistDrawObject(Value_ptr< IDrawObject> arg_vlp_drawObject, const bool arg_afterDraw, const std::uint32_t arg_layerIndex = 0, const bool isShadow = false) = 0;
 		/// <summary>
 		/// 描画オブジェクトの登録解除
 		/// </summary>
-		/// <param name="arg_shp_drawObject">描画オブジェクト</param>
+		/// <param name="arg_vlp_drawObject">描画オブジェクト</param>
 		/// <param name="arg_afterDraw">遅らせて描画するか(半透明オブジェクト等)</param>
 		/// <param name="arg_layerIndex">登録する描画レイヤーの番号</param>
 		/// <param name="isShadow">影を落とすか</param>
-		virtual void UnRegistDrawObject(Value_ptr< IDrawObject> arg_shp_drawObject, const bool arg_afterDraw, const std::uint32_t arg_layerIndex = 0, const bool isShadow = false) = 0;
+		virtual void UnRegistDrawObject(Value_ptr< IDrawObject> arg_vlp_drawObject, const bool arg_afterDraw, const std::uint32_t arg_layerIndex = 0, const bool isShadow = false) = 0;
 		/// <summary>
 		/// GUIの呼び出し
 		/// </summary>
@@ -329,8 +329,8 @@ namespace ButiEngine
 		/// シャドウ用カメラの設定
 		/// </summary>
 		/// <param name="arg_layer">設定するレイヤーの番号</param>
-		/// <param name="arg_shp_camera">設定するカメラ</param>
-		virtual void SetShadowCamera(const std::uint32_t arg_layer,Value_ptr<ICamera> arg_shp_camera)=0;
+		/// <param name="arg_vlp_camera">設定するカメラ</param>
+		virtual void SetShadowCamera(const std::uint32_t arg_layer,Value_ptr<ICamera> arg_vlp_camera)=0;
 		/// <summary>
 		/// シャドウ用カメラの取得
 		/// </summary>
@@ -543,20 +543,20 @@ namespace ButiEngine
 		/// シーンの設定
 		/// </summary>
 		/// <param name="arg_sceneName">シーン名</param>
-		/// <param name="shp_scene">シーンのインスタンス</param>
-		virtual void SetScene(const std::string& arg_sceneName, Value_ptr<IScene> shp_scene) = 0;
+		/// <param name="vlp_scene">シーンのインスタンス</param>
+		virtual void SetScene(const std::string& arg_sceneName, Value_ptr<IScene> vlp_scene) = 0;
 		/// <summary>
 		/// ゲーム開始時のジーン設定
 		/// </summary>
 		/// <param name="arg_sceneName">シーン名</param>
-		/// <param name="shp_scene">シーンのインスタンス</param>
-		virtual void SetScene_Init(const std::string& arg_sceneName, Value_ptr<IScene> shp_scene ) = 0;
+		/// <param name="vlp_scene">シーンのインスタンス</param>
+		virtual void SetScene_Init(const std::string& arg_sceneName, Value_ptr<IScene> vlp_scene ) = 0;
 		/// <summary>
 		/// シーンのロード
 		/// </summary>
 		/// <param name="arg_sceneName">シーン名</param>
-		/// <param name="shp_scene">シーンのインスタンス(nullなら名前から生成)</param>
-		virtual void LoadScene(const std::string& arg_sceneName, Value_ptr<SceneInformation> shp_scene = nullptr) = 0;
+		/// <param name="vlp_scene">シーンのインスタンス(nullなら名前から生成)</param>
+		virtual void LoadScene(const std::string& arg_sceneName, Value_ptr<SceneInformation> vlp_scene = nullptr) = 0;
 		/// <summary>
 		/// シーンのロード(非同期)
 		/// </summary>
@@ -566,8 +566,8 @@ namespace ButiEngine
 		/// ゲーム開始時のシーンのロード
 		/// </summary>
 		/// <param name="arg_sceneName">シーン名</param>
-		/// <param name="shp_scene">シーンのインスタンス(nullなら名前から生成)</param>
-		virtual void LoadScene_Init(const std::string& arg_sceneName, Value_ptr<SceneInformation> shp_scene = nullptr) = 0;
+		/// <param name="vlp_scene">シーンのインスタンス(nullなら名前から生成)</param>
+		virtual void LoadScene_Init(const std::string& arg_sceneName, Value_ptr<SceneInformation> vlp_scene = nullptr) = 0;
 		/// <summary>
 		/// シーンの削除
 		/// </summary>
@@ -729,8 +729,8 @@ namespace ButiEngine
 		/// <summary>
 		/// 描画デバイスの設定
 		/// </summary>
-		/// <param name="arg_shp_graphicDevice">描画デバイス</param>
-		virtual void SetGraphicDevice(Value_weak_ptr<GraphicDevice> arg_shp_graphicDevice)=0;
+		/// <param name="arg_vlp_graphicDevice">描画デバイス</param>
+		virtual void SetGraphicDevice(Value_weak_ptr<GraphicDevice> arg_vlp_graphicDevice)=0;
 
 		/// <summary>
 		/// GUIの呼び出し
@@ -746,6 +746,11 @@ namespace ButiEngine
 		/// リソース初期読み込み時のメッシュ読み込み
 		/// </summary>
 		virtual void InitMeshLoad() = 0;
+		/// <summary>
+		/// メッシュ読み込み
+		/// </summary>
+		virtual MeshTag LoadMesh(const std::string& filePath, const Value_ptr< ButiRendering::MeshPrimitiveBase>& arg_vlp_inputMeshData) = 0;
+		virtual MeshTag LoadMesh(const std::string& filePath, const List< Value_ptr< ButiRendering::MeshPrimitiveBase>>& arg_list_vlp_inputMeshData) = 0;
 
 		/// <summary>
 		/// 値を直接指定してマテリアル生成
@@ -1370,7 +1375,7 @@ namespace ButiEngine
 	class ICamera :public IObject {
 	public:
 
-		Value_ptr<Transform> shp_transform = ObjectFactory::Create<Transform>(Vector3(0, 0, 0));
+		Value_ptr<Transform> vlp_transform = ObjectFactory::Create<Transform>(Vector3(0, 0, 0));
 
 		/// <summary>
 		/// 描画開始

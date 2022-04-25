@@ -36,20 +36,20 @@ namespace ButiEngine {
 			virtual void GetMaxPointAndMinPoint(Vector3& arg_outputMax, Vector3& arg_outputMin) const = 0;
 			virtual Value_ptr<CollisionPrimitive> Clone() = 0;
 			virtual void ShowUI() = 0;
-			Value_weak_ptr<Transform> wkp_transform;
+			Value_weak_ptr<Transform> vwp_transform;
 		};
 		class CollisionPrimitive_Point :public CollisionPrimitive
 		{
 		public:
 			inline CollisionPrimitive_Point(Value_weak_ptr<Transform> arg_weak_transform)
 			{
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 			}
 			CollisionPrimitive_Point() {}
 			inline void Update()override {
 			}
 			inline Vector3 GetPosition() {
-				return wkp_transform.lock()->GetWorldPosition();
+				return vwp_transform.lock()->GetWorldPosition();
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override
 			{
@@ -58,7 +58,7 @@ namespace ButiEngine {
 
 			}
 			inline void GetMaxPointAndMinPoint(Vector3& arg_outputMax, Vector3& arg_outputMin) const override {
-				auto point = wkp_transform.lock()->GetWorldPosition();
+				auto point = vwp_transform.lock()->GetWorldPosition();
 				arg_outputMax = point;
 				arg_outputMin = point;
 			}
@@ -80,7 +80,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 			}
 
 		private:
@@ -90,7 +90,7 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Ray(Value_weak_ptr<Transform> arg_weak_transform, const Vector3& arg_velocity)
 			{
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 				initVelocity = arg_velocity;
 			}
 			CollisionPrimitive_Ray() {}
@@ -102,9 +102,9 @@ namespace ButiEngine {
 			bool IsHitBox_AABB(CollisionPrimitive_Box_AABB* other)override;
 			bool IsHitBox_OBB(CollisionPrimitive_Box_OBB* other)override;
 			inline void Update()override {
-				point = wkp_transform.lock()->GetWorldPosition();
+				point = vwp_transform.lock()->GetWorldPosition();
 				velocity = initVelocity;
-				wkp_transform.lock()->GetRotatedVector(velocity);
+				vwp_transform.lock()->GetRotatedVector(velocity);
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override
 			{
@@ -120,7 +120,7 @@ namespace ButiEngine {
 			Value_ptr<CollisionPrimitive> Clone()override {
 				auto ret = ObjectFactory::Create< CollisionPrimitive_Ray>();
 				ret->initVelocity = initVelocity;
-				ret->wkp_transform = wkp_transform;
+				ret->vwp_transform = vwp_transform;
 				return ret;
 			}
 
@@ -134,7 +134,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(initVelocity);
 			}
 
@@ -146,8 +146,8 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Segment(Value_weak_ptr<Transform> arg_weak_transform, const Vector3& arg_endPoint)
 			{
-				wkp_transform = arg_weak_transform;
-				point = wkp_transform.lock()->GetWorldPosition();
+				vwp_transform = arg_weak_transform;
+				point = vwp_transform.lock()->GetWorldPosition();
 				endPos = arg_endPoint;
 				velocity = ((Vector3)(endPos - point)).GetNormalize();
 			}
@@ -155,7 +155,7 @@ namespace ButiEngine {
 			{
 			}
 			inline void Update()override {
-				point = wkp_transform.lock()->GetWorldPosition();
+				point = vwp_transform.lock()->GetWorldPosition();
 				velocity= ((Vector3)(endPos - point)).GetNormalize();
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override
@@ -178,7 +178,7 @@ namespace ButiEngine {
 			Value_ptr<CollisionPrimitive> Clone()override {
 				auto ret = ObjectFactory::Create< CollisionPrimitive_Segment>();
 				ret->endPos= endPos;
-				ret->wkp_transform = wkp_transform;
+				ret->vwp_transform = vwp_transform;
 				return ret;
 			}
 
@@ -191,7 +191,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(endPos);
 			}
 
@@ -202,11 +202,11 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Sphere(const float arg_radius, Value_weak_ptr<Transform> arg_weak_transform)
 				:Geometry::Sphere(arg_radius) {
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 			}
 			CollisionPrimitive_Sphere() {}
 			inline void Update()override {
-				position = wkp_transform.lock()->GetWorldPosition();
+				position = vwp_transform.lock()->GetWorldPosition();
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override
 			{
@@ -244,7 +244,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(radius);
 			}
 		private:
@@ -254,16 +254,16 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Capsule(const float arg_radius, const Segment &arg_segment, Value_weak_ptr<Transform> arg_weak_transform)
 				:Geometry::Capsule(arg_segment,arg_radius) {
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 				length = arg_segment.velocity.y;
 			}
 			CollisionPrimitive_Capsule() :Geometry::Capsule(Segment(), 0) {}
 			inline void Update()override {
-				auto pos =  wkp_transform.lock()->GetWorldPosition();
-				auto rotation = wkp_transform.lock()->GetWorldRotation();
-				s.endPos = pos + (Vector3::YAxis * length * 0.5) * rotation;
-				s.point = pos - (Vector3::YAxis * length*0.5)*rotation;
-				r = initR * wkp_transform.lock()->GetWorldScale().x;
+				auto pos =  vwp_transform.lock()->GetWorldPosition();
+				auto rotation = vwp_transform.lock()->GetWorldRotation();
+				s.endPos = pos + (Vector3Const::YAxis * length * 0.5) * rotation;
+				s.point = pos - (Vector3Const::YAxis * length*0.5)*rotation;
+				r = initR * vwp_transform.lock()->GetWorldScale().x;
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override
 			{
@@ -300,7 +300,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(initR);
 				archive(length);
 			}
@@ -315,7 +315,7 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Polygon(const Vector3& arg_vertex1, const Vector3& arg_vertex2, const Vector3& arg_vertex3, Value_weak_ptr<Transform> arg_weak_transform)
 			{
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 				points.push_back(arg_vertex1);
 				points.push_back(arg_vertex2);
 				points.push_back(arg_vertex3);
@@ -329,11 +329,11 @@ namespace ButiEngine {
 			}
 			inline void Update()override {
 				for (std::int32_t i = 0; i < 3; i++) {
-					points[i] = initPoints[i] + wkp_transform.lock()->GetWorldPosition();
+					points[i] = initPoints[i] + vwp_transform.lock()->GetWorldPosition();
 				}
 			}
 			inline Vector3 GetPosition() {
-				return wkp_transform.lock()->GetWorldPosition();
+				return vwp_transform.lock()->GetWorldPosition();
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override
 			{
@@ -342,7 +342,7 @@ namespace ButiEngine {
 
 			}
 			inline void GetMaxPointAndMinPoint(Vector3& arg_outputMax, Vector3& arg_outputMin) const override {
-				auto point = wkp_transform.lock()->GetWorldPosition();
+				auto point = vwp_transform.lock()->GetWorldPosition();
 
 				float maxX = max(points[2].x, max(points[0].x, points[1].x));
 				float maxY = max(points[2].y, max(points[0].y, points[1].y));
@@ -376,7 +376,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(initPoints);
 			}
 
@@ -389,7 +389,7 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Surface(const Vector3& arg_normal, Value_weak_ptr<Transform> arg_weak_transform)
 				{
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 				normal = arg_normal;
 			}
 			CollisionPrimitive_Surface() {}
@@ -432,7 +432,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(normal);
 
 			}
@@ -444,13 +444,13 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Box_AABB(const Vector3& arg_length, Value_weak_ptr<Transform> arg_weak_transform)
 				:Geometry::Box_AABB(arg_length) {
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 				initLengthes = arg_length / 2;
 			}
 			CollisionPrimitive_Box_AABB() {}
 			inline void Update()override {
-				position = wkp_transform.lock()->GetWorldPosition();
-				halfLengthes = initLengthes * wkp_transform.lock()->GetWorldScale();
+				position = vwp_transform.lock()->GetWorldPosition();
+				halfLengthes = initLengthes * vwp_transform.lock()->GetWorldScale();
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override {
 				return other.lock()->IsHitBox_AABB(this);
@@ -486,7 +486,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(initLengthes);
 				archive(halfLengthes);
 			}
@@ -497,17 +497,17 @@ namespace ButiEngine {
 		public:
 			inline CollisionPrimitive_Box_OBB(const Vector3& arg_length, Value_weak_ptr<Transform> arg_weak_transform)
 				:Geometry::Box_OBB_Static(arg_length) {
-				wkp_transform = arg_weak_transform;
+				vwp_transform = arg_weak_transform;
 				initLengthes = arg_length * 0.5f;
 			}
 			CollisionPrimitive_Box_OBB() {}
 			inline void Update()override {
-				position = wkp_transform.lock()->GetWorldPosition();
+				position = vwp_transform.lock()->GetWorldPosition();
 
-				directs[0] = wkp_transform.lock()->GetRight();
-				directs[1] = wkp_transform.lock()->GetUp();
-				directs[2] = wkp_transform.lock()->GetFront();
-				halfLengthes = initLengthes * wkp_transform.lock()->GetWorldScale();
+				directs[0] = vwp_transform.lock()->GetRight();
+				directs[1] = vwp_transform.lock()->GetUp();
+				directs[2] = vwp_transform.lock()->GetFront();
+				halfLengthes = initLengthes * vwp_transform.lock()->GetWorldScale();
 			}
 			inline bool IsHit(Value_weak_ptr< CollisionPrimitive> other)override {
 				return other.lock()->IsHitBox_OBB(this);
@@ -547,7 +547,7 @@ namespace ButiEngine {
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(wkp_transform);
+				archive(vwp_transform);
 				archive(initLengthes);
 				archive(halfLengthes);
 			}

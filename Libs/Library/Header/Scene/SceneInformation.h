@@ -5,7 +5,7 @@ namespace ButiEngine {
 	struct RenderingPathInfo :public IObject {
 		void Initialize() {}
 		void PreInitialize() {}
-		virtual Value_ptr<IRenderingPath> CreateRenderingPath(Value_ptr<IRenderer> arg_shp_renderer,Value_ptr<GraphicDevice> arg_shp_graphicDevice) = 0;
+		virtual Value_ptr<IRenderingPath> CreateRenderingPath(Value_ptr<IRenderer> arg_vlp_renderer,Value_ptr<GraphicDevice> arg_vlp_graphicDevice) = 0;
 		std::int32_t order;
 		template<class Archive>
 		void serialize(Archive& archive)

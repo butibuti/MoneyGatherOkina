@@ -31,7 +31,7 @@ namespace ButiEngine {
 	class Resource_Shader :public IResource_Shader
 	{
 	public:
-		Resource_Shader(Value_weak_ptr<IResource_VertexShader> arg_wkp_vertexShader, Value_weak_ptr<IResource_PixelShader> arg_wkp_pixelShader, Value_weak_ptr<IResource_GeometryShader> arg_wkp_geometryShader, const std::string& arg_shaderName);
+		Resource_Shader(Value_weak_ptr<IResource_VertexShader> arg_vwp_vertexShader, Value_weak_ptr<IResource_PixelShader> arg_vwp_pixelShader, Value_weak_ptr<IResource_GeometryShader> arg_vwp_geometryShader, const std::string& arg_shaderName);
 		void Initialize()override {}
 		void PreInitialize()override {}
 		virtual void Attach()const;
@@ -44,9 +44,9 @@ namespace ButiEngine {
 		Value_weak_ptr<IResource_PixelShader> GetPixelShader();
 		Value_weak_ptr<IResource_GeometryShader> GetGeometryShader();
 	private:
-		Value_weak_ptr<IResource_VertexShader> wkp_vertexShader;
-		Value_weak_ptr<IResource_PixelShader> wkp_pixelShader;
-		Value_weak_ptr<IResource_GeometryShader> wkp_geometryShader;
+		Value_weak_ptr<IResource_VertexShader> vwp_vertexShader;
+		Value_weak_ptr<IResource_PixelShader> vwp_pixelShader;
+		Value_weak_ptr<IResource_GeometryShader> vwp_geometryShader;
 		std::string shaderName;
 	};
 }

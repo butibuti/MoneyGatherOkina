@@ -683,16 +683,16 @@ namespace ButiEngine {
 		}
 
 		inline Vector3 GetFront() {
-			return Vector3::ZAxis* GetWorldRotation();
+			return Vector3Const::ZAxis* GetWorldRotation();
 		}
 
 		inline Vector3 GetRight() {
-			return  Vector3::XAxis * GetWorldRotation();
+			return  Vector3Const::XAxis * GetWorldRotation();
 
 		}
 
 		inline Vector3 GetUp() {
-			return  Vector3::YAxis  * GetWorldRotation();
+			return  Vector3Const::YAxis  * GetWorldRotation();
 		}
 
 		inline void GetRotatedVector(Vector3& arg_vector3) {
@@ -769,6 +769,10 @@ namespace ButiEngine {
 		inline BoneTransform() :Transform() {
 		}
 		inline BoneTransform(const Vector3& arg_position, const Vector3& arg_rotate, const Vector3& arg_scale)
+			: Transform(arg_position, arg_rotate, arg_scale) {
+
+		}
+		inline BoneTransform(const Vector3& arg_position, const Matrix4x4& arg_rotate, const Vector3& arg_scale)
 			: Transform(arg_position, arg_rotate, arg_scale) {
 
 		}

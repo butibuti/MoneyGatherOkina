@@ -4,7 +4,7 @@
 
 #include "../../GameComponentHeader.h"
 #include"Header/Common/CollisionPrimitive.h"
-#include"ButiRendering_Dx12/MeshPrimitive.h"
+#include"ButiRendering_Dx12/Header/MeshPrimitive.h""
 #include"../../Resources/DrawData/IDrawData.h"
 namespace ButiScript {
 class CompiledData;
@@ -49,7 +49,7 @@ enum class CollisionPrimType {
 class ColliderComponent :public GameComponent
 {
 public:
-	ColliderComponent(Value_ptr<CollisionPrimitive> arg_shp_collisionPrim, const std::uint32_t arg_layerNum = 0);
+	ColliderComponent(Value_ptr<CollisionPrimitive> arg_vlp_collisionPrim, const std::uint32_t arg_layerNum = 0);
 	ColliderComponent() {}
 	void Initialize()override;
 	void OnSet()override;
@@ -63,19 +63,19 @@ public:
 	}
 	Value_ptr<GameComponent> Clone()override;
 	Value_ptr<CollisionPrimitive> GetCollisionPrimitive();
-	void SetCollisionPrimitive(Value_ptr<CollisionPrimitive> arg_shp_collisionPrim);
+	void SetCollisionPrimitive(Value_ptr<CollisionPrimitive> arg_vlp_collisionPrim);
 	void OnShowUI()override;
 
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(shp_collisionPrim);
+		archive(vlp_collisionPrim);
 		archive(layerNum);
 		archive(isActive);
 	}
 private:
 	std::uint32_t layerNum = 0;
-	Value_ptr<CollisionPrimitive> shp_collisionPrim;
+	Value_ptr<CollisionPrimitive> vlp_collisionPrim;
 };
 }
 
@@ -89,22 +89,22 @@ public:
 	void OnUpdate()override;
 	Value_ptr<Transform> GetInitTransform();
 	Value_ptr<Transform> GetTargetTransform();
-	virtual void SetInitTransform(Value_ptr<Transform> arg_shp_InitTransform);
+	virtual void SetInitTransform(Value_ptr<Transform> arg_vlp_InitTransform);
 	void SetEaseType(const Easing::EasingType type);
 	void SetSpeed(const float arg_speed);
 	void SetTime(const float arg_time);
 	void SetReverse(const bool isReverse);
 	Value_ptr<GameComponent> Clone()override;
 
-	virtual void _cdecl SetTargetTransform(Value_ptr<Transform> arg_shp_targetTransform);
+	virtual void _cdecl SetTargetTransform(Value_ptr<Transform> arg_vlp_targetTransform);
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
 		archive(isActive);
 		archive(speed);
 		archive(t);
-		archive(shp_targetTransform);
-		archive(shp_initTransform);
+		archive(vlp_targetTransform);
+		archive(vlp_initTransform);
 		archive(easeType);
 		archive(isReverse);
 	}
@@ -114,10 +114,10 @@ public:
 protected:
 	std::int32_t direction = 1;
 	float t = 0;
-	Value_ptr<Transform> shp_targetTransform;
+	Value_ptr<Transform> vlp_targetTransform;
 	Quat initRotate;
 	Quat targetRotate;
-	Value_ptr<Transform> shp_initTransform;
+	Value_ptr<Transform> vlp_initTransform;
 	float speed = 0.002f;
 	Easing::EasingType easeType = Easing::EasingType::EaseIn;
 	bool isReverse = false;
@@ -128,8 +128,8 @@ public:
 	std::string GetGameComponentName()const override {
 		return "UIAnimation";
 	}
-	void SetInitTransform(Value_ptr<Transform> arg_shp_InitTransform)override;
-	void SetTargetTransform(Value_ptr<Transform> arg_shp_targetTransform)override;
+	void SetInitTransform(Value_ptr<Transform> arg_vlp_InitTransform)override;
+	void SetTargetTransform(Value_ptr<Transform> arg_vlp_targetTransform)override;
 	Value_ptr<GameComponent> Clone()override;
 	void PositionSet()override;
 	void OnShowUI()override;
@@ -140,8 +140,8 @@ public:
 		archive(isActive);
 		archive(speed);
 		archive(t);
-		archive(shp_targetTransform);
-		archive(shp_initTransform);
+		archive(vlp_targetTransform);
+		archive(vlp_initTransform);
 		archive(easeType);
 		archive(isReverse);
 	}
@@ -164,8 +164,8 @@ public:
 		archive(isActive);
 		archive(speed);
 		archive(t);
-		archive(shp_targetTransform);
-		archive(shp_initTransform);
+		archive(vlp_targetTransform);
+		archive(vlp_initTransform);
 		archive(easeType);
 		archive(xEaseType);
 		archive(yEaseType);
@@ -201,7 +201,7 @@ private:
 class ChaseComponent :public GameComponent
 {
 public:
-	ChaseComponent(Value_ptr<Transform> arg_shp_target, const float arg_speed = 0.1f);
+	ChaseComponent(Value_ptr<Transform> arg_vlp_target, const float arg_speed = 0.1f);
 	ChaseComponent() {}
 	void OnUpdate() override;
 	void OnSet()override;
@@ -215,13 +215,13 @@ public:
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(shp_target);
+		archive(vlp_target);
 		archive(speed);
 		archive(isActive);
 	}
 
 private:
-	Value_ptr<Transform> shp_target;
+	Value_ptr<Transform> vlp_target;
 	float speed;
 };
 class IKComponent :public GameComponent
@@ -251,7 +251,7 @@ public:
 protected:
 	void RegistIK();
 private:
-	Value_ptr<ModelDrawData> shp_modelData;
+	Value_ptr<IModelObject> vlp_modelData;
 	std::vector<Value_ptr<Bone>> vec_endBones;
 	std::vector<Value_ptr< IKData>> vec_ikData;
 };
@@ -310,14 +310,14 @@ public:
 private:
 	std::vector<Particle3D> vec_particleInfo;
 	MeshTag meshTag;
-	Value_ptr<ButiRendering::MeshPrimitive<Vertex::Vertex_UV_Normal_Color>> shp_backUp;
-	Value_ptr<Resource_RealTimeMesh> shp_mesh;
+	Value_ptr<ButiRendering::MeshPrimitive<Vertex::Vertex_UV_Normal_Color>> vlp_backUp;
+	Value_ptr<Resource_RealTimeMesh> vlp_mesh;
 	std::int32_t addParticleCount = 0;
 };
 class LookAtComponent :public GameComponent
 {
 public:
-	LookAtComponent(Value_ptr<Transform> arg_shp_lookTarget);
+	LookAtComponent(Value_ptr<Transform> arg_vlp_lookTarget);
 	LookAtComponent() {}
 
 	void OnUpdate()override;
@@ -330,12 +330,12 @@ public:
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(shp_lookTarget);
+		archive(vlp_lookTarget);
 		archive(isActive);
 	}
 	void OnShowUI();
 private:
-	Value_ptr<Transform> shp_lookTarget;
+	Value_ptr<Transform> vlp_lookTarget;
 };
 class PostEffectParamUpdater :public GameComponent
 {
@@ -358,7 +358,7 @@ public:
 	}
 private:
 	Vector4 pase;
-	Value_ptr<CBuffer<ObjectInformation>> shp_param;
+	Value_ptr<CBuffer<ObjectInformation>> vlp_param;
 };
 class SplineCurveMover :public GameComponent
 {
@@ -401,11 +401,11 @@ public:
 	void serialize(Archive& archive)
 	{
 		archive(count);
-		archive(shp_timer);
+		archive(vlp_timer);
 		archive(isActive);
 	}
 private:
-	Value_ptr<RelativeTimer> shp_timer;
+	Value_ptr<RelativeTimer> vlp_timer;
 	float count;
 };
 class UIComponent :public GameComponent
@@ -435,14 +435,14 @@ protected:
 };
 class ModelAnimation;
 
-class ModelDrawData;
+class IModelObject;
 class MeshDrawComponent :public GameComponent
 {
 public:
-	MeshDrawComponent(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
-	MeshDrawComponent(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
-	MeshDrawComponent(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
-	MeshDrawComponent(const MeshTag& arg_meshTag, const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
+	MeshDrawComponent(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
+	MeshDrawComponent(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
+	MeshDrawComponent(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
+	MeshDrawComponent(const MeshTag& arg_meshTag, const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
 	MeshDrawComponent() {}
 	std::string GetGameComponentName()const override {
 		return "MeshDraw";
@@ -468,10 +468,10 @@ public:
 	Value_ptr<Transform> GetTransform();
 
 	template <class T>
-	Value_ptr<CBuffer< T>> CreateCBuffer(const std::string& arg_cBufferName, const std::uint32_t arg_slot, Value_weak_ptr<GraphicDevice> arg_wkp_graphicDevice);
+	Value_ptr<CBuffer< T>> CreateCBuffer(const std::string& arg_cBufferName, const std::uint32_t arg_slot, Value_weak_ptr<GraphicDevice> arg_vwp_graphicDevice);
 	template <class T>
 	Value_ptr<CBuffer<T>> GetCBuffer(const std::string& arg_cBufferName) {
-		return data->GetCBuffer<T>(arg_cBufferName);
+		return data->GetDrawData().GetCBuffer<T>(arg_cBufferName);
 	}
 
 	template<class Archive>
@@ -482,19 +482,19 @@ public:
 		archive(modelTag);
 		archive(materialTag);
 		archive(isActive);
-		archive(shp_transform);
-		archive(shp_drawInfo);
+		archive(vlp_transform);
+		archive(vlp_drawInfo);
 	}
 protected:
-	void ShowDrawSettingsUI(Value_ptr< DrawInformation >shp_arg_drawInfo = nullptr, const std::string& arg_settingsName = "");
-	void ShowExCBufferUI(Value_ptr< DrawInformation >shp_arg_drawInfo = nullptr, const std::string& arg_settingsName = "");
-	Value_ptr< MeshDrawData > data;
+	void ShowDrawSettingsUI(Value_ptr< DrawInformation >vlp_arg_drawInfo = nullptr, const std::string& arg_settingsName = "");
+	void ShowExCBufferUI(Value_ptr< DrawInformation >vlp_arg_drawInfo = nullptr, const std::string& arg_settingsName = "");
+	Value_ptr< DrawObject > data;
 	virtual void CreateData();
 	MeshTag meshTag;
 	ShaderTag shaderTag;
 	ModelTag modelTag;
-	Value_ptr<Transform> shp_transform;
-	Value_ptr< DrawInformation >shp_drawInfo = nullptr;
+	Value_ptr<Transform> vlp_transform;
+	Value_ptr< DrawInformation >vlp_drawInfo = nullptr;
 	std::vector<MaterialTag> materialTag;
 
 	bool isCereal = true;
@@ -502,10 +502,10 @@ protected:
 class MeshDrawComponent_Static :public MeshDrawComponent
 {
 public:
-	MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
-	MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
-	MeshDrawComponent_Static(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
-	MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_shp_drawInfo = nullptr, Value_ptr<Transform> arg_shp_transform = nullptr);
+	MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
+	MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
+	MeshDrawComponent_Static(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
+	MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, Value_ptr< DrawInformation >arg_vlp_drawInfo = nullptr, Value_ptr<Transform> arg_vlp_transform = nullptr);
 	MeshDrawComponent_Static() {}
 	std::string GetGameComponentName()const override {
 		return "MeshDraw_Static";
@@ -520,8 +520,8 @@ public:
 		archive(modelTag);
 		archive(materialTag);
 		archive(isActive);
-		archive(shp_transform);
-		archive(shp_drawInfo);
+		archive(vlp_transform);
+		archive(vlp_drawInfo);
 	}
 protected:
 };
@@ -549,8 +549,8 @@ public:
 		archive(modelTag);
 		archive(materialTag);
 		archive(isActive);
-		archive(shp_transform);
-		archive(shp_drawInfo);
+		archive(vlp_transform);
+		archive(vlp_drawInfo);
 		archive(map_size);
 		archive(map_color);
 		archive(textMeshSize);
@@ -577,7 +577,7 @@ protected:
 	std::string text;
 	std::int32_t textMeshSize = 256;
 	TextJustified just=TextJustified::left;
-	Value_ptr<Resource_RealTimeMesh> shp_mesh;
+	Value_ptr<Resource_RealTimeMesh> vlp_mesh;
 };
 
 

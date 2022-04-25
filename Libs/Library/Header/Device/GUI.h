@@ -1159,13 +1159,13 @@ void Line(const Vector2& p1, const Vector2& p2, std::uint32_t col, float thickne
 float GetFontSize();
 
 GuiIO GetIO();
-void GUISetUP(std::unique_ptr<IWindow>& unq_window, Value_ptr<GraphicDevice>shp_graphicDevice);
+void GUISetUP(std::unique_ptr<IWindow>& unq_window, Value_ptr<GraphicDevice>vlp_graphicDevice);
 void Start();
 void Update();
 void EditorGUIUpdate();
 void Draw();
 void Release();
-void SetDraggingObject(const ButiEngine::Value_ptr<IObject>& arg_shp_draggingObject);
+void SetDraggingObject(const ButiEngine::Value_ptr<IObject>& arg_vlp_draggingObject);
 void SetResourceTag(const MeshTag& arg_tag);
 void SetResourceTag(const SoundTag& arg_tag);
 void SetResourceTag(const MotionTag& arg_tag);
@@ -1178,7 +1178,7 @@ void SetResourceTag(const GeometryShaderTag& arg_tag);
 void SetResourceTag(const TextureTag& arg_tag);
 void SetResourceTag(const ScriptTag& arg_tag);
 void SetResourceTag(const FontTag& arg_tag);
-void SetDraggingCamera(Value_ptr<ICamera>arg_shp_camera);
+void SetDraggingCamera(Value_ptr<ICamera>arg_vlp_camera);
 #ifdef _EDITORBUILD
 void OccurGUIAction(IGUIAction* arg_p_act);
 void ClearGUIAction();

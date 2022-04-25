@@ -16,7 +16,7 @@ struct TextureResourceData:public IObject {
 };
 struct FontResourceData :public IObject {
 	~FontResourceData();
-	Value_ptr<TextureResourceData> shp_texResData;
+	Value_ptr<TextureResourceData> vlp_texResData;
 	ButiFont::IFontInformation* p_fontInfo;
 };
 

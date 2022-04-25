@@ -1,9 +1,9 @@
 #pragma once
 #include"stdafx.h"
 #include"Resource_Mesh.h"
-#include"ButiRendering_Dx12/MeshPrimitive.h"
+#include"ButiRendering_Dx12/Header/MeshPrimitive.h"
 #include"../GameParts/GraphicDevice_Dx12.h"
-#include"Rendering_Dx12/GraphicResourceUtil_Dx12.h"
+#include"ButiRendering_Dx12/Header/Rendering_Dx12/GraphicResourceUtil_Dx12.h"
 namespace ButiEngine {
 	class GraphicDevice_Dx12;
 	class Resource_Mesh_Dx12:public Resource_Mesh
@@ -45,7 +45,7 @@ namespace ButiEngine {
 		D3D12_INDEX_BUFFER_VIEW indexBufferView;
 		
 
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 
 
 		void ResourceUpdate() override;

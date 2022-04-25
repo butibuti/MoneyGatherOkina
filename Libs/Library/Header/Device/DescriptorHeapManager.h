@@ -24,7 +24,7 @@ class DescriptorHeapManager
 {
 	const std::uint32_t DescriptorHeapSize = 8192;
 public:
-	DescriptorHeapManager(Value_weak_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice, const std::uint32_t arg_max = 512);
+	DescriptorHeapManager(Value_weak_ptr<GraphicDevice_Dx12> arg_vwp_graphicDevice, const std::uint32_t arg_max = 512);
 	~DescriptorHeapManager();
 	void Initialize(ID3D12Device& device);
 
@@ -62,7 +62,7 @@ private:
 	
 	buffer* mappedConstantBuffer = nullptr;
 	std::vector<BackUpConstantBufferData*> vec_cbBackUpData;
-	Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+	Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 };
 
 }

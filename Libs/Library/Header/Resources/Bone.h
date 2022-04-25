@@ -3,7 +3,7 @@
 #include<string>
 namespace ButiEngine {
 
-	struct ModelDrawData;
+	struct IModelObject;
 	struct Bone;
 	struct Bone;
 	struct IKLink {
@@ -13,7 +13,7 @@ namespace ButiEngine {
 			}
 		}
 		std::int32_t linkBone;
-		Value_ptr<Bone> shp_linkBone;
+		Value_ptr<Bone> vlp_linkBone;
 		bool radianLimit = false;
 		float bonesLength = 0;
 		Quat befBoneInitRotation;
@@ -35,7 +35,7 @@ namespace ButiEngine {
 		~IKData();
 		std::int32_t targetBoneIndex;
 		std::int32_t extremityBoneIndex;
-		Value_ptr<Bone> shp_targetBone;
+		Value_ptr<Bone> vlp_targetBone;
 		std::int32_t loopCount;
 		float maxRadian;
 		float sum_bonesLength = 0;
@@ -59,7 +59,7 @@ namespace ButiEngine {
 		std::string boneNameEng;
 
 		Vector3 position;
-
+		Matrix4x4 rotation;
 		std::int32_t parentBoneIndex=-1;
 		std::int32_t transformFloor=0;
 

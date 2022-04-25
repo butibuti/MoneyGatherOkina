@@ -14,7 +14,7 @@ namespace ButiEngine {
 		class CollisionPrimitive_Box_OBB;
 	}
 
-	class IDrawObject {
+	class IDrawObject :public IObject {
 	public:
 		virtual void Draw() = 0;
 		virtual void DrawBefore() {}
@@ -25,6 +25,7 @@ namespace ButiEngine {
 		virtual void CommandSet() {}
 		virtual void CommandExecute() {}
 		virtual void ShowZ(){}
+		virtual List<Value_ptr<IDrawObject>>& GetChilds() { static List<Value_ptr<IDrawObject>> empty; return empty; }
 
 		virtual Value_ptr<Collision::CollisionPrimitive_Box_AABB> GetMeshAABB() = 0;
 		virtual Value_ptr<Collision::CollisionPrimitive_Box_OBB> GetMeshOBB() = 0;
@@ -38,16 +39,12 @@ namespace ButiEngine {
 		std::vector<Value_ptr<Bone>> vec_bone;
 		std::vector<Value_ptr<Bone>> vec_IKBone;
 		std::vector<Value_ptr<Bone>> vec_addBone;
-		void Initialize()override {}
-		void PreInitialize()override{}
 		void InverseKinematic() {
-
 			for (auto itr = vec_IKBone.begin(); itr != vec_IKBone.end(); itr++) {
 				(*itr)->CCDInverseKinematic();
 			}
 		}
 		inline void BonePowerAdd() {
-
 			for (auto itr = vec_addBone.begin(); itr != vec_addBone.end(); itr++) {
 				(*itr)->AddBonePower();
 			}

@@ -11,7 +11,7 @@ public:
 	void PreInitialize()override {}
 	void Update();
 	virtual void Start() {}
-	void Set(Value_weak_ptr<GameObject> arg_wkp_gameObj);
+	void Set(Value_weak_ptr<GameObject> arg_vwp_gameObj);
 	void SetIsRemove(bool arg_isRemove) {
 		isRemove = arg_isRemove;
 	}

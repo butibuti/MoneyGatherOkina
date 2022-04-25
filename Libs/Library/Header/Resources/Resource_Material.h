@@ -12,20 +12,16 @@ namespace ButiEngine {
 		void SetMaterialName(const std::string& arg_name);
 		void SetMaterialNameEng(const std::string& arg_name);
 		void SetComment(const std::string& arg_comment);
-		Value_ptr<IResource_Texture>GetTexture(const std::int32_t index = 0);
-		Value_ptr<IResource_Texture>GetSphereTexture();
-		
-		std::vector< TextureTag > GetTextureTags()override {
-			return textureTag;
+		const std::string& GetTagName()const override;
+		Value_weak_ptr<IResource_Texture>GetTexture(const std::int32_t index = 0)const;
+		Value_weak_ptr<IResource_Texture>GetSphereTexture()const;
+		void SetTexture(const std::uint32_t arg_index, Value_weak_ptr<IResource_Texture>  arg_vwp_texture)override;
+		void SetSphereTexture(Value_weak_ptr<IResource_Texture>  arg_vwp_texture)override;
+		const List<Value_weak_ptr<IResource_Texture>>& GetTextures()override {
+			return list_vwp_texture;
 		}
-		TextureTag GetSphereTextureTag() const{
-			return sphereTextureTag;
-		}
-		TextureTag GetTextureTag(const std::int32_t index=0)const {
-			return textureTag[index];
-		}
-		std::vector< TextureTag >textureTag;
-		TextureTag sphereTextureTag ;
+		List<Value_weak_ptr<IResource_Texture>> list_vwp_texture;
+		Value_weak_ptr<IResource_Texture> vwp_texture ;
 	protected:
 		MaterialValue materialVar;
 		std::string materialName;

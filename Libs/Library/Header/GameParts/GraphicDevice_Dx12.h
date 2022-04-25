@@ -21,7 +21,7 @@ class GraphicDevice_Dx12 :public GraphicDevice
 	};
 public:
 
-	GraphicDevice_Dx12(Value_weak_ptr<IApplication> arg_wkp_application);
+	GraphicDevice_Dx12(Value_weak_ptr<IApplication> arg_vwp_application);
 	void Initialize()override;
 
 	void PreInitialize()override;
@@ -171,9 +171,9 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> guiCommandList;
 
-	Value_ptr<DescriptorHeapManager> shp_descripterManager;
+	Value_ptr<DescriptorHeapManager> vlp_descripterManager;
 
-	Value_ptr<PipelineStateManager> shp_pipelineStateManager;
+	Value_ptr<PipelineStateManager> vlp_pipelineStateManager;
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> vec_renderTargetHandles;
 

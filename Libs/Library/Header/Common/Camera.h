@@ -22,7 +22,7 @@ namespace ButiEngine {
 		Matrix4x4 viewMatrix;
 		Vector3 cameraPos;
 		CameraProjProperty cameraViewProp; 
-		Value_ptr<IRenderer> shp_renderer;
+		Value_ptr<IRenderer> vlp_renderer;
 		bool isActive = true;
 		std::string cameraName;
 	private:
@@ -30,7 +30,7 @@ namespace ButiEngine {
 	};
 	class CameraCreater {
 	public:
-		static Value_ptr<ICamera> CreateCamera(const CameraProjProperty& arg_cameraViewProp, const std::string& cameraName,const bool initActive,Value_ptr<IRenderer> arg_shp_renderer,Value_weak_ptr<GraphicDevice> arg_wkp_graphicDevice);
-		static Value_ptr<ICamera> CreateCamera(const std::string& cameraName, const bool initActive, Value_ptr<IRenderer> arg_shp_renderer, Value_weak_ptr<GraphicDevice> arg_wkp_graphicDevice);
+		static Value_ptr<ICamera> CreateCamera(const CameraProjProperty& arg_cameraViewProp, const std::string& cameraName,const bool initActive,Value_ptr<IRenderer> arg_vlp_renderer,Value_weak_ptr<GraphicDevice> arg_vwp_graphicDevice);
+		static Value_ptr<ICamera> CreateCamera(const std::string& cameraName, const bool initActive, Value_ptr<IRenderer> arg_vlp_renderer, Value_weak_ptr<GraphicDevice> arg_vwp_graphicDevice);
 	};
 }

@@ -38,7 +38,7 @@ namespace ButiEngine {
 		std::int32_t varticalSplitScale;
 		std::int32_t horizontalNum;
 		std::int32_t varticalNum;
-		Value_ptr<CBuffer<ObjectInformation>> shp_param;
+		Value_ptr<CBuffer<ObjectInformation>> vlp_param;
 	};
 }
 

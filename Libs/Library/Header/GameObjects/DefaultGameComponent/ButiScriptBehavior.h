@@ -54,7 +54,7 @@ public:
 private:
 
 	std::vector<std::pair< Value_ptr<IValuePtrRestoreObject>,std::int32_t>> vec_pair_saveObject_typeIndex;
-	Value_ptr<ButiScript::VirtualMachine> shp_VM;
+	Value_ptr<ButiScript::VirtualMachine> vlp_VM;
 	std::mutex mtx_vm;
 	ScriptTag scriptTag;
 	std::string updateEntryPoint = "main";

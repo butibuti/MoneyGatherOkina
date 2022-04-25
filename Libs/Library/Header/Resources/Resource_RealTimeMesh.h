@@ -1,6 +1,6 @@
 #pragma once
 #include"stdafx.h"
-#include"Vertex.h"
+#include"ButiRendering_Dx12/Header/vertex.h"
 namespace ButiEngine {
 	class GraphicDevice;
 	class Resource_RealTimeMesh : public GPUResource, public IResource_Mesh
@@ -17,6 +17,8 @@ namespace ButiEngine {
 		Value_ptr<ButiRendering::MeshPrimitiveBase> GetBackupData_Row();
 
 		bool GetPosRayCast(Vector3* arg_p_pos,  Vector3* arg_p_normal, const Line& arg_line);
+		const std::string& GetTagName()const override;
+		void SetTagName(const std::string& arg_tagName);
 	protected:
 		std::uint32_t verticesCount;
 		std::uint32_t indexCount;
@@ -25,7 +27,7 @@ namespace ButiEngine {
 		bool isDataRefresh = true;
 		std::uint32_t vertexType;
 		Value_ptr<ButiRendering::MeshPrimitiveBase> vlp_meshPrimitive;
-
+		std::string tagName;
 
 	};
 

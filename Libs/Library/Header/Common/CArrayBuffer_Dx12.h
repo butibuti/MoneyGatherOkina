@@ -15,8 +15,8 @@ namespace ButiEngine {
 		CArrayBuffer_Dx12(){}
 		~CArrayBuffer_Dx12() {
 			if (instance) {
-				if (wkp_heapManager.lock()) {
-					wkp_heapManager.lock()->Release(BlankSpace{ index,instanceSize / 0x100 });
+				if (vwp_heapManager.lock()) {
+					vwp_heapManager.lock()->Release(BlankSpace{ index,instanceSize / 0x100 });
 
 				}
 				delete instance;
@@ -35,24 +35,24 @@ namespace ButiEngine {
 
 		void CreateBuffer(const bool arg_mapKeep = true) override{
 			mapKeep = arg_mapKeep;
-			auto out = wkp_heapManager.lock()->CreateConstantBufferView(instance, mapKeep, instanceSize);
+			auto out = vwp_heapManager.lock()->CreateConstantBufferView(instance, mapKeep, instanceSize);
 			index = out.index;
 			gpuDescriptorHandle = out.GPUHandle;
 		}
 
 		void SetGraphicDevice(Value_ptr<GraphicDevice> arg_graphicDevice) {
-			wkp_graphicDevice = arg_graphicDevice->GetThis<GraphicDevice_Dx12>();
-			wkp_heapManager = wkp_graphicDevice.lock()->GetDescriptorHeapManager();
+			vwp_graphicDevice = arg_graphicDevice->GetThis<GraphicDevice_Dx12>();
+			vwp_heapManager = vwp_graphicDevice.lock()->GetDescriptorHeapManager();
 		}
 		void PreInitialize() override{
 
 		}
 		void Attach(const std::uint32_t slotOffset)const override{
-			wkp_graphicDevice.lock()->GetCommandList().SetGraphicsRootDescriptorTable(slotOffset + this->slot, gpuDescriptorHandle);
+			vwp_graphicDevice.lock()->GetCommandList().SetGraphicsRootDescriptorTable(slotOffset + this->slot, gpuDescriptorHandle);
 		}
 		void Update()const override{
 
-			wkp_heapManager.lock()->ConstantBufferUpdate(instance, index, instanceSize);
+			vwp_heapManager.lock()->ConstantBufferUpdate(instance, index, instanceSize);
 		}
 
 		template<class Archive>
@@ -74,8 +74,8 @@ namespace ButiEngine {
 			return output;
 		}
 	private:
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
-		Value_weak_ptr<DescriptorHeapManager> wkp_heapManager;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
+		Value_weak_ptr<DescriptorHeapManager> vwp_heapManager;
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuDescriptorHandle;
 		T* instance=nullptr;
 		std::uint32_t size=0;

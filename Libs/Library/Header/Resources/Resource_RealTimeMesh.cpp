@@ -37,3 +37,13 @@ bool ButiEngine::Resource_RealTimeMesh::GetPosRayCast(Vector3* arg_p_pos, Vector
     return vlp_meshPrimitive->IsHitRay(arg_line, arg_p_pos,arg_p_normal);
 }
 
+const std::string& ButiEngine::Resource_RealTimeMesh::GetTagName() const
+{
+    return tagName;
+}
+
+void ButiEngine::Resource_RealTimeMesh::SetTagName(const std::string& arg_tagName)
+{
+    tagName = arg_tagName;
+}
+

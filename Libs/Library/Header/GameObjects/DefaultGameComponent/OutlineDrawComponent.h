@@ -21,23 +21,23 @@ namespace ButiEngine {
 			archive(meshTag);
 			archive(shaderTag);
 			archive(modelTag);
-			archive(outlineMesh);
+			archive(outlineMeshTag);
 			archive(outlineShaderTag);
-			archive(outlineModel);
+			archive(outlineModelTag);
 			archive(materialTag);
 			archive(isActive);
-			archive(shp_transform);
-			archive(shp_drawInfo);
-			archive(shp_outlineDrawInfo);
+			archive(vlp_transform);
+			archive(vlp_drawInfo);
+			archive(vlp_outlineDrawInfo);
 		}
 
 		void CreateData()override;
 	protected:
-		MeshTag outlineMesh;
-		ModelTag outlineModel;
+		MeshTag outlineMeshTag;
+		ModelTag outlineModelTag;
 		ShaderTag outlineShaderTag;
 
-		Value_ptr< DrawInformation >shp_outlineDrawInfo = nullptr;
+		Value_ptr< DrawInformation >vlp_outlineDrawInfo = nullptr;
 
 	}; 
 	class OutlineModelDrawComponent :public ModelDrawComponent
@@ -51,30 +51,30 @@ namespace ButiEngine {
 		Value_ptr<GameComponent> Clone()override;
 		void OnShowUI()override;
 		void OnSet()override;
-		Value_ptr<ModelDrawData> GetModelData()override;
+		Value_ptr<IModelObject> GetModelData()override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(meshTag);
 			archive(shaderTag);
 			archive(modelTag);
-			archive(outlineMesh);
+			archive(outlineMeshTag);
 			archive(outlineShaderTag);
-			archive(outlineModel);
+			archive(outlineModelTag);
 			archive(materialTag);
 			archive(isActive);
-			archive(shp_transform);
-			archive(shp_drawInfo);
-			archive(shp_outlineDrawInfo);
+			archive(vlp_transform);
+			archive(vlp_drawInfo);
+			archive(vlp_outlineDrawInfo);
 		}
 
 		void CreateData()override;
 	protected:
-		MeshTag outlineMesh;
-		ModelTag outlineModel;
+		MeshTag outlineMeshTag;
+		ModelTag outlineModelTag;
 		ShaderTag outlineShaderTag;
 
-		Value_ptr< DrawInformation >shp_outlineDrawInfo = nullptr;
+		Value_ptr< DrawInformation >vlp_outlineDrawInfo = nullptr;
 
 	};
 }

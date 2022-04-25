@@ -30,12 +30,12 @@ public:
 	std::int64_t GetBefFrame()const override;
 	const ApplicationInitData* GetAppInitData()const override;
 private:
-	Value_ptr<GraphicDevice>shp_graphicDevice;
+	Value_ptr<GraphicDevice>vlp_graphicDevice;
 	std::unique_ptr<IWindow> unq_window;
-	Value_ptr< ISceneManager> shp_sceneManager;
-	Value_ptr<IResourceContainer>shp_resourceContainer;
-	Value_ptr<ISoundManager>shp_soundManager;
-	Value_ptr<GameObjectTagManager> shp_gameObjTagManager;
+	Value_ptr< ISceneManager> vlp_sceneManager;
+	Value_ptr<IResourceContainer>vlp_resourceContainer;
+	Value_ptr<ISoundManager>vlp_soundManager;
+	Value_ptr<GameObjectTagManager> vlp_gameObjTagManager;
 	std::timespec currentTs;
 	std::int64_t befFrameTime=0;
 	std::int32_t frameTimesBuffIndex=0;

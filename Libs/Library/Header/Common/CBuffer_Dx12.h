@@ -15,8 +15,8 @@ namespace ButiEngine {
 	~CBuffer_Dx12() {
 		if (this->instance) {
 
-			if (wkp_heapManager.lock()) {
-				wkp_heapManager.lock()->Release(BlankSpace{ index,size / 0x100 });
+			if (vwp_heapManager.lock()) {
+				vwp_heapManager.lock()->Release(BlankSpace{ index,size / 0x100 });
 			}
 			this->instance = nullptr;
 		}
@@ -36,23 +36,23 @@ namespace ButiEngine {
 			return;
 		}
 		mapKeep = arg_mapKeep;
-		auto out= wkp_heapManager.lock()->CreateConstantBufferView(instance.get(), mapKeep, sizeof(T));
+		auto out= vwp_heapManager.lock()->CreateConstantBufferView(instance.get(), mapKeep, sizeof(T));
 		index= out.index;
 		gpuDescriptorHandle = out.GPUHandle;
 	}
 	void SetGraphicDevice(Value_ptr<GraphicDevice> arg_graphicDevice) override{
-		wkp_graphicDevice = arg_graphicDevice->GetThis<GraphicDevice_Dx12>();
-		wkp_heapManager = wkp_graphicDevice.lock()->GetDescriptorHeapManager();
+		vwp_graphicDevice = arg_graphicDevice->GetThis<GraphicDevice_Dx12>();
+		vwp_heapManager = vwp_graphicDevice.lock()->GetDescriptorHeapManager();
 	}
 	void PreInitialize() {
 
 	}
 	void Attach(const std::uint32_t slotOffset)const override {
-		wkp_graphicDevice.lock()->GetCommandList().SetGraphicsRootDescriptorTable(slotOffset + this->slot, gpuDescriptorHandle);
+		vwp_graphicDevice.lock()->GetCommandList().SetGraphicsRootDescriptorTable(slotOffset + this->slot, gpuDescriptorHandle);
 	}
 	void Update()const override {
 
-		wkp_heapManager.lock()->ConstantBufferUpdate(instance.get(), index, sizeof(T));
+		vwp_heapManager.lock()->ConstantBufferUpdate(instance.get(), index, sizeof(T));
 	}
 
 	template<class Archive>
@@ -81,8 +81,8 @@ private:
 
 	}
 	D3D12_GPU_DESCRIPTOR_HANDLE gpuDescriptorHandle;
-	Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
-	Value_weak_ptr<DescriptorHeapManager> wkp_heapManager;
+	Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
+	Value_weak_ptr<DescriptorHeapManager> vwp_heapManager;
 	Value_ptr<T> instance ;
 	std::uint32_t size;
 	std::uint32_t index = 0;

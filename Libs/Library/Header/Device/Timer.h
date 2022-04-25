@@ -86,8 +86,8 @@ namespace ButiEngine {
 
 	public:
 		using TsFunction = void (T::*)();
-		TimeBomb(float arg_maxCountFrame, Value_ptr<T> arg_shp_instance) :Timer(arg_maxCountFrame) {
-			shp_instance = arg_shp_instance;
+		TimeBomb(float arg_maxCountFrame, Value_ptr<T> arg_vlp_instance) :Timer(arg_maxCountFrame) {
+			vlp_instance = arg_vlp_instance;
 		}
 		inline bool Update()override {
 			if (!isOn) {
@@ -96,7 +96,7 @@ namespace ButiEngine {
 			nowCountFrame += 1; //Game::GetInstance()->GetGameTime()->GetSpeed();
 			if (nowCountFrame >= maxCountFrame) {
 				nowCountFrame = 0;
-				(*(shp_instance.lock()).*bombFunc)();
+				(*(vlp_instance.lock()).*bombFunc)();
 				return true;
 			}
 			return false;
@@ -115,7 +115,7 @@ namespace ButiEngine {
 		TsFunction bombFunc;
 
 	private:
-		Value_weak_ptr<T> shp_instance;
+		Value_weak_ptr<T> vlp_instance;
 	};
 }
 

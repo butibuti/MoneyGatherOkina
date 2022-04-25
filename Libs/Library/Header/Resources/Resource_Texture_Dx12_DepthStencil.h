@@ -8,7 +8,7 @@ namespace ButiEngine {
 	class Resource_Texture_Dx12_DepthStencil :public Resource_Texture_Dx12, public IDepthStencil
 	{
 	public:
-		Resource_Texture_Dx12_DepthStencil(Value_ptr<ImageFileIO::TextureResourceData> arg_shp_imageData, Value_ptr<GraphicDevice> arg_wkp_graphicDevice);
+		Resource_Texture_Dx12_DepthStencil(Value_ptr<ImageFileIO::TextureResourceData> arg_vlp_imageData, Value_ptr<GraphicDevice> arg_vwp_graphicDevice);
 		void CreateTextureUploadHeap()override;
 		void Initialize()override;
 		void UpdateResourceRelease()override;

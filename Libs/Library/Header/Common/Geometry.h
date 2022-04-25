@@ -77,7 +77,7 @@ namespace ButiEngine {
             }
         };
 
-        namespace GeometryUtill {
+        namespace GeometryUtil {
             static inline float GetDistance(const Vector3& arg_point, const Vector3& arg_surfacePoint, const Vector3& arg_surfaceNormal) {
                 return abs(arg_surfaceNormal.Dot(arg_point - arg_surfacePoint)) / arg_surfaceNormal.GetLength();
             }
@@ -272,7 +272,7 @@ namespace ButiEngine {
                 if (!IsHitLineSurface(arg_line, arg_vertex1, normal)) {
                     return false;
                 }
-                auto startPointDis = GeometryUtill::GetDistance(arg_line.point, arg_vertex1, normal);
+                auto startPointDis = GeometryUtil::GetDistance(arg_line.point, arg_vertex1, normal);
 
 
 
@@ -283,7 +283,7 @@ namespace ButiEngine {
 
 
 
-                return GeometryUtill::IsContainPointInPolygon(arg_ref_penetrationPoint, normal, arg_vertex1, arg_vertex2, arg_vertex3);
+                return GeometryUtil::IsContainPointInPolygon(arg_ref_penetrationPoint, normal, arg_vertex1, arg_vertex2, arg_vertex3);
             }
             static inline bool IsHitSegmentSurface(const Segment& arg_segment, const Vector3& arg_surfacePoint, const Vector3& arg_surfaceNormal) {
                 Vector3 v1 = arg_segment.point - arg_surfacePoint;
@@ -301,14 +301,14 @@ namespace ButiEngine {
                 if (!IsHitSegmentSurface(arg_segment, arg_vertex1, normal)) {
                     return false;
                 }
-                auto startPointDis = GeometryUtill::GetDistance(arg_segment.point, arg_vertex1, normal);
-                auto intDivRaio = startPointDis / (startPointDis + GeometryUtill::GetDistance(arg_segment.GetEndPoint(), arg_vertex1, normal));
+                auto startPointDis = GeometryUtil::GetDistance(arg_segment.point, arg_vertex1, normal);
+                auto intDivRaio = startPointDis / (startPointDis + GeometryUtil::GetDistance(arg_segment.GetEndPoint(), arg_vertex1, normal));
 
                 Vector3 penetrationPoint = arg_vertex1 + (1 - intDivRaio) * (arg_segment.GetEndPoint() - arg_vertex1) + intDivRaio * (arg_segment.point - arg_vertex1);
 
 
 
-                return GeometryUtill::IsContainPointInPolygon(penetrationPoint, normal, arg_vertex1, arg_vertex2, arg_vertex2);
+                return GeometryUtil::IsContainPointInPolygon(penetrationPoint, normal, arg_vertex1, arg_vertex2, arg_vertex2);
             }
 
             static inline bool IsFrontPoint(const Vector3& point, const Vector3& surfacePoint, const Vector3& surfaceNormal) {
@@ -472,15 +472,15 @@ namespace ButiEngine {
                 float t_max = FLT_MAX;
 
                 for (std::int32_t i = 0; i < 3; ++i) {
-                    if (abs(arg_ray.velocity.GetData_const()[i]) < FLT_EPSILON) {
-                        if (arg_ray.point.GetData_const()[i] < min.GetData()[i] || arg_ray.point.GetData_const()[i]> max.GetData()[i])
+                    if (abs(arg_ray.velocity.GetData()[i]) < FLT_EPSILON) {
+                        if (arg_ray.point.GetData()[i] < min.GetData()[i] || arg_ray.point.GetData()[i]> max.GetData()[i])
                             return false; 
                     }
                     else {
 
-                        float odd = 1.0f / arg_ray.velocity.GetData_const()[i];
-                        float t1 = (min.GetData()[i] - arg_ray.point.GetData_const()[i]) * odd;
-                        float t2 = (max.GetData()[i]- arg_ray.point.GetData_const()[i]) * odd;
+                        float odd = 1.0f / arg_ray.velocity.GetData()[i];
+                        float t1 = (min.GetData()[i] - arg_ray.point.GetData()[i]) * odd;
+                        float t2 = (max.GetData()[i]- arg_ray.point.GetData()[i]) * odd;
                         if (( t1) > (t2)) {
                             float tmp = t1; t1 = t2; t2 = tmp;
                         }
@@ -522,15 +522,15 @@ namespace ButiEngine {
                 float t_max = FLT_MAX;
 
                 for (std::int32_t i = 0; i < 3; ++i) {
-                    if (abs(dir_l.GetData_const()[i]) < FLT_EPSILON) {
-                        if (p_l.GetData_const()[i] < min.GetData()[i] || p_l.GetData_const()[i]> max.GetData()[i])
+                    if (abs(dir_l.GetData()[i]) < FLT_EPSILON) {
+                        if (p_l.GetData()[i] < min.GetData()[i] || p_l.GetData()[i]> max.GetData()[i])
                             return false;
                     }
                     else {
 
-                        float odd = 1.0f / dir_l.GetData_const()[i];
-                        float t1 = (min.GetData()[i] - p_l.GetData_const()[i]) * odd;
-                        float t2 = (max.GetData()[i] - p_l.GetData_const()[i]) * odd;
+                        float odd = 1.0f / dir_l.GetData()[i];
+                        float t1 = (min.GetData()[i] - p_l.GetData()[i]) * odd;
+                        float t2 = (max.GetData()[i] - p_l.GetData()[i]) * odd;
                         if ((t1) > (t2)) {
                             float tmp = t1; t1 = t2; t2 = tmp;
                         }
@@ -567,15 +567,15 @@ namespace ButiEngine {
                 float t_max = FLT_MAX;
 
                 for (std::int32_t i = 0; i < 3; ++i) {
-                    if (abs(arg_ray.velocity.GetData_const()[i]) < FLT_EPSILON) {
-                        if (arg_ray.point.GetData_const()[i] < min.GetData()[i] || arg_ray.point.GetData_const()[i]> max.GetData()[i])
+                    if (abs(arg_ray.velocity.GetData()[i]) < FLT_EPSILON) {
+                        if (arg_ray.point.GetData()[i] < min.GetData()[i] || arg_ray.point.GetData()[i]> max.GetData()[i])
                             return false; 
                     }
                     else {
 
-                        float odd = 1.0f / arg_ray.velocity.GetData_const()[i];
-                        float t1 = (min.GetData()[i] - arg_ray.point.GetData_const()[i]) * odd;
-                        float t2 = (max.GetData()[i]- arg_ray.point.GetData_const()[i]) * odd;
+                        float odd = 1.0f / arg_ray.velocity.GetData()[i];
+                        float t1 = (min.GetData()[i] - arg_ray.point.GetData()[i]) * odd;
+                        float t2 = (max.GetData()[i]- arg_ray.point.GetData()[i]) * odd;
                         if (( t1) > (t2)) {
                             float tmp = t1; t1 = t2; t2 = tmp;
                         }
@@ -618,15 +618,15 @@ namespace ButiEngine {
                 float t_max = FLT_MAX;
 
                 for (std::int32_t i = 0; i < 3; ++i) {
-                    if (abs(dir_l.GetData_const()[i]) < FLT_EPSILON) {
-                        if (p_l.GetData_const()[i] < min.GetData()[i] || p_l.GetData_const()[i]> max.GetData()[i])
+                    if (abs(dir_l.GetData()[i]) < FLT_EPSILON) {
+                        if (p_l.GetData()[i] < min.GetData()[i] || p_l.GetData()[i]> max.GetData()[i])
                             return false;
                     }
                     else {
 
-                        float odd = 1.0f / dir_l.GetData_const()[i];
-                        float t1 = (min.GetData()[i] - p_l.GetData_const()[i]) * odd;
-                        float t2 = (max.GetData()[i] - p_l.GetData_const()[i]) * odd;
+                        float odd = 1.0f / dir_l.GetData()[i];
+                        float t1 = (min.GetData()[i] - p_l.GetData()[i]) * odd;
+                        float t2 = (max.GetData()[i] - p_l.GetData()[i]) * odd;
                         if ((t1) > (t2)) {
                             float tmp = t1; t1 = t2; t2 = tmp;
                         }
@@ -711,53 +711,53 @@ namespace ButiEngine {
             }
 
             static inline bool IsHitBox_AABB(const Box_AABB& arg_box, const Box_AABB& arg_otherBox) {
-                Vector3  Ae1 = Vector3::XAxis * arg_box.GetLength(0);
-                Vector3  Ae2 = Vector3::YAxis * arg_box.GetLength(1);
-                Vector3 Ae3 = Vector3:: ZAxis * arg_box.GetLength(2);
-                Vector3 Be1 = Vector3::XAxis* arg_otherBox.GetLength(0);
-                Vector3 Be2 = Vector3::YAxis * arg_otherBox.GetLength(1);
-                Vector3 Be3 = Vector3::ZAxis * arg_otherBox.GetLength(2);
+                Vector3  Ae1 =Vector3Const:: XAxis * arg_box.GetLength(0);
+                Vector3  Ae2 =Vector3Const::YAxis * arg_box.GetLength(1);
+                Vector3 Ae3 = Vector3Const::ZAxis * arg_box.GetLength(2);
+                Vector3 Be1 = Vector3Const::XAxis* arg_otherBox.GetLength(0);
+                Vector3 Be2 = Vector3Const::YAxis * arg_otherBox.GetLength(1);
+                Vector3 Be3 = Vector3Const::ZAxis * arg_otherBox.GetLength(2);
                 Vector3 Interval = arg_box.position - arg_otherBox.position;
 
                 // •ª—£Ž² : Ae1
                 float rA = Ae1.GetLength();
-                float rB = GetLengthSeparatedAxis(Vector3::XAxis, Be1, Be2, &Be3);
-                float L = fabs(Interval.Dot(Vector3::XAxis));
+                float rB = GetLengthSeparatedAxis(Vector3Const::XAxis, Be1, Be2, &Be3);
+                float L = fabs(Interval.Dot(Vector3Const::XAxis));
                 if (L > rA + rB)
                     return false; // Õ“Ë‚µ‚Ä‚¢‚È‚¢
 
                  // •ª—£Ž² : Ae2
                 rA = Ae2.GetLength();
-                rB = GetLengthSeparatedAxis(Vector3::YAxis, Be1, Be2, &Be3);
-                L = fabs(Interval.Dot(Vector3::YAxis));
+                rB = GetLengthSeparatedAxis(Vector3Const::YAxis, Be1, Be2, &Be3);
+                L = fabs(Interval.Dot(Vector3Const::YAxis));
                 if (L > rA + rB)
                     return false;
 
                 // •ª—£Ž² : Ae3
                 rA = Ae3.GetLength();
-                rB = GetLengthSeparatedAxis(Vector3::ZAxis, Be1, Be2, &Be3);
-                L = fabs(Interval.Dot(Vector3::ZAxis));
+                rB = GetLengthSeparatedAxis(Vector3Const::ZAxis, Be1, Be2, &Be3);
+                L = fabs(Interval.Dot(Vector3Const::ZAxis));
                 if (L > rA + rB)
                     return false;
 
                 // •ª—£Ž² : Be1
-                rA = GetLengthSeparatedAxis(Vector3::XAxis, Ae1, Ae2, &Ae3);
+                rA = GetLengthSeparatedAxis(Vector3Const::XAxis, Ae1, Ae2, &Ae3);
                 rB = Be1.GetLength();
-                L = fabs(Interval.Dot(Vector3::XAxis));
+                L = fabs(Interval.Dot(Vector3Const::XAxis));
                 if (L > rA + rB)
                     return false;
 
                 // •ª—£Ž² : Be2
-                rA = GetLengthSeparatedAxis(Vector3::YAxis, Ae1, Ae2, &Ae3);
+                rA = GetLengthSeparatedAxis(Vector3Const::YAxis, Ae1, Ae2, &Ae3);
                 rB = Be2.GetLength();
-                L = fabs(Interval.Dot(Vector3::YAxis));
+                L = fabs(Interval.Dot(Vector3Const::YAxis));
                 if (L > rA + rB)
                     return false;
 
                 // •ª—£Ž² : Be3
-                rA = GetLengthSeparatedAxis(Vector3::ZAxis, Ae1, Ae2, &Ae3);
+                rA = GetLengthSeparatedAxis(Vector3Const::ZAxis, Ae1, Ae2, &Ae3);
                 rB = Be3.GetLength();
-                L = fabs(Interval.Dot(Vector3::ZAxis));
+                L = fabs(Interval.Dot(Vector3Const::ZAxis));
                 if (L > rA + rB)
                     return false;
 
@@ -765,9 +765,9 @@ namespace ButiEngine {
             }
 
             static inline bool IsHitBox_OBBBox_AABB(const Box_AABB& arg_box, const Box_OBB_Static& arg_otherBox) {
-                Vector3 Ae1 = Vector3::XAxis * arg_box.GetLength(0);
-                Vector3 Ae2 = Vector3::YAxis * arg_box.GetLength(1);
-                Vector3 Ae3 = Vector3::ZAxis * arg_box.GetLength(2);
+                Vector3 Ae1 = Vector3Const::XAxis * arg_box.GetLength(0);
+                Vector3 Ae2 = Vector3Const::YAxis * arg_box.GetLength(1);
+                Vector3 Ae3 = Vector3Const::ZAxis * arg_box.GetLength(2);
                 Vector3 NBe1 = arg_otherBox.GetDirect(0), Be1 = NBe1 * arg_otherBox.GetLength(0);
                 Vector3 NBe2 = arg_otherBox.GetDirect(1), Be2 = NBe2 * arg_otherBox.GetLength(1);
                 Vector3 NBe3 = arg_otherBox.GetDirect(2), Be3 = NBe3 * arg_otherBox.GetLength(2);
@@ -775,22 +775,22 @@ namespace ButiEngine {
 
                 // •ª—£Ž² : Ae1
                 float rA = Ae1.GetLength();
-                float rB = GetLengthSeparatedAxis(Vector3::XAxis, Be1, Be2, &Be3);
-                float L = fabs(Interval.Dot(Vector3::XAxis));
+                float rB = GetLengthSeparatedAxis(Vector3Const::XAxis, Be1, Be2, &Be3);
+                float L = fabs(Interval.Dot(Vector3Const::XAxis));
                 if (L > rA + rB)
                     return false; // Õ“Ë‚µ‚Ä‚¢‚È‚¢
 
                  // •ª—£Ž² : Ae2
                 rA = Ae2.GetLength();
-                rB = GetLengthSeparatedAxis(Vector3::YAxis, Be1, Be2, &Be3);
-                L = fabs(Interval.Dot(Vector3::YAxis));
+                rB = GetLengthSeparatedAxis(Vector3Const::YAxis, Be1, Be2, &Be3);
+                L = fabs(Interval.Dot(Vector3Const::YAxis));
                 if (L > rA + rB)
                     return false;
 
                 // •ª—£Ž² : Ae3
                 rA = Ae3.GetLength();
-                rB = GetLengthSeparatedAxis(Vector3::ZAxis, Be1, Be2, &Be3);
-                L = fabs(Interval.Dot(Vector3::ZAxis));
+                rB = GetLengthSeparatedAxis(Vector3Const::ZAxis, Be1, Be2, &Be3);
+                L = fabs(Interval.Dot(Vector3Const::ZAxis));
                 if (L > rA + rB)
                     return false;
 
@@ -823,7 +823,7 @@ namespace ButiEngine {
                 Vector3 Be2 = arg_box.GetDirect(1) * arg_box.GetLength(1);
                 Vector3 Be3 = arg_box.GetDirect(2) * arg_box.GetLength(2);
 
-                return Vector3(GetLengthSeparatedAxis(Vector3::XAxis, Be1, Be2, &Be3), GetLengthSeparatedAxis(Vector3::YAxis, Be1, Be2, &Be3), GetLengthSeparatedAxis(Vector3::ZAxis, Be1, Be2, &Be3));
+                return Vector3(GetLengthSeparatedAxis(Vector3Const::XAxis, Be1, Be2, &Be3), GetLengthSeparatedAxis(Vector3Const::YAxis, Be1, Be2, &Be3), GetLengthSeparatedAxis(Vector3Const::ZAxis, Be1, Be2, &Be3));
             }
 
             static inline bool IsHitBox_OBB(const Box_OBB_Static& arg_box, const Box_OBB_Static& arg_otherBox) {

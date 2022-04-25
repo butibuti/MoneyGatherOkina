@@ -162,7 +162,7 @@ namespace ButiEngine {
 		}
 	protected:
 		TextureTag defaultRenderTarget;
-		Value_weak_ptr<IApplication> wkp_application;
+		Value_weak_ptr<IApplication> vwp_application;
 		Matrix4x4 projectionMatrix;
 
 		Matrix4x4 viewMatrix;

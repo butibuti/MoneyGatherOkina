@@ -68,11 +68,11 @@ namespace ButiEngine {
 
 		struct Image
 		{
-			Value_ptr<ImageFileIO::TextureResourceData> shp_imageData;
+			Value_ptr<ImageFileIO::TextureResourceData> vlp_imageData;
 			void* p_resourceData = nullptr;
 			DXGI_FORMAT format;
 		};
-		Resource_Texture_Dx12(Value_ptr<ImageFileIO::TextureResourceData> arg_shp_imageData, Value_ptr<GraphicDevice> arg_graphicDevice);
+		Resource_Texture_Dx12(Value_ptr<ImageFileIO::TextureResourceData> arg_vlp_imageData, Value_ptr<GraphicDevice> arg_graphicDevice);
 		~Resource_Texture_Dx12() {
 		}
 		void SetGraphicDevice(Value_ptr<GraphicDevice> arg_graphicDevice) override;
@@ -89,7 +89,7 @@ namespace ButiEngine {
 		D3D12_RESOURCE_DESC GetTextureDesc();
 		const unsigned char* GetRawData()override;
 		UInt2 GetSize() const override {
-			return UInt2(image.shp_imageData->width, image.shp_imageData->height);
+			return UInt2(image.vlp_imageData->width, image.vlp_imageData->height);
 		}
 		std::int32_t GetFormat()const override;
 		std::int32_t GetStride()const override;
@@ -112,7 +112,7 @@ namespace ButiEngine {
 		std::wstring fileName{ L"" };
 		bool dataRefresh = true;
 
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 	};
 
 }

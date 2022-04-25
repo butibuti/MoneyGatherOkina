@@ -10,20 +10,20 @@ class IApplication;
 class SceneManager :public ISceneManager
 {
 public:
-	SceneManager(Value_weak_ptr<IApplication> arg_wkp_app);
+	SceneManager(Value_weak_ptr<IApplication> arg_vwp_app);
 
 	void Update()override;
 	void Initialize()override;
 	void PreInitialize()override;
 	void RemoveScene(const std::string& arg_sceneName)override;
 	void ChangeScene(const std::string& arg_sceneName, float sceneChangeDalay = 0)override;
-	void SetScene(const std::string& arg_sceneName, Value_ptr<IScene> shp_scene)override;
-	void SetScene_Init(const std::string& arg_sceneName, Value_ptr<IScene> shp_scene)override;
+	void SetScene(const std::string& arg_sceneName, Value_ptr<IScene> vlp_scene)override;
+	void SetScene_Init(const std::string& arg_sceneName, Value_ptr<IScene> vlp_scene)override;
 
 
-	void LoadScene(const std::string& arg_sceneName, Value_ptr<SceneInformation> shp_scene = nullptr) override;
+	void LoadScene(const std::string& arg_sceneName, Value_ptr<SceneInformation> vlp_scene = nullptr) override;
 	void LoadScene_async(const std::string& arg_sceneName) override;
-	void LoadScene_Init(const std::string& arg_sceneName, Value_ptr<SceneInformation> shp_scene = nullptr) override;
+	void LoadScene_Init(const std::string& arg_sceneName, Value_ptr<SceneInformation> vlp_scene = nullptr) override;
 	void ReloadScene()override;
 	void ReloadScene(const std::string& arg_sceneName)override;
 	void RenewalScene()override;
@@ -39,7 +39,7 @@ private:
 	Value_ptr<IScene> newScene;
 	std::map<std::string, Value_ptr<IScene>> map_iscene;
 	Value_ptr<AbsoluteTimer> sceneChangeTimer;
-	Value_weak_ptr<IApplication> wkp_app;
+	Value_weak_ptr<IApplication> vwp_app;
 	bool isReload = false, isLoad = false;
 	std::mutex mtx_load;
 #ifdef _EDITORBUILD
@@ -57,7 +57,7 @@ private:
 	void ReloadCheck();
 	bool isActive = false;
 	bool isPlaying = false;
-	Value_ptr<IResource_Texture>shp_texture;
+	Value_ptr<IResource_Texture>vlp_texture;
 	std::string reloadSceneName;
 	std::uint32_t startCount = 0;
 	TextureTag screenTextureTag;

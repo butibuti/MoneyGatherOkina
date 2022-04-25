@@ -30,7 +30,7 @@ namespace ButiEngine {
 
 		void SetActive(const bool arg_isActive);
 
-		void SetGameObjectManager(Value_weak_ptr<GameObjectManager> arg_wkp_gameObjectManager);
+		void SetGameObjectManager(Value_weak_ptr<GameObjectManager> arg_vwp_gameObjectManager);
 		bool GetActive();
 
 		void SetIsRemove(const bool arg_isRemove);
@@ -38,7 +38,7 @@ namespace ButiEngine {
 
 		virtual void OnUpdate();
 
-		virtual void Hit(Value_ptr<GameObject> shp_other);
+		virtual void Hit(Value_ptr<GameObject> vlp_other);
 		
 		virtual void Release();
 
@@ -46,9 +46,9 @@ namespace ButiEngine {
 
 		virtual void PreInitialize();
 
-		void RegistReactionComponent(Value_ptr<GameComponent> arg_shp_gameComponent);
+		void RegistReactionComponent(Value_ptr<GameComponent> arg_vlp_gameComponent);
 
-		Value_ptr<GameComponent> AddGameComponent(Value_ptr<GameComponent> arg_shp_gameComponent);
+		Value_ptr<GameComponent> AddGameComponent(Value_ptr<GameComponent> arg_vlp_gameComponent);
 
 		template<class T, typename... Ts>
 		inline Value_ptr<T> AddGameComponent(Ts&&... params) {
@@ -67,7 +67,7 @@ namespace ButiEngine {
 		}
 
 
-		Value_ptr<GameComponent> AddGameComponent_Insert(Value_ptr<GameComponent> arg_shp_gameComponent);
+		Value_ptr<GameComponent> AddGameComponent_Insert(Value_ptr<GameComponent> arg_vlp_gameComponent);
 
 		Value_ptr<GameComponent> GetGameComponent(const std::string& arg_gameComponentName,const std::uint32_t arg_index)const;
 		Value_ptr<GameComponent> GetGameComponent(const std::string& arg_gameComponentName,const std::string& arg_serchName)const;
@@ -158,7 +158,7 @@ namespace ButiEngine {
 		Value_ptr<Transform> transform;
 	protected:
 
-		Value_ptr<GameComponent> RegisterGameComponent(Value_ptr<GameComponent> arg_shp_gameComponent);
+		Value_ptr<GameComponent> RegisterGameComponent(Value_ptr<GameComponent> arg_vlp_gameComponent);
 
 		void GameComponentUpdate();
 		void BehaviorHit();
@@ -172,7 +172,7 @@ namespace ButiEngine {
 
 		std::string objectName;
 
-		Value_weak_ptr<GameObjectManager> wkp_gameObjManager;
+		Value_weak_ptr<GameObjectManager> vwp_gameObjManager;
 
 		std::vector<Value_ptr<GameObject>> vec_collisionObject;
 		std::vector<Value_ptr<GameObject>> vec_befCollisionObject;

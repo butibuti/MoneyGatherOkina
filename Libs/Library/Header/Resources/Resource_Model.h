@@ -13,42 +13,43 @@ namespace ButiEngine {
 		void Initialize()override {};
 		void PreInitialize()override {};
 
-		void SetMeshTag(const MeshTag& arg_meshTag) override;
-		void SetMaterialVec(const std::vector<MaterialTag>& arg_materialTags) override;
-		void SetName(const std::wstring & arg_name) override;
-		void SetEngName(const std::wstring & arg_engName) override;
-		void SetModelName(const std::wstring & arg_modelName) override;
-		void SetEngModelName(const std::wstring & arg_engModelName) override;
-		void SetComment(const std::wstring & arg_comment) override;
-		void SetEngComment(const std::wstring & arg_engComment) override;
+		void SetMesh(const Value_weak_ptr< IResource_Mesh>& arg_vwp_mesh) override;
+		void SetMaterial(const List<Value_weak_ptr< IResource_Material>>& arg_list_vwp_material) override;
+		void SetName(const std::string & arg_name) override;
+		void SetEngName(const std::string & arg_engName) override;
+		void SetModelName(const std::string & arg_modelName) override;
+		void SetEngModelName(const std::string & arg_engModelName) override;
+		void SetComment(const std::string & arg_comment) override;
+		void SetEngComment(const std::string & arg_engComment) override;
 		void AddBone(Bone& arg_bone) override;
 		void AddMorph(Value_ptr<Morph::Morph> arg_morph) override;
-		void AddMaterial(const MaterialTag & arg_materialTag) override;
 		void SetVersion(const float arg_version) override;
 		void SetSubset(const std::vector<std::uint32_t>& arg_subset) override;
-		const MeshTag GetMeshTag() override;
-		std::vector<MaterialTag>& GetMaterialTags() override;
 		std::vector<std::uint32_t> GetSubset() override;
-		const std::wstring & GetName() override;
-		const std::wstring & GetEngName() override;
-		const std::wstring & GetModelName() override;
-		const std::wstring & GetEngModelName() override;
-		const std::wstring & GetComment() override;
-		const std::wstring & GetEngComment() override;
+		const std::string & GetName() override;
+		const std::string & GetEngName() override;
+		const std::string & GetModelName() override;
+		const std::string & GetEngModelName() override;
+		const std::string & GetComment() override;
+		const std::string & GetEngComment() override;
 		std::vector<Value_ptr<Bone>> GetBone() override;
+
+		Value_weak_ptr<IResource_Mesh> GetMesh()const override;
+		const List<Value_weak_ptr<IResource_Material>>& GetMaterial()const override;
+		List<Value_weak_ptr<IResource_Material>>& GetMaterial() override;
 	private:
-		std::wstring modelName;
-		std::wstring modelNameEng;
-		std::wstring comment;
-		std::wstring commentEng;
-		std::wstring name;
-		std::wstring nameEng;
+		std::string modelName;
+		std::string modelNameEng;
+		std::string comment;
+		std::string commentEng;
+		std::string name;
+		std::string nameEng;
 		std::vector<Value_ptr< Morph::Morph>> vec_morphs;
 
 		std::vector<std::uint32_t> subset;
 
-		MeshTag meshTag;
-		std::vector<MaterialTag> vec_materialTags;
+		Value_weak_ptr<IResource_Mesh> vwp_mesh;
+		List<Value_weak_ptr<IResource_Material>> list_vwp_material;
 
 		std::vector<Bone> vec_bone;
 

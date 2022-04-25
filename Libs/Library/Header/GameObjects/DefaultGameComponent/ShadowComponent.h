@@ -23,18 +23,18 @@ namespace ButiEngine {
 			archive(modelTag);
 			archive(materialTag);
 			archive(isActive);
-			archive(shp_transform);
-			archive(shp_drawInfo);
-			archive(shp_meshDrawComponent);
+			archive(vlp_transform);
+			archive(vlp_drawInfo);
+			archive(vlp_meshDrawComponent);
 		}
 		void Regist()override;
 		void UnRegist()override;
 		void CreateData()override;
 	protected:
-		void RegistShadowDrop(Value_ptr<MeshDrawComponent> arg_shp_shadowDrop = nullptr);
-		Value_ptr<MeshDrawComponent> shp_meshDrawComponent;
+		void RegistShadowDrop(Value_ptr<MeshDrawComponent> arg_vlp_shadowDrop = nullptr);
+		Value_ptr<MeshDrawComponent> vlp_meshDrawComponent;
 
-		Value_ptr<IBoneObject> shp_bone;
+		Value_ptr<IBoneObject> vlp_bone;
 	};
 }
 

@@ -5,12 +5,12 @@ namespace ButiEngine {
 	class ModelAnimation;
 
 
-	class ModelDrawData;
+	class IModelObject;
 	class SimpleBoneAnimatorComponent :public GameComponent {
 	public:
 		SimpleBoneAnimatorComponent() {}
 		void OnUpdate()override;
-		void AddAnimation(Value_ptr<ModelAnimation> arg_shp_animation);
+		void AddAnimation(Value_ptr<ModelAnimation> arg_vlp_animation);
 		void AddAnimation(MotionTag arg_motionTag);
 		void SetLoop(const bool arg_isLoop);
 		void OnShowUI()override;
@@ -30,8 +30,8 @@ namespace ButiEngine {
 		}
 		Value_ptr<GameComponent> Clone()override;
 	private:
-		Value_ptr<ModelAnimation> shp_animation;
-		Value_ptr< ModelDrawData > shp_modelData;
+		Value_ptr<ModelAnimation> vlp_animation;
+		Value_ptr< IModelObject > vlp_modelData;
 		MotionTag tag;
 		bool isLoop;
 		float pase;

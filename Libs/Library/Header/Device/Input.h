@@ -10,7 +10,7 @@ namespace ButiEngine {
 	public:
 		Input();
 		~Input();
-		void Initialize(Value_weak_ptr<IApplication> arg_wkp_app);
+		void Initialize(Value_weak_ptr<IApplication> arg_vwp_app);
 		bool CheckKey(const std::uint32_t index);
 		bool TriggerKey(const std::uint32_t index);
 		bool ReleaseKey(const std::uint32_t index);
@@ -51,9 +51,9 @@ namespace ButiEngine {
 
 		HRESULT SetMouseFormat(void);
 
-		HRESULT SetKeyCooperative(Value_weak_ptr<IApplication> arg_wkp_app);
+		HRESULT SetKeyCooperative(Value_weak_ptr<IApplication> arg_vwp_app);
 
-		HRESULT SetMouseCooperative(Value_weak_ptr<IApplication> arg_wkp_app);
+		HRESULT SetMouseCooperative(Value_weak_ptr<IApplication> arg_vwp_app);
 
 
 
@@ -62,7 +62,7 @@ namespace ButiEngine {
 
 		std::unique_ptr<InputInstance> unq_instance;
 
-		Value_weak_ptr<IApplication> wkp_app;
+		Value_weak_ptr<IApplication> vwp_app;
 
 	};
 }

@@ -2,7 +2,7 @@
 #include"stdafx.h"
 #include"Resource_RealTimeMesh.h"
 
-#include "ButiRendering_Dx12/Rendering_Dx12/GraphicResourceUtil_Dx12.h"
+#include"ButiRendering_Dx12/Header/Rendering_Dx12/GraphicResourceUtil_Dx12.h"
 #include"../GameParts/GraphicDevice_Dx12.h"
 namespace ButiEngine {
 	class GraphicDevice_Dx12;
@@ -47,7 +47,7 @@ namespace ButiEngine {
 		D3D12_INDEX_BUFFER_VIEW indexBufferView;
 
 
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 
 
 		void ResourceUpdate() override;

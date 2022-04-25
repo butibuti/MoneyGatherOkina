@@ -9,7 +9,7 @@ namespace ButiEngine {
 		void PreInitialize()override;
 		Value_ptr<WaveDatas> GetWavDatas();
 	protected:
-		Value_ptr<WaveDatas> shp_wavData;
+		Value_ptr<WaveDatas> vlp_wavData;
 	};
 
 }

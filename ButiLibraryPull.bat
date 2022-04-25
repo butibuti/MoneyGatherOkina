@@ -1,25 +1,25 @@
-cd Libs\Library\
-cd ButiBulletWrap\
+cd Libs\Library\ButiBulletWrap\
 git pull
-cd ..\
-cd ButiScript\
+cd ..\ButiScript\
 git pull
-cd ..\
-cd ButiMemorySystem\
+cd ..\ButiMemorySystem\
 git pull
-cd ..\
-cd ButiUtil\
+cd ..\ButiUtil\
 git pull
-cd ..\
-cd ButiMath\
+cd ..\ButiMath\
 git pull
-cd ..\
-cd ButiEventSystem\
+cd ..\ButiEventSystem\
 git pull
-cd ..\
-cd ButiFont\
+cd ..\ButiFont\
 git pull
-cd ..\
-cd ButiRendering_Dx12\
+cd ..\ButiRendering_Dx12\
 git pull
-
+cd..\..\..\
+xcopy /y /d "Libs\dll\Debug\" "output\UserSample\Debug\"
+xcopy /y /d "Libs\dll\Debug_imguiEditor\" "output\UserSample\Debug_imguiEditor\"
+xcopy /y /d "Libs\dll\Release\" "output\UserSample\Release\"
+xcopy /y /d "Libs\dll\Release_imguiEditor\" "output\UserSample\Release_imguiEditor\"
+xcopy /y /d "Libs\lib\Debug\" "output\UserSample\Debug\"
+xcopy /y /d "Libs\lib\Debug_imguiEditor\" "output\UserSample\Debug_imguiEditor\"
+xcopy /y /d "Libs\lib\Release\" "output\UserSample\Release\"
+xcopy /y /d "Libs\lib\Release_imguiEditor\" "output\UserSample\Release_imguiEditor\"

@@ -22,7 +22,7 @@ namespace ButiEngine
 
 	class PipelineStateManager :public IObject {
 	public:
-		PipelineStateManager(Value_weak_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice);
+		PipelineStateManager(Value_weak_ptr<GraphicDevice_Dx12> arg_vwp_graphicDevice);
 		void Release();
 		void ClearPipelineState();
 		void Initialize() {}
@@ -32,6 +32,6 @@ namespace ButiEngine
 		Microsoft::WRL::ComPtr<ID3D12PipelineState> GetPipelineState(const Microsoft::WRL::ComPtr<ID3D12RootSignature>& rootSignature, const D3D12_ROOT_SIGNATURE_DESC rootdesc, D3D12_GRAPHICS_PIPELINE_STATE_DESC& RetDesc, D3D12_RASTERIZER_DESC& arg_rasteriserDesc, Value_ptr<IResource_Shader> arg_shader, const BlendMode arg_BlendMode, const TopologyType arg_topologyType,const bool arg_isDepth);
 	private:
 		std::unordered_map<std::string,Value_ptr<PipelineState> > map_pipeLineState;
-		Value_weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Value_weak_ptr<GraphicDevice_Dx12> vwp_graphicDevice;
 	};
 }

@@ -14,17 +14,17 @@ namespace Collision {
 	template<typename T>
 	struct CollisionObject :public IObject {
 
-		CollisionObject(Value_weak_ptr<CollisionPrimitive> arg_wkp_coliisionPrim, Value_weak_ptr<T> arg_wkp_obj) {
-			wkp_coliisionPrim = arg_wkp_coliisionPrim;
-			wkp_obj = arg_wkp_obj;
+		CollisionObject(Value_weak_ptr<CollisionPrimitive> arg_vwp_coliisionPrim, Value_weak_ptr<T> arg_vwp_obj) {
+			vwp_coliisionPrim = arg_vwp_coliisionPrim;
+			vwp_obj = arg_vwp_obj;
 		}
 		~CollisionObject() {
 
 		}
 		void Initialize()override {}
 		void PreInitialize()override {}
-		Value_weak_ptr<CollisionPrimitive> wkp_coliisionPrim;
-		Value_weak_ptr<T> wkp_obj;
+		Value_weak_ptr<CollisionPrimitive> vwp_coliisionPrim;
+		Value_weak_ptr<T> vwp_obj;
 	};
 
 	using CollisionObject_GameObject = CollisionObject<GameObject>;
@@ -34,18 +34,18 @@ namespace Collision {
 	class OctRegistObj:public enable_value_from_this<OctRegistObj<T>>
 	{
 	public:
-		inline OctRegistObj(Value_ptr<CollisionObject <T>> arg_shp_collisionObj) {
+		inline OctRegistObj(Value_ptr<CollisionObject <T>> arg_vlp_collisionObj) {
 
-			shp_collisionObject = arg_shp_collisionObj;
+			vlp_collisionObject = arg_vlp_collisionObj;
 
 		}
 		~OctRegistObj() {
-			shp_collisionObject = nullptr;
+			vlp_collisionObject = nullptr;
 		}
 		OctCell<T>* p_cell=nullptr;		
-		Value_ptr<CollisionObject< T>> shp_collisionObject;				
-		Value_ptr<OctRegistObj<T>> shp_next=nullptr;	
-		Value_ptr<OctRegistObj<T>> shp_bef=nullptr;	
+		Value_ptr<CollisionObject< T>> vlp_collisionObject;				
+		Value_ptr<OctRegistObj<T>> vlp_next=nullptr;	
+		Value_ptr<OctRegistObj<T>> vlp_bef=nullptr;	
 
 		bool Remove()
 		{
@@ -53,17 +53,17 @@ namespace Collision {
 				return false;
 
 
-			if (shp_next)
+			if (vlp_next)
 			{
-				shp_next->shp_bef = shp_bef;
+				vlp_next->vlp_bef = vlp_bef;
 			}
-			if (shp_bef)
+			if (vlp_bef)
 			{
-				shp_bef->shp_next = shp_next;
+				vlp_bef->vlp_next = vlp_next;
 			}
 			p_cell->OnRemove(this);
-			shp_next = nullptr;
-			shp_bef = nullptr;
+			vlp_next = nullptr;
+			vlp_bef = nullptr;
 			p_cell = nullptr;
 			return true;
 		}
@@ -74,7 +74,7 @@ namespace Collision {
 		}
 
 		Value_ptr<OctRegistObj<T>> GetBefObj() {
-			return shp_bef;
+			return vlp_bef;
 		}
 	};
 
@@ -86,12 +86,12 @@ namespace Collision {
 
 		}
 		~OctCell() {
-			while (shp_head&&shp_head->shp_next)
+			while (vlp_head&&vlp_head->vlp_next)
 			{
-				shp_head = shp_head->shp_next;
-				shp_head->shp_bef = nullptr;
+				vlp_head = vlp_head->vlp_next;
+				vlp_head->vlp_bef = nullptr;
 			}
-			shp_head = nullptr;
+			vlp_head = nullptr;
 		}
 		inline void RegistObject(Value_ptr<OctRegistObj< T>> arg_obj) {
 
@@ -102,25 +102,25 @@ namespace Collision {
 
 			arg_obj->p_cell = this;
 
-			if (shp_head) {
-				arg_obj->shp_next = shp_head;
-				shp_head->shp_bef = arg_obj;
-				shp_head = arg_obj;
+			if (vlp_head) {
+				arg_obj->vlp_next = vlp_head;
+				vlp_head->vlp_bef = arg_obj;
+				vlp_head = arg_obj;
 			}
 
-			shp_head = arg_obj;
+			vlp_head = arg_obj;
 		}
 		void OnRemove(OctRegistObj< T>* arg_remove)
 		{
-			if ((shp_head.get() ==arg_remove )&& arg_remove) {
-				shp_head = shp_head->shp_next;
+			if ((vlp_head.get() ==arg_remove )&& arg_remove) {
+				vlp_head = vlp_head->vlp_next;
 			}
 		}
 		Value_ptr< OctRegistObj<T>>& GetHead() {
-			return shp_head;
+			return vlp_head;
 		}
 	private:
-		Value_ptr< OctRegistObj< T>> shp_head;
+		Value_ptr< OctRegistObj< T>> vlp_head;
 
 	};
 
@@ -153,7 +153,7 @@ namespace Collision {
 
 		}
 		~CollisionLayer() {
-			vec_shp_collisionObjs.clear();
+			vec_vlp_collisionObjs.clear();
 			for (auto itr = vec_index.begin(); itr != vec_index.end(); itr++) {
 				delete (*itr);
 			}
@@ -165,9 +165,9 @@ namespace Collision {
 		}
 		void RegistCollisionObj(Value_ptr< CollisionPrimitive> arg_primitive, Value_ptr< T> arg_collisionObj) {
 
-			std::uint32_t* index = new std::uint32_t(vec_shp_collisionObjs.size());
+			std::uint32_t* index = new std::uint32_t(vec_vlp_collisionObjs.size());
 
-			vec_shp_collisionObjs.push_back(make_value<OctRegistObj<T>>(ObjectFactory::Create<CollisionObject<T>>(arg_primitive, arg_collisionObj)));
+			vec_vlp_collisionObjs.push_back(make_value<OctRegistObj<T>>(ObjectFactory::Create<CollisionObject<T>>(arg_primitive, arg_collisionObj)));
 
 			vec_index.push_back(index);
 			map_objIndex.emplace(arg_collisionObj, index);
@@ -177,13 +177,13 @@ namespace Collision {
 				return;
 			}
 			auto index = *map_objIndex.at(arg_index);
-			if (index >= vec_shp_collisionObjs.size()) {
+			if (index >= vec_vlp_collisionObjs.size()) {
 				return;
 			}
-			auto itr = vec_shp_collisionObjs.begin();
+			auto itr = vec_vlp_collisionObjs.begin();
 			itr += index;
 			(*itr)->Remove();
-			vec_shp_collisionObjs.erase(itr);
+			vec_vlp_collisionObjs.erase(itr);
 
 			delete map_objIndex.at(arg_index);
 			auto numItr = vec_index.begin() + index;
@@ -203,8 +203,8 @@ namespace Collision {
 		}
 		inline void RegistOctree() {
 			Vector3 minPoint, maxPoint;
-			for (auto itr = vec_shp_collisionObjs.begin(); itr != vec_shp_collisionObjs.end(); itr++) {
-				(*itr)->shp_collisionObject-> wkp_coliisionPrim.lock()->GetMaxPointAndMinPoint(maxPoint, minPoint);
+			for (auto itr = vec_vlp_collisionObjs.begin(); itr != vec_vlp_collisionObjs.end(); itr++) {
+				(*itr)->vlp_collisionObject-> vwp_coliisionPrim.lock()->GetMaxPointAndMinPoint(maxPoint, minPoint);
 				auto cellNum = GetMortonSpace(minPoint, maxPoint);
 
 				if (cellNum > maxCellNum) {
@@ -224,11 +224,11 @@ namespace Collision {
 
 		}
 
-		void Check(Value_ptr<CollisionPrimitive> arg_shp_checkPrimitive, std::vector<Value_ptr<CollisionObject< T>>>& arg_vec_collisionObjects) {
+		void Check(Value_ptr<CollisionPrimitive> arg_vlp_checkPrimitive, std::vector<Value_ptr<CollisionObject< T>>>& arg_vec_collisionObjects) {
 
 			Vector3 minPoint, maxPoint;
 
-			arg_shp_checkPrimitive->GetMaxPointAndMinPoint(maxPoint, minPoint);
+			arg_vlp_checkPrimitive->GetMaxPointAndMinPoint(maxPoint, minPoint);
 			auto cellNum = GetMortonSpace(minPoint, maxPoint);
 			if (!ary_cells[cellNum] && cellNum < maxCellNum) {
 				CreateCell(cellNum);
@@ -237,17 +237,17 @@ namespace Collision {
 			CreateObjectList(cellNum, vec_collisionObjects);
 			auto endItr = vec_collisionObjects.end();
 			for (auto itr = vec_collisionObjects.begin(); itr != endItr; itr++) {
-				if ((*itr)->wkp_coliisionPrim.lock()->IsHit(arg_shp_checkPrimitive)) {
+				if ((*itr)->vwp_coliisionPrim.lock()->IsHit(arg_vlp_checkPrimitive)) {
 					arg_vec_collisionObjects.push_back((*itr));
 				}
 			}
 
 		}
-		void Check(Value_ptr<CollisionPrimitive> arg_shp_checkPrimitive, std::vector<Value_ptr< T>>& arg_vec_collisionObjects) {
+		void Check(Value_ptr<CollisionPrimitive> arg_vlp_checkPrimitive, std::vector<Value_ptr< T>>& arg_vec_collisionObjects) {
 
 			Vector3 minPoint, maxPoint;
 
-			arg_shp_checkPrimitive->GetMaxPointAndMinPoint(maxPoint, minPoint);
+			arg_vlp_checkPrimitive->GetMaxPointAndMinPoint(maxPoint, minPoint);
 			auto cellNum = GetMortonSpace(minPoint, maxPoint);
 			if (!ary_cells[cellNum] && cellNum < maxCellNum) {
 				CreateCell(cellNum);
@@ -256,15 +256,15 @@ namespace Collision {
 			CreateObjectList(cellNum, vec_collisionObjects);
 			auto endItr = vec_collisionObjects.end();
 			for (auto itr = vec_collisionObjects.begin(); itr != endItr; itr++) {
-				if ((*itr)->wkp_coliisionPrim.lock()->IsHit(arg_shp_checkPrimitive)) {
+				if ((*itr)->vwp_coliisionPrim.lock()->IsHit(arg_vlp_checkPrimitive)) {
 					assert(0 && "修正");
-					//arg_vec_collisionObjects.push_back((*itr)->wkp_obj.lock());
+					//arg_vec_collisionObjects.push_back((*itr)->vwp_obj.lock());
 				}
 			}
 
 		}
 		std::vector<Value_ptr< OctRegistObj<T>>>& GetObjects() {
-			return vec_shp_collisionObjs;
+			return vec_vlp_collisionObjs;
 		}
 
 	private:
@@ -280,7 +280,7 @@ namespace Collision {
 				(unsigned char)((arg_position.z - rangeMin.z) / unit.z));
 		}
 		inline std::uint16_t GetMortonSpace(const Vector3& arg_minPos, const Vector3& arg_maxPos) {
-			if (arg_minPos == Vector3::Zero && arg_maxPos == Vector3::Zero) {
+			if (arg_minPos == Vector3Const::Zero && arg_maxPos == Vector3Const::Zero) {
 				return 0;
 			}
 			auto maxSpace = Get3DMortonNumber(arg_maxPos );
@@ -296,19 +296,19 @@ namespace Collision {
 			auto objItr = ary_cells[arg_cellNum]->GetHead();
 			while (objItr)
 			{
-				auto rObjItr = objItr->shp_next;
+				auto rObjItr = objItr->vlp_next;
 				while (rObjItr != nullptr) {
-					arg_output.push_back(objItr->shp_collisionObject);
-					arg_output.push_back(rObjItr->shp_collisionObject);
+					arg_output.push_back(objItr->vlp_collisionObject);
+					arg_output.push_back(rObjItr->vlp_collisionObject);
 
-					rObjItr = rObjItr->shp_next;
+					rObjItr = rObjItr->vlp_next;
 				}
 				//  衝突スタックとの衝突リスト作成
 				for (auto itr = arg_stack.begin(); itr != arg_stack.end(); itr++) {
-					arg_output.push_back(objItr->shp_collisionObject);
+					arg_output.push_back(objItr->vlp_collisionObject);
 					arg_output.push_back(*itr);
 				}
-				objItr = objItr->shp_next;
+				objItr = objItr->vlp_next;
 			}
 
 			bool ChildFlag = false;
@@ -321,9 +321,9 @@ namespace Collision {
 					if (!ChildFlag) {
 						objItr = ary_cells[arg_cellNum]->GetHead();
 						while (objItr) {
-							arg_stack.push_back(objItr->shp_collisionObject);
+							arg_stack.push_back(objItr->vlp_collisionObject);
 							ObjNum++;
-							objItr = objItr->shp_next;
+							objItr = objItr->vlp_next;
 						}
 					}
 					ChildFlag = true;
@@ -342,9 +342,9 @@ namespace Collision {
 			auto objItr = ary_cells[arg_cellNum]->GetHead();
 			while (objItr)
 			{
-				arg_output.push_back(objItr->shp_collisionObject);
+				arg_output.push_back(objItr->vlp_collisionObject);
 				
-				objItr = objItr->shp_next;
+				objItr = objItr->vlp_next;
 			}
 
 			//  子空間に移動
@@ -372,7 +372,7 @@ namespace Collision {
 			}
 
 		}
-		std::vector<Value_ptr< OctRegistObj<T>>> vec_shp_collisionObjs;
+		std::vector<Value_ptr< OctRegistObj<T>>> vec_vlp_collisionObjs;
 
 
 		std::unordered_map<Value_ptr<T>, std::uint32_t*> map_objIndex;

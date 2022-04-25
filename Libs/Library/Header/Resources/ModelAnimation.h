@@ -44,7 +44,7 @@ namespace ButiEngine {
 		virtual void Reset() = 0;
 		virtual std::uint32_t GetEndFrame() = 0;
 		virtual void PreStart() = 0;
-		virtual void SetBone(Value_ptr<Bone> arg_shp_bone) = 0;
+		virtual void SetBone(Value_ptr<Bone> arg_vlp_bone) = 0;
 		virtual void SetMotionData(const MotionKeyFrameData& arg_motionData) = 0;
 		virtual void SetMotionData(const std::vector<MotionKeyFrameData>& arg_motionDatas)=0;
 		virtual void LocalPoseSet(Value_ptr<Transform> arg_parentBone) = 0;
@@ -54,7 +54,7 @@ namespace ButiEngine {
 	public:
 		BoneMotionTimeLine();
 		~BoneMotionTimeLine();
-		void SetBone(Value_ptr<Bone> arg_shp_bone)override;
+		void SetBone(Value_ptr<Bone> arg_vlp_bone)override;
 		void PreStart()override;
 		void Reset()override;
 		void SetMotionData(const MotionKeyFrameData& arg_motionData) override;
@@ -86,7 +86,7 @@ namespace ButiEngine {
 		void PreMotionStart(Value_ptr<Transform> arg_parentBoneTransform);
 		Value_ptr<IMotionTimeLine> AddMotionTimeLine( Value_ptr<IMotionTimeLine> arg_motion);
 		bool SetLoop(const bool arg_isLoop);
-		void SetBoneDrawObj(Value_ptr<IBoneObject> arg_shp_boneDrawObj);
+		void SetBoneDrawObj(Value_ptr<IBoneObject> arg_vlp_boneDrawObj);
 		float GetFrame()const;
 	private:
 		bool isActive = true;
@@ -96,7 +96,7 @@ namespace ButiEngine {
 		
 
 		std::vector<Value_ptr<IMotionTimeLine>> vec_timeLines;
-		Value_ptr<IBoneObject> shp_boneDrawObj;
+		Value_ptr<IBoneObject> vlp_boneDrawObj;
 	};
 
 }

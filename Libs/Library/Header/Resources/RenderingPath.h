@@ -5,27 +5,27 @@
 namespace ButiEngine {
 
 	struct ForwardCameraRenderingPathInfo :public RenderingPathInfo {
-		Value_ptr<Transform> shp_cameraTrnasform;
-		Value_ptr<CameraProjProperty> shp_cameraProp;
-		Value_ptr<IRenderingPath> CreateRenderingPath(Value_ptr<IRenderer> arg_shp_renderer, Value_ptr<GraphicDevice> arg_shp_graphicDevice)override;
+		Value_ptr<Transform> vlp_cameraTrnasform;
+		Value_ptr<CameraProjProperty> vlp_cameraProp;
+		Value_ptr<IRenderingPath> CreateRenderingPath(Value_ptr<IRenderer> arg_vlp_renderer, Value_ptr<GraphicDevice> arg_vlp_graphicDevice)override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
-			archive(shp_cameraTrnasform);
-			archive(shp_cameraProp);
+			archive(vlp_cameraTrnasform);
+			archive(vlp_cameraProp);
 			archive(order);
 		}
 	};
 	struct DeferredCameraRenderingPathInfo :public RenderingPathInfo {
-		Value_ptr<Transform> shp_cameraTrnasform;
-		Value_ptr<CameraProjProperty> shp_cameraProp;
+		Value_ptr<Transform> vlp_cameraTrnasform;
+		Value_ptr<CameraProjProperty> vlp_cameraProp;
 		std::string forwardCameraPathName;
-		Value_ptr<IRenderingPath> CreateRenderingPath(Value_ptr<IRenderer> arg_shp_renderer, Value_ptr<GraphicDevice> arg_shp_graphicDevice)override;
+		Value_ptr<IRenderingPath> CreateRenderingPath(Value_ptr<IRenderer> arg_vlp_renderer, Value_ptr<GraphicDevice> arg_vlp_graphicDevice)override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
-			archive(shp_cameraTrnasform);
-			archive(shp_cameraProp);
+			archive(vlp_cameraTrnasform);
+			archive(vlp_cameraProp);
 			archive(forwardCameraPathName);
 			archive(order);
 		}
@@ -39,13 +39,13 @@ namespace ButiEngine {
 		void SetPlayActive()override;
 		void SetEditActive()override;
 	protected:
-		Value_ptr<ICamera> shp_camera;
-		Value_ptr<IScene> shp_scene;
+		Value_ptr<ICamera> vlp_camera;
+		Value_ptr<IScene> vlp_scene;
 	};
 
 	class ForwardCameraRenderingPath :public CameraRenderingPath {
 	public:
-		ForwardCameraRenderingPath(Value_ptr<ICamera> arg_shp_camera, Value_ptr<IScene> arg_shp_scene);
+		ForwardCameraRenderingPath(Value_ptr<ICamera> arg_vlp_camera, Value_ptr<IScene> arg_vlp_scene);
 		Value_ptr<RenderingPathInfo> GetRenderingPathInfo()override;
 		void BefExecute()override;
 		void Execute() override;
@@ -53,12 +53,12 @@ namespace ButiEngine {
 		void Release() override;
 		void OnShowGUI() override;
 	private:
-		Value_ptr<IRenderer> shp_renderer;
+		Value_ptr<IRenderer> vlp_renderer;
 	};
 
 	class DeferredCameraRenderingPath :public CameraRenderingPath {
 	public:
-		DeferredCameraRenderingPath(Value_ptr<ICamera> arg_shp_camera, Value_ptr<IScene> arg_shp_scene, std::string arg_forwardCamName);
+		DeferredCameraRenderingPath(Value_ptr<ICamera> arg_vlp_camera, Value_ptr<IScene> arg_vlp_scene, std::string arg_forwardCamName);
 		Value_ptr<RenderingPathInfo> GetRenderingPathInfo()override;
 		void BefExecute()override;
 		void Execute() override;
@@ -66,8 +66,8 @@ namespace ButiEngine {
 		void Release() override;
 		void OnShowGUI() override;
 	private:
-		Value_ptr<ICamera> shp_forwardCamera;
-		Value_ptr<IRenderer> shp_renderer;
+		Value_ptr<ICamera> vlp_forwardCamera;
+		Value_ptr<IRenderer> vlp_renderer;
 		std::string forwardCamName;
 	};
 

@@ -1,5 +1,5 @@
 #pragma once
-#include"Vertex.h"
+#include"ButiRendering_Dx12/Header/Vertex.h"
 namespace ButiEngine {
 	class GraphicDevice;
 	class Resource_Mesh : public GPUResource,public IResource_Mesh
@@ -13,13 +13,15 @@ namespace ButiEngine {
 		std::uint32_t GetIndexCount();
 		bool GetPosRayCast(Vector3* arg_p_pos, Vector3* arg_p_normal, const Line& arg_line);
 		const ButiRendering::MeshPrimitiveBase* GetBackUpdata(std::uint32_t arg_vertexType)const override;
+		const std::string& GetTagName()const override;
+		void SetTagName(const std::string& arg_tagName);
 	protected:
 		std::uint32_t verticesCount;
 		std::uint32_t indexCount;
 		std::uint32_t stride;
 		bool canAccessWrite;
 		bool isDataRefresh = true;
-
+		std::string tagName;
 		std::map<std::uint32_t,Value_ptr<ButiRendering::MeshPrimitiveBase>> map_vlp_meshPrimitive;
 
 

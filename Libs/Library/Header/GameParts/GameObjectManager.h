@@ -6,9 +6,9 @@ class GameObjectManager :public IObject
 {
 	friend class GameObject;
 public:
-	GameObjectManager(Value_weak_ptr<IScene> arg_wkp_scene);
+	GameObjectManager(Value_weak_ptr<IScene> arg_vwp_scene);
 	GameObjectManager() {}
-	void SetScene(Value_weak_ptr<IScene> arg_wkp_scene);
+	void SetScene(Value_weak_ptr<IScene> arg_vwp_scene);
 	void Update();
 	void RegistNewGameObject();
 	void RegistGameObject();
@@ -35,7 +35,7 @@ public:
 	void End();
 
 	Value_weak_ptr<IScene> GetScene() {
-		return wkp_scene;
+		return vwp_scene;
 	}
 
 	Value_weak_ptr<IApplication> GetApplication();
@@ -54,10 +54,10 @@ private:
 	void CreateViewGameObjectVector();
 	std::mutex mtx_addGameObject;
 	std::vector<Value_ptr<GameObject>> vec_gameObjects;
-	Value_ptr<std::vector<Value_ptr<GameObject>>> shp_vec_viewGameObjects;
+	Value_ptr<std::vector<Value_ptr<GameObject>>> vlp_vec_viewGameObjects;
 	std::vector<Value_ptr<GameObject>> vec_newGameObjects;
 	std::unordered_map<std::string, Value_weak_ptr<GameObject>> map_gameObjects;
-	Value_weak_ptr<IScene> wkp_scene;
+	Value_weak_ptr<IScene> vwp_scene;
 	Value_weak_ptr<GameObject> selectedGameObject;
 	std::string eventRegistKey;
 };
