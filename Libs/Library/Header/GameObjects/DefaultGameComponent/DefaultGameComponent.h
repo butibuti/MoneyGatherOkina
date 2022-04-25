@@ -4,7 +4,7 @@
 
 #include "../../GameComponentHeader.h"
 #include"Header/Common/CollisionPrimitive.h"
-#include"ButiRendering_Dx12/Header/MeshPrimitive.h""
+#include"ButiRendering_Dx12/Header/MeshPrimitive.h"
 #include"../../Resources/DrawData/IDrawData.h"
 namespace ButiScript {
 class CompiledData;

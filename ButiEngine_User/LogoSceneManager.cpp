@@ -51,7 +51,7 @@ void ButiEngine::LogoSceneManager::Start()
 
 
 
-    GetManager().lock()->AddObjectFromCereal("LoadAnim", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.1), Vector3::Zero, Vector3(0, 0, 1)));
+    GetManager().lock()->AddObjectFromCereal("LoadAnim", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.1), Vector3Const::Zero, Vector3(0, 0, 1)));
 
     shp_transTimer->Start();
     auto app = GetManager().lock()->GetApplication().lock();
