@@ -522,11 +522,13 @@ cd ..\</Command>
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="FluidSimulation.cpp" />
     <ClCompile Include="HitChecker.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
     <ClCompile Include="main.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="ShaderChecker.cpp" />
     <ClCompile Include="SquareParticleEmitter.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -542,7 +544,9 @@ cd ..\</Command>
   <ItemGroup>
     <ClInclude Include="FluidSimulation.h" />
     <ClInclude Include="HitChecker.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="ShaderChecker.h" />
     <ClInclude Include="SquareParticleEmitter.h" />
     <ClInclude Include="stdafx_u.h" />
