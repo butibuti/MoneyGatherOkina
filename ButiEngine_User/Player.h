@@ -21,8 +21,8 @@ namespace ButiEngine {
 	private:
 		void Move();
 
-		int8_t m_life;
-		int8_t m_level;
+		std::int8_t m_life;
+		std::int8_t m_level;
 		float m_moveSpeed;
 	};
 

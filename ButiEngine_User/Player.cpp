@@ -26,7 +26,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Move()
 {
 	//XAZ•½–Ê‚ÌˆÚ“®•ûŒü‚ðŽæ“¾
-	Vector2 velocityXZ = InputManager::GetRightStick();
+	Vector2 velocityXZ = InputManager::GetLeftStick();
 	velocityXZ.Normalize();
 
 	gameObject.lock()->transform->Translate(Vector3(velocityXZ.x, 0.0f, velocityXZ.y));
