@@ -1,6 +1,6 @@
 #pragma once
 #include"../ButiMath/ButiMath.h"
-#include"Header/Resources/ModelAnimation.h"
+#include"ButiRendering_Dx12/Header/ModelAnimation.h"
 namespace ButiEngine {
 namespace FBXAnalyze {
 enum class FBXPropertyDataType {
@@ -202,7 +202,7 @@ struct TRSCurves {
 };
 struct FBXAnimationLayer :FBXNodeStructure {
 
-	void CreateMotionData(const List<Value_ptr<FBXBoneNode>>& arg_bones, std::map<std::string, List< MotionKeyFrameData>>& arg_ref_map_motionDatas, const FBXGlobalSettings& arg_ref_globalSettings, const std::int64_t arg_localStop, const std::int64_t arg_refStop);
+	void CreateMotionData(const List<Value_ptr<FBXBoneNode>>& arg_bones, std::map<std::string, List< ButiRendering::MotionKeyFrameData>>& arg_ref_map_motionDatas, const FBXGlobalSettings& arg_ref_globalSettings, const std::int64_t arg_localStop, const std::int64_t arg_refStop);
 	std::map<std::string, TRSCurves> map_curves;
 };
 

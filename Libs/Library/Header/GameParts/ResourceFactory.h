@@ -5,28 +5,28 @@ namespace ButiEngine {
 
 class ResourceFactory :public IObject {
 public:
-	virtual Value_ptr<IResource_Texture> CreateTextureFromFile(const std::string& filePath) = 0;
-	virtual Value_ptr<IResource_Texture> CreateTextureFromPixelData(Value_ptr<ImageFileIO::TextureResourceData> arg_data) = 0;
-	virtual Value_ptr<IResource_Texture> CreateTextureFromPixelData(void* arg_p_pixelSrc, const std::int32_t arg_width, const std::int32_t arg_height, const std::int32_t arg_pixelSize, const std::int32_t arg_format) = 0;
-	virtual	Value_ptr<IResource_Texture> CreateRenderTargetTexture(const std::uint32_t width, const std::uint32_t height, const std::int32_t format)=0;
-	virtual Value_ptr<IResource_Texture> CreateDepthStencilTexture(const std::uint32_t width, const std::uint32_t height) = 0;
-	virtual Value_ptr<IResource_Texture> CreateEmptyTexture(const std::uint32_t width, const std::uint32_t height) = 0;
-	Value_ptr<IResource_Material> CreateMaterial(const std::string& arg_filePath, const std::string& arg_fileDirectory = "");
-	virtual Value_ptr<IResource_Material> CreateMaterial(const MaterialValue& arg_materialVar, Value_weak_ptr<IResource_Texture> arg_vwp_texture) = 0;
-	virtual Value_ptr<IResource_Material> CreateMaterial(const MaterialValue& arg_materialVar, const List< Value_weak_ptr<IResource_Texture>>& arg_list_vwp_texture) = 0;
-	virtual Value_ptr<IResource_Material> CreateMaterialList(const MaterialValue& arg_materialVar, const List< Value_weak_ptr<IResource_Texture>>& arg_list_vwp_texture, Value_ptr<IResourceContainer> arg_vlp_resourceContainer) = 0;
-	virtual Value_ptr<IResource_PixelShader> CreatePixelShaderFromFile(const std::string& filePath) = 0;
-	virtual Value_ptr<IResource_VertexShader> CreateVertexShaderFromFile(const std::string& filePath) = 0;
-	virtual Value_ptr<IResource_GeometryShader> CreateGeometryShaderFromFile(const std::string& filePath) = 0;
-	virtual Value_ptr<IResource_Mesh> CreateMesh(const std::string& arg_meshName, const List< ButiEngine::Value_ptr< ButiRendering::MeshPrimitiveBase>>& arg_list_vlp_inputMeshData) = 0;
-	virtual Value_ptr<Resource_RealTimeMesh> CreateRealTimeMesh(const std::string& arg_meshName, const List< ButiEngine::Value_ptr< ButiRendering::MeshPrimitiveBase>>& arg_list_vlp_inputMeshData) = 0;
+	virtual Value_ptr<ButiRendering::IResource_Texture> CreateTextureFromFile(const std::string& filePath) = 0;
+	virtual Value_ptr<ButiRendering::IResource_Texture> CreateTextureFromPixelData(Value_ptr<ImageFileIO::TextureResourceData> arg_data) = 0;
+	virtual Value_ptr<ButiRendering::IResource_Texture> CreateTextureFromPixelData(void* arg_p_pixelSrc, const std::int32_t arg_width, const std::int32_t arg_height, const std::int32_t arg_pixelSize, const std::int32_t arg_format) = 0;
+	virtual	Value_ptr<ButiRendering::IResource_Texture> CreateRenderTargetTexture(const std::uint32_t width, const std::uint32_t height, const std::int32_t format)=0;
+	virtual Value_ptr<ButiRendering::IResource_Texture> CreateDepthStencilTexture(const std::uint32_t width, const std::uint32_t height) = 0;
+	virtual Value_ptr<ButiRendering::IResource_Texture> CreateEmptyTexture(const std::uint32_t width, const std::uint32_t height) = 0;
+	Value_ptr<ButiRendering::IResource_Material> CreateMaterial(const std::string& arg_filePath, const std::string& arg_fileDirectory = "");
+	virtual Value_ptr<ButiRendering::IResource_Material> CreateMaterial(const ButiRendering::MaterialValue& arg_materialVar, Value_weak_ptr<ButiRendering::IResource_Texture> arg_vwp_texture) = 0;
+	virtual Value_ptr<ButiRendering::IResource_Material> CreateMaterial(const ButiRendering::MaterialValue& arg_materialVar, const List< Value_weak_ptr<ButiRendering::IResource_Texture>>& arg_list_vwp_texture) = 0;
+	virtual Value_ptr<ButiRendering::IResource_Material> CreateMaterialList(const ButiRendering::MaterialValue& arg_materialVar, const List< Value_weak_ptr<ButiRendering::IResource_Texture>>& arg_list_vwp_texture, Value_ptr<IResourceContainer> arg_vlp_resourceContainer) = 0;
+	virtual Value_ptr<ButiRendering::IResource_PixelShader> CreatePixelShaderFromFile(const std::string& filePath) = 0;
+	virtual Value_ptr<ButiRendering::IResource_VertexShader> CreateVertexShaderFromFile(const std::string& filePath) = 0;
+	virtual Value_ptr<ButiRendering::IResource_GeometryShader> CreateGeometryShaderFromFile(const std::string& filePath) = 0;
+	virtual Value_ptr<ButiRendering::IResource_Mesh> CreateMesh(const std::string& arg_meshName, const List< ButiEngine::Value_ptr< ButiRendering::MeshPrimitiveBase>>& arg_list_vlp_inputMeshData) = 0;
+	virtual Value_ptr<ButiRendering::Resource_RealTimeMesh> CreateRealTimeMesh(const std::string& arg_meshName, const List< ButiEngine::Value_ptr< ButiRendering::MeshPrimitiveBase>>& arg_list_vlp_inputMeshData) = 0;
 
 	void Initialize()override {};
 	void PreInitialize()override {};
-	Value_ptr<IResource_Model>CreateModel(const std::string& modelPath, const std::string& fileDirectory = "");
-	Value_ptr<IResource_Motion>CreateMotion(const std::string& modelPath, const std::string& fileDirectory = "");
+	Value_ptr<ButiRendering::IResource_Model>CreateModel(const std::string& modelPath, const std::string& fileDirectory = "");
+	Value_ptr<ButiRendering::IResource_Motion>CreateMotion(const std::string& modelPath, const std::string& fileDirectory = "");
 protected:
-	Value_weak_ptr<GraphicDevice> vwp_graphicDevice;
+	Value_weak_ptr<ButiRendering::GraphicDevice> vwp_graphicDevice;
 private:
 	void ReadIndex(std::vector<std::uint32_t>& indices, char arg_indexByteCount, BinaryReader& arg_reader);
 	template<typename T>

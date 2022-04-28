@@ -1,4 +1,4 @@
-
+#include"Header/GameObjects/DefaultGameComponent/DefaultGameComponent.h"
 #include "MeshDrawComponent.h"
 namespace ButiEngine {
 
@@ -24,7 +24,7 @@ namespace ButiEngine {
 		void OnUpdate() override;
 	private:
 		Value_ptr<MeshDrawComponent> vlp_drawComponent;
-		Value_ptr<CBuffer<ParticleParameter>> vlp_particleBuffer;
+		Value_ptr<ButiRendering::CBuffer<ButiRendering::ParticleParameter>> vlp_particleBuffer;
 		float time = 0;
 	};
 

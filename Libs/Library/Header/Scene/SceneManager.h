@@ -57,7 +57,7 @@ private:
 	void ReloadCheck();
 	bool isActive = false;
 	bool isPlaying = false;
-	Value_ptr<IResource_Texture>vlp_texture;
+	Value_ptr<ButiRendering::IResource_Texture>vlp_texture;
 	std::string reloadSceneName;
 	std::uint32_t startCount = 0;
 	TextureTag screenTextureTag;

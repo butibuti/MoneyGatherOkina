@@ -28,7 +28,7 @@ namespace Collision {
 	};
 
 	using CollisionObject_GameObject = CollisionObject<GameObject>;
-	using CollisionObject_DrawObject = CollisionObject<IDrawObject>;
+	using CollisionObject_DrawObject = CollisionObject<ButiRendering::IDrawObject>;
 
 	template<typename T>
 	class OctRegistObj:public enable_value_from_this<OctRegistObj<T>>

@@ -12,22 +12,20 @@
 #include"../Library/ButiUtil/ButiUtil/Util.h"
 #include"../Library/ButiUtil/ButiUtil/ID.h"
 #include"../Library/ButiUtil/ButiUtil/ObjectFactory.h"
-#include"Common/Transform.h"
+#include"ButiMath/Transform.h"
 
 #include"Device/GameDevice.h"
 #include"Device/Timer.h"
 
-#include"GameParts/GraphicDevice.h"
-
-#include "Resources/ShaderVariable.h"
+#include"ButiRendering_Dx12/Header/GraphicDevice.h"
+#include"ButiRendering_Dx12/Header/ShaderVariable.h"
 
 #include"GameObjects/GameObjectTagManager.h"
 #include"Resources/IResources.h"
 #include"GameParts/GamePartsInterface.h"
 
-#include"Common/CBuffer.h"
-
-#include"Common/Camera.h"
+#include"ButiRendering_Dx12/Header/CBuffer.h"
+#include"ButiRendering_Dx12/Header/Camera.h"
 
 #include"GameObjects/GameObject.h"
 

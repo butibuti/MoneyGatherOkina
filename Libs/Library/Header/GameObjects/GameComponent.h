@@ -48,9 +48,9 @@ public:
 	bool IsOverrideOnUpdate();
 protected:
 	virtual void OnUpdate(){}
-	Value_ptr<ICamera> GetCamera();
-	Value_ptr<ICamera> GetCamera(const std::uint32_t arg_camNum);
-	Value_ptr<ICamera> GetCamera(const std::string& arg_camName);
+	Value_ptr<ButiRendering::ICamera> GetCamera();
+	Value_ptr<ButiRendering::ICamera> GetCamera(const std::uint32_t arg_camNum);
+	Value_ptr<ButiRendering::ICamera> GetCamera(const std::string& arg_camName);
 	Value_weak_ptr<GameObjectManager> GetManager();
 	Value_weak_ptr<ICollisionManager> GetCollisionManager();
 	Value_ptr<GameObjectTagManager> GetTagManager();

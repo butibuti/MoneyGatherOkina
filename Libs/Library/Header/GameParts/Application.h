@@ -17,7 +17,7 @@ public:
 	void CreateInstances(const ApplicationInitData& arg_data);
 	std::unique_ptr<IWindow>& GetWindow()override;
 	Value_ptr<ISceneManager> GetSceneManager()override;
-	Value_ptr<GraphicDevice> GetGraphicDevice()override;
+	Value_ptr<ButiRendering::GraphicDevice> GetGraphicDevice()override;
 	Value_ptr<IResourceContainer> GetResourceContainer()override;
 	Value_ptr<GameObjectTagManager> GetGameObjectTagManager()override;
 	Value_ptr<ISoundManager> GetSoundManager()override;
@@ -30,7 +30,7 @@ public:
 	std::int64_t GetBefFrame()const override;
 	const ApplicationInitData* GetAppInitData()const override;
 private:
-	Value_ptr<GraphicDevice>vlp_graphicDevice;
+	Value_ptr<ButiRendering::GraphicDevice>vlp_graphicDevice;
 	std::unique_ptr<IWindow> unq_window;
 	Value_ptr< ISceneManager> vlp_sceneManager;
 	Value_ptr<IResourceContainer>vlp_resourceContainer;

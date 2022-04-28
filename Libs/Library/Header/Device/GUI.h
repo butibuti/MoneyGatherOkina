@@ -23,10 +23,9 @@ class RefferenceCounter_weak;
 template<typename T, typename RefferenceObject = SmartPtrDetail::RefferenceCounter::RefferenceCounter<ButiMemorySystem::Allocator>>
 class Value_ptr;
 #endif
-
+namespace ButiRendering {
 class IResource_Mesh;
 class IResource_Model;
-class IResource_Sound;
 class IResource_Texture;
 class IResource_VertexShader;
 class IResource_PixelShader;
@@ -34,27 +33,31 @@ class IResource_GeometryShader;
 class IResource_Shader;
 class IResource_Motion;
 class IResource_Material;
+
+class ICamera;
+class GraphicDevice;
+}
+
 class IResource_Script;
 class IResource_Font;
+class IResource_Sound;
 
-using MeshTag = ID<IResource_Mesh>;
-using MotionTag = ID<IResource_Motion>;
+using MeshTag = ID<ButiRendering::IResource_Mesh>;
+using MotionTag = ID<ButiRendering::IResource_Motion>;
 
-using VertexShaderTag = ID<IResource_VertexShader>;
-using PixelShaderTag = ID<IResource_PixelShader>;
-using GeometryShaderTag = ID<IResource_GeometryShader>;
-using ShaderTag = ID<IResource_Shader>;
+using VertexShaderTag = ID<ButiRendering::IResource_VertexShader>;
+using PixelShaderTag = ID<ButiRendering::IResource_PixelShader>;
+using GeometryShaderTag = ID<ButiRendering::IResource_GeometryShader>;
+using ShaderTag = ID<ButiRendering::IResource_Shader>;
 using SoundTag = ID<IResource_Sound>;
-using TextureTag = ID<IResource_Texture>;
-using ModelTag = ID<IResource_Model>;
+using TextureTag = ID<ButiRendering::IResource_Texture>;
+using ModelTag = ID<ButiRendering::IResource_Model>;
 
-using MaterialTag = ID<IResource_Material>;
+using MaterialTag = ID<ButiRendering::IResource_Material>;
 using ScriptTag = ID<IResource_Script>;
 using FontTag = ID<IResource_Font>;
-class ICamera;
 class IObject;
 class IWindow;
-class GraphicDevice;
 namespace GUI
 {
 using GuiCol=std::int32_t;
@@ -1159,7 +1162,7 @@ void Line(const Vector2& p1, const Vector2& p2, std::uint32_t col, float thickne
 float GetFontSize();
 
 GuiIO GetIO();
-void GUISetUP(std::unique_ptr<IWindow>& unq_window, Value_ptr<GraphicDevice>vlp_graphicDevice);
+void GUISetUP(std::unique_ptr<IWindow>& unq_window, Value_ptr<ButiRendering::GraphicDevice>vlp_graphicDevice);
 void Start();
 void Update();
 void EditorGUIUpdate();
@@ -1178,7 +1181,7 @@ void SetResourceTag(const GeometryShaderTag& arg_tag);
 void SetResourceTag(const TextureTag& arg_tag);
 void SetResourceTag(const ScriptTag& arg_tag);
 void SetResourceTag(const FontTag& arg_tag);
-void SetDraggingCamera(Value_ptr<ICamera>arg_vlp_camera);
+void SetDraggingCamera(Value_ptr<ButiRendering::ICamera>arg_vlp_camera);
 #ifdef _EDITORBUILD
 void OccurGUIAction(IGUIAction* arg_p_act);
 void ClearGUIAction();
@@ -1190,7 +1193,7 @@ void RegistEditorGUIObject(Value_ptr<IObject>arg_obj);
 void UnRegistEditorGUIObject(Value_ptr<IObject>arg_obj);
 
 Value_ptr<IObject> GetDraggingObject();
-Value_ptr<ICamera> GetDraggingCamera();
+Value_ptr<ButiRendering::ICamera> GetDraggingCamera();
 
 const MeshTag& GetMeshTag();
 const SoundTag& GetSoundTag();

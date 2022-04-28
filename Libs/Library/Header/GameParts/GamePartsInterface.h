@@ -44,11 +44,13 @@ namespace ButiEngine
 	enum class WindowPopType {
 		normal = SW_SHOWNORMAL, max = SW_SHOWMAXIMIZED
 	};
+	namespace ButiRendering {
 	class IDrawObject;
-	class IScene;
-	class IApplication;
 	template<typename T>
 	class CBuffer;
+	}
+	class IScene;
+	class IApplication;
 	class SceneInformation;
 	class GameObjectManager;
 	namespace ImageFileIO {
@@ -144,212 +146,8 @@ namespace ButiEngine
 		class CollisionLayer;
 		class CollisionPrimitive_Box_OBB;
 	}
-	class ICamera;
-
-	/// <summary>
-	/// 描画オブジェクトレイヤーのインターフェース
-	/// </summary>
-	class IDrawLayer :public IObject {
-	public:
-
-		void Initialize()override {};
-		void PreInitialize()override {}
-
-		/// <summary>
-		/// 中身の削除
-		/// </summary>
-		virtual void Clear() = 0;
-		/// <summary>
-		/// レンダリング処理の前に行う処理を走らせる
-		/// </summary>
-		virtual void BefRendering() = 0;
-		/// <summary>
-		/// 描画オブジェクトを登録
-		/// </summary>
-		/// <param name="arg_vwp_drawObject">描画オブジェクト</param>
-		/// <param name="arg_isAfterRendering">遅らせて描画するか(半透明オブジェクト等)</param>
-		/// <param name="arg_ret_pim">描画オブジェクトの形状</param>
-		/// <param name="arg_isShadow">影を生成するオブジェクトか</param>
-		virtual void Regist(Value_ptr< IDrawObject> arg_vwp_drawObject, const bool arg_isAfterRendering, Value_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim = nullptr, const bool arg_isShadow = false) = 0;
-		/// <summary>
-		/// 描画オブジェクトの登録解除
-		/// </summary>
-		/// <param name="arg_vlp_drawObject">描画オブジェクト</param>
-		/// <param name="arg_isAfterRendering">描画を遅らせるか</param>
-		/// <param name="arg_isShadow">影を生成するオブジェクトか</param>
-		virtual void UnRegist(Value_ptr< IDrawObject> arg_vlp_drawObject, const bool arg_isAfterRendering,  const bool arg_isShadow = false) = 0;
-		/// <summary>
-		/// シャドウ撮影用カメラの登録
-		/// </summary>
-		/// <param name="arg_shadowCamera"></param>
-		virtual void SetShadowCamera(Value_ptr<ICamera> arg_shadowCamera) = 0;
-		/// <summary>
-		/// シャドウ読み込みテクスチャの登録
-		/// </summary>
-		/// <param name="arg_textureTag"></param>
-		virtual void SetShadowTexture(TextureTag arg_textureTag) = 0;
-		/// <summary>
-		/// レンダリングの実行
-		/// </summary>
-		virtual void Rendering() = 0;
-		/// <summary>
-		/// 描画コマンドの構築
-		/// </summary>
-		virtual void CommandSet() = 0;
-		/// <summary>
-		/// 影のレンダリング
-		/// </summary>
-		virtual void ShadowRendering() = 0;
-		/// <summary>
-		/// 衝突レイヤーの取得(現在使用不可)
-		/// </summary>
-		/// <returns></returns>
-		virtual Value_ptr<Collision::CollisionLayer<IDrawObject>> GetCollisionLayer() = 0;
-		/// <summary>
-		/// シャドウ用カメラの取得
-		/// </summary>
-		/// <returns></returns>
-		virtual Value_ptr<ICamera> GetShadowCamera() = 0;
-		/// <summary>
-		/// シャドウ用テクスチャの取得
-		/// </summary>
-		/// <returns></returns>
-		virtual TextureTag GetShadowTexture() = 0;
-	};
-	/// <summary>
-	/// 影用の描画レイヤー
-	/// </summary>
-	class IDrawLayer_Shadow {
-	public:
-		/// <summary>
-		/// 影を書き込んだかの取得
-		/// </summary>
-		/// <returns></returns>
-		virtual bool IsShadowDrawed() = 0;
-	};
 
 	class IResourceContainer;
-
-	/// <summary>
-	/// シーンが所持する描画用クラス
-	/// </summary>
-	class IRenderer :public IObject {
-	public:
-		void PreInitialize()override {}
-		virtual void Update() = 0;
-
-		/// <summary>
-		/// 全体のレンダリング開始
-		/// </summary>
-		virtual void RenderingStart() = 0;
-		/// <summary>
-		/// レンダリング開始前の処理
-		/// </summary>
-		virtual void BefRendering() = 0;
-		/// <summary>
-		/// 描画レイヤの追加
-		/// </summary>
-		virtual void AddLayer() = 0;
-		/// <summary>
-		/// レイヤーの数の取得
-		/// </summary>
-		/// <returns>レイヤー数</returns>
-		virtual std::uint32_t GetLayerCount() = 0;
-		/// <summary>
-		/// 描画レイヤーのレンダリング
-		/// </summary>
-		/// <param name="arg_layerIndex">描画するレイヤーの番号</param>
-		virtual void Rendering(const std::uint32_t arg_layerIndex) = 0;
-		/// <summary>
-		/// 描画レイヤーの影のレンダリング
-		/// </summary>
-		/// <param name="arg_layerIndex">描画するレイヤーの番号</param>
-		virtual void ShadowRendering(const std::uint32_t arg_layerIndex) = 0;
-		/// <summary>
-		/// 全体のレンダリング終了
-		/// </summary>
-		virtual void RenderingEnd() = 0;
-		/// <summary>
-		/// 描画オブジェクトの解放
-		/// </summary>
-		virtual void ClearDrawObjects() = 0;
-		//所属しているシーンの取得
-		virtual Value_ptr<IScene> GetScene() = 0;
-		/// <summary>
-		/// 描画レイヤーに対するシャドウ用テクスチャの設定
-		/// </summary>
-		/// <param name="arg_layerIndex">設定するレイヤーの番号</param>
-		/// <param name="arg_shadowTex">設定するシャドウ用テクスチャ</param>
-		virtual void SetShadowTexture(const std::uint32_t arg_layerIndex, TextureTag arg_shadowTex) = 0;
-		/// <summary>
-		/// 描画レイヤーが使用するシャドウ用テクスチャの取得
-		/// </summary>
-		/// <param name="arg_layerIndex">レイヤーの番号</param>
-		/// <returns>使用しているシャドウ用テクスチャ</returns>
-		virtual TextureTag GetShadowTexture(const std::uint32_t arg_layerIndex) = 0;
-		/// <summary>
-		/// 描画オブジェクトの登録
-		/// </summary>
-		/// <param name="arg_vlp_drawObject">描画オブジェクト</param>
-		/// <param name="arg_afterDraw">遅らせて描画するか(半透明オブジェクト等)</param>
-		/// <param name="arg_layerIndex">登録する描画レイヤーの番号</param>
-		/// <param name="isShadow">影を落とすか</param>
-		virtual void RegistDrawObject(Value_ptr< IDrawObject> arg_vlp_drawObject, const bool arg_afterDraw, const std::uint32_t arg_layerIndex = 0, const bool isShadow = false) = 0;
-		/// <summary>
-		/// 描画オブジェクトの登録解除
-		/// </summary>
-		/// <param name="arg_vlp_drawObject">描画オブジェクト</param>
-		/// <param name="arg_afterDraw">遅らせて描画するか(半透明オブジェクト等)</param>
-		/// <param name="arg_layerIndex">登録する描画レイヤーの番号</param>
-		/// <param name="isShadow">影を落とすか</param>
-		virtual void UnRegistDrawObject(Value_ptr< IDrawObject> arg_vlp_drawObject, const bool arg_afterDraw, const std::uint32_t arg_layerIndex = 0, const bool isShadow = false) = 0;
-		/// <summary>
-		/// GUIの呼び出し
-		/// </summary>
-		virtual void ShowUI() = 0;
-		/// <summary>
-		/// 解放処理
-		/// </summary>
-		virtual void Release() = 0;
-		/// <summary>
-		/// Renderer制御の定数バッファ更新
-		/// </summary>
-		/// <param name="arg_param">更新する値</param>
-		virtual void UpdateRendererCBuffer(const RenderingSceneInfo& arg_param) = 0;
-		/// <summary>
-		/// Renderer制御の定数バッファ解放
-		/// </summary>
-		virtual void ReleaseRendererCBuffer() = 0;
-		/// <summary>
-		/// Renderer制御の定数バッファ取得
-		/// </summary>
-		/// <returns>Renderer制御の定数バッファ</returns>
-		virtual Value_ptr<CBuffer<RenderingSceneInfo>> GetRendererCBuffer() = 0;
-		/// <summary>
-		/// シャドウ用カメラの設定
-		/// </summary>
-		/// <param name="arg_layer">設定するレイヤーの番号</param>
-		/// <param name="arg_vlp_camera">設定するカメラ</param>
-		virtual void SetShadowCamera(const std::uint32_t arg_layer,Value_ptr<ICamera> arg_vlp_camera)=0;
-		/// <summary>
-		/// シャドウ用カメラの取得
-		/// </summary>
-		/// <param name="arg_layer">取得するレイヤーの番号</param>
-		/// <returns>シャドウ用カメラ</returns>
-		virtual Value_ptr<ICamera> GetShadowCamera(const std::uint32_t arg_layer) = 0;
-		/// <summary>
-		/// 描画オブジェクトとの衝突判定（現在使用不可）
-		/// </summary>
-		/// <param name="arg_prim">衝突判定に使う形状</param>
-		/// <param name="arg_layer">判定するレイヤーの番号</param>
-		/// <returns>衝突している描画オブジェクトのvector</returns>
-		virtual std::vector< Value_ptr<IDrawObject>> GetHitDrawObjects(Value_ptr<Collision::CollisionPrimitive> arg_prim, const std::int32_t arg_layer)=0;
-		/// <summary>
-		/// 使用しているResourceContainerの取得
-		/// </summary>
-		/// <returns>使用しているResourceContainer</returns>
-		virtual Value_ptr<IResourceContainer> GetResourceContainer()=0;
-	};
 
 	/// <summary>
 	/// ウィンドウ制御インターフェース
@@ -667,7 +465,7 @@ namespace ButiEngine
 		MaterialLoadInfo() {}
 		std::string materialName;
 		std::string fileName = "none";
-		MaterialValue var;
+		ButiRendering::MaterialValue var;
 		std::vector<TextureTag> vec_texture;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -730,7 +528,7 @@ namespace ButiEngine
 		/// 描画デバイスの設定
 		/// </summary>
 		/// <param name="arg_vlp_graphicDevice">描画デバイス</param>
-		virtual void SetGraphicDevice(Value_weak_ptr<GraphicDevice> arg_vlp_graphicDevice)=0;
+		virtual void SetGraphicDevice(Value_weak_ptr<ButiRendering::GraphicDevice> arg_vlp_graphicDevice)=0;
 
 		/// <summary>
 		/// GUIの呼び出し
@@ -759,7 +557,7 @@ namespace ButiEngine
 		/// <param name="arg_textureTag">テクスチャ情報</param>
 		/// <param name="arg_materialName">マテリアルの名前</param>
 		/// <returns>読み込んだマテリアルのタグ</returns>
-		virtual MaterialTag LoadMaterial(const MaterialValue& arg_resourceMaterial, const std::vector< TextureTag>& arg_textureTag, const std::string& arg_materialName) =0;
+		virtual MaterialTag LoadMaterial(const ButiRendering::MaterialValue& arg_resourceMaterial, const std::vector< TextureTag>& arg_textureTag, const std::string& arg_materialName) =0;
 		/// <summary>
 		/// マテリアルをファイルから読み込み
 		/// </summary>
@@ -1147,19 +945,19 @@ namespace ButiEngine
 		/// </summary>
 		/// <param name="arg_key">検索タグ</param>
 		/// <returns>メッシュのリソース</returns>
-		virtual Value_weak_ptr<IResource_Mesh> GetMesh(const  MeshTag& arg_key)=0;
+		virtual Value_weak_ptr<ButiRendering::IResource_Mesh> GetMesh(const  MeshTag& arg_key)=0;
 		/// <summary>
 		/// テクスチャの取得
 		/// </summary>
 		/// <param name="arg_key">検索タグ</param>
 		/// <returns>テクスチャのリソース</returns>
-		virtual Value_weak_ptr<IResource_Texture> GetTexture(const TextureTag& arg_key)=0;
+		virtual Value_weak_ptr<ButiRendering::IResource_Texture> GetTexture(const TextureTag& arg_key)=0;
 		/// <summary>
 		/// シェーダの取得
 		/// </summary>
 		/// <param name="arg_key">検索タグ</param>
 		/// <returns>シェーダのリソース</returns>
-		virtual Value_weak_ptr<IResource_Shader> GetShader(const ShaderTag& arg_key)=0;
+		virtual Value_weak_ptr<ButiRendering::IResource_Shader> GetShader(const ShaderTag& arg_key)=0;
 		/// <summary>
 		/// 音声の取得
 		/// </summary>
@@ -1171,24 +969,24 @@ namespace ButiEngine
 		/// </summary>
 		/// <param name="arg_key">検索タグ</param>
 		/// <returns>マテリアルのリソース</returns>
-		virtual Value_weak_ptr<IResource_Material>GetMaterial(const MaterialTag& arg_key)=0;
+		virtual Value_weak_ptr<ButiRendering::IResource_Material>GetMaterial(const MaterialTag& arg_key)=0;
 		/// <summary>
 		/// 遅延シェーディング用のマテリアルリストの取得
 		/// </summary>
 		/// <returns>遅延シェーディング用のマテリアルパラメータのvector</returns>
-		virtual std::vector<MaterialValue_Deferred> CreateDeferredMaterialList() = 0;
+		virtual std::vector<ButiRendering::MaterialValue_Deferred> CreateDeferredMaterialList() = 0;
 		/// <summary>
 		/// モデルの取得
 		/// </summary>
 		/// <param name="arg_key">検索タグ</param>
 		/// <returns>モデルのリソース</returns>
-		virtual Value_weak_ptr<IResource_Model>GetModel(const ModelTag& arg_key)=0;
+		virtual Value_weak_ptr<ButiRendering::IResource_Model>GetModel(const ModelTag& arg_key)=0;
 		/// <summary>
 		/// モーションの取得
 		/// </summary>
 		/// <param name="arg_key">検索タグ</param>
 		/// <returns>モーションのリソース</returns>
-		virtual Value_ptr<ModelAnimation>GetMotion(const MotionTag& arg_key)=0;
+		virtual Value_ptr<ButiRendering::ModelAnimation>GetMotion(const MotionTag& arg_key)=0;
 		/// <summary>
 		/// コンパイル済みスクリプトの取得
 		/// </summary>
@@ -1266,7 +1064,7 @@ namespace ButiEngine
 		/// 描画デバイスの取得
 		/// </summary>
 		/// <returns></returns>
-		virtual Value_ptr<GraphicDevice> GetGraphicDevice()=0;
+		virtual Value_ptr<ButiRendering::GraphicDevice> GetGraphicDevice()=0;
 		/// <summary>
 		/// リソース管理インターフェースの取得
 		/// </summary>
@@ -1320,206 +1118,6 @@ namespace ButiEngine
 #endif
 	};
 
-	struct CameraProjProperty {
-		CameraProjProperty() {};
-		CameraProjProperty(const std::uint32_t arg_widthScale, const std::uint32_t arg_heightScale, const std::uint32_t arg_x, const std::uint32_t arg_y, const bool arg_isPararell = false, std::uint32_t arg_layer = 0);
-
-		std::int32_t currentWidth = 0, currentHeight = 0,width,height, left = 0, top = 0;
-		float front = 0.0f, angle = 60.0f, farClip = 50.0f, nearClip = 0.1f;
-		bool isPararell = false;
-		std::uint32_t layer = 0;
-		std::int32_t renderingInfo = 0;
-		std::vector< TextureTag >projectionTexture;
-		TextureTag depthStencilTexture;
-		std::string cameraName;
-		Vector4 clearColor;
-		bool isInitActive = true, isEditActive = false, isShadow = false;
-		std::vector< TextureTag >vec_shadowTextures;
-		std::vector< TextureTag >vec_staticShadowTextures;
-
-
-		template<class Archive>
-		void serialize(Archive& archive)
-		{
-			archive(width);
-			archive(height);
-			archive(left);
-			archive(top);
-			archive(front);
-			archive(angle);
-			archive(farClip);
-			archive(nearClip);
-			archive(isPararell);
-			archive(layer);
-			archive(front);
-			archive(renderingInfo);
-			archive(projectionTexture);
-			archive(depthStencilTexture);
-			archive(cameraName);
-			archive(clearColor);
-			archive(isInitActive);
-			archive(isEditActive);
-			archive(isShadow);
-			archive(vec_shadowTextures);
-			archive(vec_staticShadowTextures);
-		}
-
-	}; 
-
-	namespace Geometry {
-		class Box_AABB;
-	}
-	/// <summary>
-	/// カメラのインターフェース
-	/// </summary>
-	class ICamera :public IObject {
-	public:
-
-		Value_ptr<Transform> vlp_transform = ObjectFactory::Create<Transform>(Vector3(0, 0, 0));
-
-		/// <summary>
-		/// 描画開始
-		/// </summary>
-		virtual void Start() = 0;
-		/// <summary>
-		/// 描画停止
-		/// </summary>
-		virtual void Stop()const = 0;
-
-		virtual void Initialize()override {}
-		virtual void PreInitialize()override {}
-		/// <summary>
-		/// 名前の取得
-		/// </summary>
-		/// <returns>名前</returns>
-		virtual const std::string& GetName() const = 0;
-		/// <summary>
-		/// 名前の設定
-		/// </summary>
-		/// <param name="arg_name">名前</param>
-		virtual void SetName(const std::string& arg_name) = 0;
-		/// <summary>
-		/// 実行するかの設定
-		/// </summary>
-		/// <param name="arg_active"></param>
-		virtual void SetActive(const bool arg_active) = 0;
-		/// <summary>
-		/// 実行するかの取得
-		/// </summary>
-		/// <returns></returns>
-		virtual bool GetActive()const = 0;
-		/// <summary>
-		/// 描画処理
-		/// </summary>
-		virtual void Draw() = 0;
-		/// <summary>
-		/// GUI呼び出し
-		/// </summary>
-		virtual void ShowUI() = 0;
-		/// <summary>
-		/// カメラ設定の取得
-		/// </summary>
-		/// <returns></returns>
-		virtual CameraProjProperty& GetCameraProperty() = 0;
-		/// <summary>
-		/// カメラに形状が写っているかの取得
-		/// </summary>
-		/// <param name="arg_AABB">形状</param>
-		/// <returns></returns>
-		virtual std::int32_t IsContaineVisibility(Value_ptr<Geometry::Box_AABB>arg_AABB) = 0;
-		/// <summary>
-		/// 終了処理
-		/// </summary>
-		virtual void End() = 0;
-		/// <summary>
-		/// 描画結果を出力するレンダーターゲットテクスチャの設定
-		/// </summary>
-		/// <param name="arg_tag">描画結果を出力するレンダーターゲットテクスチャ</param>
-		virtual void SetProjectionTexture(const TextureTag& arg_tag) = 0;
-		/// <summary>
-		/// 参照、出力する深度テクスチャの設定
-		/// </summary>
-		/// <param name="arg_tag">参照、出力する深度テクスチャ</param>
-		virtual void SetDepthStencilView(const TextureTag& arg_tag) = 0;
-		/// <summary>
-		/// 描画前処理
-		/// </summary>
-		virtual void BefDraw() = 0;
-		/// <summary>
-		/// VP行列の取得
-		/// </summary>
-		/// <returns>VP行列</returns>
-		virtual Matrix4x4 GetViewProjectionMatrix() = 0;
-		/// <summary>
-		/// V行列の取得
-		/// </summary>
-		/// <returns>V行列</returns>
-		virtual Matrix4x4 GetViewMatrix() = 0;
-		/// <summary>
-		/// P行列の取得
-		/// </summary>
-		/// <returns>P行列</returns>
-		virtual Matrix4x4 GetProjectionMatrix() = 0;
-		/// <summary>
-		/// カメラ位置の取得
-		/// </summary>
-		/// <returns>カメラ位置</returns>
-		virtual Vector3 GetPosition() = 0;
-	protected:
-	};
-	class RenderingPathInfo;
-	/// <summary>
-	/// 描画パスのインターフェース
-	/// </summary>
-	class IRenderingPath:public IObject {
-	public:
-		void Initialize()override{}
-		void PreInitialize()override{}
-		/// <summary>
-		/// フレームの開始時の処理
-		/// </summary>
-		virtual void BefExecute() = 0;
-		/// <summary>
-		/// 実行
-		/// </summary>
-		virtual void Execute()=0;
-		/// <summary>
-		/// フレームの終了時の処理
-		/// </summary>
-		virtual void End() = 0;
-		/// <summary>
-		/// 解放処理
-		/// </summary>
-		virtual void Release() = 0;
-		/// <summary>
-		/// GUI呼び出し
-		/// </summary>
-		virtual void OnShowGUI() = 0;
-		/// <summary>
-		/// ゲームシーン実行中に有効な描画パスなら起動、違ったら停止
-		/// </summary>
-		virtual void SetPlayActive() = 0;
-		/// <summary>
-		/// ゲームシーン編集中に有効な描画パスなら起動、違ったら停止
-		/// </summary>
-		virtual void SetEditActive() = 0;
-		/// <summary>
-		/// 名前の設定
-		/// </summary>
-		/// <param name="arg_name">名前</param>
-		virtual void SetName(const std::string& arg_name) = 0;
-		/// <summary>
-		/// 名前の取得
-		/// </summary>
-		/// <returns>名前</returns>
-		virtual const std::string& GetName()const=0;
-		/// <summary>
-		/// 描画パスの保存データの取得
-		/// </summary>
-		/// <returns>描画パスの保存データ</returns>
-		virtual Value_ptr<RenderingPathInfo> GetRenderingPathInfo() = 0;
-	};
-
 	class SceneInformation;
 	class SceneChangeInformation;
 	class SceneRenderingInformation;
@@ -1563,19 +1161,19 @@ namespace ButiEngine
 		/// </summary>
 		/// <param name="arg_camName">カメラ名</param>
 		/// <returns> カメラの取得</returns>
-		virtual Value_ptr<ICamera> GetCamera(const std::string& arg_camName) = 0;
+		virtual Value_ptr<ButiRendering::ICamera> GetCamera(const std::string& arg_camName) = 0;
 		/// <summary>
 		///  カメラの取得
 		/// </summary>
 		/// <param name="arg_camNum">描画パスのインデックス</param>
 		/// <returns>カメラの取得</returns>
-		virtual Value_ptr<ICamera> GetCamera(const std::uint32_t arg_camNum = 0) = 0;
+		virtual Value_ptr<ButiRendering::ICamera> GetCamera(const std::uint32_t arg_camNum = 0) = 0;
 		/// <summary>
 		/// 描画パスの追加
 		/// </summary>
 		/// <param name="arg_path">描画パス</param>
 		/// <returns>追加された描画パス</returns>
-		virtual Value_ptr<IRenderingPath> AddRenderingPath(Value_ptr<IRenderingPath> arg_path) = 0;
+		virtual Value_ptr<ButiRendering::IRenderingPath> AddRenderingPath(Value_ptr<ButiRendering::IRenderingPath> arg_path) = 0;
 		/// <summary>
 		/// 衝突管理インスタンスの取得
 		/// </summary>
@@ -1595,7 +1193,7 @@ namespace ButiEngine
 		/// 描画管理インスタンスの取得
 		/// </summary>
 		/// <returns>描画管理インスタンス</returns>
-		virtual Value_ptr<IRenderer> GetRenderer() = 0;
+		virtual Value_ptr<ButiRendering::IRenderer> GetRenderer() = 0;
 		/// <summary>
 		/// リソース管理インスタンスの取得
 		/// </summary>

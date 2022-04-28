@@ -12,13 +12,13 @@
 #include "../../cereal/include/cereal/types/array.hpp"
 
 #define BUTI_REGIST_CBUFFER(T)\
-CEREAL_REGISTER_TYPE(ButiEngine::CBuffer_Dx12<T>);\
-CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::ICBuffer, ButiEngine::CBuffer_Dx12<T>);\
+CEREAL_REGISTER_TYPE(ButiEngine::ButiRendering::CBuffer_Dx12<T>);\
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::ButiRendering::ICBuffer, ButiEngine::ButiRendering::CBuffer_Dx12<T>);\
 
 
 #define BUTI_REGIST_CARRAYBUFFER(T)\
-	CEREAL_REGISTER_TYPE(ButiEngine::CArrayBuffer_Dx12<T>);\
-	CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::ICBuffer, ButiEngine::CArrayBuffer_Dx12<T>);\
+	CEREAL_REGISTER_TYPE(ButiEngine::ButiRendering::CArrayBuffer_Dx12<T>);\
+	CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::ButiRendering::ICBuffer, ButiEngine::ButiRendering::CArrayBuffer_Dx12<T>);\
 
 
 #define BUTI_REGIST_BUTISCRIPTSHAREDTYPE(T)\

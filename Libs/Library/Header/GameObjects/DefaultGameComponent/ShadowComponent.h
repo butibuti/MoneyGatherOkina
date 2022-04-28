@@ -34,7 +34,7 @@ namespace ButiEngine {
 		void RegistShadowDrop(Value_ptr<MeshDrawComponent> arg_vlp_shadowDrop = nullptr);
 		Value_ptr<MeshDrawComponent> vlp_meshDrawComponent;
 
-		Value_ptr<IBoneObject> vlp_bone;
+		Value_ptr<ButiRendering::IBoneObject> vlp_bone;
 	};
 }
 

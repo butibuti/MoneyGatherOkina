@@ -37,7 +37,7 @@ namespace ButiEngine {
 		ModelTag outlineModelTag;
 		ShaderTag outlineShaderTag;
 
-		Value_ptr< DrawInformation >vlp_outlineDrawInfo = nullptr;
+		Value_ptr<ButiRendering::DrawInformation >vlp_outlineDrawInfo = nullptr;
 
 	}; 
 	class OutlineModelDrawComponent :public ModelDrawComponent
@@ -51,7 +51,7 @@ namespace ButiEngine {
 		Value_ptr<GameComponent> Clone()override;
 		void OnShowUI()override;
 		void OnSet()override;
-		Value_ptr<IModelObject> GetModelData()override;
+		Value_ptr<ButiRendering::IModelObject> GetModelData()override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
@@ -74,7 +74,7 @@ namespace ButiEngine {
 		ModelTag outlineModelTag;
 		ShaderTag outlineShaderTag;
 
-		Value_ptr< DrawInformation >vlp_outlineDrawInfo = nullptr;
+		Value_ptr<ButiRendering::DrawInformation >vlp_outlineDrawInfo = nullptr;
 
 	};
 }
