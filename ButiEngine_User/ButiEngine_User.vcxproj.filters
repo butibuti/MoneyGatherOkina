@@ -24,21 +24,6 @@
     <ClCompile Include="DefaultGameComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestBehavior.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HitChecker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderChecker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SquareParticleEmitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FluidSimulation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LogoSceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,21 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx_u.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestBehavior.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HitChecker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderChecker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SquareParticleEmitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FluidSimulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LogoSceneManager.h">

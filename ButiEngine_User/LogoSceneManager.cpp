@@ -46,8 +46,8 @@ void ButiEngine::LogoSceneManager::OnShowUI()
 
 void ButiEngine::LogoSceneManager::Start()
 {
-    shp_logoBuffer = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ObjectInformation>("ObjectInformation");
-    shp_teamBuffer = GetManager().lock()->GetGameObject("TeamLogo").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ObjectInformation>("ObjectInformation");
+    shp_logoBuffer = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation");
+    shp_teamBuffer = GetManager().lock()->GetGameObject("TeamLogo").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation");
 
 
 

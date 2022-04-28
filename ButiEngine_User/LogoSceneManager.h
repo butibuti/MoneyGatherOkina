@@ -23,7 +23,7 @@ public:
 	void Start()override;
 	void OnSet()override;
 private:
-	Value_ptr<CBuffer<ObjectInformation>> shp_logoBuffer, shp_teamBuffer;
+	Value_ptr<ButiRendering::CBuffer<ButiRendering::ObjectInformation>> shp_logoBuffer, shp_teamBuffer;
 	Value_ptr<RelativeTimer> shp_timer, shp_logoTimer, shp_transTimer;
 	float logoApperanceSpeed, logoTime, teamLogoTime = 0.0f;
 	bool isTrans = false;

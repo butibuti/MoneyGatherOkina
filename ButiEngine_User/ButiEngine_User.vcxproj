@@ -520,8 +520,6 @@ cd ..\</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DefaultGameComponent.cpp" />
-    <ClCompile Include="FluidSimulation.cpp" />
-    <ClCompile Include="HitChecker.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
     <ClCompile Include="main.cpp">
@@ -529,8 +527,6 @@ cd ..\</Command>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ShaderChecker.cpp" />
-    <ClCompile Include="SquareParticleEmitter.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">Create</PrecompiledHeader>
@@ -539,18 +535,12 @@ cd ..\</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestBehavior.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FluidSimulation.h" />
-    <ClInclude Include="HitChecker.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="ShaderChecker.h" />
-    <ClInclude Include="SquareParticleEmitter.h" />
     <ClInclude Include="stdafx_u.h" />
-    <ClInclude Include="TestBehavior.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
