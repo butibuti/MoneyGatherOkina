@@ -18,6 +18,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		float GetMoveSpeed() { return m_moveSpeed; }
 	private:
 		void Move();
 

@@ -19,14 +19,12 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
-		float GetMoveSpeed() { return m_moveSpeed; }
 	private:
 		void CalcMoveSpeed(std::vector<Value_ptr<GameObject>> arg_vec_workers);
 		void CalcGatherDir();
-		void CalcCohesionDir(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcALignmentDir(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcSeparationDir(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalcCohesionVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalcALignmentVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalcSeparationVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
 		void Move();
 
 		static float m_rotationSpeed;
@@ -40,9 +38,9 @@ namespace ButiEngine {
 		float m_nearBorder;
 		float m_moveSpeed;
 		Vector3 m_gatherDir;
-		Vector3 m_cohesionDir;
-		Vector3 m_alignmentDir;
-		Vector3 m_separationDir;
+		Vector3 m_cohesionVec;
+		Vector3 m_alignmentVec;
+		Vector3 m_separationVec;
 	};
 
 }
