@@ -61,7 +61,7 @@ void ButiEngine::Flocking::CalcMoveSpeed(std::vector<Value_ptr<GameObject>> arg_
 	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 
-	m_moveSpeed = Easing::EaseOutCirc(MathHelper::Clamp((playerPos - pos).GetLengthSqr() - 25.0f, 0.0f, 100.0f) / 100.0f) * 0.1f;
+	m_moveSpeed = Easing::EaseOutCirc(MathHelper::Clamp((playerPos - pos).GetLengthSqr() - 4.0f, 0.0f, 100.0f) / 100.0f) * 0.1f;
 }
 
 void ButiEngine::Flocking::CalcGatherDir()
