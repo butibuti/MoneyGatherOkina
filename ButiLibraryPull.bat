@@ -14,12 +14,27 @@ cd ..\ButiFont\
 git pull
 cd ..\ButiRendering_Dx12\
 git pull
-cd..\..\..\
-xcopy /y /d "Libs\dll\Debug\" "output\UserSample\Debug\"
-xcopy /y /d "Libs\dll\Debug_imguiEditor\" "output\UserSample\Debug_imguiEditor\"
-xcopy /y /d "Libs\dll\Release\" "output\UserSample\Release\"
-xcopy /y /d "Libs\dll\Release_imguiEditor\" "output\UserSample\Release_imguiEditor\"
-xcopy /y /d "Libs\lib\Debug\" "output\UserSample\Debug\"
-xcopy /y /d "Libs\lib\Debug_imguiEditor\" "output\UserSample\Debug_imguiEditor\"
-xcopy /y /d "Libs\lib\Release\" "output\UserSample\Release\"
-xcopy /y /d "Libs\lib\Release_imguiEditor\" "output\UserSample\Release_imguiEditor\"
+cd ..\ButiEngineHeader\
+git pull
+cd ..\..\
+set FILE_ID=1zKw1TsZ6TN6m4h5micZssCzkILADxQ-L
+curl -L "https://drive.google.com/uc?export=download&id=%FILE_ID%" -o dll.zip
+set FILE_ID=1pQ9fW4cizD50HXcFvgfzr6K8JXMZHvGN
+curl -c /tmp/cookie "https://drive.google.com/uc?export=download&id=%FILE_ID%" /dev/null
+set CODE="%(awk '/_warning_/ {print %NF%}' /tmp/cookie)%"
+curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=%CODE%&id=%FILE_ID%" -o lib.zip
+call powershell -command "Expand-Archive -Force ./dll.zip"
+call powershell -command "Expand-Archive -Force ./lib.zip"
+cd ..\
+xcopy /y /d /e Libs\dll\dll\ Libs\dll
+xcopy /y /d /e Libs\lib\lib\ Libs\lib
+rmdir /s /q Libs\dll\dll
+rmdir /s /q Libs\lib\lib
+xcopy /y /d Libs\dll\Debug\ output\UserSample\Debug\
+xcopy /y /d Libs\dll\Debug_imguiEditor\ output\UserSample\Debug_imguiEditor\
+xcopy /y /d Libs\dll\Release\ output\UserSample\Release\
+xcopy /y /d Libs\dll\Release_imguiEditor\ output\UserSample\Release_imguiEditor\
+xcopy /y /d Libs\lib\Debug\ output\UserSample\Debug\
+xcopy /y /d Libs\lib\Debug_imguiEditor\ output\UserSample\Debug_imguiEditor\
+xcopy /y /d Libs\lib\Release\ output\UserSample\Release\
+xcopy /y /d Libs\lib\Release_imguiEditor\ output\UserSample\Release_imguiEditor\

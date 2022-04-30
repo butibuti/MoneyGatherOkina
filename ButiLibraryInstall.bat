@@ -7,3 +7,4 @@ git clone https://github.com/butibuti/ButiMath
 git clone https://github.com/butibuti/ButiEventSystem
 git clone https://github.com/butibuti/ButiFont
 git clone https://github.com/butibuti/ButiRendering_Dx12
+git clone https://github.com/butibuti/ButiEngineHeader
