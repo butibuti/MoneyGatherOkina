@@ -1,0 +1,73 @@
+class ControlList{
+	controlBehavior:ButiScriptBehavior;
+	next: ControlList&;
+	bef: ControlList&;
+}
+private var top:ControlList&;
+private var end:ControlList&;
+function main():void{
+	if(top!=null){
+		//先頭のOnControlを呼び出し、trueが帰ってきたら先頭を破棄
+		if(top.controlBehavior.Execute<int>("OnControl")){
+			Pop_top();
+		}
+	}
+	
+}
+
+function OnRemove():void{
+	for(;top!=null;Pop_top()){
+
+	}
+}
+
+function Pop_top():void{
+	if(top!=null){
+		top=top.next;
+		if(top!=null){
+			top.bef=null;
+			top.controlBehavior.Execute("OnControlStart");
+		}else{
+			end=null;
+		}
+	}
+}
+function Pop_end():void{
+	if(end!=null){
+		end=end.bef;
+		if(end!=null){
+			end.next=null;
+		}else{
+			top=null;
+		}
+	}
+}
+function Push_top(arg_controlBehavior:ButiScriptBehavior):void{
+	var newList:ControlList;
+	newList.controlBehavior=arg_controlBehavior;
+	if(top!=null){
+		newList.next=top;
+		top.bef=newList;
+	}
+	top=newList;
+	if(end==null){
+		end=top;
+		top.controlBehavior.Execute("OnControlStart");
+	}
+}
+function Push_end(arg_controlBehavior:ButiScriptBehavior):void{
+	var newList:ControlList;
+	newList.controlBehavior=arg_controlBehavior;
+	if(end!=null){
+		newList.bef=end;
+		end.next=newList;
+	}
+	end=newList;
+	if(top==null){
+		top=end;
+		top.controlBehavior.Execute("OnControlStart");
+	}
+
+}
+
+

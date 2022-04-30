@@ -1,0 +1,33 @@
+public var transParam:TranslateParameter;
+private var playerTransform:Transform;
+private var targetTransform:Transform;
+function main():int
+{
+	var velocity:Vector3;
+	velocity=targetTransform.GetWorldPosition()-GetGameObject().GetTransform().GetWorldPosition();
+	velocity=velocity.GetNormalize()*velocity.GetLength()*velocity.GetLength()* 0.01*transParam.speed;
+	velocity.y=0;
+	GetGameObject().GetTransform().Translate(velocity);
+	GetGameObject().GetTransform().SetLookAtRotation(playerTransform.GetWorldPosition());
+	return 0;
+}
+
+function OnStart():void{
+	playerTransform=GetGameObject("Player").GetTransform();
+	targetTransform=GetGameObject("Player_cameraTarget").GetTransform();
+}
+
+class TranslateParameter{
+	public speed:float; 
+	public verticalSpeed:float; 
+
+
+	GetMoveOffset(velocity:Vector3):Vector3{
+		velocity.x*=this.speed;
+		velocity.z*=this.speed;
+		velocity.y*=this.verticalSpeed;
+
+		return velocity;
+	}
+
+}

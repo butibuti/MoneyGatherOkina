@@ -1,0 +1,45 @@
+public var currentTargetIndex:int;
+public var currentIndex:int;
+private var selectUI:ButiScriptBehavior;
+
+function SetActive():void{
+    currentTargetIndex=0;
+	GetGameObject( "ControlManager" ).GetScriptBehavior().Execute("Push_end",GetSelf());
+    selectUI=GetGameObject("Target"+ToString(currentTargetIndex)+"Select").GetScriptBehavior();
+    selectUI.Execute("Select");
+}
+
+function OnControlStart():void{
+    GetGameObject("TargetSelectParent").GetScriptBehavior().Execute("Show");
+}
+
+function OnControl():int
+{
+    if(TriggerKeyBoard(Keys.A)){
+        
+        currentTargetIndex--;
+        if(currentTargetIndex<0){
+            currentTargetIndex=2;
+        }
+        selectUI.Execute("UnSelect");
+        selectUI=GetGameObject("Target"+ToString(currentTargetIndex)+"Select").GetScriptBehavior();
+        selectUI.Execute("Select");
+    }
+    if(TriggerKeyBoard(Keys.D)){
+        currentTargetIndex++;
+        if(currentTargetIndex>2){
+            currentTargetIndex=0;
+        }
+        selectUI.Execute("UnSelect");
+        selectUI=GetGameObject("Target"+ToString(currentTargetIndex)+"Select").GetScriptBehavior();
+        selectUI.Execute("Select");
+    }
+    if(TriggerKeyBoard(Keys.Enter)){
+        print(ToString(currentTargetIndex));
+        GetGameObject( "Robot:"+ToString(currentIndex)).GetScriptBehavior().Execute("OnTargetSelect",currentTargetIndex);
+        GetGameObject("TargetSelectParent").GetScriptBehavior().Execute("Hide");
+        selectUI.Execute("UnSelect");
+        return true;
+    }
+    return false;
+}

@@ -1,0 +1,149 @@
+//行動ゾーンと命令ゾーンの間のどこにいるか
+public var progress :float;
+//現在参照しているスピード
+public var currentSpeed:float;
+//向き
+public var direction:int;
+//パラメータ 
+public var param :RobotParameter;
+//機体番号
+public var index:int;
+public var targetIndex:int;
+
+private var animationFunction:()=>void;
+
+private var transform:Transform;
+
+private var battleManager:ButiScriptBehavior;
+private var animationManager:ButiScriptBehavior;
+private var currentActionParts:ButiScriptBehavior;
+private var arm_L:ButiScriptBehavior;
+private var partsSelectComponent:ButiScriptBehavior;
+private var targetSelectComponent:ButiScriptBehavior;
+
+public var waitPosition:Vector3;
+public var executePosition:Vector3;
+public var moveEasingType:EasingType;
+private var waitAnimProgress:float;
+private var arm_R:ButiScriptBehavior;
+private var head:ButiScriptBehavior;
+function main():int{
+	//アニメーション関数の実行
+	animationFunction();
+	return 0;
+}
+function OnSet():void{
+	// //初期化
+	direction=1;
+	currentSpeed=param.chargeSpeed;
+	arm_L=GetGameObject( "Robot:"+ToString(index)+ ":LeftArm" ).GetScriptBehavior();
+	arm_R=GetGameObject( "Robot:"+ToString(index)+ ":RightArm" ).GetScriptBehavior();
+	head=GetGameObject( "Robot:"+ToString(index)+ ":Head" ).GetScriptBehavior();
+	partsSelectComponent=GetGameObject( "PartsSelect:"+ ToString(index)).GetScriptBehavior();
+	targetSelectComponent=GetGameObject( "TargetSelect:"+ ToString(index)).GetScriptBehavior();
+	animationManager=GetGameObject( "AnimationManager" ).GetScriptBehavior();
+	battleManager=GetGameObject( "BattleManager" ).GetScriptBehavior();
+	transform=GetGameObject().GetTransform();
+
+}
+function OnStart():void{
+	AddEventMessanger("Update_Battle");
+
+
+	animationFunction=SelectAnimation;
+	//パーツ選択、ターゲット選択操作をアクティブに
+	partsSelectComponent.Execute("SetActive");
+	targetSelectComponent.Execute("SetActive");
+	//パーツに自分をセット
+	arm_L.Execute("SetRobotCore",GetSelf());
+	arm_R.Execute("SetRobotCore",GetSelf());
+	head.Execute("SetRobotCore",GetSelf());
+}
+
+function OnMove():void{
+	progress+=direction*currentSpeed;
+	if(progress>=1.0){
+		progress=1.0;
+		direction=-1;
+		currentSpeed=param.coolSpeed;
+		ActionReset();
+		//RegistEvent("Update_Battle","Robot:"+ToString(index),"OnExecute");
+		animationFunction=ExecuteAnimation;
+		print("移動完了！");
+		currentActionParts.Execute("SetUI");
+		animationManager.Execute("Push_end",currentActionParts);
+	}
+	if(progress<=0.0){
+		progress=0.0;
+		direction=1;
+		currentSpeed=param.chargeSpeed;
+		print("Robot:"+ToString(index) +"が冷却終了!!!");
+		ActionReset();
+		animationFunction=SelectAnimation;
+		partsSelectComponent.Execute("SetActive");
+		targetSelectComponent.Execute("SetActive");
+	}
+
+}
+
+function OnPartsSelect(partsIndex:int ):void{
+	if(partsIndex==0){
+		currentActionParts =arm_L;
+	}else if(partsIndex==1){
+		currentActionParts =head;
+
+	}else if(partsIndex==2){
+		currentActionParts =arm_R;
+	}
+	
+}
+function OnTargetSelect(arg_targetIndex:int ):void{
+	targetIndex=arg_targetIndex;
+	currentActionParts.Execute("SetTarget",targetIndex);
+	ActionReset();
+	RegistEvent("Update_Battle","Robot:"+ToString(index),"OnMove");
+	//アニメーション関数を移動アニメーションに設定
+	animationFunction= ()=>void{
+		transform.SetLocalPosition ( waitPosition +(executePosition-waitPosition)*GetEase( progress , moveEasingType ));
+	};
+}
+//攻撃終了
+function ExecuteEnd():void{
+	ActionReset();
+	RegistEvent("Update_Battle","Robot:"+ToString(index),"OnMove");
+	//アニメーション関数を移動アニメーションに設定
+	animationFunction= ()=>void{
+		transform.SetLocalPosition ( waitPosition +(executePosition-waitPosition)*GetEase( progress , moveEasingType ));
+	};
+}
+
+
+function ExecuteAnimation():void{
+	waitAnimProgress+=0.01;
+	if(waitAnimProgress>1.0){
+		waitAnimProgress=0.0;
+	}
+	transform.SetLocalPositionY(waitPosition.y+waitAnimProgress*0.1);
+}
+
+function SelectAnimation():void{
+	waitAnimProgress+=0.01;
+	if(waitAnimProgress>1.0){
+		waitAnimProgress=0.0;
+	}
+	transform.SetLocalPositionY(waitPosition.y+waitAnimProgress*0.1);
+}
+
+function DamageAnimation():void{
+
+}
+
+function ActionReset():void{
+	UnRegistEvent("Update_Battle","Robot:"+ToString(index));
+}
+
+
+class RobotParameter{
+	public coolSpeed:float; 
+	public chargeSpeed:float;
+}

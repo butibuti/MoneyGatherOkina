@@ -1,0 +1,38 @@
+public var initPosition:Vector3;
+public var targetPosition:Vector3;
+public var initScale:Vector3;
+public var targetScale:Vector3;
+public var progress:float;
+public var speed:float;
+private var transform:Transform;
+private var windowTransform:Transform;
+function OnSet():void{
+    transform=GetGameObject().GetTransform();
+    windowTransform=GetGameObject(GetGameObject().GetName()+ "Window").GetTransform();
+}
+function Select():void{
+    initPosition=transform.GetLocalPosition();
+    initScale=windowTransform.GetLocalScale();
+    targetPosition.y=100;
+    targetScale.x=600;
+    targetScale.y=400;
+    RegistEvent("Update_UI",GetGameObject().GetName(),"UIUpdate");
+}
+function UnSelect():void{
+    initPosition=transform.GetLocalPosition();
+    initScale=windowTransform.GetLocalScale();
+    targetPosition.y=0;
+    targetScale.x=550;
+    targetScale.y=300;
+    RegistEvent("Update_UI",GetGameObject().GetName(),"UIUpdate");
+}
+
+function UIUpdate():void{
+    progress+=speed;
+	transform.SetLocalPosition ( initPosition +(targetPosition-initPosition)*GetEase( progress , EasingType.EaseInOutSin ));
+	windowTransform.SetLocalScale ( initScale +(targetScale-initScale)*GetEase( progress , EasingType.EaseInOutSin ));
+    if(progress>=1.0){
+        progress=0.0;
+        UnRegistEvent("Update_UI",GetGameObject().GetName());
+    }
+}

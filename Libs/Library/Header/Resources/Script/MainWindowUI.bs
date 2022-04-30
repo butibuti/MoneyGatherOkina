@@ -1,0 +1,36 @@
+private var textDraw:TextDrawComponent;
+public var initPosition:Vector3;
+public var targetPosition:Vector3;
+public var progress:float;
+public var speed:float;
+private var transform:Transform;
+function OnSet():void{
+    textDraw=GetGameObject("MainText").GetTextDrawComponent();
+    transform=GetGameObject().GetTransform();
+}
+
+
+function SetText(arg_string:string):void{
+    textDraw.SetText(arg_string);
+}
+
+
+function Show():void{
+    initPosition=transform.GetLocalPosition();
+    targetPosition.y=0;
+    RegistEvent("Update_UI","MainWindow","UIUpdate");
+}
+function Hide():void{
+    initPosition=transform.GetLocalPosition();
+    targetPosition.y=-500;
+    RegistEvent("Update_UI","MainWindow","UIUpdate");
+}
+
+function UIUpdate():void{
+    progress+=speed;
+	transform.SetLocalPosition ( initPosition +(targetPosition-initPosition)*GetEase( progress , EasingType.EaseInOutSin ));
+    if(progress>=1.0){
+        progress=0.0;
+        UnRegistEvent("Update_UI","MainWindow");
+    }
+}

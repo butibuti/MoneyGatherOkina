@@ -1,0 +1,53 @@
+
+public var transParam:TranslateParameter;
+private var rigidBody:RigidBody;
+function main():int
+{
+	
+	var velocity:Vector3;
+	if(CheckKeyBoard(Keys.D)){
+		print("DD");
+		velocity.x=1.0;
+	}
+	if(CheckKeyBoard(Keys.A)){
+		velocity.x=-1.0;
+	}
+	if(CheckKeyBoard(Keys.W)){
+		velocity.z=1.0;
+	}
+	if(CheckKeyBoard(Keys.S)){
+		velocity.z=-1.0;
+	}
+	velocity.Normalize();
+	velocity=transParam.GetMoveOffset(velocity);
+	rigidBody.ApplyForce(velocity);
+	return 0;
+}
+
+function OnCollision(arg_obj:GameObject):void{
+    print("Collision!!!!");
+}
+function OnCollisionEnter(arg_obj:GameObject):void{
+    print("Collision!!!!");
+}
+function OnCollisionEnd(arg_obj:GameObject):void{
+    print("Collision!!!!");
+}
+function OnStart():void{
+	rigidBody=GetGameObject().GetRigidBodyComponent().GetRigidBody();
+}
+
+class TranslateParameter{
+	public speed:float; 
+	public verticalSpeed:float; 
+
+
+	GetMoveOffset(velocity:Vector3):Vector3{
+		velocity.x*=this.speed;
+		velocity.z*=this.speed;
+		velocity.y*=this.verticalSpeed;
+
+		return velocity;
+	}
+
+}

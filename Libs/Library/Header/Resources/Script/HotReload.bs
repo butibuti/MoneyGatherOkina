@@ -1,0 +1,12 @@
+
+public var param :RobotParameter;
+
+class RobotParameter{
+	public coolSpeed:float; 
+}
+
+
+function main():int{
+    print( "coooooool.!!!?" );
+    return 0;
+}
