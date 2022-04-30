@@ -519,6 +519,8 @@ cd ..\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraAxis.cpp" />
+    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -541,6 +543,8 @@ cd ..\</Command>
     <ClCompile Include="WorkerSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraAxis.h" />
+    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />

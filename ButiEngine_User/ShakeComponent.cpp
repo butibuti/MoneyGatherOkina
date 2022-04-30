@@ -5,10 +5,10 @@
 
 void ButiEngine::ShakeComponent::OnUpdate()
 {
-	if (InputManager::IsTriggerRightKey())
-	{
-		ShakeStart(10, 60);
-	}
+	//if (InputManager::IsTriggerRightKey())
+	//{
+	//	ShakeStart(3, 40);
+	//}
 
 	if (!m_startFlag)
 	{
@@ -65,7 +65,7 @@ void ButiEngine::ShakeComponent::Start()
 	m_startFlag = false;
 	m_amplitude = 0.0f;
 	m_subAmplitude = 0.0f;
-	m_oneShakeFrame = 60;
+	m_oneShakeFrame = 2;
 	m_oneShakeCount = 0;
 	m_moveRotate = Vector3(0, 0, 0);
 	m_defaultRotate = Vector3(0, 0, 0);
