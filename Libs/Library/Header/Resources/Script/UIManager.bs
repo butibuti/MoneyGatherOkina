@@ -1,7 +1,0 @@
-function main():void{
-	EventExecute("Update_UI");
-}
-
-function OnSet():void{
-	AddEventMessanger("Update_UI");
-}
