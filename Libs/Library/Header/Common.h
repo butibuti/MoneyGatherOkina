@@ -21,7 +21,6 @@
 #include"ButiRendering_Dx12/Header/ShaderVariable.h"
 
 #include"GameObjects/GameObjectTagManager.h"
-#include"Resources/IResources.h"
 #include"GameParts/GamePartsInterface.h"
 
 #include"ButiRendering_Dx12/Header/CBuffer.h"

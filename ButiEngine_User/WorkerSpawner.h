@@ -2,12 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Player :public GameComponent
+	class WorkerSpawner :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Player";
+			return "WorkerSpawner";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -18,16 +18,10 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
-		float GetMoveSpeed() { return m_moveSpeed; }
 	private:
-		void Move();
-
-		std::int8_t m_life;
-		std::int8_t m_level;
-		float m_moveSpeed;
+		Value_weak_ptr<GameObject> m_vwp_player;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Player, true);
+BUTI_REGIST_GAMECOMPONENT(WorkerSpawner, true);

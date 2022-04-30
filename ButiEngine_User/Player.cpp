@@ -15,7 +15,7 @@ void ButiEngine::Player::Start()
 {
 	m_life = 3;
 	m_level = 1;
-	m_moveSpeed = 1.0f;
+	m_moveSpeed = 0.0f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -28,6 +28,14 @@ void ButiEngine::Player::Move()
 	//XAZ•½–Ê‚ÌˆÚ“®•ûŒü‚ðŽæ“¾
 	Vector2 velocityXZ = InputManager::GetLeftStick();
 	velocityXZ.Normalize();
+
+	m_moveSpeed = 0.0f;
+	if (velocityXZ != 0)
+	{
+		m_moveSpeed = 0.1f;
+	}
+
+	velocityXZ *= m_moveSpeed;
 
 	gameObject.lock()->transform->Translate(Vector3(velocityXZ.x, 0.0f, velocityXZ.y));
 }
