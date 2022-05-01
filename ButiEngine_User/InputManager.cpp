@@ -111,6 +111,24 @@ bool ButiEngine::InputManager::IsTriggerCancelKey()
 		GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_B));
 }
 
+bool ButiEngine::InputManager::IsZoomInKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::E) ||
+		GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_UP));
+}
+
+bool ButiEngine::InputManager::IsZoomOutKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::Q) ||
+		GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_DOWN));
+}
+
+bool ButiEngine::InputManager::IsCameraResetKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::R) ||
+		GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_STICK_RIGHT));
+}
+
 bool ButiEngine::InputManager::IsPushAnyGameKey()
 {
 	return (IsPushRightKey() ||

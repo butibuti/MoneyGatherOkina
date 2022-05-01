@@ -13,8 +13,11 @@ namespace ButiEngine {
 		void OnSet()override;
 		void Start()override;
 		void OnShowUI()override;
-		void ZoomIn();
-		void ZoomOut();
+		void CanZoom(const Vector3& arg_zoomPosition, const float arg_rotationX);
+		void ZoomOperation(const std::int8_t arg_zoomOperationNum);
+		void InputOperationNum();
+		void FixOperationNum();
+		void CameraReset();
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -25,15 +28,15 @@ namespace ButiEngine {
 	private:
 		Value_weak_ptr<GameObject> m_vwp_cameraAxis;
 
-		Vector3 m_relativePosition;
-		Vector3 m_currentCameraPos;
-		Vector3 m_previousCameraPos;
+		Vector3 m_defaultPosition;
+		Vector3 m_currentPosition;
+		Vector3 m_previousPosition;
 
-		float m_zoomInFrame;
-		float m_zoomOutFrame;
-		float m_moveLength;
-		float m_initCameraZ;
+		float m_defaultRotateX;
+		float m_currentRotateX;
+		float m_previousRotateX;
 
+		std::int8_t m_zoomOperationNum;
 	};
 }
 

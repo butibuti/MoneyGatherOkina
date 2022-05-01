@@ -30,6 +30,9 @@ namespace ButiEngine {
 		static bool IsTriggerDownKey();
 		static bool IsTriggerDecideKey();
 		static bool IsTriggerCancelKey();
+		static bool IsZoomInKey();
+		static bool IsZoomOutKey();
+		static bool IsCameraResetKey();
 		static bool IsPushAnyGameKey();
 
 		//ゲームプレイシーンのみ

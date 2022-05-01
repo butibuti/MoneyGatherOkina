@@ -1,9 +1,12 @@
 #include "stdafx_u.h"
 #include "CameraComponent.h"
+#include "InputManager.h"
 
 void ButiEngine::CameraComponent::OnUpdate()
 {
-    //gameObject.lock()->transform->SetLookAtRotation(m_vwp_cameraAxis.lock()->transform->GetLocalPosition(), Vector3(0, 1, 0));
+    InputOperationNum();
+    FixOperationNum();
+    ZoomOperation(m_zoomOperationNum);
 }
 
 void ButiEngine::CameraComponent::OnSet()
@@ -13,8 +16,17 @@ void ButiEngine::CameraComponent::OnSet()
 void ButiEngine::CameraComponent::Start()
 {
     //カメラの初期位置
-    m_currentCameraPos = gameObject.lock()->transform->GetLocalPosition();
-    m_previousCameraPos = m_currentCameraPos;
+    m_defaultPosition = Vector3(0, 8.0f, -6.0f);
+    m_currentPosition = m_defaultPosition;
+    m_previousPosition = m_currentPosition;
+
+    //カメラの初期角度
+    m_defaultRotateX = 1.0f;
+    m_currentRotateX = m_defaultRotateX;
+    m_previousRotateX = m_currentRotateX;
+
+    //0～3
+    m_zoomOperationNum = 1;
 
     if (m_vwp_cameraAxis.lock() == nullptr)
     {
@@ -23,43 +35,97 @@ void ButiEngine::CameraComponent::Start()
 
         //cameraAxisを親としてセット
         gameObject.lock()->transform->SetBaseTransform(m_vwp_cameraAxis.lock()->transform);
-
-        //親オブジェクトとの相対距離の取得
-        m_relativePosition = m_currentCameraPos - m_vwp_cameraAxis.lock()->transform->GetLocalPosition();
     }
 
 }
 
 void ButiEngine::CameraComponent::OnShowUI()
 {
-    GUI::BulletText("RelativePosition");
-    GUI::DragFloat3("##relativePosition", m_relativePosition, 0.01f, -100.0f, 100.0f);
+    GUI::BulletText("PreviousPosition");
+    GUI::DragFloat3("##previousPosition", m_previousPosition, 0.01f, -30.0f, 30.0f);
+    GUI::BulletText("RotateX");
+    GUI::DragFloat("##rotateX", m_previousRotateX, 0.01f, 0.0f, 2.0f);
 }
 
-void ButiEngine::CameraComponent::ZoomIn()
+void ButiEngine::CameraComponent::CanZoom(const Vector3& arg_zoomPosition, const float arg_rotationX)
 {
-    //auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-    //if (!anim)
-    //{
-    //    anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-    //    anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-    //    anim->GetTargetTransform()->SetWorldPosition(Vector3(0, 0, m_initCameraZ));
-    //    anim->SetSpeed(1.0f / m_zoomInFrame);
-    //    anim->SetEaseType(Easing::EasingType::EaseOutQuart);
-    //}
+    const float LERP_SCALE = 0.1f;
+
+    //positionの補間
+    m_currentPosition = arg_zoomPosition;
+    m_previousPosition.x = m_previousPosition.x * (1.0f - LERP_SCALE) + m_currentPosition.x * LERP_SCALE;
+    m_previousPosition.y = m_previousPosition.y * (1.0f - LERP_SCALE) + m_currentPosition.y * LERP_SCALE;
+    m_previousPosition.z = m_previousPosition.z * (1.0f - LERP_SCALE) + m_currentPosition.z * LERP_SCALE;
+
+    //rotationXの補間
+    m_currentRotateX = arg_rotationX;
+    m_previousRotateX = m_previousRotateX * (1.0f - LERP_SCALE) + m_currentRotateX * LERP_SCALE;
+    
+    //補間した値のセット
+    auto transform = gameObject.lock()->transform;
+    transform->SetLocalPosition(m_previousPosition);
+    transform->SetLocalRotationX(m_previousRotateX);
+
 }
 
-void ButiEngine::CameraComponent::ZoomOut()
+void ButiEngine::CameraComponent::ZoomOperation(const std::int8_t arg_zoomOperationNum)
 {
-    //auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-    //if (!anim)
-    //{
-    //    anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-    //    anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-    //    anim->GetTargetTransform()->SetWorldPosition(Vector3(0, 0, m_initCameraZ - m_moveLength));
-    //    anim->SetSpeed(1.0f / m_zoomOutFrame);
-    //    anim->SetEaseType(Easing::EasingType::EaseInQuad);
-    //}
+    switch (arg_zoomOperationNum)
+    {
+    case 0: //ズームイン
+        CanZoom(Vector3(0.0f, 4.0f, -2.5f), 0.85f);
+        break;
+    case 1: //デフォルト
+        CanZoom(m_defaultPosition, m_defaultRotateX); //(0,8,-6),1.0f
+        break;
+    case 2: //ズームアウト
+        CanZoom(Vector3(0.0f, 12.0f, -8.0f), 1.1f);
+        break;
+    case 3: //ウルトラズームアウト
+        CanZoom(Vector3(0.0f, 18.0f, -6.0f), 1.25f);
+        break;
+    default:
+        CanZoom(m_defaultPosition, m_defaultRotateX);
+        break;
+    }
+}
+
+void ButiEngine::CameraComponent::InputOperationNum()
+{
+    if (InputManager::IsZoomInKey())
+    {
+        //ズームイン
+        m_zoomOperationNum--;
+    }
+    else if (InputManager::IsZoomOutKey())
+    {
+        //ズームアウト
+        m_zoomOperationNum++;
+    }
+    if (InputManager::IsCameraResetKey())
+    {
+        //デフォルトズーム
+        CameraReset();
+    }
+}
+
+void ButiEngine::CameraComponent::FixOperationNum()
+{
+    //0～3に修正
+    if (m_zoomOperationNum < 0)
+    {
+        m_zoomOperationNum = 0;
+    }
+    else if (m_zoomOperationNum > 3)
+    {
+        m_zoomOperationNum = 3;
+    }
+}
+
+void ButiEngine::CameraComponent::CameraReset()
+{
+    //カメラをデフォルトの位置に戻す
+    m_zoomOperationNum = 1;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::CameraComponent::Clone()
