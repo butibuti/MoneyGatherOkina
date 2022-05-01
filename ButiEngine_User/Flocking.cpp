@@ -30,10 +30,6 @@ void ButiEngine::Flocking::OnUpdate()
 
 void ButiEngine::Flocking::OnSet()
 {
-	//gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([](ButiBullet::ContactData& arg_other)->void 
-	//	{
-	//		GUI::Console("Stay");
-	//	}));
 }
 
 void ButiEngine::Flocking::OnShowUI()
@@ -235,5 +231,5 @@ void ButiEngine::Flocking::Move()
 
 	gameObject.lock()->transform->Translate(gameObject.lock()->transform->GetFront().GetNormalize() * m_moveSpeed);
 
-	//gameObject.lock()->GetGameComponent<RigidBodyComponent>()->TransformApply();
+	gameObject.lock()->GetGameComponent<RigidBodyComponent>()->TransformApply();
 }
