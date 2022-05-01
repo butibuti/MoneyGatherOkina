@@ -33,16 +33,20 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Move()
 {
 	//XAZ•½–Ê‚ÌˆÚ“®•ûŒü‚ðŽæ“¾
-	Vector2 velocityXZ = InputManager::GetLeftStick();
-	velocityXZ.Normalize();
+	Vector2 leftStick = InputManager::GetLeftStick();
 
 	m_moveSpeed = 0.0f;
-	if (velocityXZ != 0)
+	if (leftStick != 0)
 	{
 		m_moveSpeed = m_maxMoveSpeed;
 	}
 
-	velocityXZ *= m_moveSpeed;
+	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
 
-	gameObject.lock()->transform->Translate(Vector3(velocityXZ.x, 0.0f, velocityXZ.y));
+	Vector3 velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+	velocity.y = 0;
+	velocity.Normalize();
+	velocity *= m_moveSpeed;
+
+	gameObject.lock()->transform->Translate(velocity);
 }
