@@ -529,6 +529,7 @@ cd ..\</Command>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -548,6 +549,7 @@ cd ..\</Command>
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="stdafx_u.h" />
