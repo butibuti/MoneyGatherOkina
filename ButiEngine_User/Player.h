@@ -11,6 +11,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -26,6 +27,7 @@ namespace ButiEngine {
 		std::int8_t m_life;
 		std::int8_t m_level;
 		float m_moveSpeed;
+		float m_maxMoveSpeed;
 	};
 
 }
