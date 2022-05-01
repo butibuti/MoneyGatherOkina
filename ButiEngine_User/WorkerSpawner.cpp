@@ -24,6 +24,16 @@ void ButiEngine::WorkerSpawner::Start()
 	{
 		m_vwp_player = GetManager().lock()->GetGameObject("Player");
 	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
+		gameObject.lock()->transform->RollLocalRotationY_Degrees(ButiRandom::GetRandom(0, 360));
+		gameObject.lock()->transform->SetLocalPosition(playerPos + gameObject.lock()->transform->GetFront() * ButiRandom::GetRandom(5, 10));
+
+		auto worker = GetManager().lock()->AddObjectFromCereal("Worker", nullptr);
+		worker.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	}
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::WorkerSpawner::Clone()
