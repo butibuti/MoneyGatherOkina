@@ -2,12 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class SphereExclusion :public GameComponent
+	class Pocket :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "SphereExclusion";
+			return "Pocket";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -18,10 +18,12 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		bool HasWorker() { return m_hasWorker; }
 	private:
-		Value_weak_ptr<GameObject> m_vwp_player;
+		bool m_hasWorker;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(SphereExclusion, true);
+BUTI_REGIST_GAMECOMPONENT(Pocket, true);

@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Pocket;
+
 	class Enemy :public GameComponent
 	{
 	public:
@@ -11,6 +13,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -18,8 +21,16 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void CreatePocket(std::uint8_t arg_pocketCount);
 	private:
+		std::uint8_t GetHasWorkerPocketCount();
+		void RemoveAllPocket();
+
 		Value_weak_ptr<GameObject> m_vwp_player;
+		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
+		std::uint8_t m_pocketCount;
+		std::int32_t m_testPocketCount;
 	};
 
 }

@@ -531,7 +531,9 @@ cd ..\</Command>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="SphereExclusion.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">Create</PrecompiledHeader>
@@ -551,7 +553,9 @@ cd ..\</Command>
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Pocket.h" />
     <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="SphereExclusion.h" />
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
