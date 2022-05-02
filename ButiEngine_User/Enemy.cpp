@@ -8,10 +8,10 @@ void ButiEngine::Enemy::OnUpdate()
 
 void ButiEngine::Enemy::OnSet()
 {
-	//gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([](ButiBullet::ContactData& arg_other)->void 
-	//	{
-	//		GUI::Console("Stay");
-	//	}));
+	gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([](ButiBullet::ContactData& arg_other)->void 
+		{
+			int a = 0;
+		}));
 }
 
 void ButiEngine::Enemy::OnShowUI()
@@ -31,6 +31,19 @@ void ButiEngine::Enemy::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
 {
 	return ObjectFactory::Create<Enemy>();
+}
+
+ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetFreePocket()
+{
+	auto end = m_vec_pockets.end();
+	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
+	{
+		if (!(*itr).lock()->GetGameComponent<Pocket>()->ExistWorker())
+		{
+			return (*itr);
+		}
+	}
+	return Value_weak_ptr<GameObject>();
 }
 
 void ButiEngine::Enemy::CreatePocket(std::uint8_t arg_pocketCount)
@@ -60,20 +73,20 @@ void ButiEngine::Enemy::CreatePocket(std::uint8_t arg_pocketCount)
 	}
 }
 
-std::uint8_t ButiEngine::Enemy::GetHasWorkerPocketCount()
+std::uint8_t ButiEngine::Enemy::GetExistWorkerPocketCount()
 {
-	std::uint8_t hasWorkerPocketCount = 0;
+	std::uint8_t existWorkerPocketCount = 0;
 
 	auto end = m_vec_pockets.end();
 	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
 	{
-		if ((*itr).lock()->GetGameComponent<Pocket>()->HasWorker())
+		if ((*itr).lock()->GetGameComponent<Pocket>()->ExistWorker())
 		{
-			hasWorkerPocketCount++;
+			existWorkerPocketCount++;
 		}
 	}
 
-	return hasWorkerPocketCount;
+	return existWorkerPocketCount;
 }
 
 void ButiEngine::Enemy::RemoveAllPocket()

@@ -2,17 +2,18 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Worker;
+	class Pocket;
 
-	class Pocket :public GameComponent
+	class Stick :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Pocket";
+			return "Stick";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -21,12 +22,11 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetWorker(Value_weak_ptr<GameObject> arg_worker) { m_vwp_worker = arg_worker; }
-		bool ExistWorker() { return m_vwp_worker.lock(); }
+		void SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket) { m_vlp_pocket = arg_vwp_pocket; }
 	private:
-		Value_weak_ptr<GameObject> m_vwp_worker;
+		Value_weak_ptr<GameObject> m_vlp_pocket;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Pocket, true);
+BUTI_REGIST_GAMECOMPONENT(Stick, true);

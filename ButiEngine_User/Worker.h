@@ -19,6 +19,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
 		Value_weak_ptr<GameObject> m_vwp_player;
 	};
 

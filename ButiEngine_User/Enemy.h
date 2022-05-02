@@ -22,9 +22,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		Value_weak_ptr<GameObject> GetFreePocket();
 		void CreatePocket(std::uint8_t arg_pocketCount);
 	private:
-		std::uint8_t GetHasWorkerPocketCount();
+		std::uint8_t GetExistWorkerPocketCount();
 		void RemoveAllPocket();
 
 		Value_weak_ptr<GameObject> m_vwp_player;
