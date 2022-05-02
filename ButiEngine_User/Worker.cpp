@@ -2,6 +2,7 @@
 #include "Worker.h"
 #include "Enemy.h"
 #include "Pocket.h"
+#include "Stick.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 void ButiEngine::Worker::OnUpdate()
@@ -30,13 +31,18 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
 
 void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy)
 {
+	//既にしがみついていたら何もしない
+	if (gameObject.lock()->GetGameComponent<Stick>()) { return; }
+
+	//敵に空いているポケットがあったらしがみつく
 	auto enemyComponent = arg_vwp_enemy.lock()->GetGameComponent<Enemy>();
 	auto pocket = enemyComponent->GetFreePocket();
 
-	//gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = ButiColor::Red();
 	if (pocket.lock())
 	{
-		auto pocketComponent = pocket.lock()->GetGameComponent<Pocket>();
-		pocketComponent->SetWorker(gameObject);
+		gameObject.lock()->RemoveGameComponent("Flocking");
+
+		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
+		stickComponent->SetPocket(pocket);
 	}
 }

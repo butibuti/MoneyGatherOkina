@@ -22,10 +22,12 @@ void ButiEngine::Enemy::OnShowUI()
 	{
 		CreatePocket(m_testPocketCount);
 	}
+	GUI::BulletText("StickWorkerCount:%d", GetExistWorkerPocketCount());
 }
 
 void ButiEngine::Enemy::Start()
 {
+	m_testPocketCount = 0;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
