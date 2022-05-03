@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class RigidBodyComponent;
+
 	class Player :public GameComponent
 	{
 	public:
@@ -24,6 +26,7 @@ namespace ButiEngine {
 	private:
 		void Move();
 
+		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
 		std::int8_t m_life;
 		std::int8_t m_level;
 		float m_moveSpeed;

@@ -33,5 +33,8 @@ void ButiEngine::Stick::SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket)
 	pocketComponent->SetWorker(gameObject);
 
 	gameObject.lock()->transform->SetLocalPosition(m_vwp_pocket.lock()->transform->GetWorldPosition());
-	gameObject.lock()->GetGameComponent<RigidBodyComponent>()->TransformApply();
+	
+	auto rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
+	rigidBody->GetRigidBody()->SetVelocity(Vector3Const::Zero);
+	rigidBody->TransformApply();
 }

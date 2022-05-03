@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "Player.h"
 #include"InputManager.h"
+#include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -19,6 +20,7 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
+	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
 	m_life = 3;
 	m_level = 1;
 	m_moveSpeed = 0.0f;
@@ -46,7 +48,8 @@ void ButiEngine::Player::Move()
 	Vector3 velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
 	velocity.y = 0;
 	velocity.Normalize();
-	velocity *= m_moveSpeed;
+	velocity *= m_moveSpeed * 70;
 
-	gameObject.lock()->transform->Translate(velocity);
+	m_vlp_rigidBody->GetRigidBody()->SetVelocity(velocity);
+	//gameObject.lock()->transform->Translate(velocity);
 }

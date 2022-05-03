@@ -25,7 +25,7 @@ void ButiEngine::WorkerSpawner::Start()
 		m_vwp_player = GetManager().lock()->GetGameObject("Player");
 	}
 
-	for (std::uint8_t i = 0; i < 1; i++)
+	for (std::uint8_t i = 0; i < 20; i++)
 	{
 		Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
 		gameObject.lock()->transform->RollLocalRotationY_Degrees(ButiRandom::GetRandom(0, 360));

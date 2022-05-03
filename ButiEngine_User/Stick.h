@@ -2,8 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Pocket;
-
 	class Stick :public GameComponent
 	{
 	public:
@@ -25,6 +23,7 @@ namespace ButiEngine {
 		void SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket);
 	private:
 		Value_weak_ptr<GameObject> m_vwp_pocket;
+
 	};
 
 }

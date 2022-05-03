@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class RigidBodyComponent;
+
 	class Flocking :public GameComponent
 	{
 	public:
@@ -19,6 +21,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		Vector3 GetVelocity();
 	private:
 		void CalcAveragePos(std::vector<Value_ptr<GameObject>> arg_vec_workers);
 		void CalcMoveSpeed(std::vector<Value_ptr<GameObject>> arg_vec_workers);
@@ -40,6 +44,8 @@ namespace ButiEngine {
 		static float m_nearBorder;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
+		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
+		Value_ptr<Transform> m_transform;
 		float m_rotationSpeed;
 		float m_moveSpeed;
 

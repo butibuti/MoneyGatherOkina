@@ -56,7 +56,7 @@ void ButiEngine::Enemy::CreatePocket(std::uint8_t arg_pocketCount)
 	auto pocketCenter = gameObject.lock()->transform->Clone();
 	auto pocketTransform = ObjectFactory::Create<Transform>();
 	pocketTransform->SetBaseTransform(pocketCenter);
-	pocketTransform->SetLocalPosition(Vector3(0.0f, 0.0f, 0.5f));
+	pocketTransform->SetWorldPosition(gameObject.lock()->transform->GetLocalScale() * 0.5f + Vector3(0,0,0.5f));
 
 	float rollAngle = 360.0f / m_pocketCount;
 
