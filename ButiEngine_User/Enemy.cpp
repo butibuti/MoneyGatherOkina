@@ -1,9 +1,29 @@
 #include "stdafx_u.h"
 #include "Enemy.h"
 #include "Pocket.h"
+#include "Player.h"
+#include "Worker.h"
+
+float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
+	if (GameDevice::GetInput()->TriggerKey(Keys::L))
+	{
+		gameObject.lock()->SetIsRemove(true);
+		return;
+	}
+	//ƒvƒŒƒCƒ„[‚ª‹ß‚­‚É‚¢‚½‚çU“®—Êã¸A‚¢‚È‚©‚Á‚½‚çŒ¸­
+	float nearBorderSqr = m_nearBorder * m_nearBorder;
+	float distanceSqr = (gameObject.lock()->transform->GetLocalPosition() - m_vwp_player.lock()->transform->GetLocalPosition()).GetLengthSqr();
+	if (distanceSqr <= nearBorderSqr)
+	{
+		IncreaseVibration();
+	}
+	else
+	{
+		DecreaseVibration();
+	}
 }
 
 void ButiEngine::Enemy::OnSet()
@@ -15,19 +35,41 @@ void ButiEngine::Enemy::OnSet()
 	//	}));
 }
 
+void ButiEngine::Enemy::OnRemove()
+{
+	RemoveAllPocket();
+}
+
 void ButiEngine::Enemy::OnShowUI()
 {
+	GUI::BulletText("NearBorder");
+	GUI::DragFloat("##nearBorder", &m_nearBorder, 1.0f, 0.0f, 10.0f);
+	GUI::BulletText("Decrease");
+	GUI::DragFloat("##decrease", &m_vibrationDecrease, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText("Capacity");
+	GUI::DragFloat("##capacity", &m_vibrationCapacity, 1.0f, 0.0f, 1000.0f);
+	GUI::BulletText("Resistance");
+	GUI::DragFloat("##resistance", &m_vibrationResistance, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText("Vibration:%f / %f", m_vibration, m_vibrationCapacity);
 	GUI::BulletText("PocketCount");
 	GUI::DragInt("##p", m_testPocketCount, 1.0f, 0, 20);
 	if (GUI::Button("Create"))
 	{
 		CreatePocket(m_testPocketCount);
 	}
-	GUI::BulletText("StickWorkerCount:%d", GetExistWorkerPocketCount());
+	GUI::BulletText("StickWorkerCount:%d", GetStickWorkerCount());
 }
 
 void ButiEngine::Enemy::Start()
 {
+	m_vwp_player = GetManager().lock()->GetGameObject("Player");
+	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
+
+	m_nearBorder = 3.0f;
+	m_vibration = 0.0f;
+	m_vibrationIncrease = 0.0f;
+	m_vibrationCapacity = 100.0f;
+	m_vibrationResistance = 10.0f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
@@ -40,7 +82,7 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetNearFre
 	auto end = m_vec_pockets.end();
 	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
 	{
-		if (!(*itr).lock()->GetGameComponent<Pocket>()->ExistWorker())
+		if (!(*itr).lock()->GetGameComponent<Pocket>()->ExistStickWorker())
 		{
 			float borderSqr = arg_border * arg_border;
 			float distanceSqr = (arg_pos - (*itr).lock()->transform->GetWorldPosition()).GetLengthSqr();
@@ -95,20 +137,48 @@ void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
 	//tmpWorker.lock()->SetIsRemove(true);
 }
 
-std::uint8_t ButiEngine::Enemy::GetExistWorkerPocketCount()
+void ButiEngine::Enemy::IncreaseVibration()
 {
-	std::uint8_t existWorkerPocketCount = 0;
+	CalcVibrationIncrease();
+	m_vibration += m_vibrationIncrease;
+
+	//U“®—Ê‚ªãŒÀ‚ð’´‚¦‚½‚çŽ€‚Ê
+	if (m_vibration > m_vibrationCapacity)
+	{
+		gameObject.lock()->SetIsRemove(true);
+	}
+}
+
+void ButiEngine::Enemy::DecreaseVibration()
+{
+	m_vibration -= m_vibrationDecrease;
+	m_vibration = max(m_vibration, 0.0f);
+}
+
+void ButiEngine::Enemy::CalcVibrationIncrease()
+{
+	float playerVibrationForce = m_vlp_playerComponent->GetVibrationForce();
+	float workerVibrationForce = Worker::GetVibrationForce();
+	float stickWorkerCount = GetStickWorkerCount();
+
+	m_vibrationIncrease = playerVibrationForce + workerVibrationForce * stickWorkerCount - m_vibrationResistance;
+	m_vibrationIncrease = max(m_vibrationIncrease, 0.0f);
+}
+
+std::uint8_t ButiEngine::Enemy::GetStickWorkerCount()
+{
+	std::uint8_t stickWorkerCount = 0;
 
 	auto end = m_vec_pockets.end();
 	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
 	{
-		if ((*itr).lock()->GetGameComponent<Pocket>()->ExistWorker())
+		if ((*itr).lock()->GetGameComponent<Pocket>()->ExistStickWorker())
 		{
-			existWorkerPocketCount++;
+			stickWorkerCount++;
 		}
 	}
 
-	return existWorkerPocketCount;
+	return stickWorkerCount;
 }
 
 void ButiEngine::Enemy::RemoveAllPocket()

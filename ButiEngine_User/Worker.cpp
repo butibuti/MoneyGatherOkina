@@ -6,6 +6,7 @@
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder;
+float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -28,6 +29,8 @@ void ButiEngine::Worker::OnShowUI()
 {
 	GUI::BulletText("NearBorder");
 	GUI::DragFloat("##nearBorder", &m_nearBorder, 0.1f, 0.0f, 10.0f);
+	GUI::BulletText("VibrationForce");
+	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
 }
 
 void ButiEngine::Worker::Start()

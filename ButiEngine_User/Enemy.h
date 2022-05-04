@@ -2,7 +2,7 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Pocket;
+	class Player;
 
 	class Enemy :public GameComponent
 	{
@@ -13,6 +13,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnRemove()override;
 		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
@@ -22,22 +23,31 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetNearBorder(const float arg_nearBorder) { m_nearBorder = arg_nearBorder; }
 		void SetVibrationCapacity(const float arg_capacity) { m_vibrationCapacity = arg_capacity; }
 		void SetVibrationResistance(const float arg_resistance) { m_vibrationResistance = arg_resistance; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 		void CreatePocket(const std::uint8_t arg_pocketCount);
 	private:
-		std::uint8_t GetExistWorkerPocketCount();
+		void IncreaseVibration();
+		void DecreaseVibration();
+		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
+		void CalcVibrationIncrease();
+		std::uint8_t GetStickWorkerCount();
 		void RemoveAllPocket();
 
 		//êUìÆÇÃå∏è≠ó 
 		static float m_vibrationDecrease;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
+		Value_ptr<Player> m_vlp_playerComponent;
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
 		std::uint8_t m_pocketCount;
 		std::int32_t m_testPocketCount;
 
+		float m_nearBorder;
+		float m_vibration;
+		float m_vibrationIncrease;
 		float m_vibrationCapacity;
 		float m_vibrationResistance;
 

@@ -14,8 +14,10 @@ void ButiEngine::Player::OnSet()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::BulletText("speed");
+	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
+	GUI::BulletText("VibrationForce");
+	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
 }
 
 void ButiEngine::Player::Start()
@@ -25,6 +27,7 @@ void ButiEngine::Player::Start()
 	m_level = 1;
 	m_moveSpeed = 0.0f;
 	m_maxMoveSpeed = 0.1f;
+	m_vibrationForce = 3.0f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()

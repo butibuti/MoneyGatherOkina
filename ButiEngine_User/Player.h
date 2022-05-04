@@ -23,6 +23,7 @@ namespace ButiEngine {
 		}
 
 		float GetMoveSpeed() { return m_moveSpeed; }
+		float GetVibrationForce() { return m_vibrationForce; }
 	private:
 		void Move();
 

@@ -19,6 +19,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		static float GetVibrationForce() { return m_vibrationForce; }
 	private:
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
 		Value_weak_ptr<GameObject> m_vwp_player;
