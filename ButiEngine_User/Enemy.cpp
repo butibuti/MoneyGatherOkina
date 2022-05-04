@@ -9,10 +9,10 @@ void ButiEngine::Enemy::OnUpdate()
 void ButiEngine::Enemy::OnSet()
 {
 	m_testPocketCount = 0;
-	gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([](ButiBullet::ContactData& arg_other)->void 
-		{
-			int a = 0;
-		}));
+	//gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([](ButiBullet::ContactData& arg_other)->void 
+	//	{
+	//		int a = 0;
+	//	}));
 }
 
 void ButiEngine::Enemy::OnShowUI()
@@ -28,7 +28,6 @@ void ButiEngine::Enemy::OnShowUI()
 
 void ButiEngine::Enemy::Start()
 {
-	CreatePocket(m_testPocketCount);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
@@ -55,7 +54,7 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetNearFre
 	return Value_weak_ptr<GameObject>();
 }
 
-void ButiEngine::Enemy::CreatePocket(std::uint8_t arg_pocketCount)
+void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
 {
 	RemoveAllPocket();
 	m_pocketCount = arg_pocketCount;

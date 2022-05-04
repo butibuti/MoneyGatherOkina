@@ -24,6 +24,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_player;
 
 		static float m_nearBorder;
+		static float m_vibrationForce;
 	};
 
 }
