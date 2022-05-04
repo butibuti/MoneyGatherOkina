@@ -2,8 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Worker;
-
 	class Pocket :public GameComponent
 	{
 	public:
@@ -13,6 +11,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnRemove()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -21,9 +20,13 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetWorker(Value_weak_ptr<GameObject> arg_worker) { m_vwp_worker = arg_worker; }
+		void SetEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy) { m_vwp_enemy = arg_vwp_enemy; }
+		void SetWorker(Value_weak_ptr<GameObject> arg_vwp_worker) { m_vwp_worker = arg_vwp_worker; }
+		Value_weak_ptr<GameObject> GetEnemy() { return m_vwp_enemy; }
+
 		bool ExistWorker() { return m_vwp_worker.lock(); }
 	private:
+		Value_weak_ptr<GameObject> m_vwp_enemy;
 		Value_weak_ptr<GameObject> m_vwp_worker;
 	};
 

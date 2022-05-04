@@ -19,6 +19,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		void SpawnWorker();
 		Value_weak_ptr<GameObject> m_vwp_player;
 	};
 

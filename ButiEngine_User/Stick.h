@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class RigidBodyComponent;
+
 	class Stick :public GameComponent
 	{
 	public:
@@ -22,8 +24,18 @@ namespace ButiEngine {
 
 		void SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket);
 	private:
-		Value_weak_ptr<GameObject> m_vwp_pocket;
+		void Move();
+		//敵に接する位置まで移動する
+		void MoveToEnemy();
+		//ポケットへ移動する
+		void MoveToPocket();
+		//移動の中心を設定する
+		void SetCenter();
 
+		Value_weak_ptr<GameObject> m_vwp_pocket;
+		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
+		Value_ptr<Transform> m_vlp_center;
+		Value_ptr<Transform> m_vlp_rotationTarget;
 	};
 
 }

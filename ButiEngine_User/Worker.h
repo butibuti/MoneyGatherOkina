@@ -11,6 +11,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -21,6 +22,8 @@ namespace ButiEngine {
 	private:
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
 		Value_weak_ptr<GameObject> m_vwp_player;
+
+		static float m_nearBorder;
 	};
 
 }

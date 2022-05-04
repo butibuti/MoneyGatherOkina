@@ -22,7 +22,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		Value_weak_ptr<GameObject> GetFreePocket();
+		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 		void CreatePocket(std::uint8_t arg_pocketCount);
 	private:
 		std::uint8_t GetExistWorkerPocketCount();
