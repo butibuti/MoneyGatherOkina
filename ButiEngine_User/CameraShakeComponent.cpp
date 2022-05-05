@@ -5,10 +5,10 @@
 
 void ButiEngine::CameraShakeComponent::OnUpdate()
 {
-	//if (InputManager::IsTriggerRightKey())
-	//{
-	//	ShakeStart(3, 40);
-	//}
+	if (InputManager::IsTriggerDecideKey())
+	{
+		ShakeStart(4, 40);
+	}
 
 	if (!m_startFlag)
 	{

@@ -12,8 +12,10 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
-		void ShakeStart(const float arg_amplitude);
+		void OnShowUI()override;
+		void ShakeStart();
 		void ShakeStop();
+		void SetShakePower(const float arg_amplitude);
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -21,10 +23,13 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		Vector3 m_defaultRotate;
+		Vector3 m_currentRotate;
+		Vector3 m_moveRotate;
+		Vector3 m_currentPos;
+		Vector3 m_movePos;
 		float m_amplitude;
 		bool m_shakeFlag;
-
+		bool m_moveFlag;
 	};
 
 }
