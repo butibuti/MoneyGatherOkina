@@ -9,12 +9,12 @@ float ButiEngine::Flocking::m_alignmentWeight = 0.5f;
 float ButiEngine::Flocking::m_separationWeight = 1.0f;
 float ButiEngine::Flocking::m_avoidPlayerWeight = 1.0f;
 float ButiEngine::Flocking::m_surroundWeight = 1.0f;
-float ButiEngine::Flocking::m_viewRadius = 100.0f;
-float ButiEngine::Flocking::m_nearBorder = 4.0f;
+float ButiEngine::Flocking::m_viewRadius = 10.0f;
+float ButiEngine::Flocking::m_nearBorder = 2.0f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
-	auto vec_workers = GetManager().lock()->GetGameObjects(GameObjectTag("Worker"));
+	auto vec_workers = GetManager().lock()->GetGameObjects(GameObjectTag("Flocking"));
 
 	CalcAveragePos(vec_workers);
 	CalcMoveSpeed(vec_workers);
@@ -30,10 +30,13 @@ void ButiEngine::Flocking::OnUpdate()
 
 void ButiEngine::Flocking::OnSet()
 {
-	//gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([](ButiBullet::ContactData& arg_other)->void 
-	//	{
-	//		GUI::Console("Stay");
-	//	}));
+	auto tag = GameObjectTag("Flocking");
+	gameObject.lock()->SetGameObjectTag(tag);
+}
+
+void ButiEngine::Flocking::OnRemove()
+{
+	gameObject.lock()->RemoveGameObjectTag(GameObjectTag("Flocking"));
 }
 
 void ButiEngine::Flocking::OnShowUI()
@@ -58,10 +61,9 @@ void ButiEngine::Flocking::OnShowUI()
 
 void ButiEngine::Flocking::Start()
 {
-	if (m_vwp_player.lock() == nullptr)
-	{
-		m_vwp_player = GetManager().lock()->GetGameObject("Player");
-	}
+	m_vwp_player = GetManager().lock()->GetGameObject("Player");
+	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
+	m_transform = gameObject.lock()->transform->Clone();
 
 	m_rotationSpeed = 0.05f;
 	m_moveSpeed = 0.1f;
@@ -72,19 +74,25 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Flocking::Clone()
 	return ObjectFactory::Create<Flocking>();
 }
 
+ButiEngine::Vector3 ButiEngine::Flocking::GetVelocity()
+{
+	return m_vlp_rigidBody->GetRigidBody()->GetVelocity();
+}
+
 void ButiEngine::Flocking::CalcAveragePos(std::vector<Value_ptr<GameObject>> arg_vec_workers)
 {
 	m_averagePos = Vector3Const::Zero;
 
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 pos = m_transform->GetLocalPosition();
 	std::uint8_t workerNum = 0;
 
 	auto end = arg_vec_workers.end();
 	for (auto itr = arg_vec_workers.begin(); itr != end; ++itr)
 	{
 		Vector3 workerPos = (*itr)->transform->GetLocalPosition();
-		float distance = (pos - workerPos).GetLengthSqr();
-		if (distance <= m_viewRadius)
+		float viewRadiusSqr = m_viewRadius * m_viewRadius;
+		float distanceSqr = (pos - workerPos).GetLengthSqr();
+		if (distanceSqr <= viewRadiusSqr)
 		{
 			workerNum++;
 			m_averagePos += workerPos;
@@ -103,9 +111,10 @@ void ButiEngine::Flocking::CalcMoveSpeed(std::vector<Value_ptr<GameObject>> arg_
 	//プレイヤーに近い時プレイヤーの速度に合わせる
 	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
 
-	float distance = (playerPos - m_averagePos).GetLengthSqr();
+	float nearBorderSqr = m_nearBorder * m_nearBorder;
+	float distanceSqr = (playerPos - m_averagePos).GetLengthSqr();
 
-	if (distance <= 4.0f)
+	if (distanceSqr <= nearBorderSqr)
 	{
 		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_vwp_player.lock()->GetGameComponent<Player>()->GetMoveSpeed(), 0.1f);
 	}
@@ -123,7 +132,7 @@ void ButiEngine::Flocking::CalcGatherVec()
 	m_gatherDir = Vector3Const::Zero;
 
 	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
-	m_gatherDir = (playerPos - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
+	m_gatherDir = (playerPos - m_transform->GetLocalPosition()).GetNormalize();
 }
 
 void ButiEngine::Flocking::CalcCohesionVec(std::vector<Value_ptr<GameObject>> arg_vec_workers)
@@ -131,7 +140,7 @@ void ButiEngine::Flocking::CalcCohesionVec(std::vector<Value_ptr<GameObject>> ar
 	//群れの中心へ向かう
 
 	m_cohesionVec = Vector3Const::Zero;
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 pos = m_transform->GetLocalPosition();
 	m_cohesionVec = (m_averagePos - pos).GetNormalize();
 }
 
@@ -140,18 +149,19 @@ void ButiEngine::Flocking::CalcALignmentVec(std::vector<Value_ptr<GameObject>> a
 	//周りと同じ方向を向く
 
 	m_alignmentVec = Vector3Const::Zero;
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 pos = m_transform->GetLocalPosition();
 	std::uint8_t workerNum = 0;
 
 	auto end = arg_vec_workers.end();
 	for (auto itr = arg_vec_workers.begin(); itr != end; ++itr)
 	{
 		Vector3 workerPos = (*itr)->transform->GetLocalPosition();
-		float distance = (pos - workerPos).GetLengthSqr();
-		if (distance <= m_viewRadius)
+		float viewRadiusSqr = m_viewRadius * m_viewRadius;
+		float distanceSqr = (pos - workerPos).GetLengthSqr();
+		if (distanceSqr <= m_viewRadius)
 		{
 			workerNum++;
-			m_alignmentVec += (*itr)->transform->GetFront();
+			m_alignmentVec += (*itr)->GetGameComponent<Flocking>()->GetVelocity().GetNormalize();
 		}
 	}
 
@@ -166,7 +176,7 @@ void ButiEngine::Flocking::CalcSeparationVec(std::vector<Value_ptr<GameObject>> 
 	//近づきすぎたWorkerと離れる方向を向く
 
 	m_separationVec = Vector3Const::Zero;
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 pos = m_transform->GetLocalPosition();
 
 	std::uint8_t nearWorkerNum = 0;
 
@@ -176,8 +186,9 @@ void ButiEngine::Flocking::CalcSeparationVec(std::vector<Value_ptr<GameObject>> 
 		if (gameObject.lock() == (*itr)) { continue; }
 
 		Vector3 workerPos = (*itr)->transform->GetLocalPosition();
-		float distance = (pos - workerPos).GetLengthSqr();
-		if (distance <= m_nearBorder)
+		float nearBorderSqr = m_nearBorder * m_nearBorder;
+		float distanceSqr = (pos - workerPos).GetLengthSqr();
+		if (distanceSqr <= nearBorderSqr)
 		{
 			nearWorkerNum++;
 			Vector3 diff = pos - workerPos;
@@ -197,9 +208,10 @@ void ButiEngine::Flocking::CalcAvoidPlayerVec(std::vector<Value_ptr<GameObject>>
 	m_avoidPlayerVec = Vector3Const::Zero;
 
 	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
-	float distance = (pos - playerPos).GetLengthSqr();
-	if (distance <= m_nearBorder)
+	Vector3 pos = m_transform->GetLocalPosition();
+	float nearBorderSqr = m_nearBorder * m_nearBorder;
+	float distanceSqr = (pos - playerPos).GetLengthSqr();
+	if (distanceSqr <= nearBorderSqr)
 	{
 		Vector3 diff = pos - playerPos;
 		m_avoidPlayerVec += diff / diff.GetLengthSqr();
@@ -209,7 +221,7 @@ void ButiEngine::Flocking::CalcAvoidPlayerVec(std::vector<Value_ptr<GameObject>>
 void ButiEngine::Flocking::CalcSurroundVec(std::vector<Value_ptr<GameObject>> arg_vec_workers)
 {
 	m_surroundVec = Vector3Const::Zero;
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 pos = m_transform->GetLocalPosition();
 
 	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
 	m_cohesionVec = (playerPos - m_averagePos).GetNormalize();
@@ -226,14 +238,15 @@ void ButiEngine::Flocking::Move()
 	dir.y = 0.0f;
 	dir.Normalize();
 
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 pos = m_transform->GetLocalPosition();
 
-	auto target = gameObject.lock()->transform.Clone();
-	target->SetLookAtRotation(pos + dir);
-	auto rotation = MathHelper::LearpQuat(gameObject.lock()->transform->GetLocalRotation().ToQuat(), target->GetLocalRotation().ToQuat(), m_rotationSpeed);
-	gameObject.lock()->transform->SetLocalRotation(rotation.ToMatrix());
+	auto target = m_transform->GetMatrix();
+	target.SetLookAt(pos + dir);
+	auto rotation = MathHelper::LearpQuat(m_transform->GetLocalRotation().ToQuat(), target.ToQuat(), m_rotationSpeed);
+	m_transform->SetLocalRotation(rotation.ToMatrix());
 
-	gameObject.lock()->transform->Translate(gameObject.lock()->transform->GetFront().GetNormalize() * m_moveSpeed);
+	auto m = rotation.ToMatrix();
+	m_vlp_rigidBody->GetRigidBody()->SetVelocity(Vector3Const::ZAxis * rotation.ToMatrix() * m_moveSpeed * 70);
 
-	//gameObject.lock()->GetGameComponent<RigidBodyComponent>()->TransformApply();
+	m_transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 }

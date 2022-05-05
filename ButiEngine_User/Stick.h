@@ -4,12 +4,12 @@ namespace ButiEngine {
 
 	class RigidBodyComponent;
 
-	class Player :public GameComponent
+	class Stick :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Player";
+			return "Stick";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -22,20 +22,22 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		float GetMoveSpeed() { return m_moveSpeed; }
-		float GetVibrationForce() { return m_vibrationForce; }
+		void SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket);
 	private:
 		void Move();
+		//敵に接する位置まで移動する
+		void MoveToEnemy();
+		//ポケットへ移動する
+		void MoveToPocket();
+		//移動の中心を設定する
+		void SetCenter();
 
+		Value_weak_ptr<GameObject> m_vwp_pocket;
 		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
-		std::int8_t m_life;
-		std::int8_t m_level;
-		float m_moveSpeed;
-		float m_maxMoveSpeed;
-
-		float m_vibrationForce;
+		Value_ptr<Transform> m_vlp_center;
+		Value_ptr<Transform> m_vlp_rotationTarget;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Player, true);
+BUTI_REGIST_GAMECOMPONENT(Stick, true);

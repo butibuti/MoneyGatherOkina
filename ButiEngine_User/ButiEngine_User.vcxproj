@@ -522,6 +522,8 @@ cd ..\</Command>
     <ClCompile Include="CameraAxis.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy_Test.cpp" />
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
@@ -531,7 +533,9 @@ cd ..\</Command>
     </ClCompile>
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="SphereExclusion.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">Create</PrecompiledHeader>
@@ -540,19 +544,25 @@ cd ..\</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Stick.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy_Test.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Pocket.h" />
     <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="SphereExclusion.h" />
     <ClInclude Include="stdafx_u.h" />
+    <ClInclude Include="Stick.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
   </ItemGroup>

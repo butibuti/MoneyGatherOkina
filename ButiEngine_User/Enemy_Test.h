@@ -2,15 +2,16 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class WorkerSpawner :public GameComponent
+	class Enemy_Test :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "WorkerSpawner";
+			return "Enemy_Test";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -19,10 +20,8 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		void SpawnWorker();
-		Value_weak_ptr<GameObject> m_vwp_player;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(WorkerSpawner, true);
+BUTI_REGIST_GAMECOMPONENT(Enemy_Test, true);

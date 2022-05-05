@@ -2,12 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class WorkerSpawner :public GameComponent
+	class SphereExclusion :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "WorkerSpawner";
+			return "SphereExclusion";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -19,10 +19,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		void SpawnWorker();
 		Value_weak_ptr<GameObject> m_vwp_player;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(WorkerSpawner, true);
+BUTI_REGIST_GAMECOMPONENT(SphereExclusion, true);
