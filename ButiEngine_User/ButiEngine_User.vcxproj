@@ -534,8 +534,9 @@ cd ..\</Command>
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pocket.cpp" />
-    <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
+    <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">Create</PrecompiledHeader>
@@ -545,6 +546,7 @@ cd ..\</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Stick.cpp" />
+    <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
   </ItemGroup>
@@ -559,10 +561,12 @@ cd ..\</Command>
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pocket.h" />
-    <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
+    <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
+    <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
   </ItemGroup>

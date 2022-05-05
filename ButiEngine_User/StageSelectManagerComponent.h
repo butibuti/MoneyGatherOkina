@@ -3,18 +3,17 @@
 
 namespace ButiEngine {
 
-	class ParticleGenerater : public GameComponent
+	class StageSelectManagerComponent : public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()const override {
-			return "ParticleGenerater";
+			return "StageSelectManagerComponent";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void OnShowUI()override;
 		void Start()override;
-		void Explosion(const Vector3& arg_position);
-		void SparkParticle(const Vector3& arg_position);
+		void NextScene();
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -23,13 +22,9 @@ namespace ButiEngine {
 		}
 
 	private:
-		void Flickering();
-
-		Value_weak_ptr<ImmediateParticleController> m_vwp_immediateParticleController;
-
-		std::int8_t m_flickeringFrame;
-		bool m_isChangeColor;
+		std::int16_t m_stageNum;
 	};
 }
 
-BUTI_REGIST_GAMECOMPONENT(ParticleGenerater, true);
+BUTI_REGIST_GAMECOMPONENT(StageSelectManagerComponent, true);
+

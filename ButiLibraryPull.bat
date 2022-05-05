@@ -38,3 +38,5 @@ xcopy /y /d Libs\lib\Debug\ output\UserSample\Debug\
 xcopy /y /d Libs\lib\Debug_imguiEditor\ output\UserSample\Debug_imguiEditor\
 xcopy /y /d Libs\lib\Release\ output\UserSample\Release\
 xcopy /y /d Libs\lib\Release_imguiEditor\ output\UserSample\Release_imguiEditor\
+
+pause

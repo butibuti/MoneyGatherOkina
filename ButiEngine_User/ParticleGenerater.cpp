@@ -9,6 +9,10 @@ void ButiEngine::ParticleGenerater::OnUpdate()
 	{
 		Explosion(Vector3(0, 5, 0));
 	}
+	if (InputManager::IsPushAnyGameKey())
+	{
+		SparkParticle(Vector3(0, 10, 0));
+	}
 
 	Flickering();
 }
@@ -80,6 +84,38 @@ void ButiEngine::ParticleGenerater::Explosion(const Vector3& arg_position)
 
 		m_vwp_immediateParticleController.lock()->AddParticle(particle);
 	}
+
+}
+
+void ButiEngine::ParticleGenerater::SparkParticle(const Vector3& arg_position)
+{
+	Particle3D particle;
+
+	particle.position = arg_position;
+
+	float speed = ButiRandom::GetInt(1, 4) * 0.05f;
+
+	particle.life = 15;
+	particle.axis = Vector3(ButiRandom::GetInt(1, 10) * 0.1f,
+		ButiRandom::GetInt(1, 10) * 0.1f, ButiRandom::GetInt(1, 10) * 0.1f);
+	particle.angle = ButiRandom::GetInt(0, 90);
+	particle.anglePase = ButiRandom::GetInt(1, 5) * 0.01f;
+	particle.sizePase = -0.2f;
+	particle.size = 3.0f;
+
+	//ƒIƒŒƒ“ƒW
+	particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_6);
+
+	Vector3 velocity;
+	velocity.x = (float)ButiRandom::GetRandom(-50, 50, 100);
+	velocity.y = (float)ButiRandom::GetRandom( 20, 50, 100);
+	velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
+	particle.velocity = velocity.Normalize() * speed;
+
+	particle.force = velocity * 0.1f + Vector3(0, 0.6f, 0);
+	particle.accelation = 0.6f;
+
+	m_vwp_immediateParticleController.lock()->AddParticle(particle);
 
 }
 

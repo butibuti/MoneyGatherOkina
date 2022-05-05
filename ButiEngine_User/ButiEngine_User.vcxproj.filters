@@ -42,7 +42,7 @@
     <ClCompile Include="Worker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShakeComponent.cpp">
+    <ClCompile Include="CameraShakeComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CameraComponent.cpp">
@@ -69,6 +69,12 @@
     <ClCompile Include="ParticleGenerater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StageSelectManagerComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleManagerComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx_u.h">
@@ -92,7 +98,7 @@
     <ClInclude Include="Worker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShakeComponent.h">
+    <ClInclude Include="CameraShakeComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CameraComponent.h">
@@ -117,6 +123,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParticleGenerater.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectManagerComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleManagerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
