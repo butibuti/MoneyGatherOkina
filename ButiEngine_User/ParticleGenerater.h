@@ -13,8 +13,9 @@ namespace ButiEngine {
 		void OnSet()override;
 		void OnShowUI()override;
 		void Start()override;
-		void Explosion(const Vector3& arg_position);
+		void ExplosionParticles(const Vector3& arg_position);
 		void SparkParticle(const Vector3& arg_position);
+		void TrajectoryParticles(const Vector3& arg_position);
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)

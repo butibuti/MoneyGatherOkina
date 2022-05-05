@@ -535,6 +535,7 @@ cd ..\</Command>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
+    <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
     <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -562,6 +563,7 @@ cd ..\</Command>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pocket.h" />
     <ClInclude Include="CameraShakeComponent.h" />
+    <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
     <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="stdafx_u.h" />

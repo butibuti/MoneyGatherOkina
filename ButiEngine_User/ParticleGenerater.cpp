@@ -5,14 +5,14 @@
 
 void ButiEngine::ParticleGenerater::OnUpdate()
 {
-	if (InputManager::IsTriggerRightKey())
-	{
-		Explosion(Vector3(0, 5, 0));
-	}
-	if (InputManager::IsPushAnyGameKey())
-	{
-		SparkParticle(Vector3(0, 10, 0));
-	}
+	//if (InputManager::IsTriggerRightKey())
+	//{
+	//	ExplosionParticles(Vector3(0, 5, 0));
+	//}
+	//if (InputManager::IsPushAnyGameKey())
+	//{
+	//	SparkParticle(Vector3(0, 10, 0));
+	//}
 
 	Flickering();
 }
@@ -35,7 +35,7 @@ void ButiEngine::ParticleGenerater::Start()
 	m_isChangeColor = false;
 }
 
-void ButiEngine::ParticleGenerater::Explosion(const Vector3& arg_position)
+void ButiEngine::ParticleGenerater::ExplosionParticles(const Vector3& arg_position)
 {
 	Particle3D particle;
 
@@ -103,20 +103,65 @@ void ButiEngine::ParticleGenerater::SparkParticle(const Vector3& arg_position)
 	particle.sizePase = -0.2f;
 	particle.size = 3.0f;
 
-	//オレンジ
-	particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_6);
+	if (speed < 0.15f)
+	{
+		//オレンジ
+		particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_9);
+	}
+	else
+	{
+		//ほぼ黄色
+		particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_5);
+	}
 
 	Vector3 velocity;
 	velocity.x = (float)ButiRandom::GetRandom(-50, 50, 100);
-	velocity.y = (float)ButiRandom::GetRandom( 20, 50, 100);
+	velocity.y = (float)ButiRandom::GetRandom(-50, 50, 100);
 	velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
 	particle.velocity = velocity.Normalize() * speed;
 
-	particle.force = velocity * 0.1f + Vector3(0, 0.6f, 0);
+	particle.force = velocity * 0.1f;
 	particle.accelation = 0.6f;
 
 	m_vwp_immediateParticleController.lock()->AddParticle(particle);
 
+}
+
+void ButiEngine::ParticleGenerater::TrajectoryParticles(const Vector3& arg_position)
+{
+	Particle3D particle;
+
+	particle.position = arg_position;
+
+	float speed = 0.02f;
+
+	particle.life = 60;
+	auto randomAxis = ButiRandom::GetInt(1, 10) * 0.1f;
+	particle.axis = Vector3(randomAxis, randomAxis, randomAxis);
+	particle.angle = ButiRandom::GetInt(0, 90);
+	particle.anglePase = ButiRandom::GetInt(1, 5) * 0.01f;
+	particle.size = 3.5f;
+	particle.sizePase = -0.05f;
+
+	if (!m_isChangeColor)
+	{
+		//茶色
+		particle.color = ButiColor::Brown(ButiColor::ShadeIndex::Shade_9);
+	}
+	else
+	{
+		//ほぼ黄色
+		particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_5);
+	}
+	
+
+	Vector3 velocity;
+	velocity.x = (float)ButiRandom::GetRandom(-50, 50, 100);
+	velocity.y = (float)ButiRandom::GetRandom(-50, 50, 100);
+	velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
+	particle.velocity = velocity.Normalize() * speed;
+
+	m_vwp_immediateParticleController.lock()->AddParticle(particle);
 }
 
 void ButiEngine::ParticleGenerater::Flickering()

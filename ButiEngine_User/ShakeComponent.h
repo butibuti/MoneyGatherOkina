@@ -21,6 +21,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		Vector3 m_defaultRotate;
+		float m_amplitude;
+		bool m_shakeFlag;
 
 	};
 

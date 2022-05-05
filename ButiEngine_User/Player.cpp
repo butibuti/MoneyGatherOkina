@@ -1,10 +1,12 @@
 #include "stdafx_u.h"
 #include "Player.h"
 #include"InputManager.h"
+#include "ParticleGenerater.h"
 #include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
+	TrajectoryParticleWaitCount();
 	Move();
 }
 
@@ -23,8 +25,11 @@ void ButiEngine::Player::OnShowUI()
 void ButiEngine::Player::Start()
 {
 	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_life = 3;
 	m_level = 1;
+	m_addTrajectoryParticleCounter = 0;
+	m_addTrajectoryParticleWait = 2;
 	m_moveSpeed = 0.0f;
 	m_maxMoveSpeed = 0.1f;
 	m_vibrationForce = 3.0f;
@@ -44,6 +49,12 @@ void ButiEngine::Player::Move()
 	if (leftStick != 0)
 	{
 		m_moveSpeed = m_maxMoveSpeed;
+
+		if (m_addTrajectoryParticleCounter == 0)
+		{
+			auto position = gameObject.lock()->transform->GetWorldPosition();
+			m_vwp_particleGenerater.lock()->TrajectoryParticles(position);
+		}
 	}
 
 	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
@@ -55,4 +66,16 @@ void ButiEngine::Player::Move()
 
 	m_vlp_rigidBody->GetRigidBody()->SetVelocity(velocity);
 	//gameObject.lock()->transform->Translate(velocity);
+}
+
+void ButiEngine::Player::TrajectoryParticleWaitCount()
+{
+	if (m_addTrajectoryParticleCounter < m_addTrajectoryParticleWait)
+	{
+		m_addTrajectoryParticleCounter++;
+	}
+	else
+	{
+		m_addTrajectoryParticleCounter = 0;
+	}
 }

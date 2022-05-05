@@ -5,8 +5,9 @@
 
 void ButiEngine::TitleManagerComponent::OnUpdate()
 {
-	if (InputManager::IsTriggerCancelKey())
+	if (InputManager::IsTriggerDecideKey())
 	{
+		//Ÿ‚ÌƒV[ƒ“‚Ö
 		NextScene();
 	}
 }
