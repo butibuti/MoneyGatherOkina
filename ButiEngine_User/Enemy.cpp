@@ -99,9 +99,8 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetNearFre
 void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
 {
 	RemoveAllPocket();
-	m_pocketCount = arg_pocketCount;
 
-	if (m_pocketCount == 0) { return; }
+	if (arg_pocketCount == 0) { return; }
 
 	//transformŽæ“¾—pworker
 	//auto tmpWorker = GetManager().lock()->AddObjectFromCereal("Target");
@@ -115,9 +114,9 @@ void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
 	pocketTransform->SetBaseTransform(pocketCenter);
 	pocketTransform->SetLocalPosition(Vector3(0.0f, 0.0f, (radius + workerRadius) / gameObject.lock()->transform->GetLocalScale().x));
 
-	float rollAngle = 360.0f / m_pocketCount;
+	float rollAngle = 360.0f / arg_pocketCount;
 
-	for (std::uint8_t i = 0; i < m_pocketCount; i++)
+	for (std::uint8_t i = 0; i < arg_pocketCount; i++)
 	{
 		auto pocket = GetManager().lock()->AddObjectFromCereal("Pocket", ObjectFactory::Create<Transform>());
 		pocket.lock()->transform->SetBaseTransform(gameObject.lock()->transform);

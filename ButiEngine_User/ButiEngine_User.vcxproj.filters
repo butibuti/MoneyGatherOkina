@@ -1,131 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="CameraAxis.cpp" />
+    <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="DefaultGameComponent.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy_Test.cpp" />
+    <ClCompile Include="Flocking.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LogoSceneManager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ParticleGenerater.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Pocket.cpp" />
+    <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="SphereExclusion.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Stick.cpp" />
+    <ClCompile Include="Worker.cpp" />
+    <ClCompile Include="WorkerSpawner.cpp" />
+    <ClCompile Include="Loiter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultGameComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LogoSceneManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Flocking.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WorkerSpawner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Worker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShakeComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraAxis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereExclusion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Pocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleGenerater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="CameraAxis.h" />
+    <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy_Test.h" />
+    <ClInclude Include="Flocking.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="ParticleGenerater.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Pocket.h" />
+    <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="SphereExclusion.h" />
+    <ClInclude Include="stdafx_u.h" />
+    <ClInclude Include="Stick.h" />
+    <ClInclude Include="Worker.h" />
+    <ClInclude Include="WorkerSpawner.h" />
+    <ClInclude Include="Loiter.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx_u.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LogoSceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flocking.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorkerSpawner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Worker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShakeComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraAxis.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereExclusion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pocket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleGenerater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ProtBuf\EngineEditorCommunicate.proto">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini">
-      <Filter>Resource Files</Filter>
-    </None>
+    <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
+    <None Include="ProtBuf\EngineEditorCommunicate.proto" />
   </ItemGroup>
 </Project>
