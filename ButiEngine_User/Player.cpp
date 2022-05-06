@@ -31,7 +31,7 @@ void ButiEngine::Player::Start()
 	m_life = 3;
 	m_level = 1;
 	m_addTrajectoryParticleCounter = 0;
-	m_addTrajectoryParticleWait = 2;
+	m_addTrajectoryParticleWait = 3;
 	m_knockBackFlame = 0;
 	m_maxKnockBackFlame = 20;
 	m_moveSpeed = 0.0f;

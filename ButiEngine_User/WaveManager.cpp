@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "WaveManager.h"
 #include "StartPopUpComponent.h"
+#include "EnemySpawnManager.h"
 #include "InputManager.h"
 
 void ButiEngine::WaveManager::OnUpdate()
@@ -57,9 +58,7 @@ void ButiEngine::WaveManager::FixWaveNum()
 void ButiEngine::WaveManager::MoveWave()
 {
 	//プレイヤーがポップに触れたらウェーブ開始
-    //if (ポップ->プレイヤーが触れたかどうか)
 	if (m_vwp_startPopUpObject.lock()->IsHitPlayerFlag() && !m_waveTimeFlag)
-	//if (InputManager::IsTriggerDecideKey())
 	{
 		//ウェーブ番号を進める
 		m_waveNum++;
@@ -94,6 +93,26 @@ void ButiEngine::WaveManager::MoveWave()
 void ButiEngine::WaveManager::SpawnEnemy()
 {
 	//ウェーブ番号に応じて出現させる敵のパターンや配置を変える
+	//何ステージ目・何ウェーブ目・敵の名前・位置
+
+	auto sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+	std::int16_t underScoreIndex = sceneName.find("_");
+	auto size = sceneName.size();
+	std::string stageNum = sceneName.substr(underScoreIndex + 1, size);
+
+	std::string fileName = "EnemyData/1_" /*+ stageNum + "_"*/ + std::to_string(m_waveNum) + ".enemyData";
+
+	std::vector<EnemySpawnData> vec_enemySpawnDatas;
+	InputCereal(vec_enemySpawnDatas, fileName);
+
+	for (auto enemyData : vec_enemySpawnDatas)
+	{
+		auto enemy = GetManager().lock()->AddObjectFromCereal(enemyData.m_enemyName);
+		auto transformData = enemyData.m_vlp_enemyTransform;
+		enemy.lock()->transform->SetLocalPosition(transformData->GetLocalPosition());
+		enemy.lock()->transform->SetLocalRotation(transformData->GetLocalRotation());
+	}
+	
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::WaveManager::Clone()
