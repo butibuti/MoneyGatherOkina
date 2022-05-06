@@ -20,6 +20,11 @@
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="Loiter.cpp" />
+    <ClCompile Include="CameraShakeComponent.cpp" />
+    <ClCompile Include="StageSelectManagerComponent.cpp" />
+    <ClCompile Include="TitleManagerComponent.cpp" />
+    <ClCompile Include="WaveManager.cpp" />
+    <ClCompile Include="StartPopUpComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -66,9 +71,6 @@
     <ClCompile Include="Worker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CameraShakeComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CameraComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -93,15 +95,14 @@
     <ClCompile Include="ParticleGenerater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StageSelectManagerComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleManagerComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ShakeComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClInclude Include="CameraShakeComponent.h" />
+    <ClInclude Include="StageSelectManagerComponent.h" />
+    <ClInclude Include="TitleManagerComponent.h" />
+    <ClInclude Include="WaveManager.h" />
+    <ClInclude Include="StartPopUpComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx_u.h">
@@ -123,9 +124,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Worker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraShakeComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CameraComponent.h">
@@ -150,12 +148,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParticleGenerater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StageSelectManagerComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleManagerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShakeComponent.h">
