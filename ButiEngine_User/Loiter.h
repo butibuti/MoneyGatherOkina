@@ -24,23 +24,41 @@ namespace ButiEngine {
 
 		void SetMoveRange(const float arg_moveRange) { m_moveRange = arg_moveRange; }
 		void SetMaxMoveSpeed(const float arg_moveSpeed) { m_maxMoveSpeed = arg_moveSpeed; }
-		void SetWaitFrame(const std::uint16_t arg_waitFrame) { m_vlp_timer->ChangeCountFrame(arg_waitFrame); }
+		void SetAccelFrame(const std::uint8_t arg_accelFrame) { m_vlp_accelTimer->ChangeCountFrame(arg_accelFrame); }
+		void SetBrakeFrame(const std::uint8_t arg_brakeFrame) { m_vlp_brakeTimer->ChangeCountFrame(arg_brakeFrame); }
+		void SetWaitFrame(const std::uint16_t arg_waitFrame) { m_vlp_waitTimer->ChangeCountFrame(arg_waitFrame); }
+
+		void Stop();
 	private:
 		void Move();
+		void Accel();
+		void Brake();
 		void Wait();
 		void SetMoveTarget();
 
 		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
 		Value_ptr<Transform> m_targetSpawner;
-		Vector3 m_moveTarget = Vector3Const::Zero;
+		
 		float m_moveRange = 0.0f;
 		float m_maxMoveSpeed = 0.0f;
-		float m_accelFrame = 10;
-		float m_brakeFrame = 10;
-		bool m_canMove;
-		std::int32_t m_testWaitFrame = 0;
 
-		Value_ptr<Timer> m_vlp_timer;
+		Vector3 m_moveTarget;
+		Vector3 m_velocity;
+		float m_moveSpeed;
+		float m_speedBeforeBrake;
+		bool m_isGetSpeedBeforeBrake;
+		bool m_canMove;
+		bool m_canAccel;
+		bool m_canBrake;
+
+		Value_ptr<Timer> m_vlp_accelTimer;
+		Value_ptr<Timer> m_vlp_brakeTimer;
+		Value_ptr<Timer> m_vlp_waitTimer;
+
+		//imguiÇ≈ïœçXÇ∑ÇÈóp
+		std::int32_t m_waitFrame = 0;
+		std::int32_t m_accelFrame = 0;
+		std::int32_t m_brakeFrame = 0;
 		
 	};
 

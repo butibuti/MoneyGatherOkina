@@ -24,9 +24,11 @@ void ButiEngine::Enemy_Test::Start()
 	enemyComponent->SetVibrationResistance(3.0f);
 
 	auto loiterComponent = gameObject.lock()->GetGameComponent<Loiter>();
-	loiterComponent->SetMoveRange(10.0f);
-	loiterComponent->SetMaxMoveSpeed(0.05f);
+	loiterComponent->SetMoveRange(30.0f);
+	loiterComponent->SetMaxMoveSpeed(0.3f);
 	loiterComponent->SetWaitFrame(60);
+	loiterComponent->SetAccelFrame(30);
+	loiterComponent->SetBrakeFrame(30);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Test::Clone()
