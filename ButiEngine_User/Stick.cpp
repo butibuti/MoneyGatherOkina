@@ -11,9 +11,7 @@ void ButiEngine::Stick::OnUpdate()
 
 void ButiEngine::Stick::OnSet()
 {
-	//“–‚½‚è”»’è‚ðØ‚é
-	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
-	m_vlp_rigidBody->UnRegist();
+	gameObject.lock()->RemoveGameComponent("RigidBodyComponent");
 
 	m_vlp_center = ObjectFactory::Create<Transform>();
 }
@@ -54,22 +52,23 @@ void ButiEngine::Stick::MoveToEnemy()
 	auto enemy = pocketComponent->GetEnemy();
 
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	float enemyRadius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	Vector3 dir = (gameObject.lock()->transform->GetLocalPosition() - enemy.lock()->transform->GetLocalPosition()).GetNormalize();
-	Vector3 newPos = enemy.lock()->transform->GetLocalPosition() + dir * (radius + enemyRadius);
+	float enemyRadius = enemy.lock()->transform->GetLocalScale().x * 0.5f;
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 enemyPos = enemy.lock()->transform->GetLocalPosition();
+	Vector3 dir = (pos - enemyPos).GetNormalize();
+	Vector3 newPos = enemyPos + dir * (radius + enemyRadius);
 
 	gameObject.lock()->transform->SetLocalPosition(newPos);
-	m_vlp_rigidBody->TransformApply();
 	
 }
 
 void ButiEngine::Stick::MoveToPocket()
 {
+	//m_vlp_rotationTarget->SetLookAtRotation(m_vwp_pocket.lock()->transform->GetWorldPosition());
+
 	constexpr float rotationSpeed = 0.1f;
 	auto rotation = MathHelper::LearpQuat(m_vlp_center->GetLocalRotation().ToQuat(), m_vlp_rotationTarget->GetLocalRotation().ToQuat(), rotationSpeed);
 	m_vlp_center->SetLocalRotation(rotation.ToMatrix());
-
-	m_vlp_rigidBody->TransformApply();
 }
 
 void ButiEngine::Stick::SetCenter()
@@ -84,5 +83,8 @@ void ButiEngine::Stick::SetCenter()
 	m_vlp_center->SetLocalScale(scale);
 
 	m_vlp_center->SetLookAtRotation(gameObject.lock()->transform->GetLocalPosition());
+
+	Vector3 a = gameObject.lock()->transform->GetWorldPosition();
 	gameObject.lock()->transform->SetBaseTransform(m_vlp_center);
+	Vector3 b = gameObject.lock()->transform->GetWorldPosition();
 }

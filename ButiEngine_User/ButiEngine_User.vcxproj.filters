@@ -1,20 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="CameraAxis.cpp" />
+    <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="DefaultGameComponent.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy_Test.cpp" />
+    <ClCompile Include="Flocking.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LogoSceneManager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ParticleGenerater.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Pocket.cpp" />
+    <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="SphereExclusion.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Stick.cpp" />
+    <ClCompile Include="Worker.cpp" />
+    <ClCompile Include="WorkerSpawner.cpp" />
+    <ClCompile Include="Loiter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraAxis.h" />
+    <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy_Test.h" />
+    <ClInclude Include="Flocking.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="ParticleGenerater.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Pocket.h" />
+    <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="SphereExclusion.h" />
+    <ClInclude Include="stdafx_u.h" />
+    <ClInclude Include="Stick.h" />
+    <ClInclude Include="Worker.h" />
+    <ClInclude Include="WorkerSpawner.h" />
+    <ClInclude Include="Loiter.h" />
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -139,11 +163,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ProtBuf\EngineEditorCommunicate.proto">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini">
-      <Filter>Resource Files</Filter>
-    </None>
+    <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
+    <None Include="ProtBuf\EngineEditorCommunicate.proto" />
   </ItemGroup>
 </Project>

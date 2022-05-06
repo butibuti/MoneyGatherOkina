@@ -33,7 +33,6 @@ namespace ButiEngine {
 		void SetCenter();
 
 		Value_weak_ptr<GameObject> m_vwp_pocket;
-		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
 		Value_ptr<Transform> m_vlp_center;
 		Value_ptr<Transform> m_vlp_rotationTarget;
 	};
