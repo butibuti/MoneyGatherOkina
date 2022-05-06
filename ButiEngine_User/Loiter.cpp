@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "Loiter.h"
+#include "MoveRestriction.h"
 #include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
 
 void ButiEngine::Loiter::OnUpdate()
@@ -62,10 +63,10 @@ void ButiEngine::Loiter::Start()
 	m_velocity = Vector3Const::Zero;
 	m_moveSpeed = 0.0f;
 	m_speedBeforeBrake = 0.0f;
+	m_isStop = false;
 	m_canMove = true;
 	m_canAccel = true;
 	m_canBrake = false;
-	m_isGetSpeedBeforeBrake = false;
 	SetMoveTarget();
 }
 
@@ -74,8 +75,27 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Loiter::Clone()
 	return ObjectFactory::Create<Loiter>();
 }
 
-void ButiEngine::Loiter::Stop()
+void ButiEngine::Loiter::StartBrake()
 {
+	if (m_canBrake) { return; }
+
+	m_vlp_accelTimer->Reset();
+	m_canAccel = false;
+
+	m_speedBeforeBrake = m_moveSpeed;
+	m_canBrake = true;
+}
+
+void ButiEngine::Loiter::MoveStart()
+{
+	m_isStop = false;
+}
+
+void ButiEngine::Loiter::MoveStop()
+{
+	m_vlp_waitTimer->Reset();
+	StartBrake();
+	m_isStop = true;
 }
 
 void ButiEngine::Loiter::Move()
@@ -92,13 +112,12 @@ void ButiEngine::Loiter::Move()
 	}
 	else
 	{
-		float nearBorder = 3.0f;
+		float nearBorder = m_moveRange * 0.3f;
 		float nearBorderSqr = nearBorder * nearBorder;
 		float distanceSqr = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetLengthSqr();
 		if (distanceSqr <= nearBorderSqr)
 		{
-			m_canAccel = false;
-			m_canBrake = true;
+			StartBrake();
 		}
 	}
 
@@ -108,30 +127,22 @@ void ButiEngine::Loiter::Move()
 
 void ButiEngine::Loiter::Accel()
 {
-	m_moveSpeed = m_maxMoveSpeed * Easing::EaseInCirc(m_vlp_accelTimer->GetPercent());
+	m_moveSpeed = m_maxMoveSpeed * Easing::EaseInCubic(m_vlp_accelTimer->GetPercent());
 
 	if (m_vlp_accelTimer->Update())
 	{
-		m_moveSpeed = m_maxMoveSpeed * Easing::EaseInCirc(1.0f);
+		m_moveSpeed = m_maxMoveSpeed;
 		m_canAccel = false;
 	}
 }
 
 void ButiEngine::Loiter::Brake()
 {
-	//ブレーキ前の速度を取得
-	if (!m_isGetSpeedBeforeBrake)
-	{
-		m_speedBeforeBrake = m_moveSpeed;
-		m_isGetSpeedBeforeBrake = true;
-	}
-
-	float a = Easing::EaseInCirc(m_vlp_brakeTimer->GetPercent());
-	m_moveSpeed = m_speedBeforeBrake * (1.0f - Easing::EaseInCirc(m_vlp_brakeTimer->GetPercent()));
+	m_moveSpeed = m_speedBeforeBrake * (1.0f - Easing::EaseInCubic(m_vlp_brakeTimer->GetPercent()));
 
 	if (m_vlp_brakeTimer->Update())
 	{
-		m_moveSpeed = m_speedBeforeBrake * Easing::EaseInCirc(1.0f);
+		m_moveSpeed = 0.0f;
 		m_canBrake = false;
 		m_canMove = false;
 	}
@@ -139,20 +150,29 @@ void ButiEngine::Loiter::Brake()
 
 void ButiEngine::Loiter::Wait()
 {
+	if (m_isStop) { return; }
+
 	if (m_vlp_waitTimer->Update())
 	{
 		SetMoveTarget();
 
 		m_canMove = true;
 		m_canAccel = true;
-		m_isGetSpeedBeforeBrake = false;
 	}
 }
 
 void ButiEngine::Loiter::SetMoveTarget()
 {
 	m_targetSpawner->RollLocalRotationY_Degrees(ButiRandom::GetRandom(110, 250));
-	m_moveTarget = m_targetSpawner->GetLocalPosition() + m_targetSpawner->GetFront() * ButiRandom::GetRandom(m_moveRange * 0.75f, m_moveRange);
+	m_moveTarget = m_targetSpawner->GetLocalPosition() + m_targetSpawner->GetFront() * ButiRandom::GetRandom(m_moveRange * 0.9f, m_moveRange);
+
+	//フィールドから出ている分戻す
+	auto moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
+	if (moveRestriction->IsOutField(m_moveTarget))
+	{
+		float outLength = moveRestriction->GetOutLength(m_moveTarget);
+		m_moveTarget -= m_targetSpawner->GetFront() * outLength;
+	}
 
 	m_velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 }

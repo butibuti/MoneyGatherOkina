@@ -532,6 +532,7 @@ cd ..\</Command>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <ClCompile Include="MoveRestriction.cpp" />
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pocket.cpp" />
@@ -561,6 +562,7 @@ cd ..\</Command>
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="Loiter.h" />
+    <ClInclude Include="MoveRestriction.h" />
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pocket.h" />

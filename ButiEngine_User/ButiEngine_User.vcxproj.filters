@@ -9,17 +9,21 @@
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
+    <ClCompile Include="Loiter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pocket.cpp" />
+    <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
+    <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Stick.cpp" />
+    <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
-    <ClCompile Include="Loiter.cpp" />
+    <ClCompile Include="MoveRestriction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -29,138 +33,20 @@
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="Loiter.h" />
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pocket.h" />
+    <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
+    <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
+    <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
-    <ClInclude Include="Loiter.h" />
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultGameComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LogoSceneManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Flocking.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WorkerSpawner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Worker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraShakeComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraAxis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereExclusion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Pocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleGenerater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StageSelectManagerComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleManagerComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShakeComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx_u.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LogoSceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flocking.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorkerSpawner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Worker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraShakeComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraAxis.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereExclusion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pocket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleGenerater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StageSelectManagerComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleManagerComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShakeComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="MoveRestriction.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

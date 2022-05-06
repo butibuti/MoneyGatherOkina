@@ -54,6 +54,7 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 	if (pocket.lock())
 	{
 		gameObject.lock()->RemoveGameComponent("Flocking");
+		gameObject.lock()->RemoveGameComponent("MoveRestriction");
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
