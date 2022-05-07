@@ -61,6 +61,11 @@ void ButiEngine::StageSelectManagerComponent::BackScene()
 	sceneManager->ChangeScene(sceneName);
 }
 
+std::int16_t ButiEngine::StageSelectManagerComponent::GetStageNum()
+{
+	return m_stageNum;
+}
+
 void ButiEngine::StageSelectManagerComponent::FixStageNum()
 {
 	//ステージ番号を範囲内に修正

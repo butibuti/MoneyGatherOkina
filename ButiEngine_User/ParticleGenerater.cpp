@@ -164,6 +164,49 @@ void ButiEngine::ParticleGenerater::TrajectoryParticles(const Vector3& arg_posit
 	m_vwp_immediateParticleController.lock()->AddParticle(particle);
 }
 
+void ButiEngine::ParticleGenerater::PachiPachiParticles(const Vector3& arg_position)
+{
+	Particle3D particle;
+
+	for (std::int8_t i = 0; i < 5; i++)
+	{
+		particle.position = arg_position;
+
+		float speed = 0.0f;
+
+		particle.life = 20;
+		particle.axis = Vector3(ButiRandom::GetInt(1, 10) * 0.1f,
+			ButiRandom::GetInt(1, 10) * 0.1f, ButiRandom::GetInt(1, 10) * 0.1f);
+		particle.angle = ButiRandom::GetInt(0, 90);
+		particle.anglePase = ButiRandom::GetInt(1, 5) * 0.01f;
+		particle.sizePase = 0;
+
+		if (i == 0)
+		{
+			//’†‰›‚Ì‚â‚Â
+			particle.color = ButiColor::Yellow(ButiColor::ShadeIndex::Shade_9);
+			particle.size = 10.0f;
+			particle.sizePase = -1.0f;
+		}
+		else
+		{
+			//‚Í‚¶‚¯‚é‚â‚Â
+			particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_8);
+			particle.life = ButiRandom::GetInt(40, 50);
+			speed = 0.05f;
+			particle.size = 3.0f;
+		}
+
+		Vector3 velocity;
+		velocity.x = (float)ButiRandom::GetRandom(-50, 50, 100);
+		velocity.y = (float)ButiRandom::GetRandom(-50, 50, 100);
+		velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
+		particle.velocity = velocity.Normalize() * speed;
+
+		m_vwp_immediateParticleController.lock()->AddParticle(particle);
+	}
+}
+
 void ButiEngine::ParticleGenerater::Flickering()
 {
 	if (m_flickeringFrame < 2)

@@ -13,14 +13,16 @@ namespace ButiEngine {
 		void OnSet()override;
 		void OnShowUI()override;
 		void Start()override;
-		void NextScene();
-		void BackScene();
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
 		}
+
+		void NextScene();
+		void BackScene();
+		std::int16_t GetStageNum();
 
 	private:
 		void FixStageNum();

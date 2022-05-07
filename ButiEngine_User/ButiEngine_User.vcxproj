@@ -523,6 +523,7 @@ cd ..\</Command>
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="Enemy_Test.cpp" />
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -539,6 +540,7 @@ cd ..\</Command>
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
     <ClCompile Include="StageSelectManagerComponent.cpp" />
+    <ClCompile Include="StartPopUpComponent.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Editor|x64'">Create</PrecompiledHeader>
@@ -549,6 +551,7 @@ cd ..\</Command>
     </ClCompile>
     <ClCompile Include="Stick.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
+    <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
   </ItemGroup>
@@ -556,6 +559,7 @@ cd ..\</Command>
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="Enemy_Test.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
@@ -568,9 +572,11 @@ cd ..\</Command>
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
     <ClInclude Include="StageSelectManagerComponent.h" />
+    <ClInclude Include="StartPopUpComponent.h" />
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
     <ClInclude Include="TitleManagerComponent.h" />
+    <ClInclude Include="WaveManager.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
   </ItemGroup>
