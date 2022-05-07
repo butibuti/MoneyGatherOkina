@@ -11,6 +11,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnRemove()override;
 		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
@@ -23,7 +24,9 @@ namespace ButiEngine {
 		static float GetVibrationForce() { return m_vibrationForce; }
 	private:
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
+
 		Value_weak_ptr<GameObject> m_vwp_player;
+		Value_weak_ptr<GameObject> m_vwp_drawObject;
 
 		static float m_nearBorder;
 		static float m_vibrationForce;

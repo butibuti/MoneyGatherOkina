@@ -11,10 +11,6 @@ float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::L))
-	{
-		gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
-	}
 }
 
 void ButiEngine::Worker::OnSet()
@@ -28,6 +24,11 @@ void ButiEngine::Worker::OnSet()
 		}));
 }
 
+void ButiEngine::Worker::OnRemove()
+{
+	m_vwp_drawObject.lock()->SetIsRemove(true);
+}
+
 void ButiEngine::Worker::OnShowUI()
 {
 	GUI::BulletText("NearBorder");
@@ -38,6 +39,7 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
+	m_vwp_drawObject = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()

@@ -45,8 +45,9 @@ namespace ButiEngine {
 		static float m_nearBorder;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
+		Value_ptr<Transform> m_vlp_drawObjectTransform;
 		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
-		Value_ptr<Transform> m_transform;
+		Value_ptr<Transform> m_vlp_transform;
 		float m_rotationSpeed;
 		float m_moveSpeed;
 

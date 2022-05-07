@@ -29,8 +29,9 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SeparateDrawObject:
 	return ObjectFactory::Create<SeparateDrawObject>();
 }
 
-void ButiEngine::SeparateDrawObject::CreateDrawObject(const std::string& arg_objectName)
+ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::SeparateDrawObject::CreateDrawObject(const std::string& arg_objectName)
 {
-	if (m_vwp_drawObject.lock()) { return; }
-	m_vwp_drawObject = gameObject.lock()->GetGameObjectManager().lock()->AddObjectFromCereal("DrawObject_Worker", gameObject.lock()->transform->Clone());
+	if (m_vwp_drawObject.lock()) { return m_vwp_drawObject; }
+	m_vwp_drawObject = gameObject.lock()->GetGameObjectManager().lock()->AddObjectFromCereal("DrawObject_" + arg_objectName, gameObject.lock()->transform->Clone());
+	return m_vwp_drawObject;
 }

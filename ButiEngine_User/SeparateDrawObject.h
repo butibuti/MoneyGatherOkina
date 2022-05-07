@@ -20,8 +20,12 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		Value_ptr<Transform> GetTransform() { return m_vwp_drawObject.lock()->transform; }
-		void CreateDrawObject(const std::string& arg_objectName);
+		Value_ptr<Transform> GetTransform()
+		{ 
+			if (!m_vwp_drawObject.lock()) { return nullptr; }
+			return m_vwp_drawObject.lock()->transform; 
+		}
+		Value_weak_ptr<GameObject> CreateDrawObject(const std::string& arg_objectName);
 	private:
 		Value_weak_ptr<GameObject> m_vwp_drawObject;
 	};
