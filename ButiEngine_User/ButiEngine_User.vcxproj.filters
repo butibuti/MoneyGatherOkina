@@ -24,6 +24,8 @@
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="MoveRestriction.cpp" />
+    <ClCompile Include="SeparateDrawObject.cpp" />
+    <ClCompile Include="Enemy_Flie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -47,6 +49,8 @@
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="MoveRestriction.h" />
+    <ClInclude Include="SeparateDrawObject.h" />
+    <ClInclude Include="Enemy_Flie.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

@@ -121,7 +121,8 @@ void ButiEngine::Loiter::Move()
 		}
 	}
 
-	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed);
+	Vector3 velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
+	gameObject.lock()->transform->Translate(velocity * m_moveSpeed);
 	m_vlp_rigidBody->TransformApply();
 }
 
@@ -142,6 +143,7 @@ void ButiEngine::Loiter::Brake()
 
 	if (m_vlp_brakeTimer->Update())
 	{
+		m_vlp_rigidBody->GetRigidBody()->SetVelocity(Vector3Const::Zero);
 		m_moveSpeed = 0.0f;
 		m_canBrake = false;
 		m_canMove = false;
