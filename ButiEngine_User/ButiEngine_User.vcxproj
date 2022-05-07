@@ -525,6 +525,7 @@ cd ..\</Command>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Enemy_Flie.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
+    <ClCompile Include="Enemy_Kiba.cpp" />
     <ClCompile Include="Enemy_Test.cpp" />
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -564,6 +565,7 @@ cd ..\</Command>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enemy_Flie.h" />
     <ClInclude Include="EnemySpawnManager.h" />
+    <ClInclude Include="Enemy_Kiba.h" />
     <ClInclude Include="Enemy_Test.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />

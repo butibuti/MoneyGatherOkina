@@ -4,6 +4,8 @@
 #include "Pocket.h"
 #include "Stick.h"
 #include "SeparateDrawObject.h"
+#include "Flocking.h"
+#include "MoveRestriction.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 1.0f;
@@ -26,7 +28,6 @@ void ButiEngine::Worker::OnSet()
 
 void ButiEngine::Worker::OnRemove()
 {
-	m_vwp_drawObject.lock()->SetIsRemove(true);
 }
 
 void ButiEngine::Worker::OnShowUI()
@@ -39,7 +40,7 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
-	m_vwp_drawObject = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
@@ -58,8 +59,18 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 	if (pocket.lock())
 	{
-		gameObject.lock()->RemoveGameComponent("Flocking");
-		gameObject.lock()->RemoveGameComponent("MoveRestriction");
+		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
+		if (flocking)
+		{
+			flocking->SetIsRemove(true);
+		}
+
+		auto moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
+		if (moveRestriction)
+		{
+			moveRestriction->SetIsRemove(true);
+		}
+
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);

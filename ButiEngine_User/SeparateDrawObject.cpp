@@ -16,6 +16,12 @@ void ButiEngine::SeparateDrawObject::OnSet()
 {
 }
 
+void ButiEngine::SeparateDrawObject::OnRemove()
+{
+	if (!m_vwp_drawObject.lock()) { return; }
+	m_vwp_drawObject.lock()->SetIsRemove(true);
+}
+
 void ButiEngine::SeparateDrawObject::OnShowUI()
 {
 }
