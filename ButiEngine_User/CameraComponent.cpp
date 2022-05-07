@@ -49,17 +49,17 @@ void ButiEngine::CameraComponent::OnShowUI()
 
 void ButiEngine::CameraComponent::CanZoom(const Vector3& arg_zoomPosition, const float arg_rotationX)
 {
-    const float LERP_SCALE = 0.1f;
+    float lerpScale = 0.1f;
 
     //positionの補間
     m_currentPosition = arg_zoomPosition;
-    m_previousPosition.x = m_previousPosition.x * (1.0f - LERP_SCALE) + m_currentPosition.x * LERP_SCALE;
-    m_previousPosition.y = m_previousPosition.y * (1.0f - LERP_SCALE) + m_currentPosition.y * LERP_SCALE;
-    m_previousPosition.z = m_previousPosition.z * (1.0f - LERP_SCALE) + m_currentPosition.z * LERP_SCALE;
+    m_previousPosition.x = m_previousPosition.x * (1.0f - lerpScale) + m_currentPosition.x * lerpScale;
+    m_previousPosition.y = m_previousPosition.y * (1.0f - lerpScale) + m_currentPosition.y * lerpScale;
+    m_previousPosition.z = m_previousPosition.z * (1.0f - lerpScale) + m_currentPosition.z * lerpScale;
 
     //rotationXの補間
     m_currentRotateX = arg_rotationX;
-    m_previousRotateX = m_previousRotateX * (1.0f - LERP_SCALE) + m_currentRotateX * LERP_SCALE;
+    m_previousRotateX = m_previousRotateX * (1.0f - lerpScale) + m_currentRotateX * lerpScale;
     
     //補間した値のセット
     auto transform = gameObject.lock()->transform;

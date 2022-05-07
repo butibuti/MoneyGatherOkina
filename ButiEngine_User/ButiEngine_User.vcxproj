@@ -526,6 +526,8 @@ cd ..\</Command>
     <ClCompile Include="Enemy_Flie.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="Enemy_Test.cpp" />
+    <ClCompile Include="FloatMotionComponent.cpp" />
+    <ClCompile Include="FloatMotionParent.cpp" />
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
@@ -565,6 +567,8 @@ cd ..\</Command>
     <ClInclude Include="Enemy_Flie.h" />
     <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="Enemy_Test.h" />
+    <ClInclude Include="FloatMotionComponent.h" />
+    <ClInclude Include="FloatMotionParent.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />

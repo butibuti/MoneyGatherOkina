@@ -33,6 +33,8 @@
     <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="StartPopUpComponent.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
+    <ClCompile Include="FloatMotionComponent.cpp" />
+    <ClCompile Include="FloatMotionParent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -116,6 +118,8 @@
     <ClInclude Include="WaveManager.h" />
     <ClInclude Include="StartPopUpComponent.h" />
     <ClInclude Include="EnemySpawnManager.h" />
+    <ClInclude Include="FloatMotionComponent.h" />
+    <ClInclude Include="FloatMotionParent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx_u.h">
