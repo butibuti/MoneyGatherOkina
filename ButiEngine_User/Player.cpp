@@ -31,7 +31,7 @@ void ButiEngine::Player::Start()
 	m_life = 3;
 	m_level = 1;
 	m_addTrajectoryParticleCounter = 0;
-	m_addTrajectoryParticleWait = 3;
+	m_addTrajectoryParticleWait = 4;
 	m_knockBackFlame = 0;
 	m_maxKnockBackFlame = 20;
 	m_moveSpeed = 0.0f;
@@ -66,6 +66,10 @@ void ButiEngine::Player::Move()
 
 	//XAZ•½–Ê‚ÌˆÚ“®•ûŒü‚ðŽæ“¾
 	Vector2 leftStick = InputManager::GetLeftStick();
+	
+	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
+
+	Vector3 velocity;
 
 	m_moveSpeed = 0.0f;
 	if (leftStick != 0)
@@ -74,17 +78,22 @@ void ButiEngine::Player::Move()
 
 		if (m_addTrajectoryParticleCounter == 0)
 		{
+			velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+			velocity.y = 0;
+			velocity.Normalize();
+			velocity *= m_moveSpeed * 9.0f;
+
 			auto position = gameObject.lock()->transform->GetWorldPosition();
 			m_vwp_particleGenerater.lock()->TrajectoryParticles(position);
+			m_vwp_particleGenerater.lock()->PachiPachiParticles(position - velocity);
 		}
 	}
 
-	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
 
-	Vector3 velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+	velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
 	velocity.y = 0;
 	velocity.Normalize();
-	velocity *= m_moveSpeed * 70;
+	velocity *= m_moveSpeed * 90;
 
 	m_vlp_rigidBody->GetRigidBody()->SetVelocity(velocity);
 	//gameObject.lock()->transform->Translate(velocity);

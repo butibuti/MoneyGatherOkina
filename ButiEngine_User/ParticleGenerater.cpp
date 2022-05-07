@@ -131,28 +131,22 @@ void ButiEngine::ParticleGenerater::TrajectoryParticles(const Vector3& arg_posit
 {
 	Particle3D particle;
 
-	particle.position = arg_position;
+	Vector3 randomPos = Vector3(ButiRandom::GetInt(-10, 10), ButiRandom::GetInt(-10, 10),
+		ButiRandom::GetInt(-10, 10)) * 0.075f;
+	particle.position = arg_position + randomPos;
 
-	float speed = 0.02f;
+	float speed = 0.025f;
 
 	particle.life = 60;
 	auto randomAxis = ButiRandom::GetInt(1, 10) * 0.1f;
 	particle.axis = Vector3(randomAxis, randomAxis, randomAxis);
 	particle.angle = ButiRandom::GetInt(0, 90);
-	particle.anglePase = ButiRandom::GetInt(1, 5) * 0.01f;
-	particle.size = 3.5f;
+	particle.anglePase = ButiRandom::GetInt(1, 5) * 0.02f;
+	particle.size = 3.0f;
 	particle.sizePase = -0.05f;
 
-	if (!m_isChangeColor)
-	{
-		//íÉêF
-		particle.color = ButiColor::Brown(ButiColor::ShadeIndex::Shade_9);
-	}
-	else
-	{
-		//ÇŸÇ⁄â©êF
-		particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_5);
-	}
+	//ÇŸÇ⁄â©êF
+	particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_5);
 	
 
 	Vector3 velocity;
@@ -166,35 +160,39 @@ void ButiEngine::ParticleGenerater::TrajectoryParticles(const Vector3& arg_posit
 
 void ButiEngine::ParticleGenerater::PachiPachiParticles(const Vector3& arg_position)
 {
-	Particle3D particle;
+
 
 	for (std::int8_t i = 0; i < 5; i++)
 	{
-		particle.position = arg_position;
+		Particle3D particle;
+		Vector3 randomPos = Vector3(ButiRandom::GetInt(-10, 10), ButiRandom::GetInt(-10, 10),
+			ButiRandom::GetInt(-10, 10)) * 0.1f;
+		particle.position = arg_position + randomPos;
 
 		float speed = 0.0f;
 
 		particle.life = 20;
-		particle.axis = Vector3(ButiRandom::GetInt(1, 10) * 0.1f,
-			ButiRandom::GetInt(1, 10) * 0.1f, ButiRandom::GetInt(1, 10) * 0.1f);
+		//particle.axis = Vector3(ButiRandom::GetInt(1, 10) * 0.1f,
+		//	ButiRandom::GetInt(1, 10) * 0.1f, ButiRandom::GetInt(1, 10) * 0.1f);
 		particle.angle = ButiRandom::GetInt(0, 90);
-		particle.anglePase = ButiRandom::GetInt(1, 5) * 0.01f;
+		particle.anglePase = ButiRandom::GetInt(1, 5) * 0.05f;
 		particle.sizePase = 0;
+		particle.color = Vector4(1, 1, 1, 1);
 
 		if (i == 0)
 		{
 			//íÜâõÇÃÇ‚Ç¬
-			particle.color = ButiColor::Yellow(ButiColor::ShadeIndex::Shade_9);
-			particle.size = 10.0f;
-			particle.sizePase = -1.0f;
+			particle.size = 3.0f;
+			particle.sizePase = -0.15f;
+			speed = 0.001f;
 		}
 		else
 		{
-			//ÇÕÇ∂ÇØÇÈÇ‚Ç¬
-			particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_8);
-			particle.life = ButiRandom::GetInt(40, 50);
-			speed = 0.05f;
-			particle.size = 3.0f;
+			//ÇÕÇ∂ÇØÇÈÇ‚Ç¬			
+			particle.life = 10;
+			speed = 0.15f;
+			particle.sizePase = -0.01f;
+			particle.size = 1.0f;
 		}
 
 		Vector3 velocity;
