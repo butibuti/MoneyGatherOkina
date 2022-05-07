@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class RigidBodyComponent;
 	class ParticleGenerater;
+	class WaveManager;
 
 	class Player :public GameComponent
 	{
@@ -34,6 +35,7 @@ namespace ButiEngine {
 
 		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 		Vector3 m_knockBackVelocity;
 		std::int8_t m_life;
 		std::int8_t m_level;

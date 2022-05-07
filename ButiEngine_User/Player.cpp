@@ -2,6 +2,7 @@
 #include "Player.h"
 #include"InputManager.h"
 #include "ParticleGenerater.h"
+#include "WaveManager.h"
 #include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
 
 void ButiEngine::Player::OnUpdate()
@@ -27,6 +28,7 @@ void ButiEngine::Player::Start()
 {
 	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	m_knockBackVelocity = Vector3(0, 0, 0);
 	m_life = 3;
 	m_level = 1;
@@ -48,6 +50,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::KnockBack()
 {
 	if (m_knockBackFlag) return;
+	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
 
 	//ノックバックの初期値セット
 	m_knockBackFlag = true;
@@ -63,6 +66,12 @@ void ButiEngine::Player::Move()
 {
 	//ノックバック中は操作不能
 	if (m_knockBackFlag) return;
+	//リザルト(クリア演出)中は操作不能
+	if (m_vwp_waveManager.lock()->IsClearAnimationFlag())
+	{
+		m_vlp_rigidBody->GetRigidBody()->SetVelocity(Vector3(0, 0, 0));
+		return;
+	}
 
 	//X、Z平面の移動方向を取得
 	Vector2 leftStick = InputManager::GetLeftStick();
