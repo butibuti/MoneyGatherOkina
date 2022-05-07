@@ -9,16 +9,23 @@
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
+    <ClCompile Include="Loiter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pocket.cpp" />
+    <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
+    <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Stick.cpp" />
+    <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
+    <ClCompile Include="MoveRestriction.cpp" />
+    <ClCompile Include="SeparateDrawObject.cpp" />
+    <ClCompile Include="Enemy_Flie.cpp" />
     <ClCompile Include="Loiter.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="StageSelectManagerComponent.cpp" />
@@ -35,13 +42,17 @@
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="Loiter.h" />
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pocket.h" />
+    <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
+    <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
+    <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="Loiter.h" />
@@ -155,6 +166,9 @@
     <ClInclude Include="ShakeComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MoveRestriction.h" />
+    <ClInclude Include="SeparateDrawObject.h" />
+    <ClInclude Include="Enemy_Flie.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

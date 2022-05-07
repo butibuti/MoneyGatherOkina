@@ -523,6 +523,7 @@ cd ..\</Command>
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy_Flie.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="Enemy_Test.cpp" />
     <ClCompile Include="Flocking.cpp" />
@@ -533,10 +534,12 @@ cd ..\</Command>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <ClCompile Include="MoveRestriction.cpp" />
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
+    <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
     <ClCompile Include="StageSelectManagerComponent.cpp" />
@@ -559,16 +562,19 @@ cd ..\</Command>
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy_Flie.h" />
     <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="Enemy_Test.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="Loiter.h" />
+    <ClInclude Include="MoveRestriction.h" />
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pocket.h" />
     <ClInclude Include="CameraShakeComponent.h" />
+    <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
     <ClInclude Include="StageSelectManagerComponent.h" />

@@ -8,11 +8,7 @@ float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::L))
-	{
-		gameObject.lock()->SetIsRemove(true);
-		return;
-	}
+	gameObject.lock()->transform->SetLookAtRotation(m_vwp_player.lock()->transform->GetLocalPosition());
 	//プレイヤーが近くにいたら振動量上昇、いなかったら減少
 	float nearBorderSqr = m_nearBorder * m_nearBorder;
 	float distanceSqr = (gameObject.lock()->transform->GetLocalPosition() - m_vwp_player.lock()->transform->GetLocalPosition()).GetLengthSqr();
@@ -29,10 +25,14 @@ void ButiEngine::Enemy::OnUpdate()
 void ButiEngine::Enemy::OnSet()
 {
 	m_testPocketCount = 0;
-	//gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([](ButiBullet::ContactData& arg_other)->void 
-	//	{
-	//		int a = 0;
-	//	}));
+	m_vwp_player = GetManager().lock()->GetGameObject("Player");
+	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
+
+	m_nearBorder = 3.0f;
+	m_vibration = 0.0f;
+	m_vibrationIncrease = 0.0f;
+	m_vibrationCapacity = 100.0f;
+	m_vibrationResistance = 10.0f;
 }
 
 void ButiEngine::Enemy::OnRemove()
@@ -62,14 +62,6 @@ void ButiEngine::Enemy::OnShowUI()
 
 void ButiEngine::Enemy::Start()
 {
-	m_vwp_player = GetManager().lock()->GetGameObject("Player");
-	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
-
-	m_nearBorder = 3.0f;
-	m_vibration = 0.0f;
-	m_vibrationIncrease = 0.0f;
-	m_vibrationCapacity = 100.0f;
-	m_vibrationResistance = 10.0f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()

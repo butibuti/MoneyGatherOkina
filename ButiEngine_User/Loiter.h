@@ -28,7 +28,9 @@ namespace ButiEngine {
 		void SetBrakeFrame(const std::uint8_t arg_brakeFrame) { m_vlp_brakeTimer->ChangeCountFrame(arg_brakeFrame); }
 		void SetWaitFrame(const std::uint16_t arg_waitFrame) { m_vlp_waitTimer->ChangeCountFrame(arg_waitFrame); }
 
-		void Stop();
+		void StartBrake();
+		void MoveStart();
+		void MoveStop();
 	private:
 		void Move();
 		void Accel();
@@ -46,7 +48,7 @@ namespace ButiEngine {
 		Vector3 m_velocity;
 		float m_moveSpeed;
 		float m_speedBeforeBrake;
-		bool m_isGetSpeedBeforeBrake;
+		bool m_isStop;
 		bool m_canMove;
 		bool m_canAccel;
 		bool m_canBrake;
