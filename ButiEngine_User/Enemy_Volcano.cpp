@@ -16,12 +16,12 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 	if (m_isHeatUp)
 	{
 		//激化時
-		m_rockShotRate = 90;
+		m_rockShotRate = 30;
 	}
 	else
 	{
 		//通常時
-		m_rockShotRate = 120;
+		m_rockShotRate = 90;
 	}
 
 	if (m_rockShotCount < m_rockShotRate)
@@ -32,6 +32,7 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 	{
 		m_rockShotCount = 0;
 		ShotVolcanoRock();
+		AddPredictedPoint();
 	}
 }
 
@@ -52,7 +53,7 @@ void ButiEngine::Enemy_Volcano::Start()
 	enemyComponent->SetVibrationResistance(3.0f);
 
 	m_rockShotCount = 0;
-	m_rockShotRate = 120;
+	m_rockShotRate = 90;
 	m_isHeatUp = false;
 }
 
@@ -65,25 +66,33 @@ void ButiEngine::Enemy_Volcano::ShotVolcanoRock()
 {
 	//全体的に要調整
 
-	Vector3 randomVelocity = Vector3(0, 5, 0);
-	while (randomVelocity == Vector3(0, 5, 0))
+	m_randomVelocity = Vector3(0, 0, 0);
+	while (m_randomVelocity == Vector3(0, 0, 0))
 	{
-		randomVelocity.x = ButiRandom::GetInt(-5, 5);
-		randomVelocity.z = ButiRandom::GetInt(-5, 5);
+		m_randomVelocity.x = ButiRandom::GetInt(-5, 5);
+		m_randomVelocity.z = ButiRandom::GetInt(-5, 5);
 	}
+	m_randomVelocity.Normalize();
+	m_randomVelocity.y = 2;
 
-	Vector3 position = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 
 	//火山岩を出す
 	auto volcanoRock = GetManager().lock()->AddObjectFromCereal("VolcanoRock");
-	volcanoRock.lock()->transform->SetLocalPosition(position);
-	volcanoRock.lock()->GetGameComponent<VolcanoRock>()->SetVelocity(randomVelocity);
+	volcanoRock.lock()->transform->SetWorldPosition(position);
+	volcanoRock.lock()->GetGameComponent<VolcanoRock>()->SetVelocity(m_randomVelocity);
+}
+
+void ButiEngine::Enemy_Volcano::AddPredictedPoint()
+{
+	Vector3 randomVelocity = m_randomVelocity;
+	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 
 	//予測地点を出す
-	randomVelocity.Normalize();
-	randomVelocity *= 30;
+	randomVelocity *= 6.0f;
 	randomVelocity.y = 0;
 	position += randomVelocity;
+	position.y -= 1.0f;
 	auto predictedPoint = GetManager().lock()->AddObjectFromCereal("PredictedPoint");
-	volcanoRock.lock()->transform->SetLocalPosition(position);
+	predictedPoint.lock()->transform->SetWorldPosition(position);
 }

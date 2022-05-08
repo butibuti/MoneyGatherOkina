@@ -21,6 +21,9 @@ namespace ButiEngine {
 		}
 	private:
 		void ShotVolcanoRock();
+		void AddPredictedPoint();
+
+		Vector3 m_randomVelocity;
 
 		std::int32_t m_rockShotCount;
 		std::int32_t m_rockShotRate;
