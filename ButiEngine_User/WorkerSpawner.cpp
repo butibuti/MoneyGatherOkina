@@ -20,7 +20,7 @@ void ButiEngine::WorkerSpawner::Start()
 		m_vwp_player = GetManager().lock()->GetGameObject("Player");
 	}
 
-	for (std::uint8_t i = 0; i < 20; i++)
+	for (std::uint8_t i = 0; i < 3; i++)
 	{
 		SpawnWorker();
 	}

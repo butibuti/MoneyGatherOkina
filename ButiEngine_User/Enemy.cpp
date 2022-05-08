@@ -8,11 +8,11 @@ float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
-	gameObject.lock()->transform->SetLookAtRotation(m_vwp_player.lock()->transform->GetLocalPosition());
 	//プレイヤーが近くにいたら振動量上昇、いなかったら減少
 	float nearBorderSqr = m_nearBorder * m_nearBorder;
 	float distanceSqr = (gameObject.lock()->transform->GetLocalPosition() - m_vwp_player.lock()->transform->GetLocalPosition()).GetLengthSqr();
-	if (distanceSqr <= nearBorderSqr)
+	m_isVibrate = distanceSqr <= nearBorderSqr;
+	if (m_isVibrate)
 	{
 		IncreaseVibration();
 	}
@@ -28,6 +28,7 @@ void ButiEngine::Enemy::OnSet()
 	m_vwp_player = GetManager().lock()->GetGameObject("Player");
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
 
+	m_isVibrate = false;
 	m_nearBorder = 3.0f;
 	m_vibration = 0.0f;
 	m_vibrationIncrease = 0.0f;

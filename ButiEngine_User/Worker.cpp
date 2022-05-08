@@ -40,7 +40,6 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()

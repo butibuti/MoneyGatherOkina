@@ -2,7 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class RigidBodyComponent;
 	class ParticleGenerater;
 
 	class Player :public GameComponent
@@ -32,7 +31,6 @@ namespace ButiEngine {
 		void MoveKnockBack();
 		void TrajectoryParticleWaitCount();
 
-		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Vector3 m_knockBackVelocity;
 		std::int8_t m_life;

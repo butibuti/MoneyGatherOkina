@@ -18,7 +18,6 @@ void ButiEngine::Enemy_Flie::OnShowUI()
 
 void ButiEngine::Enemy_Flie::Start()
 {
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Flie");
 
 	auto enemyComponent = gameObject.lock()->GetGameComponent<Enemy>();
 	enemyComponent->CreatePocket(3);

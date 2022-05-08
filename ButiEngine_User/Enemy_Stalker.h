@@ -2,15 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Enemy;
-	class Loiter;
-
-	class Enemy_Kiba :public GameComponent
+	class Enemy_Stalker :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Enemy_Kiba";
+			return "Enemy_Stalker";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -24,18 +21,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		void LookAtPlayer();
-		void CreateDamageArea();
 		void SetEnemyParameter();
 		void SetLoiterParameter();
-
-		Value_ptr<Enemy> m_vlp_enemy;
-		Value_ptr<Loiter> m_vlp_loiter;
-		Value_weak_ptr<GameObject> m_vwp_damageArea;
-
-		float m_rotationSpeed;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Enemy_Kiba, true);
+BUTI_REGIST_GAMECOMPONENT(Enemy_Stalker, true);

@@ -25,7 +25,6 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
-	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_knockBackVelocity = Vector3(0, 0, 0);
 	m_life = 3;
@@ -55,8 +54,6 @@ void ButiEngine::Player::KnockBack()
 	m_knockBackVelocity.x = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.z = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.Normalize();
-
-	m_knockBackVelocity *= 70.0f;
 }
 
 void ButiEngine::Player::Move()
@@ -84,10 +81,9 @@ void ButiEngine::Player::Move()
 	Vector3 velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
 	velocity.y = 0;
 	velocity.Normalize();
-	velocity *= m_moveSpeed * 70;
+	velocity *= m_moveSpeed;
 
-	m_vlp_rigidBody->GetRigidBody()->SetVelocity(velocity);
-	//gameObject.lock()->transform->Translate(velocity);
+	gameObject.lock()->transform->Translate(velocity);
 }
 
 void ButiEngine::Player::MoveKnockBack()
@@ -95,7 +91,7 @@ void ButiEngine::Player::MoveKnockBack()
 	if (!m_knockBackFlag) return;
 
 	//ノックバック中の処理
-	m_vlp_rigidBody->GetRigidBody()->SetVelocity(m_knockBackVelocity);
+	gameObject.lock()->transform->Translate(m_knockBackVelocity);
 
 	m_knockBackVelocity *= 0.85f;
 

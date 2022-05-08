@@ -2,7 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class RigidBodyComponent;
 
 	class Loiter :public GameComponent
 	{
@@ -38,14 +37,12 @@ namespace ButiEngine {
 		void Wait();
 		void SetMoveTarget();
 
-		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
 		Value_ptr<Transform> m_targetSpawner;
 		
 		float m_moveRange = 0.0f;
 		float m_maxMoveSpeed = 0.0f;
 
 		Vector3 m_moveTarget;
-		Vector3 m_velocity;
 		float m_moveSpeed;
 		float m_speedBeforeBrake;
 		bool m_isStop;

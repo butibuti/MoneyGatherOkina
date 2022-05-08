@@ -34,6 +34,7 @@
     <ClCompile Include="StartPopUpComponent.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="Enemy_Kiba.cpp" />
+    <ClCompile Include="Enemy_Stalker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -118,6 +119,7 @@
     <ClInclude Include="StartPopUpComponent.h" />
     <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="Enemy_Kiba.h" />
+    <ClInclude Include="Enemy_Stalker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx_u.h">

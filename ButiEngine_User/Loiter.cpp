@@ -1,7 +1,6 @@
 #include "stdafx_u.h"
 #include "Loiter.h"
 #include "MoveRestriction.h"
-#include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
 
 void ButiEngine::Loiter::OnUpdate()
 {
@@ -50,8 +49,6 @@ void ButiEngine::Loiter::OnShowUI()
 
 void ButiEngine::Loiter::Start()
 {
-	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
-
 	m_targetSpawner = ObjectFactory::Create<Transform>();
 	m_targetSpawner->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 
@@ -60,7 +57,6 @@ void ButiEngine::Loiter::Start()
 	m_vlp_brakeTimer->Start();
 
 	m_moveTarget = Vector3Const::Zero;
-	m_velocity = Vector3Const::Zero;
 	m_moveSpeed = 0.0f;
 	m_speedBeforeBrake = 0.0f;
 	m_isStop = false;
@@ -93,6 +89,7 @@ void ButiEngine::Loiter::MoveStart()
 
 void ButiEngine::Loiter::MoveStop()
 {
+	if (m_isStop) { return; }
 	m_vlp_waitTimer->Reset();
 	StartBrake();
 	m_isStop = true;
@@ -123,7 +120,6 @@ void ButiEngine::Loiter::Move()
 
 	Vector3 velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 	gameObject.lock()->transform->Translate(velocity * m_moveSpeed);
-	m_vlp_rigidBody->TransformApply();
 }
 
 void ButiEngine::Loiter::Accel()
@@ -143,7 +139,6 @@ void ButiEngine::Loiter::Brake()
 
 	if (m_vlp_brakeTimer->Update())
 	{
-		m_vlp_rigidBody->GetRigidBody()->SetVelocity(Vector3Const::Zero);
 		m_moveSpeed = 0.0f;
 		m_canBrake = false;
 		m_canMove = false;
@@ -175,6 +170,4 @@ void ButiEngine::Loiter::SetMoveTarget()
 		float outLength = moveRestriction->GetOutLength(m_moveTarget);
 		m_moveTarget -= m_targetSpawner->GetFront() * outLength;
 	}
-
-	m_velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 }
