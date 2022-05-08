@@ -526,6 +526,7 @@ cd ..\</Command>
     <ClCompile Include="Enemy_Flie.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="Enemy_Test.cpp" />
+    <ClCompile Include="Enemy_Volcano.cpp" />
     <ClCompile Include="FloatMotionComponent.cpp" />
     <ClCompile Include="FloatMotionParent.cpp" />
     <ClCompile Include="Flocking.cpp" />
@@ -541,6 +542,7 @@ cd ..\</Command>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
+    <ClCompile Include="PredictedPoint.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
@@ -556,6 +558,7 @@ cd ..\</Command>
     </ClCompile>
     <ClCompile Include="Stick.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
+    <ClCompile Include="VolcanoRock.cpp" />
     <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
@@ -567,6 +570,7 @@ cd ..\</Command>
     <ClInclude Include="Enemy_Flie.h" />
     <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="Enemy_Test.h" />
+    <ClInclude Include="Enemy_Volcano.h" />
     <ClInclude Include="FloatMotionComponent.h" />
     <ClInclude Include="FloatMotionParent.h" />
     <ClInclude Include="Flocking.h" />
@@ -578,6 +582,7 @@ cd ..\</Command>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pocket.h" />
     <ClInclude Include="CameraShakeComponent.h" />
+    <ClInclude Include="PredictedPoint.h" />
     <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
@@ -586,6 +591,7 @@ cd ..\</Command>
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
     <ClInclude Include="TitleManagerComponent.h" />
+    <ClInclude Include="VolcanoRock.h" />
     <ClInclude Include="WaveManager.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />

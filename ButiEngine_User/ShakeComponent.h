@@ -28,8 +28,8 @@ namespace ButiEngine {
 		Vector3 m_currentPos;
 		Vector3 m_movePos;
 		float m_amplitude;
-		bool m_shakeFlag;
-		bool m_moveFlag;
+		bool m_isShake;
+		bool m_isMove;
 	};
 
 }

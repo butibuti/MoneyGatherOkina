@@ -35,6 +35,9 @@
     <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="FloatMotionComponent.cpp" />
     <ClCompile Include="FloatMotionParent.cpp" />
+    <ClCompile Include="Enemy_Volcano.cpp" />
+    <ClCompile Include="VolcanoRock.cpp" />
+    <ClCompile Include="PredictedPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -120,6 +123,9 @@
     <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="FloatMotionComponent.h" />
     <ClInclude Include="FloatMotionParent.h" />
+    <ClInclude Include="Enemy_Volcano.h" />
+    <ClInclude Include="VolcanoRock.h" />
+    <ClInclude Include="PredictedPoint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx_u.h">

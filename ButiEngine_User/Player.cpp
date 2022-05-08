@@ -34,12 +34,12 @@ void ButiEngine::Player::Start()
 	m_level = 1;
 	m_addTrajectoryParticleCounter = 0;
 	m_addTrajectoryParticleWait = 4;
-	m_knockBackFlame = 0;
-	m_maxKnockBackFlame = 20;
+	m_knockBackFrame = 0;
+	m_maxKnockBackFrame = 20;
 	m_moveSpeed = 0.0f;
 	m_maxMoveSpeed = 0.1f;
 	m_vibrationForce = 3.0f;
-	m_knockBackFlag = false;
+	m_isKnockBack = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -49,12 +49,12 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 
 void ButiEngine::Player::KnockBack()
 {
-	if (m_knockBackFlag) return;
+	if (m_isKnockBack) return;
 	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
 
 	//ノックバックの初期値セット
-	m_knockBackFlag = true;
-	m_knockBackFlame = m_maxKnockBackFlame;
+	m_isKnockBack = true;
+	m_knockBackFrame = m_maxKnockBackFrame;
 	m_knockBackVelocity.x = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.z = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.Normalize();
@@ -65,7 +65,7 @@ void ButiEngine::Player::KnockBack()
 void ButiEngine::Player::Move()
 {
 	//ノックバック中は操作不能
-	if (m_knockBackFlag) return;
+	if (m_isKnockBack) return;
 	//リザルト(クリア演出)中は操作不能
 	if (m_vwp_waveManager.lock()->IsClearAnimationFlag())
 	{
@@ -110,18 +110,18 @@ void ButiEngine::Player::Move()
 
 void ButiEngine::Player::MoveKnockBack()
 {
-	if (!m_knockBackFlag) return;
+	if (!m_isKnockBack) return;
 
 	//ノックバック中の処理
 	m_vlp_rigidBody->GetRigidBody()->SetVelocity(m_knockBackVelocity);
 
 	m_knockBackVelocity *= 0.85f;
 
-	m_knockBackFlame--;
+	m_knockBackFrame--;
 
-	if (m_knockBackFlame <= 0)
+	if (m_knockBackFrame <= 0)
 	{
-		m_knockBackFlag = false;
+		m_isKnockBack = false;
 	}
 }
 

@@ -43,17 +43,17 @@ namespace ButiEngine {
 		std::int32_t m_gameOverAnimationTime;
 
 		//Wave中かどうか
-		bool m_waveTimeFlag; 
+		bool m_isWaveTime; 
 		//ポップを出現させるためのフラグ
-		bool m_popupSpawnFlag;
+		bool m_isPopupSpawn;
 		//最終ウェーブをクリアしているかどうか
-		bool m_lastWaveClearFlag;
+		bool m_isLastWaveClear;
 		//ゲームオーバーかどうか
-		bool m_gameOverFlag;
+		bool m_isGameOver;
 		//次のシーンにいくためのボタンが押せる状態かどうか
-		bool m_nextSceneButtonFlag;
+		bool m_isNextSceneButton;
 		//ゲームオーバー時のリトライボタン用
-		bool m_gameOverButtonFlag;
+		bool m_isGameOverButton;
 
 		//次のウェーブに進むまでの仮のカウント
 		std::int8_t m_nextWaveCount;

@@ -41,14 +41,14 @@ namespace ButiEngine {
 		std::int8_t m_level;
 		std::int8_t m_addTrajectoryParticleCounter;
 		std::int8_t m_addTrajectoryParticleWait;
-		std::int8_t m_knockBackFlame;
-		std::int8_t m_maxKnockBackFlame;
+		std::int8_t m_knockBackFrame;
+		std::int8_t m_maxKnockBackFrame;
 		float m_moveSpeed;
 		float m_maxMoveSpeed;
 
 		float m_vibrationForce;
 
-		bool m_knockBackFlag;
+		bool m_isKnockBack;
 	};
 
 }
