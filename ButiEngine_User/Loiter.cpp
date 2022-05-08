@@ -4,7 +4,7 @@
 
 void ButiEngine::Loiter::OnUpdate()
 {
-	if (m_canMove)
+	if (m_isMove)
 	{
 		Move();
 	}
@@ -60,9 +60,9 @@ void ButiEngine::Loiter::Start()
 	m_moveSpeed = 0.0f;
 	m_speedBeforeBrake = 0.0f;
 	m_isStop = false;
-	m_canMove = true;
-	m_canAccel = true;
-	m_canBrake = false;
+	m_isMove = true;
+	m_isAccel = true;
+	m_isBrake = false;
 	SetMoveTarget();
 }
 
@@ -73,13 +73,13 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Loiter::Clone()
 
 void ButiEngine::Loiter::StartBrake()
 {
-	if (m_canBrake) { return; }
+	if (m_isBrake) { return; }
 
 	m_vlp_accelTimer->Reset();
-	m_canAccel = false;
+	m_isAccel = false;
 
 	m_speedBeforeBrake = m_moveSpeed;
-	m_canBrake = true;
+	m_isBrake = true;
 }
 
 void ButiEngine::Loiter::MoveStart()
@@ -97,13 +97,13 @@ void ButiEngine::Loiter::MoveStop()
 
 void ButiEngine::Loiter::Move()
 {
-	if (m_canAccel)
+	if (m_isAccel)
 	{
 		Accel();
 	}
 
 	//ターゲットにある程度近づいたらスピードを落とす
-	if (m_canBrake)
+	if (m_isBrake)
 	{
 		Brake();
 	}
@@ -129,7 +129,7 @@ void ButiEngine::Loiter::Accel()
 	if (m_vlp_accelTimer->Update())
 	{
 		m_moveSpeed = m_maxMoveSpeed;
-		m_canAccel = false;
+		m_isAccel = false;
 	}
 }
 
@@ -140,8 +140,8 @@ void ButiEngine::Loiter::Brake()
 	if (m_vlp_brakeTimer->Update())
 	{
 		m_moveSpeed = 0.0f;
-		m_canBrake = false;
-		m_canMove = false;
+		m_isBrake = false;
+		m_isMove = false;
 	}
 }
 
@@ -153,8 +153,8 @@ void ButiEngine::Loiter::Wait()
 	{
 		SetMoveTarget();
 
-		m_canMove = true;
-		m_canAccel = true;
+		m_isMove = true;
+		m_isAccel = true;
 	}
 }
 

@@ -14,10 +14,7 @@ void ButiEngine::StartPopUpComponent::OnSet()
 
 void ButiEngine::StartPopUpComponent::Start()
 {
-	if (m_vwp_player.lock() == nullptr)
-	{
-		m_vwp_player = GetManager().lock()->GetGameObject("Player");
-	}
+	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 
 	m_defaultScale = Vector3(4, 2, 2);
 	m_currentScale = m_defaultScale;

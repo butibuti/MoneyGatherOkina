@@ -1,7 +1,6 @@
 #include "stdafx_u.h"
 #include "Stick.h"
 #include "Pocket.h"
-#include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
 
 void ButiEngine::Stick::OnUpdate()
 {
@@ -11,8 +10,6 @@ void ButiEngine::Stick::OnUpdate()
 
 void ButiEngine::Stick::OnSet()
 {
-	gameObject.lock()->RemoveGameComponent("RigidBodyComponent");
-
 	m_vlp_center = ObjectFactory::Create<Transform>();
 }
 
@@ -64,8 +61,6 @@ void ButiEngine::Stick::MoveToEnemy()
 
 void ButiEngine::Stick::MoveToPocket()
 {
-	//m_vlp_rotationTarget->SetLookAtRotation(m_vwp_pocket.lock()->transform->GetWorldPosition());
-
 	constexpr float rotationSpeed = 0.1f;
 	auto rotation = MathHelper::LearpQuat(m_vlp_center->GetLocalRotation().ToQuat(), m_vlp_rotationTarget->GetLocalRotation().ToQuat(), rotationSpeed);
 	m_vlp_center->SetLocalRotation(rotation.ToMatrix());
@@ -76,7 +71,6 @@ void ButiEngine::Stick::SetCenter()
 	auto enemy = m_vwp_pocket.lock()->GetGameComponent<Pocket>()->GetEnemy();
 
 	m_vlp_center->SetBaseTransform(enemy.lock()->transform, true);
-	//m_vlp_center->SetLocalPosition(enemy.lock()->transform->GetLocalPosition());
 
 	//enemy‚ÌƒXƒP[ƒ‹‚ð‘Å‚¿Á‚·
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f) / enemy.lock()->transform->GetLocalScale();

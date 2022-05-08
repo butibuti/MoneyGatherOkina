@@ -24,8 +24,7 @@ void ButiEngine::Enemy::OnUpdate()
 
 void ButiEngine::Enemy::OnSet()
 {
-	m_testPocketCount = 0;
-	m_vwp_player = GetManager().lock()->GetGameObject("Player");
+	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
 
 	m_isVibrate = false;

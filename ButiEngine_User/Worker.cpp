@@ -6,9 +6,11 @@
 #include "SeparateDrawObject.h"
 #include "Flocking.h"
 #include "MoveRestriction.h"
+#include "Player.h"
+#include "WorkerSpawner.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
-float ButiEngine::Worker::m_nearBorder = 1.0f;
+float ButiEngine::Worker::m_nearBorder = 3.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
@@ -17,17 +19,31 @@ void ButiEngine::Worker::OnUpdate()
 
 void ButiEngine::Worker::OnSet()
 {
-	gameObject.lock()->AddCollisionStayReaction(std::function<void(ButiBullet::ContactData&)>([this](ButiBullet::ContactData& arg_other)->void 
+	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_other)->void
 		{
-			if (arg_other.vwp_gameObject.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			if (arg_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
-				OnCollisionEnemy(arg_other.vwp_gameObject);
+				OnCollisionEnemy(arg_other);
 			}
-		}));
+		});
+
+	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
+	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 }
 
 void ButiEngine::Worker::OnRemove()
 {
+	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
+	if (player)
+	{
+		player->AddExp();
+	}
+
+	auto workerSpawner = GetManager().lock()->GetGameObject(GameObjectTag("WorkerSpawner")).lock()->GetGameComponent<WorkerSpawner>();
+	if (workerSpawner)
+	{
+		workerSpawner->StartTimer();
+	}
 }
 
 void ButiEngine::Worker::OnShowUI()
@@ -68,6 +84,12 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 		if (moveRestriction)
 		{
 			moveRestriction->SetIsRemove(true);
+		}
+
+		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
+		if (collider)
+		{
+			collider->SetIsRemove(true);
 		}
 
 

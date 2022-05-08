@@ -22,23 +22,33 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void KnockBack();
-
+		std::uint8_t GetMaxWorkerCount() { return m_maxWorkerCount; }
 		float GetMoveSpeed() { return m_moveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
+
+		void AddExp();
+		void KnockBack();
 	private:
 		void Move();
+		void LevelUp();
 		void MoveKnockBack();
 		void TrajectoryParticleWaitCount();
 
+		std::uint16_t CalcRequestExp();
+
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Vector3 m_knockBackVelocity;
-		std::int8_t m_life;
-		std::int8_t m_level;
-		std::int8_t m_addTrajectoryParticleCounter;
-		std::int8_t m_addTrajectoryParticleWait;
-		std::int8_t m_knockBackFlame;
-		std::int8_t m_maxKnockBackFlame;
+		std::uint8_t m_life;
+		std::uint8_t m_addTrajectoryParticleCounter;
+		std::uint8_t m_addTrajectoryParticleWait;
+		std::uint8_t m_knockBackFlame;
+		std::uint8_t m_maxKnockBackFlame;
+
+		std::uint8_t m_level;
+		std::uint8_t m_maxLevel;
+		std::uint8_t m_maxWorkerCount;
+		std::uint16_t m_exp;
+
 		float m_moveSpeed;
 		float m_maxMoveSpeed;
 

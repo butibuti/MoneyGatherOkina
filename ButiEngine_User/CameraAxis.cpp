@@ -20,11 +20,8 @@ void ButiEngine::CameraAxis::OnShowUI()
 
 void ButiEngine::CameraAxis::Start()
 {
-	if (m_vwp_player.lock() == nullptr)
-	{
-		//プレイヤーの取得
-		m_vwp_player = GetManager().lock()->GetGameObject("Player");
-	}
+	//プレイヤーの取得
+	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 
 	m_currentPosition = m_vwp_player.lock()->transform->GetLocalPosition();
 	m_previousPosition = m_currentPosition;

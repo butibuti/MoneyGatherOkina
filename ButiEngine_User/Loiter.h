@@ -46,9 +46,9 @@ namespace ButiEngine {
 		float m_moveSpeed;
 		float m_speedBeforeBrake;
 		bool m_isStop;
-		bool m_canMove;
-		bool m_canAccel;
-		bool m_canBrake;
+		bool m_isMove;
+		bool m_isAccel;
+		bool m_isBrake;
 
 		Value_ptr<Timer> m_vlp_accelTimer;
 		Value_ptr<Timer> m_vlp_brakeTimer;

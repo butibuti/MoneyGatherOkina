@@ -61,7 +61,7 @@ void ButiEngine::Flocking::OnShowUI()
 
 void ButiEngine::Flocking::Start()
 {
-	m_vwp_player = GetManager().lock()->GetGameObject("Player");
+	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 
 	m_rotationSpeed = 0.05f;
 	m_moveSpeed = 0.1f;

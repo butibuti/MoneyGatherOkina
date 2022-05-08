@@ -25,8 +25,6 @@ namespace ButiEngine {
 	private:
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
 
-		Value_weak_ptr<GameObject> m_vwp_player;
-
 		static float m_nearBorder;
 		static float m_vibrationForce;
 	};

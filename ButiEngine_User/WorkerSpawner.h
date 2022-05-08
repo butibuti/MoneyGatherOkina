@@ -18,9 +18,19 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void StartTimer()
+		{
+			if (m_vlp_spawnTimer)
+			{
+				m_vlp_spawnTimer->Start();
+			}
+		}
 	private:
 		void SpawnWorker();
-		Value_weak_ptr<GameObject> m_vwp_player;
+
+		Value_ptr<Timer> m_vlp_spawnTimer;
+		std::uint8_t m_spawnIntervalFrame;
 	};
 
 }

@@ -83,7 +83,7 @@ void ButiEngine::Enemy_Kiba::SetLoiterParameter()
 {
 	m_vlp_loiter = gameObject.lock()->GetGameComponent<Loiter>();
 	m_vlp_loiter->SetMoveRange(30.0f);
-	m_vlp_loiter->SetMaxMoveSpeed(0.1f);
+	m_vlp_loiter->SetMaxMoveSpeed(0.0f);
 	m_vlp_loiter->SetWaitFrame(60);
 	m_vlp_loiter->SetAccelFrame(30);
 	m_vlp_loiter->SetBrakeFrame(30);
