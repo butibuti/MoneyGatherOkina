@@ -3,13 +3,6 @@
 
 void ButiEngine::SeparateDrawObject::OnUpdate()
 {
-	if (!m_vwp_drawObject.lock()) { return; }
-
-	auto transform = gameObject.lock()->transform;
-	auto drawObjectTransform = m_vwp_drawObject.lock()->transform;
-
-	drawObjectTransform->SetWorldPosition(transform->GetWorldPosition());
-	drawObjectTransform->SetLocalScale(transform->GetLocalScale());
 }
 
 void ButiEngine::SeparateDrawObject::OnSet()
@@ -38,6 +31,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SeparateDrawObject:
 ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::SeparateDrawObject::CreateDrawObject(const std::string& arg_objectName)
 {
 	if (m_vwp_drawObject.lock()) { return m_vwp_drawObject; }
-	m_vwp_drawObject = gameObject.lock()->GetGameObjectManager().lock()->AddObjectFromCereal("DrawObject_" + arg_objectName, gameObject.lock()->transform->Clone());
+	m_vwp_drawObject = gameObject.lock()->GetGameObjectManager().lock()->AddObjectFromCereal("DrawObject_" + arg_objectName);
+	m_vwp_drawObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	return m_vwp_drawObject;
 }

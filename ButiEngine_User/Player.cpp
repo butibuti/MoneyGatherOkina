@@ -4,6 +4,7 @@
 #include "ParticleGenerater.h"
 #include "WaveManager.h"
 #include "SphereExclusion.h"
+#include "SeparateDrawObject.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -49,6 +50,8 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
+
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
