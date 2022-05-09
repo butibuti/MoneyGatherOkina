@@ -44,7 +44,7 @@ void ButiEngine::Player::Start()
 	m_addTrajectoryParticleCounter = 0;
 	m_addTrajectoryParticleWait = 4;
 	m_knockBackFrame = 0;
-	m_maxKnockBackFrame = 20;
+	m_maxKnockBackFrame = 15;
 	m_moveSpeed = 0.0f;
 	m_maxMoveSpeed = 0.1f;
 
@@ -69,7 +69,7 @@ void ButiEngine::Player::AddExp()
 	}
 }
 
-void ButiEngine::Player::KnockBack()
+void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 {
 	if (m_isKnockBack) return;
 	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
@@ -77,8 +77,11 @@ void ButiEngine::Player::KnockBack()
 	//ノックバックの初期値セット
 	m_isKnockBack = true;
 	m_knockBackFrame = m_maxKnockBackFrame;
-	m_knockBackVelocity.x = ButiRandom::GetRandom(-10, 10, 100);
-	m_knockBackVelocity.z = ButiRandom::GetRandom(-10, 10, 100);
+
+	m_knockBackVelocity = arg_velocity;
+	m_knockBackVelocity.y = 0;
+	//m_knockBackVelocity.x = ButiRandom::GetRandom(-10, 10, 100);
+	//m_knockBackVelocity.z = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.Normalize();
 }
 
@@ -106,7 +109,7 @@ void ButiEngine::Player::Move()
 			velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
 			velocity.y = 0;
 			velocity.Normalize();
-			velocity *= m_moveSpeed * 9.0f;
+			velocity *= m_moveSpeed * 10.0f;
 
 			auto position = gameObject.lock()->transform->GetWorldPosition();
 			m_vwp_particleGenerater.lock()->TrajectoryParticles(position);
@@ -136,7 +139,7 @@ void ButiEngine::Player::MoveKnockBack()
 	//ノックバック中の処理
 	gameObject.lock()->transform->Translate(m_knockBackVelocity);
 
-	m_knockBackVelocity *= 0.85f;
+	m_knockBackVelocity *= 0.7f;
 
 	m_knockBackFrame--;
 

@@ -63,7 +63,8 @@ void ButiEngine::StartPopUpComponent::CheckHitPlayer()
 		{
 			//ノックバックさせる
 			auto playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
-			playerComponent->KnockBack();
+			Vector3 knockBackVelocity = playerPosition - position;
+			playerComponent->KnockBack(knockBackVelocity);
 		}
 		else
 		{

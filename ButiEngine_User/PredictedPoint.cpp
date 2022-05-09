@@ -23,7 +23,7 @@ void ButiEngine::PredictedPoint::OnShowUI()
 
 void ButiEngine::PredictedPoint::Start()
 {
-	m_life = 180;
+	m_life = 105;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::PredictedPoint::Clone()

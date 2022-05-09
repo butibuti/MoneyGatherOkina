@@ -28,7 +28,7 @@ namespace ButiEngine {
 		float GetVibrationForce() { return m_vibrationForce; }
 
 		void AddExp();
-		void KnockBack();
+		void KnockBack(const Vector3& arg_velocity);
 	private:
 		void Move();
 		void LevelUp();

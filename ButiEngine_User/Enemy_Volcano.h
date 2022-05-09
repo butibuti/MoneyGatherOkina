@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Enemy;
+
 	class Enemy_Volcano :public GameComponent
 	{
 	public:
@@ -22,14 +24,17 @@ namespace ButiEngine {
 	private:
 		void ShotVolcanoRock();
 		void AddPredictedPoint();
+		void ScaleAnimation();
+
+		Value_ptr<Enemy> m_vlp_enemy;
 
 		Vector3 m_randomVelocity;
+		Vector3 m_defaultScale;
+		Vector3 m_currentScale;
+		Vector3 m_previousScale;
 
 		std::int32_t m_rockShotCount;
 		std::int32_t m_rockShotRate;
-
-		bool m_isHeatUp;
-
 	};
 
 }

@@ -13,7 +13,7 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 	//	ShotVolcanoRock();
 	//}
 
-	if (m_isHeatUp)
+	if (m_vlp_enemy->IsVibrate())
 	{
 		//Œƒ‰»Žž
 		m_rockShotRate = 30;
@@ -33,7 +33,9 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 		m_rockShotCount = 0;
 		ShotVolcanoRock();
 		AddPredictedPoint();
+		m_previousScale = Vector3(1.5f, 5.0f, 1.5f);
 	}
+	ScaleAnimation();
 }
 
 void ButiEngine::Enemy_Volcano::OnSet()
@@ -46,15 +48,18 @@ void ButiEngine::Enemy_Volcano::OnShowUI()
 
 void ButiEngine::Enemy_Volcano::Start()
 {
-	auto enemyComponent = gameObject.lock()->GetGameComponent<Enemy>();
-	enemyComponent->CreatePocket(8);
-	enemyComponent->SetNearBorder(6.5f);
-	enemyComponent->SetVibrationCapacity(1000.0f);
-	enemyComponent->SetVibrationResistance(3.0f);
+	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->CreatePocket(8);
+	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
+	m_vlp_enemy->SetVibrationCapacity(1000.0f);
+	m_vlp_enemy->SetVibrationResistance(3.0f);
+
+	m_defaultScale = Vector3(3, 3, 3);
+	m_currentScale = m_defaultScale;
+	m_previousScale = m_currentScale;
 
 	m_rockShotCount = 0;
 	m_rockShotRate = 90;
-	m_isHeatUp = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Volcano::Clone()
@@ -73,7 +78,7 @@ void ButiEngine::Enemy_Volcano::ShotVolcanoRock()
 		m_randomVelocity.z = ButiRandom::GetInt(-5, 5);
 	}
 	m_randomVelocity.Normalize();
-	m_randomVelocity.y = 2;
+	m_randomVelocity.y = 2.5f;
 
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 
@@ -89,10 +94,22 @@ void ButiEngine::Enemy_Volcano::AddPredictedPoint()
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 
 	//—\‘ª’n“_‚ðo‚·
-	randomVelocity *= 6.0f;
+	randomVelocity *= 5.0f;
 	randomVelocity.y = 0;
 	position += randomVelocity;
 	position.y -= 1.0f;
 	auto predictedPoint = GetManager().lock()->AddObjectFromCereal("PredictedPoint");
 	predictedPoint.lock()->transform->SetWorldPosition(position);
+}
+
+void ButiEngine::Enemy_Volcano::ScaleAnimation()
+{
+	float lerpScale = 0.05f;
+
+	//position‚Ì•âŠÔ
+	m_previousScale.x = m_previousScale.x * (1.0f - lerpScale) + m_currentScale.x * lerpScale;
+	m_previousScale.y = m_previousScale.y * (1.0f - lerpScale) + m_currentScale.y * lerpScale;
+	m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;
+
+	gameObject.lock()->transform->SetLocalScale(m_previousScale);
 }
