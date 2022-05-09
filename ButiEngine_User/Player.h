@@ -36,7 +36,7 @@ namespace ButiEngine {
 		void MoveKnockBack();
 		void TrajectoryParticleWaitCount();
 
-		std::uint16_t CalcRequestExp();
+		std::uint16_t CalculateRequestExp();
 
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 

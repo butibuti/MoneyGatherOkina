@@ -26,6 +26,10 @@ void ButiEngine::Worker::OnSet()
 			{
 				OnCollisionEnemy(arg_other);
 			}
+			else if (arg_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
+			{
+				gameObject.lock()->SetIsRemove(true);
+			}
 		});
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);

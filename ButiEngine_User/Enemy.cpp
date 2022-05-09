@@ -132,6 +132,7 @@ void ButiEngine::Enemy::RemovePocket(const std::uint8_t arg_pocketNum)
 {
 	if (arg_pocketNum >= m_vec_pockets.size()) { return; }
 	m_vec_pockets[arg_pocketNum].lock()->SetIsRemove(true);
+	m_vec_pockets.erase(m_vec_pockets.begin() + arg_pocketNum);
 }
 
 void ButiEngine::Enemy::IncreaseVibration()

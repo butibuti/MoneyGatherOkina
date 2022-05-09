@@ -21,6 +21,10 @@ void ButiEngine::Player::OnShowUI()
 	GUI::Text("Level:%d", m_level);
 	GUI::Text("Exp:%d", m_exp);
 	GUI::Text("MaxWorker:%d", m_maxWorkerCount);
+	if (GUI::Button("LevelUp"))
+	{
+		LevelUp();
+	}
 
 	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
@@ -68,7 +72,7 @@ void ButiEngine::Player::AddExp()
 	if (m_level == m_maxLevel) { return; }
 
 	m_exp++;
-	std::uint16_t requestExp = CalcRequestExp();
+	std::uint16_t requestExp = CalculateRequestExp();
 	if (m_exp == requestExp)
 	{
 		LevelUp();
@@ -167,7 +171,7 @@ void ButiEngine::Player::TrajectoryParticleWaitCount()
 	}
 }
 
-std::uint16_t ButiEngine::Player::CalcRequestExp()
+std::uint16_t ButiEngine::Player::CalculateRequestExp()
 {
 	return m_level * 10;
 }

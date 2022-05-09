@@ -22,14 +22,14 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		void CalcAveragePos(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcMoveSpeed(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcGatherVec();
-		void CalcCohesionVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcALignmentVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcSeparationVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcAvoidPlayerVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcSurroundVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateAveragePos(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateMoveSpeed(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateGatherVec();
+		void CalculateCohesionVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateALignmentVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateSeparationVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateAvoidPlayerVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateSurroundVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
 		void Move();
 
 		static float m_gatherWeight;
