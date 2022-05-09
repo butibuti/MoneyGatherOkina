@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Enemy;
+
 	class Enemy_Stalker :public GameComponent
 	{
 	public:
@@ -20,13 +22,28 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		bool IsPrey() { return m_isPrey; }
 	private:
-		void OnCollisionPlayer();
-		void OnCollisionWorker();
-		void OnCollisionEnemy();
+		void OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other);
+		void OnCollisionWorker(Value_weak_ptr<GameObject> arg_vwp_other);
+		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other);
+
+		void Move();
+		void Prey(Value_weak_ptr<GameObject> arg_vwp_other);
+		void OnPrey();
 
 		void SetEnemyParameter();
 
+		Value_ptr<Enemy> m_vlp_enemy;
+
+		Vector3 m_velocity;
+		float m_maxMoveSpeed;
+		float m_acceleration;
+
+		Value_ptr<LookAtComponent> m_vlp_lookAt;
+		Value_weak_ptr<GameObject> m_vwp_preyTarget;
+		Value_ptr<Timer> m_vlp_preyTimer;
 		bool m_isPrey;
 	};
 

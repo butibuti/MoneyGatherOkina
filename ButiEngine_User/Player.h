@@ -41,6 +41,7 @@ namespace ButiEngine {
 
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
+		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		std::uint16_t CalculateRequestExp();
 
@@ -54,7 +55,8 @@ namespace ButiEngine {
 		std::uint8_t m_maxWorkerCount;
 		std::uint16_t m_exp;
 
-		//ˆÚ“®‘¬“x
+		//ˆÚ“®
+		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<ButiRendering::ICamera> m_vlp_camera;
 		Vector3 m_velocity;
 		float m_maxMoveSpeed;

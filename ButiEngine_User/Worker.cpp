@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "WorkerSpawner.h"
 #include "SphereExclusion.h"
+#include "Enemy_Stalker.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -22,7 +23,11 @@ void ButiEngine::Worker::OnSet()
 {
 	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Stalker")))
+			{
+				OnCollisionStalker(arg_vwp_other);
+			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				OnCollisionEnemy(arg_vwp_other);
 			}
@@ -68,6 +73,38 @@ void ButiEngine::Worker::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
 {
 	return ObjectFactory::Create<Worker>();
+}
+
+void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	auto stalker = arg_vwp_other.lock()->GetGameComponent<Enemy_Stalker>();
+	if (!stalker) { return; }
+
+	//•ßH’†‚È‚ç‚µ‚ª‚Ý‚Â‚­
+	bool isPrey = stalker->IsPrey();
+	if (isPrey)
+	{
+		OnCollisionEnemy(arg_vwp_other);
+		return; 
+	}
+
+	auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
+	if (flocking)
+	{
+		flocking->SetIsRemove(true);
+	}
+
+	auto moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
+	if (moveRestriction)
+	{
+		moveRestriction->SetIsRemove(true);
+	}
+
+	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
+	if (collider)
+	{
+		collider->SetIsRemove(true);
+	}
 }
 
 void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy)

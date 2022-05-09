@@ -5,6 +5,7 @@
 #include "WaveManager.h"
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
+#include "Enemy_Stalker.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -24,6 +25,10 @@ void ButiEngine::Player::OnSet()
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
 				OnCollisionDamageArea(arg_vwp_other);
+			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Stalker")))
+			{
+				OnCollisionStalker(arg_vwp_other);
 			}
 		});
 
@@ -50,8 +55,6 @@ void ButiEngine::Player::OnShowUI()
 void ButiEngine::Player::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
-	gameObject.lock()->GetGameComponent<LookAtComponent>()->m_speed = 0.1f;
-
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
@@ -73,6 +76,8 @@ void ButiEngine::Player::Start()
 
 	m_isDead = false;
 
+	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	m_vlp_lookAt->m_speed = 0.1f;
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;
@@ -141,7 +146,7 @@ void ButiEngine::Player::Move()
 		/////////////////////////////////////////////
 		auto lookTarget = gameObject.lock()->transform->Clone();
 		lookTarget->Translate(dir);
-		gameObject.lock()->GetGameComponent<LookAtComponent>()->m_vlp_lookTarget = lookTarget;
+		m_vlp_lookAt->m_vlp_lookTarget = lookTarget;
 		/////////////////////////////////////////////
 
 		m_velocity += dir.GetNormalize() * m_acceleration;
@@ -234,6 +239,22 @@ void ButiEngine::Player::OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vw
 {
 	if (m_isInvincible) { return; }
 	if (m_isDead) { return; }
+
+	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
+	KnockBack(velocity);
+	Damage();
+}
+
+void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	if (m_isInvincible) { return; }
+	if (m_isDead) { return; }
+
+	auto stalker = arg_vwp_other.lock()->GetGameComponent<Enemy_Stalker>();
+	if (!stalker) { return; }
+
+	bool isPrey = stalker->IsPrey();
+	if (isPrey) { return; }
 
 	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
 	KnockBack(velocity);
