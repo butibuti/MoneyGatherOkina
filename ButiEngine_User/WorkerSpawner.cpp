@@ -27,7 +27,7 @@ void ButiEngine::WorkerSpawner::Start()
 
 	for (std::uint8_t i = 0; i < 3; i++)
 	{
-		SpawnWorker();
+		//SpawnWorker();
 	}
 }
 

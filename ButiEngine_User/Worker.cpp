@@ -70,6 +70,7 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 	//敵に空いているポケットがあったらしがみつく
 	auto enemyComponent = arg_vwp_enemy.lock()->GetGameComponent<Enemy>();
+	if (!enemyComponent) { return; }
 	auto pocket = enemyComponent->GetNearFreePocket(gameObject.lock()->transform->GetLocalPosition(), m_nearBorder);
 
 	if (pocket.lock())
