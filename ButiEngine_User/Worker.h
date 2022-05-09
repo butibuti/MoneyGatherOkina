@@ -23,6 +23,7 @@ namespace ButiEngine {
 
 		static float GetVibrationForce() { return m_vibrationForce; }
 	private:
+		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
 
 		static float m_nearBorder;

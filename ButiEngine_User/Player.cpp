@@ -4,6 +4,8 @@
 #include "ParticleGenerater.h"
 #include "WaveManager.h"
 #include "SphereExclusion.h"
+#include "SeparateDrawObject.h"
+#include "Enemy_Stalker.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -25,10 +27,13 @@ void ButiEngine::Player::OnSet()
 			{
 				OnCollisionDamageArea(arg_vwp_other);
 			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Stalker")))
+			{
+				OnCollisionStalker(arg_vwp_other);
+			}
 		});
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
-	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 }
 
 void ButiEngine::Player::OnShowUI()
@@ -50,6 +55,7 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
@@ -71,6 +77,8 @@ void ButiEngine::Player::Start()
 
 	m_isDead = false;
 
+	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	m_vlp_lookAt->m_speed = 0.1f;
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;
@@ -117,6 +125,8 @@ void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 	if (m_isKnockBack) return;
 	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
 
+	//現在の移動量をゼロにする
+	m_velocity = Vector3Const::Zero;
 	//ノックバックの初期値セット
 	m_isKnockBack = true;
 	m_knockBackFrame = m_maxKnockBackFrame;
@@ -145,8 +155,15 @@ void ButiEngine::Player::Move()
 	if (leftStick != 0)
 	{
 		Vector3 dir = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+		dir.y = 0.0f;
+
+		/////////////////////////////////////////////
+		auto lookTarget = gameObject.lock()->transform->Clone();
+		lookTarget->Translate(dir);
+		m_vlp_lookAt->m_vlp_lookTarget = lookTarget;
+		/////////////////////////////////////////////
+
 		m_velocity += dir.GetNormalize() * m_acceleration;
-		m_velocity.y = 0;
 		if (m_velocity.GetLength() > m_maxMoveSpeed)
 		{
 			m_velocity = m_velocity.GetNormalize() * m_maxMoveSpeed;
@@ -244,6 +261,22 @@ void ButiEngine::Player::OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vw
 {
 	if (m_isInvincible) { return; }
 	if (m_isDead) { return; }
+
+	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
+	KnockBack(velocity);
+	Damage();
+}
+
+void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	if (m_isInvincible) { return; }
+	if (m_isDead) { return; }
+
+	auto stalker = arg_vwp_other.lock()->GetGameComponent<Enemy_Stalker>();
+	if (!stalker) { return; }
+
+	bool isPrey = stalker->IsPrey();
+	if (isPrey) { return; }
 
 	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
 	KnockBack(velocity);
