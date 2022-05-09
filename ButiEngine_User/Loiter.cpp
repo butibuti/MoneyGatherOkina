@@ -56,6 +56,7 @@ void ButiEngine::Loiter::Start()
 	m_vlp_accelTimer->Start();
 	m_vlp_brakeTimer->Start();
 
+	m_velocity = Vector3Const::Zero;
 	m_moveTarget = Vector3Const::Zero;
 	m_moveSpeed = 0.0f;
 	m_speedBeforeBrake = 0.0f;
@@ -118,8 +119,7 @@ void ButiEngine::Loiter::Move()
 		}
 	}
 
-	Vector3 velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
-	gameObject.lock()->transform->Translate(velocity * m_moveSpeed);
+	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed);
 }
 
 void ButiEngine::Loiter::Accel()
@@ -170,4 +170,6 @@ void ButiEngine::Loiter::SetMoveTarget()
 		float outLength = moveRestriction->GetOutLength(m_moveTarget);
 		m_moveTarget -= m_targetSpawner->GetFront() * outLength;
 	}
+
+	m_velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 }

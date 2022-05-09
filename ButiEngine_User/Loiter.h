@@ -42,6 +42,7 @@ namespace ButiEngine {
 		float m_moveRange = 0.0f;
 		float m_maxMoveSpeed = 0.0f;
 
+		Vector3 m_velocity;
 		Vector3 m_moveTarget;
 		float m_moveSpeed;
 		float m_speedBeforeBrake;

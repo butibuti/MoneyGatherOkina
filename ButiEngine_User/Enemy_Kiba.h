@@ -34,8 +34,8 @@ namespace ButiEngine {
 		Value_ptr<Loiter> m_vlp_loiter;
 		Value_weak_ptr<GameObject> m_vwp_damageArea;
 
-		float m_rotationSpeed;
-		float m_maxRotationSpeed;
+		float m_rotationAngle;
+		float m_maxRotationAngle;
 		float m_rotationAcceleration;
 	};
 
