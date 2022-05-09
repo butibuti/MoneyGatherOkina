@@ -28,6 +28,18 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Stalker::Clon
 	return ObjectFactory::Create<Enemy_Stalker>();
 }
 
+void ButiEngine::Enemy_Stalker::OnCollisionPlayer()
+{
+}
+
+void ButiEngine::Enemy_Stalker::OnCollisionWorker()
+{
+}
+
+void ButiEngine::Enemy_Stalker::OnCollisionEnemy()
+{
+}
+
 void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 {
 }
