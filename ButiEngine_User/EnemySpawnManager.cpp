@@ -20,11 +20,21 @@ void ButiEngine::EnemySpawnManager::Start()
 
 void ButiEngine::EnemySpawnManager::OnShowUI()
 {
-    if (GUI::Button("TestEnemy"))
+    if (GUI::Button("Add_Enemy_Flie"))
     {
-        //GetManager().lock()->AddObjectFromCereal("TestEditEnemy");
-
-        GetManager().lock()->AddObjectFromCereal("TestEnemy");
+        GetManager().lock()->AddObjectFromCereal("Enemy_Flie");
+    }
+    if (GUI::Button("Add_Enemy_Kiba"))
+    {
+        GetManager().lock()->AddObjectFromCereal("Enemy_Kiba");
+    }
+    if (GUI::Button("Add_Enemy_Stalker"))
+    {
+        GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
+    }
+    if (GUI::Button("Add_Enemy_Volcano"))
+    {
+        GetManager().lock()->AddObjectFromCereal("Enemy_Volcano");
     }
     GUI::BulletText("StageNum : WaveNum");
     GUI::InputInt2("##StageData", m_stageAndWaveNum);
