@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "InputManager.h"
 #include "ParticleGenerater.h"
+#include "WaveManager.h"
+#include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -28,6 +30,9 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	m_knockBackVelocity = Vector3(0, 0, 0);
 	m_life = 3;
 
 	m_level = 1;
@@ -37,17 +42,14 @@ void ButiEngine::Player::Start()
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_addTrajectoryParticleCounter = 0;
-	m_addTrajectoryParticleWait = 3;
-
-	m_knockBackVelocity = Vector3(0, 0, 0);
-	m_knockBackFlame = 0;
-	m_maxKnockBackFlame = 20;
-	m_knockBackFlag = false;
-
+	m_addTrajectoryParticleWait = 4;
+	m_knockBackFrame = 0;
+	m_maxKnockBackFrame = 20;
 	m_moveSpeed = 0.0f;
 	m_maxMoveSpeed = 0.1f;
 
 	m_vibrationForce = 3.0f;
+	m_isKnockBack = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -69,11 +71,12 @@ void ButiEngine::Player::AddExp()
 
 void ButiEngine::Player::KnockBack()
 {
-	if (m_knockBackFlag) return;
+	if (m_isKnockBack) return;
+	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
 
 	//ノックバックの初期値セット
-	m_knockBackFlag = true;
-	m_knockBackFlame = m_maxKnockBackFlame;
+	m_isKnockBack = true;
+	m_knockBackFrame = m_maxKnockBackFrame;
 	m_knockBackVelocity.x = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.z = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.Normalize();
@@ -82,10 +85,16 @@ void ButiEngine::Player::KnockBack()
 void ButiEngine::Player::Move()
 {
 	//ノックバック中は操作不能
-	if (m_knockBackFlag) return;
+	if (m_isKnockBack) return;
+	//リザルト(クリア演出)中は操作不能
+	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
 
 	//X、Z平面の移動方向を取得
 	Vector2 leftStick = InputManager::GetLeftStick();
+	
+	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
+
+	Vector3 velocity;
 
 	m_moveSpeed = 0.0f;
 	if (leftStick != 0)
@@ -94,14 +103,19 @@ void ButiEngine::Player::Move()
 
 		if (m_addTrajectoryParticleCounter == 0)
 		{
+			velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+			velocity.y = 0;
+			velocity.Normalize();
+			velocity *= m_moveSpeed * 9.0f;
+
 			auto position = gameObject.lock()->transform->GetWorldPosition();
 			m_vwp_particleGenerater.lock()->TrajectoryParticles(position);
+			m_vwp_particleGenerater.lock()->PachiPachiParticles(position - velocity);
 		}
 	}
 
-	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
 
-	Vector3 velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+	velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
 	velocity.y = 0;
 	velocity.Normalize();
 	velocity *= m_moveSpeed;
@@ -117,18 +131,18 @@ void ButiEngine::Player::LevelUp()
 
 void ButiEngine::Player::MoveKnockBack()
 {
-	if (!m_knockBackFlag) return;
+	if (!m_isKnockBack) return;
 
 	//ノックバック中の処理
 	gameObject.lock()->transform->Translate(m_knockBackVelocity);
 
 	m_knockBackVelocity *= 0.85f;
 
-	m_knockBackFlame--;
+	m_knockBackFrame--;
 
-	if (m_knockBackFlame <= 0)
+	if (m_knockBackFrame <= 0)
 	{
-		m_knockBackFlag = false;
+		m_isKnockBack = false;
 	}
 }
 

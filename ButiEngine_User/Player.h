@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class ParticleGenerater;
+	class WaveManager;
 
 	class Player :public GameComponent
 	{
@@ -37,12 +38,13 @@ namespace ButiEngine {
 		std::uint16_t CalcRequestExp();
 
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 		Vector3 m_knockBackVelocity;
-		std::uint8_t m_life;
-		std::uint8_t m_addTrajectoryParticleCounter;
-		std::uint8_t m_addTrajectoryParticleWait;
-		std::uint8_t m_knockBackFlame;
-		std::uint8_t m_maxKnockBackFlame;
+		std::int8_t m_life;
+		std::int8_t m_addTrajectoryParticleCounter;
+		std::int8_t m_addTrajectoryParticleWait;
+		std::int8_t m_knockBackFrame;
+		std::int8_t m_maxKnockBackFrame;
 
 		std::uint8_t m_level;
 		std::uint8_t m_maxLevel;
@@ -54,7 +56,7 @@ namespace ButiEngine {
 
 		float m_vibrationForce;
 
-		bool m_knockBackFlag;
+		bool m_isKnockBack;
 	};
 
 }

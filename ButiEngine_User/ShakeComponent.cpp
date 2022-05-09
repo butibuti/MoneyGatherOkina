@@ -17,12 +17,12 @@ void ButiEngine::ShakeComponent::OnUpdate()
 
 	SetShakePower(shakePower);
 
-	if (!m_shakeFlag)
+	if (!m_isShake)
 	{
 		return;
 	}
 
-	if (!m_moveFlag)
+	if (!m_isMove)
 	{
 		Vector3 randomRotate;
 		randomRotate.x = ButiRandom::GetRandom(-5, 5);
@@ -53,7 +53,7 @@ void ButiEngine::ShakeComponent::OnUpdate()
 	m_currentPos = m_currentPos + m_movePos;
 	gameObject.lock()->transform->SetLocalPosition(m_currentPos);
 
-	m_moveFlag = !m_moveFlag;
+	m_isMove = !m_isMove;
 
 }
 
@@ -63,8 +63,8 @@ void ButiEngine::ShakeComponent::OnSet()
 
 void ButiEngine::ShakeComponent::Start()
 {
-	m_shakeFlag = false;
-	m_moveFlag = false;
+	m_isShake = false;
+	m_isMove = false;
 	m_currentRotate = gameObject.lock()->transform->GetLocalRotation().GetEulerOneValue_local().ToDegrees();
 	m_moveRotate = Vector3(0, 0, 0);
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
@@ -81,8 +81,8 @@ void ButiEngine::ShakeComponent::OnShowUI()
 void ButiEngine::ShakeComponent::ShakeStart()
 {
 	ShakeStop();
-	m_moveFlag = false;
-	m_shakeFlag = true;
+	m_isMove = false;
+	m_isShake = true;
 	m_currentRotate = gameObject.lock()->transform->GetLocalRotation().GetEulerOneValue_local().ToDegrees();
 	m_moveRotate = Vector3(0, 0, 0);
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
@@ -92,8 +92,8 @@ void ButiEngine::ShakeComponent::ShakeStart()
 
 void ButiEngine::ShakeComponent::ShakeStop()
 {
-	m_shakeFlag = false;
-	if (m_moveFlag)
+	m_isShake = false;
+	if (m_isMove)
 	{
 		m_moveRotate = -m_moveRotate;
 		m_currentRotate = gameObject.lock()->transform->GetLocalRotation().GetEulerOneValue_local().ToDegrees();
@@ -105,7 +105,7 @@ void ButiEngine::ShakeComponent::ShakeStop()
 		m_currentPos = m_currentPos + m_movePos;
 		gameObject.lock()->transform->SetLocalPosition(m_currentPos);
 		
-		m_moveFlag = false;
+		m_isMove = false;
 	}
 }
 
