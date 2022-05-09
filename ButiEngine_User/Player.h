@@ -49,6 +49,7 @@ namespace ButiEngine {
 		std::uint16_t m_exp;
 
 		//ˆÚ“®‘¬“x
+		Value_ptr<ButiRendering::ICamera> m_vlp_camera;
 		Vector3 m_velocity;
 		float m_maxMoveSpeed;
 		float m_acceleration;

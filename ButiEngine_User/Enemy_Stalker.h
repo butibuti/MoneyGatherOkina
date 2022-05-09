@@ -21,8 +21,14 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		void OnCollisionPlayer();
+		void OnCollisionWorker();
+		void OnCollisionEnemy();
+
 		void SetEnemyParameter();
 		void SetLoiterParameter();
+
+		bool m_isPrey;
 	};
 
 }

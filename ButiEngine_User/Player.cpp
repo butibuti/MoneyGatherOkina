@@ -50,6 +50,7 @@ void ButiEngine::Player::Start()
 	m_maxKnockBackFrame = 20;
 	m_isKnockBack = false;
 
+	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;
 	m_acceleration = 0.01f;
@@ -102,7 +103,7 @@ void ButiEngine::Player::Move()
 	//XAZ•½–Ê‚ÌˆÚ“®•ûŒü‚ðŽæ“¾
 	Vector2 leftStick = InputManager::GetLeftStick();
 	
-	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
+	auto cameraTransform = m_vlp_camera->vlp_transform;
 
 	if (leftStick != 0)
 	{
