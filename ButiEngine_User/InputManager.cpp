@@ -138,6 +138,15 @@ bool ButiEngine::InputManager::IsPushAnyGameKey()
 		IsPushConveneKey());
 }
 
+void ButiEngine::InputManager::VivelationStart()
+{
+	
+}
+
+void ButiEngine::InputManager::VivelationStop()
+{
+}
+
 bool ButiEngine::InputManager::IsPushConveneKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::Space) ||

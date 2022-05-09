@@ -76,7 +76,7 @@ void ButiEngine::CameraComponent::ZoomOperation(const std::int8_t arg_zoomOperat
         CanZoom(Vector3(0.0f, 5.0f, -7.0f), 0.6f);
         break;
     case 1: //デフォルト
-        CanZoom(m_defaultPosition, m_defaultRotateX); //(0,8,-6),1.0f
+        CanZoom(m_defaultPosition, m_defaultRotateX);
         break;
     case 2: //ズームアウト
         CanZoom(Vector3(0.0f, 24.0f, -16.0f), 1.0f);

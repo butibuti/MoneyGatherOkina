@@ -3,6 +3,7 @@
 #include "Pocket.h"
 #include "Player.h"
 #include "Worker.h"
+#include "WaveManager.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 
@@ -26,6 +27,7 @@ void ButiEngine::Enemy::OnSet()
 {
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_isVibrate = false;
 	m_nearBorder = 3.0f;
@@ -38,6 +40,14 @@ void ButiEngine::Enemy::OnSet()
 void ButiEngine::Enemy::OnRemove()
 {
 	RemoveAllPocket();
+	SubDeadCount();
+
+	auto transform = gameObject.lock()->transform;
+	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
+	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	deadEffect.lock()->transform->SetLocalScale(transform->GetLocalScale());
+
+	//GetManager().lock()->GetGameObject("Particle")
 }
 
 void ButiEngine::Enemy::OnShowUI()
@@ -187,4 +197,10 @@ void ButiEngine::Enemy::RemoveAllPocket()
 		(*itr).lock()->SetIsRemove(true);
 	}
 	m_vec_pockets.clear();
+}
+
+void ButiEngine::Enemy::SubDeadCount()
+{
+	//ウェーブマネージャーのカウント減少関数を呼ぶ
+	m_vwp_waveManager.lock()->SubEnemyDeadCount();
 }

@@ -88,6 +88,12 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 	return ObjectFactory::Create<Player>();
 }
 
+void ButiEngine::Player::Revival()
+{
+	m_life = 3;
+	m_isDead = false;
+}
+
 void ButiEngine::Player::AddExp()
 {
 	if (m_level == m_maxLevel) { return; }
@@ -119,9 +125,11 @@ void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 void ButiEngine::Player::Move()
 {
 	//ノックバック中は操作不能
-	if (m_isKnockBack) return;
+	if (m_isKnockBack) { return; }
 	//リザルト(クリア演出)中は操作不能
-	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
+	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) { return; }
+	//死んでる間は操作不能
+	if (m_isDead) { return; }
 
 	//X、Z平面の移動方向を取得
 	Vector2 leftStick = InputManager::GetLeftStick();

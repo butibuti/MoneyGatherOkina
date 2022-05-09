@@ -2,6 +2,7 @@
 #include "WaveManager.h"
 #include "StartPopUpComponent.h"
 #include "EnemySpawnManager.h"
+#include "Player.h"
 #include "InputManager.h"
 
 void ButiEngine::WaveManager::OnUpdate()
@@ -12,7 +13,7 @@ void ButiEngine::WaveManager::OnUpdate()
 	{
 		//ウェーブ中
 
-		if (InputManager::IsTriggerPauseKey())
+		if (m_vwp_playerComponent.lock()->IsDead())
 		{
 			m_isGameOver = true;
 		}
@@ -47,6 +48,7 @@ void ButiEngine::WaveManager::OnSet()
 void ButiEngine::WaveManager::Start()
 {
 	m_vwp_startPopUpObject = GetManager().lock()->GetGameObject("StartPopUpObject").lock()->GetGameComponent<StartPopUpComponent>();
+	m_vwp_playerComponent = GetManager().lock()->GetGameObject("Player").lock()->GetGameComponent<Player>();
 
 	m_waveNum = 0;
 	m_maxWaveNum = 20;
@@ -59,18 +61,25 @@ void ButiEngine::WaveManager::Start()
 	m_isNextSceneButton = false;
 	m_isGameOverButton = false;
 
-	m_nextWaveCount = 0;
+	m_enemyCount = 0;
 }
 
 void ButiEngine::WaveManager::OnShowUI()
 {
 	GUI::BulletText("WaveNum");
 	GUI::InputInt("##waveNum", m_waveNum);
+	GUI::BulletText("MaxWaveNum");
+	GUI::InputInt("##maxWaveNum", m_maxWaveNum);
 }
 
 void ButiEngine::WaveManager::WaveStart()
 {
 	m_isWaveTime = true;
+}
+
+void ButiEngine::WaveManager::SubEnemyDeadCount()
+{
+	m_enemyCount--;
 }
 
 bool ButiEngine::WaveManager::IsClearAnimationFlag()
@@ -110,20 +119,18 @@ void ButiEngine::WaveManager::MoveWave()
 		m_vwp_startPopUpObject.lock()->DisappearPopUp();
 
 		//敵をスポーンさせる
-		//SpawnEnemy();
+		SpawnEnemy();
 	}
 
 	
-	//仮でボタンを5回押したらウェーブをクリアできるようにしている
-	if (InputManager::IsTriggerCancelKey() && m_isWaveTime)
+	////仮でボタンを5回押したらウェーブをクリアできるようにしている
+	//if (InputManager::IsTriggerCancelKey() && m_isWaveTime)
+	//{
+	//	m_enemyCount++;
+	//}
+	//フィールド内の敵をすべて倒していたら
+	if (m_enemyCount <= 0 && m_isWaveTime)
 	{
-		m_nextWaveCount++;
-	}
-	//フィールド内の敵をすべて倒していたらに変える
-	if (m_nextWaveCount >= 5)
-	{
-		m_nextWaveCount = 0;
-	
 		WaveFinish();
 	}
 }
@@ -149,8 +156,9 @@ void ButiEngine::WaveManager::SpawnEnemy()
 		auto transformData = enemyData.m_vlp_enemyTransform;
 		enemy.lock()->transform->SetLocalPosition(transformData->GetLocalPosition());
 		enemy.lock()->transform->SetLocalRotation(transformData->GetLocalRotation());
+
+		m_enemyCount++;
 	}
-	
 }
 
 void ButiEngine::WaveManager::WaveFinish()
@@ -158,6 +166,7 @@ void ButiEngine::WaveManager::WaveFinish()
 	//ウェーブ終了
 	m_isWaveTime = false;
 	m_isPopupSpawn = true;
+	m_enemyCount = 0;
 }
 
 void ButiEngine::WaveManager::StageClearAnimation()
@@ -206,6 +215,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 	{
 		m_waveNum--;
 		m_isGameOver = false;
+		m_vwp_playerComponent.lock()->Revival(); //プレイヤー蘇生
 		WaveFinish();
 	}
 }

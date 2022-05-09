@@ -30,6 +30,7 @@ namespace ButiEngine {
 
 		bool IsDead() { return m_isDead; }
 
+		void Revival();
 		void AddExp();
 		void KnockBack(const Vector3& arg_velocity);
 	private:

@@ -4,6 +4,7 @@
 namespace ButiEngine {
 
 	class StartPopUpComponent;
+	class Player;
 
 	class WaveManager :public GameComponent
 	{
@@ -23,6 +24,7 @@ namespace ButiEngine {
 		}
 
 		void WaveStart();
+		void SubEnemyDeadCount();
 		bool IsClearAnimationFlag();
 
 	private:
@@ -34,6 +36,7 @@ namespace ButiEngine {
 		void GameOverAnimation();
 
 		Value_weak_ptr<StartPopUpComponent> m_vwp_startPopUpObject;
+		Value_weak_ptr<Player> m_vwp_playerComponent;
 
 		//ウェーブ番号
 		std::int32_t m_waveNum;
@@ -56,7 +59,7 @@ namespace ButiEngine {
 		bool m_isGameOverButton;
 
 		//次のウェーブに進むまでの仮のカウント
-		std::int8_t m_nextWaveCount;
+		std::int8_t m_enemyCount;
 	};
 
 }

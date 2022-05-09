@@ -548,6 +548,7 @@ cd ..\</Command>
     <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
+    <ClCompile Include="SplashEffectComponent.cpp" />
     <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="StartPopUpComponent.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -590,6 +591,7 @@ cd ..\</Command>
     <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
+    <ClInclude Include="SplashEffectComponent.h" />
     <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="StartPopUpComponent.h" />
     <ClInclude Include="stdafx_u.h" />
