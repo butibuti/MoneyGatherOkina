@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Loiter.h"
 #include "SeparateDrawObject.h"
+#include "SphereExclusion.h"
 
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
@@ -13,6 +14,7 @@ void ButiEngine::Enemy_Kiba::OnUpdate()
 	}
 	else
 	{
+		m_maxRotationAngle = 0.0f;
 		m_vlp_loiter->MoveStart();
 	}
 }
@@ -38,8 +40,11 @@ void ButiEngine::Enemy_Kiba::Start()
 	CreateDamageArea();
 	SetEnemyParameter();
 	SetLoiterParameter();
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(100.0f);
 
-	m_rotationSpeed = 0.01f;
+	m_rotationAngle = 0.0f;
+	m_rotationAcceleration = 0.03f;
+	m_maxRotationAngle = 1.0f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Kiba::Clone()
@@ -49,11 +54,34 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Kiba::Clone()
 
 void ButiEngine::Enemy_Kiba::LookAtPlayer()
 {
-	auto lookTarget = gameObject.lock()->transform->GetMatrix();
-	lookTarget.SetLookAt(m_vlp_enemy->GetPlayer().lock()->transform->GetLocalPosition());
+	float rotationDirection = CalculateRotationDirection();
+	m_rotationAngle += m_rotationAcceleration * rotationDirection;
+	if (abs(m_rotationAngle) > m_maxRotationAngle)
+	{
+		if (m_rotationAngle > 0)
+		{
+			m_rotationAngle = m_maxRotationAngle;
+		}
+		else if(m_rotationAngle < 0)
+		{
+			m_rotationAngle = -m_maxRotationAngle;
+		}
+	}
 
-	auto rotation = MathHelper::LearpQuat(gameObject.lock()->transform->GetLocalRotation().ToQuat(), lookTarget.ToQuat(), m_rotationSpeed);
-	gameObject.lock()->transform->SetLocalRotation(rotation.ToMatrix());
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 playerPos = m_vlp_enemy->GetPlayer().lock()->transform->GetLocalPosition();
+	Vector3 diff = playerPos - pos;
+	Vector3 front = gameObject.lock()->transform->GetFront();
+
+	float angle = MathHelper::ToDegree(std::acos(front.Dot(diff) / (front.GetLength() * diff.GetLength())));
+	if (angle < abs(m_rotationAngle))
+	{
+		gameObject.lock()->transform->RollLocalRotationY_Degrees(rotationDirection * angle);
+		m_rotationAngle = 0.0f;
+		return;
+	}
+
+	gameObject.lock()->transform->RollLocalRotationY_Degrees(m_rotationAngle);
 }
 
 void ButiEngine::Enemy_Kiba::CreateDamageArea()
@@ -74,6 +102,7 @@ void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
 	m_vlp_enemy->CreatePocket(8);
+	m_vlp_enemy->RemovePocket(0);
 	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
@@ -82,9 +111,28 @@ void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 void ButiEngine::Enemy_Kiba::SetLoiterParameter()
 {
 	m_vlp_loiter = gameObject.lock()->GetGameComponent<Loiter>();
-	m_vlp_loiter->SetMoveRange(30.0f);
-	m_vlp_loiter->SetMaxMoveSpeed(0.0f);
+	m_vlp_loiter->SetMoveRange(5.0f);
+	m_vlp_loiter->SetMaxMoveSpeed(0.1f);
 	m_vlp_loiter->SetWaitFrame(60);
 	m_vlp_loiter->SetAccelFrame(30);
 	m_vlp_loiter->SetBrakeFrame(30);
 }
+
+float ButiEngine::Enemy_Kiba::CalculateRotationDirection()
+{
+	float result = 1.0f;
+
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 playerPos = m_vlp_enemy->GetPlayer().lock()->transform->GetLocalPosition();
+	Vector3 diff = playerPos - pos;
+	Vector3 front = gameObject.lock()->transform->GetFront();
+
+	float cross = diff.x * front.z - diff.z * front.x;
+	if (cross <= 0)
+	{
+		result = -1.0f;
+	}
+
+	return result;
+}
+

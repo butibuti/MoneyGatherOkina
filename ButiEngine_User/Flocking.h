@@ -2,6 +2,7 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Player;
 	class Flocking :public GameComponent
 	{
 	public:
@@ -21,14 +22,14 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		void CalcAveragePos(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcMoveSpeed(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcGatherVec();
-		void CalcCohesionVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcALignmentVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcSeparationVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcAvoidPlayerVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
-		void CalcSurroundVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateAveragePos(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateMoveSpeed(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateGatherVec();
+		void CalculateCohesionVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateALignmentVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateSeparationVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateAvoidPlayerVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
+		void CalculateSurroundVec(std::vector<Value_ptr<GameObject>> arg_vec_workers);
 		void Move();
 
 		static float m_gatherWeight;
@@ -41,6 +42,7 @@ namespace ButiEngine {
 		static float m_nearBorder;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
+		Value_ptr<Player> m_vlp_playerComponent;
 		float m_rotationSpeed;
 		float m_moveSpeed;
 

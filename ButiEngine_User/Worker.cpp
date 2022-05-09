@@ -8,6 +8,7 @@
 #include "MoveRestriction.h"
 #include "Player.h"
 #include "WorkerSpawner.h"
+#include "SphereExclusion.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -24,6 +25,10 @@ void ButiEngine::Worker::OnSet()
 			if (arg_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				OnCollisionEnemy(arg_other);
+			}
+			else if (arg_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
+			{
+				gameObject.lock()->SetIsRemove(true);
 			}
 		});
 
@@ -56,6 +61,7 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(0.1f);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
@@ -70,6 +76,7 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 	//敵に空いているポケットがあったらしがみつく
 	auto enemyComponent = arg_vwp_enemy.lock()->GetGameComponent<Enemy>();
+	if (!enemyComponent) { return; }
 	auto pocket = enemyComponent->GetNearFreePocket(gameObject.lock()->transform->GetLocalPosition(), m_nearBorder);
 
 	if (pocket.lock())

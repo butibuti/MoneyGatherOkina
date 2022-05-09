@@ -28,12 +28,15 @@ namespace ButiEngine {
 		void CreateDamageArea();
 		void SetEnemyParameter();
 		void SetLoiterParameter();
+		float CalculateRotationDirection();
 
 		Value_ptr<Enemy> m_vlp_enemy;
 		Value_ptr<Loiter> m_vlp_loiter;
 		Value_weak_ptr<GameObject> m_vwp_damageArea;
 
-		float m_rotationSpeed;
+		float m_rotationAngle;
+		float m_maxRotationAngle;
+		float m_rotationAcceleration;
 	};
 
 }
