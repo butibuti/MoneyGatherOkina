@@ -57,8 +57,7 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
-	auto exclusion = gameObject.lock()->GetGameComponent<SphereExclusion>();
-	exclusion->SetMass(0.1f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(0.1f);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()

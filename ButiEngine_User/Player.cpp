@@ -30,8 +30,7 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
-	auto exclusion = gameObject.lock()->GetGameComponent<SphereExclusion>();
-	exclusion->SetMass(1.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 

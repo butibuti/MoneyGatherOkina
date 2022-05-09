@@ -39,8 +39,7 @@ void ButiEngine::Enemy_Kiba::Start()
 	CreateDamageArea();
 	SetEnemyParameter();
 	SetLoiterParameter();
-	auto exclusion = gameObject.lock()->GetGameComponent<SphereExclusion>();
-	exclusion->SetMass(100.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(100.0f);
 
 	m_rotationSpeed = 0.01f;
 }
@@ -77,6 +76,7 @@ void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
 	m_vlp_enemy->CreatePocket(8);
+	m_vlp_enemy->RemovePocket(0);
 	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
@@ -86,7 +86,7 @@ void ButiEngine::Enemy_Kiba::SetLoiterParameter()
 {
 	m_vlp_loiter = gameObject.lock()->GetGameComponent<Loiter>();
 	m_vlp_loiter->SetMoveRange(30.0f);
-	m_vlp_loiter->SetMaxMoveSpeed(0.0f);
+	m_vlp_loiter->SetMaxMoveSpeed(0.1f);
 	m_vlp_loiter->SetWaitFrame(60);
 	m_vlp_loiter->SetAccelFrame(30);
 	m_vlp_loiter->SetBrakeFrame(30);
