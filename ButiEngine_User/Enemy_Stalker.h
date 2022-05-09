@@ -26,7 +26,6 @@ namespace ButiEngine {
 		void OnCollisionEnemy();
 
 		void SetEnemyParameter();
-		void SetLoiterParameter();
 
 		bool m_isPrey;
 	};

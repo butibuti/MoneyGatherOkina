@@ -28,7 +28,6 @@ void ButiEngine::Player::OnSet()
 		});
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
-	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 }
 
 void ButiEngine::Player::OnShowUI()
@@ -51,6 +50,7 @@ void ButiEngine::Player::OnShowUI()
 void ButiEngine::Player::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
+	gameObject.lock()->GetGameComponent<LookAtComponent>()->m_speed = 0.1f;
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
@@ -108,6 +108,8 @@ void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 	if (m_isKnockBack) return;
 	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
 
+	//現在の移動量をゼロにする
+	m_velocity = Vector3Const::Zero;
 	//ノックバックの初期値セット
 	m_isKnockBack = true;
 	m_knockBackFrame = m_maxKnockBackFrame;
@@ -134,8 +136,15 @@ void ButiEngine::Player::Move()
 	if (leftStick != 0)
 	{
 		Vector3 dir = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+		dir.y = 0.0f;
+
+		/////////////////////////////////////////////
+		auto lookTarget = gameObject.lock()->transform->Clone();
+		lookTarget->Translate(dir);
+		gameObject.lock()->GetGameComponent<LookAtComponent>()->m_vlp_lookTarget = lookTarget;
+		/////////////////////////////////////////////
+
 		m_velocity += dir.GetNormalize() * m_acceleration;
-		m_velocity.y = 0;
 		if (m_velocity.GetLength() > m_maxMoveSpeed)
 		{
 			m_velocity = m_velocity.GetNormalize() * m_maxMoveSpeed;
