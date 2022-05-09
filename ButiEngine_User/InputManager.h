@@ -35,8 +35,8 @@ namespace ButiEngine {
 		static bool IsCameraResetKey();
 		static bool IsPushAnyGameKey();
 
-		static void VivelationStart();
-		static void VivelationStop();
+		static void VibrationStart(const float arg_vibPower);
+		static void VibrationStop();
 
 		//ゲームプレイシーンのみ
 		static bool IsPushConveneKey();

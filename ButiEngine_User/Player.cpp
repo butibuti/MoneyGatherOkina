@@ -14,6 +14,7 @@ void ButiEngine::Player::OnUpdate()
 	{
 		OnInvincible();
 	}
+	VibrationController();
 }
 
 void ButiEngine::Player::OnSet()
@@ -86,6 +87,11 @@ void ButiEngine::Player::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 {
 	return ObjectFactory::Create<Player>();
+}
+
+void ButiEngine::Player::SetVibrationStart()
+{
+	m_isVibration = true;
 }
 
 void ButiEngine::Player::Revival()
@@ -215,6 +221,14 @@ void ButiEngine::Player::Damage()
 
 	m_isInvincible = true;
 	m_vlp_invincibleTimer->Start();
+}
+
+void ButiEngine::Player::VibrationController()
+{
+	InputManager::VibrationStop();
+	if (!m_isVibration) { return; }
+	InputManager::VibrationStart(0.5f);
+	m_isVibration = false;
 }
 
 void ButiEngine::Player::OnInvincible()

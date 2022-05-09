@@ -138,13 +138,16 @@ bool ButiEngine::InputManager::IsPushAnyGameKey()
 		IsPushConveneKey());
 }
 
-void ButiEngine::InputManager::VivelationStart()
+void ButiEngine::InputManager::VibrationStart(const float arg_vibPower)
 {
-	
+	GameDevice::GetInput()->Vibration_L(arg_vibPower);
+	GameDevice::GetInput()->Vibration_R(arg_vibPower);
 }
 
-void ButiEngine::InputManager::VivelationStop()
+void ButiEngine::InputManager::VibrationStop()
 {
+	GameDevice::GetInput()->Vibration_L(0);
+	GameDevice::GetInput()->Vibration_R(0);
 }
 
 bool ButiEngine::InputManager::IsPushConveneKey()

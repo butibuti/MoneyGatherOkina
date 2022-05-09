@@ -30,6 +30,8 @@ namespace ButiEngine {
 
 		bool IsDead() { return m_isDead; }
 
+		void SetVibrationStart();
+
 		void Revival();
 		void AddExp();
 		void KnockBack(const Vector3& arg_velocity);
@@ -39,6 +41,7 @@ namespace ButiEngine {
 		void MoveKnockBack();
 		void TrajectoryParticleWaitCount();
 		void Damage();
+		void VibrationController();
 
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
@@ -76,6 +79,7 @@ namespace ButiEngine {
 
 		//振動
 		float m_vibrationForce;
+		bool m_isVibration;
 
 		//パーティクル
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Worker.h"
 #include "WaveManager.h"
+#include "InputManager.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 
@@ -16,6 +17,7 @@ void ButiEngine::Enemy::OnUpdate()
 	if (m_isVibrate)
 	{
 		IncreaseVibration();
+		m_vlp_playerComponent->SetVibrationStart();
 	}
 	else
 	{
