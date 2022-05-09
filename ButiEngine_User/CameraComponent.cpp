@@ -16,12 +16,12 @@ void ButiEngine::CameraComponent::OnSet()
 void ButiEngine::CameraComponent::Start()
 {
     //カメラの初期位置
-    m_defaultPosition = Vector3(0, 8.0f, -6.0f);
+    m_defaultPosition = Vector3(0, 15.0f, -12.0f);
     m_currentPosition = m_defaultPosition;
     m_previousPosition = m_currentPosition;
 
     //カメラの初期角度
-    m_defaultRotateX = 1.0f;
+    m_defaultRotateX = 0.9f;
     m_currentRotateX = m_defaultRotateX;
     m_previousRotateX = m_currentRotateX;
 
@@ -73,16 +73,16 @@ void ButiEngine::CameraComponent::ZoomOperation(const std::int8_t arg_zoomOperat
     switch (arg_zoomOperationNum)
     {
     case 0: //ズームイン
-        CanZoom(Vector3(0.0f, 4.0f, -2.5f), 0.85f);
+        CanZoom(Vector3(0.0f, 5.0f, -7.0f), 0.6f);
         break;
     case 1: //デフォルト
         CanZoom(m_defaultPosition, m_defaultRotateX); //(0,8,-6),1.0f
         break;
     case 2: //ズームアウト
-        CanZoom(Vector3(0.0f, 12.0f, -8.0f), 1.1f);
+        CanZoom(Vector3(0.0f, 24.0f, -16.0f), 1.0f);
         break;
     case 3: //ウルトラズームアウト
-        CanZoom(Vector3(0.0f, 18.0f, -6.0f), 1.25f);
+        CanZoom(Vector3(0.0f, 36.0f, -10.0f), 1.3f);
         break;
     default:
         CanZoom(m_defaultPosition, m_defaultRotateX);
