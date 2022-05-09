@@ -14,7 +14,7 @@ void ButiEngine::Enemy_Kiba::OnUpdate()
 	}
 	else
 	{
-		m_maxRotationAngle = 0.0f;
+		m_rotationAngle = 0.0f;
 		m_vlp_loiter->MoveStart();
 	}
 }

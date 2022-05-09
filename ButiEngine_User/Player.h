@@ -28,6 +28,8 @@ namespace ButiEngine {
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
 
+		bool IsDead() { return m_isDead; }
+
 		void AddExp();
 		void KnockBack(const Vector3& arg_velocity);
 	private:
@@ -35,6 +37,10 @@ namespace ButiEngine {
 		void LevelUp();
 		void MoveKnockBack();
 		void TrajectoryParticleWaitCount();
+		void Damage();
+
+		void OnInvincible();
+		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		std::uint16_t CalculateRequestExp();
 
@@ -55,12 +61,17 @@ namespace ButiEngine {
 		float m_acceleration;
 		float m_deceleration;
 
-
 		//ÉmÉbÉNÉoÉbÉN
 		Vector3 m_knockBackVelocity;
 		std::int8_t m_knockBackFrame;
 		std::int8_t m_maxKnockBackFrame;
 		bool m_isKnockBack;
+
+		//ñ≥ìGéûä‘
+		Value_ptr<Timer> m_vlp_invincibleTimer;
+		bool m_isInvincible;
+
+		bool m_isDead;
 
 		//êUìÆ
 		float m_vibrationForce;

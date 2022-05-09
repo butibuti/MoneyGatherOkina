@@ -10,10 +10,24 @@ void ButiEngine::Player::OnUpdate()
 	TrajectoryParticleWaitCount();
 	MoveKnockBack();
 	Move();
+	if (m_isInvincible)
+	{
+		OnInvincible();
+	}
 }
 
 void ButiEngine::Player::OnSet()
 {
+	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+		{
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
+			{
+				OnCollisionDamageArea(arg_vwp_other);
+			}
+		});
+
+	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
+	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 }
 
 void ButiEngine::Player::OnShowUI()
@@ -21,6 +35,7 @@ void ButiEngine::Player::OnShowUI()
 	GUI::Text("Level:%d", m_level);
 	GUI::Text("Exp:%d", m_exp);
 	GUI::Text("MaxWorker:%d", m_maxWorkerCount);
+	GUI::Text("Life:%d", m_life);
 	if (GUI::Button("LevelUp"))
 	{
 		LevelUp();
@@ -49,6 +64,11 @@ void ButiEngine::Player::Start()
 	m_knockBackFrame = 0;
 	m_maxKnockBackFrame = 15;
 	m_isKnockBack = false;
+
+	m_vlp_invincibleTimer = ObjectFactory::Create<RelativeTimer>(60);
+	m_isInvincible = false;
+
+	m_isDead = false;
 
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_velocity = Vector3Const::Zero;
@@ -173,6 +193,39 @@ void ButiEngine::Player::TrajectoryParticleWaitCount()
 	{
 		m_addTrajectoryParticleCounter = 0;
 	}
+}
+
+void ButiEngine::Player::Damage()
+{
+	m_life--;
+
+	if (m_life == 0)
+	{
+		m_isDead = true;
+		return;
+	}
+
+	m_isInvincible = true;
+	m_vlp_invincibleTimer->Start();
+}
+
+void ButiEngine::Player::OnInvincible()
+{
+	if (m_vlp_invincibleTimer->Update())
+	{
+		m_isInvincible = false;
+		m_vlp_invincibleTimer->Stop();
+	}
+}
+
+void ButiEngine::Player::OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	if (m_isInvincible) { return; }
+	if (m_isDead) { return; }
+
+	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
+	KnockBack(velocity);
+	Damage();
 }
 
 std::uint16_t ButiEngine::Player::CalculateRequestExp()

@@ -20,13 +20,13 @@ void ButiEngine::Worker::OnUpdate()
 
 void ButiEngine::Worker::OnSet()
 {
-	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_other)->void
+	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
-				OnCollisionEnemy(arg_other);
+				OnCollisionEnemy(arg_vwp_other);
 			}
-			else if (arg_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
 				gameObject.lock()->SetIsRemove(true);
 			}
