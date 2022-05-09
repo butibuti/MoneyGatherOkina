@@ -2,6 +2,7 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Player;
 	class Flocking :public GameComponent
 	{
 	public:
@@ -41,6 +42,7 @@ namespace ButiEngine {
 		static float m_nearBorder;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
+		Value_ptr<Player> m_vlp_playerComponent;
 		float m_rotationSpeed;
 		float m_moveSpeed;
 

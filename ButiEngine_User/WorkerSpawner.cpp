@@ -25,7 +25,7 @@ void ButiEngine::WorkerSpawner::Start()
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(180);
 	m_vlp_spawnTimer->Start();
 
-	for (std::uint8_t i = 0; i < 3; i++)
+	for (std::uint8_t i = 0; i < 10; i++)
 	{
 		//SpawnWorker();
 	}

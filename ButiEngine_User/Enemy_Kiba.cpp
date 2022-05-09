@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Loiter.h"
 #include "SeparateDrawObject.h"
+#include "SphereExclusion.h"
 
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
@@ -38,6 +39,8 @@ void ButiEngine::Enemy_Kiba::Start()
 	CreateDamageArea();
 	SetEnemyParameter();
 	SetLoiterParameter();
+	auto exclusion = gameObject.lock()->GetGameComponent<SphereExclusion>();
+	exclusion->SetMass(100.0f);
 
 	m_rotationSpeed = 0.01f;
 }

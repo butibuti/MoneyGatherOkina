@@ -8,6 +8,7 @@
 #include "MoveRestriction.h"
 #include "Player.h"
 #include "WorkerSpawner.h"
+#include "SphereExclusion.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -56,6 +57,8 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
+	auto exclusion = gameObject.lock()->GetGameComponent<SphereExclusion>();
+	exclusion->SetMass(0.1f);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()

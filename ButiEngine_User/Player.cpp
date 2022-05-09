@@ -3,7 +3,7 @@
 #include "InputManager.h"
 #include "ParticleGenerater.h"
 #include "WaveManager.h"
-#include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
+#include "SphereExclusion.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -30,9 +30,11 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
-	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	auto exclusion = gameObject.lock()->GetGameComponent<SphereExclusion>();
+	exclusion->SetMass(1.0f);
+
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
-	m_knockBackVelocity = Vector3(0, 0, 0);
+
 	m_life = 3;
 
 	m_level = 1;
@@ -40,16 +42,21 @@ void ButiEngine::Player::Start()
 	m_maxWorkerCount = 10;
 	m_exp = 0;
 
+	m_knockBackVelocity = Vector3(0, 0, 0);
+	m_knockBackFrame = 0;
+	m_maxKnockBackFrame = 20;
+	m_isKnockBack = false;
+
+	m_velocity = Vector3Const::Zero;
+	m_maxMoveSpeed = 0.15f;
+	m_acceleration = 0.01f;
+	m_deceleration = 0.01f;
+
+	m_vibrationForce = 3.0f;
+
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_addTrajectoryParticleCounter = 0;
 	m_addTrajectoryParticleWait = 4;
-	m_knockBackFrame = 0;
-	m_maxKnockBackFrame = 20;
-	m_moveSpeed = 0.0f;
-	m_maxMoveSpeed = 0.1f;
-
-	m_vibrationForce = 3.0f;
-	m_isKnockBack = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -94,33 +101,36 @@ void ButiEngine::Player::Move()
 	
 	auto cameraTransform = GetManager().lock()->GetScene().lock()->GetCamera("main")->vlp_transform;
 
-	Vector3 velocity;
-
-	m_moveSpeed = 0.0f;
 	if (leftStick != 0)
 	{
-		m_moveSpeed = m_maxMoveSpeed;
+		Vector3 dir = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+		m_velocity += dir.GetNormalize() * m_acceleration;
+		m_velocity.y = 0;
+		if (m_velocity.GetLength() > m_maxMoveSpeed)
+		{
+			m_velocity = m_velocity.GetNormalize() * m_maxMoveSpeed;
+		}
+		//m_velocity.Normalize();
 
 		if (m_addTrajectoryParticleCounter == 0)
 		{
-			velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
-			velocity.y = 0;
-			velocity.Normalize();
-			velocity *= m_moveSpeed * 9.0f;
-
 			auto position = gameObject.lock()->transform->GetWorldPosition();
+			Vector3 pachiPachiPosition = position - m_velocity * 9.0f;
 			m_vwp_particleGenerater.lock()->TrajectoryParticles(position);
-			m_vwp_particleGenerater.lock()->PachiPachiParticles(position - velocity);
+			m_vwp_particleGenerater.lock()->PachiPachiParticles(pachiPachiPosition);
 		}
 	}
+	else
+	{
+		if (m_velocity.GetLength() < m_deceleration)
+		{
+			m_velocity = Vector3Const::Zero;
+		}
+		m_velocity -= m_velocity.GetNormalize() * m_deceleration;
+		m_velocity.y = 0;
+	}
 
-
-	velocity = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
-	velocity.y = 0;
-	velocity.Normalize();
-	velocity *= m_moveSpeed;
-
-	gameObject.lock()->transform->Translate(velocity);
+	gameObject.lock()->transform->Translate(m_velocity);
 }
 
 void ButiEngine::Player::LevelUp()

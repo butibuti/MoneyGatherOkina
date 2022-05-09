@@ -10,19 +10,19 @@ void ButiEngine::SphereExclusion::OnSet()
 {
 	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
-			GUI::Console("Hit");
-			//auto exclusion = arg_vwp_other.lock()->GetGameComponent<SphereExclusion>();
-			//if (exclusion)
-			//{
-			//	//‘ŠŽè‚æ‚èŒy‚©‚Á‚½‚ç‰Ÿ‚µ–ß‚³‚ê‚é
-			//	float otherMass = exclusion->GetMass();
-			//	if (otherMass <= m_mass)
-			//	{
-			//		Exclusion(arg_vwp_other, exclusion);
-			//	}
-			//}
+			auto exclusion = arg_vwp_other.lock()->GetGameComponent<SphereExclusion>();
+			if (exclusion)
+			{
+				//‘ŠŽè‚æ‚èŒy‚©‚Á‚½‚ç‰Ÿ‚µ–ß‚³‚ê‚é
+				float otherMass = exclusion->GetMass();
+				if (m_mass <= otherMass)
+				{
+					Exclusion(arg_vwp_other, exclusion);
+				}
+			}
 		});
 
+	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 }
 
