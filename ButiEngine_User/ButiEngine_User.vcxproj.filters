@@ -11,6 +11,7 @@
     <ClCompile Include="Enemy_Stalker.cpp" />
     <ClCompile Include="Enemy_Test.cpp" />
     <ClCompile Include="Enemy_Volcano.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="FloatMotionComponent.cpp" />
     <ClCompile Include="FloatMotionParent.cpp" />
     <ClCompile Include="Flocking.cpp" />
@@ -21,17 +22,23 @@
     <ClCompile Include="MoveRestriction.cpp" />
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerSensor.cpp" />
     <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="ShockWave.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
+    <ClCompile Include="SplashEffectComponent.cpp" />
     <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="StartPopUpComponent.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Stick.cpp" />
+    <ClCompile Include="Suicide.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
+    <ClCompile Include="VibrationEffectComponent.cpp" />
+    <ClCompile Include="VibrationSensor.cpp" />
     <ClCompile Include="VolcanoRock.cpp" />
     <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="Worker.cpp" />
@@ -44,6 +51,7 @@
     <ClCompile Include="PlayerSensor.cpp" />
     <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="HeartUIManagerComponent.cpp" />
+    <ClCompile Include="Enemy_Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -55,6 +63,7 @@
     <ClInclude Include="Enemy_Stalker.h" />
     <ClInclude Include="Enemy_Test.h" />
     <ClInclude Include="Enemy_Volcano.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="FloatMotionComponent.h" />
     <ClInclude Include="FloatMotionParent.h" />
     <ClInclude Include="Flocking.h" />
@@ -64,17 +73,23 @@
     <ClInclude Include="MoveRestriction.h" />
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerSensor.h" />
     <ClInclude Include="Pocket.h" />
     <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="PredictedPoint.h" />
     <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="ShockWave.h" />
     <ClInclude Include="SphereExclusion.h" />
+    <ClInclude Include="SplashEffectComponent.h" />
     <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="StartPopUpComponent.h" />
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
+    <ClInclude Include="Suicide.h" />
     <ClInclude Include="TitleManagerComponent.h" />
+    <ClInclude Include="VibrationEffectComponent.h" />
+    <ClInclude Include="VibrationSensor.h" />
     <ClInclude Include="VolcanoRock.h" />
     <ClInclude Include="WaveManager.h" />
     <ClInclude Include="Worker.h" />
@@ -87,6 +102,7 @@
     <ClInclude Include="PlayerSensor.h" />
     <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="HeartUIManagerComponent.h" />
+    <ClInclude Include="Enemy_Tutorial.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

@@ -3,6 +3,7 @@
 #include "VolcanoRock.h"
 #include "Enemy.h"
 #include "Loiter.h"
+#include "SphereExclusion.h"
 
 #include "InputManager.h"
 
@@ -33,7 +34,7 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 		m_rockShotCount = 0;
 		ShotVolcanoRock();
 		AddPredictedPoint();
-		m_previousScale = Vector3(1.5f, 5.0f, 1.5f);
+		m_previousScale = Vector3(3.5f, 10.0f, 3.5f);
 	}
 	ScaleAnimation();
 }
@@ -42,20 +43,25 @@ void ButiEngine::Enemy_Volcano::OnSet()
 {
 }
 
+void ButiEngine::Enemy_Volcano::OnRemove()
+{
+	if (m_vlp_enemy)
+	{
+		m_vlp_enemy->Explosion();
+	}
+}
+
 void ButiEngine::Enemy_Volcano::OnShowUI()
 {
 }
 
 void ButiEngine::Enemy_Volcano::Start()
 {
-	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vlp_enemy->CreatePocket(8);
-	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
-	m_vlp_enemy->SetVibrationCapacity(1000.0f);
-	m_vlp_enemy->SetVibrationResistance(3.0f);
-	m_vlp_enemy->SetExplosionScale(10.0f);
+	SetEnemyParameter();
 
-	m_defaultScale = Vector3(3, 3, 3);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1000.0f);
+
+	m_defaultScale = Vector3(7, 7, 7);
 	m_currentScale = m_defaultScale;
 	m_previousScale = m_currentScale;
 
@@ -113,4 +119,14 @@ void ButiEngine::Enemy_Volcano::ScaleAnimation()
 	m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;
 
 	gameObject.lock()->transform->SetLocalScale(m_previousScale);
+}
+
+void ButiEngine::Enemy_Volcano::SetEnemyParameter()
+{
+	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->CreatePocket(8);
+	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
+	m_vlp_enemy->SetVibrationCapacity(1000.0f);
+	m_vlp_enemy->SetVibrationResistance(3.0f);
+	m_vlp_enemy->SetExplosionScale(10.0f);
 }

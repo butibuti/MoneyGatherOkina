@@ -4,12 +4,12 @@ namespace ButiEngine {
 
 	class Enemy;
 
-	class Enemy_Flie :public GameComponent
+	class Enemy_Tutorial :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Enemy_Flie";
+			return "Enemy_Tutorial";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -24,11 +24,8 @@ namespace ButiEngine {
 		}
 	private:
 		void SetEnemyParameter();
-		void SetLoiterParameter();
-
-		Value_ptr<Enemy> m_vlp_enemy;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Enemy_Flie, true);
+BUTI_REGIST_GAMECOMPONENT(Enemy_Tutorial, true);

@@ -70,12 +70,27 @@ void ButiEngine::Player::OnShowUI()
 	{
 		LevelUp();
 	}
-	GUI::Text("Vibration:%f", m_vibration);
 
 	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
+
+	GUI::BulletText("Acceleration");
+	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText("Deceleration");
+	GUI::DragFloat("##decel", &m_deceleration, 0.001f, 0.0f, 1.0f);
+
+
+	GUI::Text("Vibration:%f", m_vibration);
+
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText("VibrationIncrease");
+	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText("VibrationDecrease");
+	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
 }
 
 void ButiEngine::Player::Start()
@@ -104,7 +119,7 @@ void ButiEngine::Player::Start()
 	m_isDead = false;
 
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
-	m_vlp_lookAt->m_speed = 0.1f;
+	m_vlp_lookAt->SetSpeed(0.1f);
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;
@@ -197,7 +212,7 @@ void ButiEngine::Player::Move()
 		/////////////////////////////////////////////
 		auto lookTarget = gameObject.lock()->transform->Clone();
 		lookTarget->Translate(dir);
-		m_vlp_lookAt->m_vlp_lookTarget = lookTarget;
+		m_vlp_lookAt->SetLookTarget(lookTarget);
 		/////////////////////////////////////////////
 
 		m_velocity += dir.GetNormalize() * m_acceleration;

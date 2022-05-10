@@ -29,10 +29,19 @@ void ButiEngine::Enemy_Kiba::OnRemove()
 	{
 		m_vwp_damageArea.lock()->SetIsRemove(true);
 	}
+
+	if (m_vlp_enemy)
+	{
+		m_vlp_enemy->Explosion();
+	}
 }
 
 void ButiEngine::Enemy_Kiba::OnShowUI()
 {
+	GUI::BulletText("MaxRotationAngle");
+	GUI::DragFloat("##maxRAngle", &m_maxRotationAngle, 0.01f, 0.0f, 10.0f);
+	GUI::BulletText("RotationAcceleration");
+	GUI::DragFloat("##rAccel", &m_rotationAcceleration, 0.001f, 0.0f, 1.0f);
 }
 
 void ButiEngine::Enemy_Kiba::Start()

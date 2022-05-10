@@ -38,14 +38,13 @@ namespace ButiEngine {
 
 		bool IsVibrate();
 
+		void Explosion();
 		void CreatePocket(const std::uint8_t arg_pocketCount);
 		void RemovePocket(const std::uint8_t arg_pocketNum);
 	private:
 		void IncreaseVibration();
 		void DecreaseVibration();
 		void VibrationStickWoker();
-
-		void Explosion();
 
 		//U“®—Ê‚Ìã¸’l‚ğŒvZ‚·‚é
 		void CalculateVibrationIncrease();

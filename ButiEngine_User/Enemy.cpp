@@ -76,6 +76,8 @@ void ButiEngine::Enemy::OnSet()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 
+	m_isNearPlayer = false;
+	m_isHitShockWave = false;
 	m_vibration = 0.0f;
 	m_vibrationIncrease = 0.0f;
 	m_vibrationCapacity = 100.0f;
@@ -100,13 +102,17 @@ void ButiEngine::Enemy::OnRemove()
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
 
-	Explosion();
-
 	//GetManager().lock()->GetGameObject("Particle")
 }
 
 void ButiEngine::Enemy::OnShowUI()
 {
+	float nearBorder = m_vwp_playerSensor.lock()->transform->GetWorldScale().x * 0.5f;
+	GUI::BulletText("NearBorder");
+	if (GUI::DragFloat("##nearBorder", &nearBorder, 0.1f, 0.0f, 100.0f))
+	{
+		SetNearBorder(nearBorder);
+	}
 	GUI::BulletText("Decrease");
 	GUI::DragFloat("##decrease", &m_vibrationDecrease, 1.0f, 0.0f, 100.0f);
 	GUI::BulletText("Capacity");
@@ -121,6 +127,9 @@ void ButiEngine::Enemy::OnShowUI()
 		CreatePocket(m_testPocketCount);
 	}
 	GUI::BulletText("StickWorkerCount:%d", GetStickWorkerCount());
+
+	GUI::BulletText("ExplosionScale");
+	GUI::DragFloat("##exScale", &m_explosionScale, 0.1f, 0.0f, 100.0f);
 }
 
 void ButiEngine::Enemy::Start()
@@ -179,6 +188,13 @@ std::vector<ButiEngine::Value_weak_ptr<ButiEngine::GameObject>> ButiEngine::Enem
 bool ButiEngine::Enemy::IsVibrate()
 {
 	return m_isNearPlayer || m_isHitShockWave;
+}
+
+void ButiEngine::Enemy::Explosion()
+{
+	auto transform = gameObject.lock()->transform->Clone();
+	transform->SetLocalScale(m_explosionScale);
+	auto explosion = GetManager().lock()->AddObjectFromCereal("Explosion", transform);
 }
 
 void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
@@ -256,12 +272,6 @@ void ButiEngine::Enemy::VibrationStickWoker()
 	}
 }
 
-void ButiEngine::Enemy::Explosion()
-{
-	auto transform = gameObject.lock()->transform->Clone();
-	transform->SetLocalScale(m_explosionScale);
-	auto explosion = GetManager().lock()->AddObjectFromCereal("Explosion", transform);
-}
 
 void ButiEngine::Enemy::CalculateVibrationIncrease()
 {

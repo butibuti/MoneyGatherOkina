@@ -9,9 +9,17 @@ void ButiEngine::ShockWave::OnSet()
 {
 }
 
+void ButiEngine::ShockWave::OnShowUI()
+{
+	GUI::BulletText("MaxScale");
+	GUI::DragFloat3("##scale", &m_maxScale.x, 0.1f, 0.0f, 100.0f);
+}
+
 void ButiEngine::ShockWave::Start()
 {
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
+
+	m_maxScale = Vector3(10.0f, 10.0f, 10.0f);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::ShockWave::Clone()

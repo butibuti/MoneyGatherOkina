@@ -11,6 +11,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -23,6 +24,8 @@ namespace ButiEngine {
 		void Disappear();
 	private:
 		Value_weak_ptr<GameObject> m_vwp_player;
+
+		Vector3 m_maxScale;
 	};
 
 }
