@@ -27,6 +27,8 @@ namespace ButiEngine {
 
 		void SetVibration(const bool arg_isVibration) { m_isVibration = arg_isVibration; }
 
+		void Dead();
+
 	private:
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);

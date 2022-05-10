@@ -57,7 +57,8 @@ void ButiEngine::Worker::OnSet()
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
-				gameObject.lock()->SetIsRemove(true);
+
+				Dead();
 			}
 		});
 
@@ -101,6 +102,16 @@ void ButiEngine::Worker::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
 {
 	return ObjectFactory::Create<Worker>();
+}
+
+void ButiEngine::Worker::Dead()
+{
+	auto beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
+	Vector3 screenPosition = GetCamera("main")->WorldToScreen(gameObject.lock()->transform->GetWorldPosition());
+	screenPosition.z = 0;
+	beeSoul.lock()->transform->SetLocalPosition(screenPosition);
+
+	gameObject.lock()->SetIsRemove(true);
 }
 
 void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)

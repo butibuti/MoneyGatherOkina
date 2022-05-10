@@ -519,10 +519,13 @@ cd ..\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BeeSoulComponent.cpp" />
+    <ClCompile Include="BeeSoulPodUIComponent.cpp" />
     <ClCompile Include="CameraAxis.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Enemy_Flie.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="Enemy_Kiba.cpp" />
@@ -575,9 +578,12 @@ cd ..\</Command>
     <ClCompile Include="WorkerSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BeeSoulComponent.h" />
+    <ClInclude Include="BeeSoulPodUIComponent.h" />
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Enemy_Flie.h" />
     <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="Enemy_Kiba.h" />

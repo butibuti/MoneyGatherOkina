@@ -8,6 +8,7 @@
 #include "Enemy_Stalker.h"
 #include "ShockWave.h"
 #include "VibrationEffectComponent.h"
+#include "BeeSoulPodUIComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -159,7 +160,13 @@ void ButiEngine::Player::AddExp()
 	if (m_level == m_maxLevel) { return; }
 
 	m_exp++;
+
 	std::uint16_t requestExp = CalculateRequestExp();
+	
+	auto beeSoulPodUIComponent = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
+	float expRate = (float)m_exp / (float)requestExp;
+	beeSoulPodUIComponent->SetExpRate(expRate);
+
 	if (m_exp == requestExp)
 	{
 		LevelUp();

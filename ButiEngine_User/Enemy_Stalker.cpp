@@ -134,7 +134,7 @@ void ButiEngine::Enemy_Stalker::OnPrey()
 
 		if (m_vwp_preyTarget.lock())
 		{
-			m_vwp_preyTarget.lock()->SetIsRemove(true);
+			m_vwp_preyTarget.lock()->GetGameComponent<Worker>()->Dead();
 		}
 
 		m_isPrey = false;
