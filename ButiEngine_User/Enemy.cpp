@@ -27,10 +27,10 @@ void ButiEngine::Enemy::OnUpdate()
 		}
 		else
 		{
+			auto transform = gameObject.lock()->transform;
 			float vibrationPower = m_vibration / m_vibrationCapacity;
 			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, false);
-			auto transform = gameObject.lock()->transform;
-			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
 		}
 	}
 	else

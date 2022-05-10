@@ -23,6 +23,7 @@ namespace ButiEngine {
 		}
 
 		void SetVibrationViolent(const float arg_vibrationPower, const bool arg_isPlayer);
+		void SetEffectPosition(const Vector3& arg_position);
 
 	private:
 		void Animation();
@@ -31,6 +32,8 @@ namespace ButiEngine {
 
 		Vector3 m_defaultScale;
 		Vector3 m_calcScale;
+
+		float m_randomPosY;
 
 		std::int16_t m_animationFrame;
 		std::int32_t m_animationRate;

@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class ParticleGenerater;
 	class WaveManager;
+	class VibrationEffectComponent;
 
 	class Player :public GameComponent
 	{
@@ -28,6 +29,7 @@ namespace ButiEngine {
 		float GetMoveSpeed() { return m_velocity.GetLength(); }
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
+		std::int8_t GetLife() { return m_life; }
 		void SetIsIncrease(const bool arg_isIncrease) { m_isIncrease = arg_isIncrease; }
 
 		bool IsDead() { return m_isDead; }
@@ -47,6 +49,8 @@ namespace ButiEngine {
 		void VibrationController();
 		void IncreaseVibration();
 		void DecreaseVibration();
+		void VibrationEffect();
+		void StopVibrationEffect();
 
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
@@ -56,6 +60,8 @@ namespace ButiEngine {
 
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 
+		//パラメータ
+		Vector3 m_defaultScale;
 		std::int8_t m_life;
 
 		//レベル
@@ -86,6 +92,8 @@ namespace ButiEngine {
 
 		//振動
 		Value_weak_ptr<GameObject> m_vwp_shockWave;
+		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
+		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		float m_vibrationForce;
 		bool m_isVibrate;
 		bool m_isIncrease;

@@ -43,6 +43,7 @@
     <ClCompile Include="ShockWave.cpp" />
     <ClCompile Include="PlayerSensor.cpp" />
     <ClCompile Include="VibrationEffectComponent.cpp" />
+    <ClCompile Include="HeartUIManagerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -85,6 +86,7 @@
     <ClInclude Include="ShockWave.h" />
     <ClInclude Include="PlayerSensor.h" />
     <ClInclude Include="VibrationEffectComponent.h" />
+    <ClInclude Include="HeartUIManagerComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

@@ -7,6 +7,7 @@
 #include "SeparateDrawObject.h"
 #include "Enemy_Stalker.h"
 #include "ShockWave.h"
+#include "VibrationEffectComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -18,6 +19,7 @@ void ButiEngine::Player::OnUpdate()
 	{
 		DecreaseVibration();
 	}
+	VibrationEffect();
 
 	m_nearEnemyCount = 0;
 
@@ -83,6 +85,7 @@ void ButiEngine::Player::Start()
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
+	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_life = 3;
 
 	m_level = 1;
@@ -304,6 +307,42 @@ void ButiEngine::Player::DecreaseVibration()
 		m_vibration = 0.0f;
 		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
 		m_isVibrate = false;
+	}
+}
+
+void ButiEngine::Player::VibrationEffect()
+{
+	if (m_isVibrate)
+	{
+		if (m_vwp_vibrationEffect.lock() == nullptr)
+		{
+			auto transform = gameObject.lock()->transform;
+			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
+
+			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+		}
+		else
+		{
+			auto transform = gameObject.lock()->transform;
+			float vibrationPower = m_vibration / m_maxVibration;
+			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, true);
+			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
+		}
+	}
+	else
+	{
+		StopVibrationEffect();
+	}
+}
+
+void ButiEngine::Player::StopVibrationEffect()
+{
+	if (m_vwp_vibrationEffect.lock() != nullptr)
+	{
+		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
+		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
 	}
 }
 
