@@ -24,6 +24,7 @@ void ButiEngine::Enemy_Flie::Start()
 	enemyComponent->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
 	enemyComponent->SetVibrationCapacity(100.0f);
 	enemyComponent->SetVibrationResistance(3.0f);
+	enemyComponent->SetExplosionScale(2.0f);
 
 	auto loiterComponent = gameObject.lock()->GetGameComponent<Loiter>();
 	loiterComponent->SetMoveRange(20.0f);

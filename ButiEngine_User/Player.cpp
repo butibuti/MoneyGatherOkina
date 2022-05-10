@@ -6,16 +6,30 @@
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
 #include "Enemy_Stalker.h"
+#include "ShockWave.h"
 
 void ButiEngine::Player::OnUpdate()
 {
+	if (m_isIncrease)
+	{
+		IncreaseVibration();
+	}
+	else
+	{
+		DecreaseVibration();
+	}
+
+	m_nearEnemyCount = 0;
+
 	TrajectoryParticleWaitCount();
 	MoveKnockBack();
 	Move();
+
 	if (m_isInvincible)
 	{
 		OnInvincible();
 	}
+
 	VibrationController();
 }
 
@@ -36,6 +50,14 @@ void ButiEngine::Player::OnSet()
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 }
 
+void ButiEngine::Player::OnRemove()
+{
+	if (m_vwp_shockWave.lock())
+	{
+		m_vwp_shockWave.lock()->SetIsRemove(true);
+	}
+}
+
 void ButiEngine::Player::OnShowUI()
 {
 	GUI::Text("Level:%d", m_level);
@@ -46,6 +68,7 @@ void ButiEngine::Player::OnShowUI()
 	{
 		LevelUp();
 	}
+	GUI::Text("Vibration:%f", m_vibration);
 
 	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
@@ -85,7 +108,17 @@ void ButiEngine::Player::Start()
 	m_acceleration = 0.01f;
 	m_deceleration = 0.01f;
 
+	m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
+	m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+
+	m_isIncrease = false;
+	m_isVibrate = false;
 	m_vibrationForce = 3.0f;
+	m_vibration = 0.0f;
+	m_maxVibration = 1.0f;
+	m_nearEnemyCount = 0;
+	m_vibrationIncrease = m_maxVibration / 180.0f;
+	m_vibrationDecrease = m_maxVibration / 300.0f;
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_addTrajectoryParticleCounter = 0;
@@ -95,11 +128,6 @@ void ButiEngine::Player::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 {
 	return ObjectFactory::Create<Player>();
-}
-
-void ButiEngine::Player::SetVibrationStart()
-{
-	m_isVibration = true;
 }
 
 void ButiEngine::Player::Revival()
@@ -136,6 +164,12 @@ void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 	//m_knockBackVelocity.x = ButiRandom::GetRandom(-10, 10, 100);
 	//m_knockBackVelocity.z = ButiRandom::GetRandom(-10, 10, 100);
 	m_knockBackVelocity.Normalize();
+}
+
+void ButiEngine::Player::SetShockWaveScale(const Vector3& arg_scale)
+{
+	Vector3 scale = arg_scale / gameObject.lock()->transform->GetLocalScale();
+	m_vwp_shockWave.lock()->transform->SetLocalScale(scale);
 }
 
 void ButiEngine::Player::Move()
@@ -243,9 +277,34 @@ void ButiEngine::Player::Damage()
 void ButiEngine::Player::VibrationController()
 {
 	InputManager::VibrationStop();
-	if (!m_isVibration) { return; }
+	if (!m_isVibrate) { return; }
 	InputManager::VibrationStart(0.5f);
-	m_isVibration = false;
+}
+
+void ButiEngine::Player::IncreaseVibration()
+{
+	m_vibration += m_vibrationIncrease * m_nearEnemyCount;
+	m_vibration = min(m_vibration, m_maxVibration);
+
+	if (!m_isVibrate)
+	{
+		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Appear();
+		m_isVibrate = true;
+	}
+}
+
+void ButiEngine::Player::DecreaseVibration()
+{
+	if (!m_isVibrate) { return; }
+
+	m_vibration -= m_vibrationDecrease;
+
+	if (m_vibration <= 0.0f)
+	{
+		m_vibration = 0.0f;
+		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
+		m_isVibrate = false;
+	}
 }
 
 void ButiEngine::Player::OnInvincible()

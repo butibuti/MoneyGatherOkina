@@ -25,22 +25,27 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetNearBorder(const float arg_nearBorder) { m_nearBorder = arg_nearBorder; }
+		void SetNearBorder(const float arg_nearBorder);
 		void SetVibrationCapacity(const float arg_capacity) { m_vibrationCapacity = arg_capacity; }
 		void SetVibrationResistance(const float arg_resistance) { m_vibrationResistance = arg_resistance; }
+		void SetExplosionScale(const float arg_scale) { m_explosionScale = arg_scale; }
+		void SetIsNearPlayer(const bool arg_isNearPlayer) { m_isNearPlayer = arg_isNearPlayer; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 
-		bool IsVibrate() { return m_isVibrate; }
+		bool IsVibrate();
 
 		void CreatePocket(const std::uint8_t arg_pocketCount);
 		void RemovePocket(const std::uint8_t arg_pocketNum);
 	private:
 		void IncreaseVibration();
 		void DecreaseVibration();
+
+		void Explosion();
+
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
-		void CalcVibrationIncrease();
+		void CalculateVibrationIncrease();
 		std::uint8_t GetStickWorkerCount();
 		void RemoveAllPocket();
 		void SubDeadCount();
@@ -54,17 +59,21 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_ptr<Player> m_vlp_playerComponent;
+		Value_weak_ptr<GameObject> m_vwp_playerSensor;
+
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
 		std::int32_t m_testPocketCount;
 
+		bool m_isNearPlayer;
+		bool m_isHitShockWave;
 		Vector3 m_defaultScale;
 
-		bool m_isVibrate;
-		float m_nearBorder;
 		float m_vibration;
 		float m_vibrationIncrease;
 		float m_vibrationCapacity;
 		float m_vibrationResistance;
+
+		float m_explosionScale;
 	};
 
 }

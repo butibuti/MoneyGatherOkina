@@ -5,20 +5,17 @@
 #include "Worker.h"
 #include "WaveManager.h"
 #include "InputManager.h"
+#include "PlayerSensor.h"
 #include "VibrationEffectComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
-	//ƒvƒŒƒCƒ„[‚ª‹ß‚­‚É‚¢‚½‚çU“®—Êã¸A‚¢‚È‚©‚Á‚½‚çŒ¸­
-	float nearBorderSqr = m_nearBorder * m_nearBorder;
-	float distanceSqr = (gameObject.lock()->transform->GetLocalPosition() - m_vwp_player.lock()->transform->GetLocalPosition()).GetLengthSqr();
-	m_isVibrate = distanceSqr <= nearBorderSqr;
-	if (m_isVibrate)
+	//Player‚ª‹ß‚¢‚©ÕŒ‚”g‚ª“–‚½‚Á‚Ä‚¢‚½‚çU“®‚·‚é
+	if (IsVibrate())
 	{
 		IncreaseVibration();
-		m_vlp_playerComponent->SetVibrationStart();
 		if (m_vwp_vibrationEffect.lock() == nullptr)
 		{
 			auto transform = gameObject.lock()->transform;
@@ -45,18 +42,38 @@ void ButiEngine::Enemy::OnUpdate()
 
 void ButiEngine::Enemy::OnSet()
 {
+	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+		{
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
+			{
+				m_isHitShockWave = true;
+			}
+		});
+
+	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+		{
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
+			{
+				m_isHitShockWave = false;
+			}
+		});
+
+	gameObject.lock()->AddCollisionStayReaction(collisionStayLambda);
+	gameObject.lock()->AddCollisionLeaveReaction(collisionLeaveLambda);
+
+
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 
-	m_isVibrate = false;
-	m_nearBorder = 3.0f;
 	m_vibration = 0.0f;
 	m_vibrationIncrease = 0.0f;
 	m_vibrationCapacity = 100.0f;
 	m_vibrationResistance = 10.0f;
+
+	m_explosionScale = 1.0f;
 }
 
 void ButiEngine::Enemy::OnRemove()
@@ -65,18 +82,23 @@ void ButiEngine::Enemy::OnRemove()
 	SubDeadCount();
 	StopVibrationEffect();
 
+	if (m_vwp_playerSensor.lock())
+	{
+		m_vwp_playerSensor.lock()->SetIsRemove(true);
+	}
+
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
+
+	Explosion();
 
 	//GetManager().lock()->GetGameObject("Particle")
 }
 
 void ButiEngine::Enemy::OnShowUI()
 {
-	GUI::BulletText("NearBorder");
-	GUI::DragFloat("##nearBorder", &m_nearBorder, 1.0f, 0.0f, 10.0f);
 	GUI::BulletText("Decrease");
 	GUI::DragFloat("##decrease", &m_vibrationDecrease, 1.0f, 0.0f, 100.0f);
 	GUI::BulletText("Capacity");
@@ -95,11 +117,21 @@ void ButiEngine::Enemy::OnShowUI()
 
 void ButiEngine::Enemy::Start()
 {
+	m_vwp_playerSensor = GetManager().lock()->AddObjectFromCereal("PlayerSensor");
+	m_vwp_playerSensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	m_vwp_playerSensor.lock()->GetGameComponent<PlayerSensor>()->SetParentEnemy(gameObject);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
 {
 	return ObjectFactory::Create<Enemy>();
+}
+
+void ButiEngine::Enemy::SetNearBorder(const float arg_nearBorder)
+{
+	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+	Vector3 sensorScale = Vector3(arg_nearBorder * 2) / scale;
+	m_vwp_playerSensor.lock()->transform->SetLocalScale(sensorScale);
 }
 
 ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetNearFreePocket(const Vector3& arg_pos, float arg_border)
@@ -119,6 +151,11 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetNearFre
 		}
 	}
 	return Value_weak_ptr<GameObject>();
+}
+
+bool ButiEngine::Enemy::IsVibrate()
+{
+	return m_isNearPlayer || m_isHitShockWave;
 }
 
 void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
@@ -170,7 +207,7 @@ void ButiEngine::Enemy::RemovePocket(const std::uint8_t arg_pocketNum)
 
 void ButiEngine::Enemy::IncreaseVibration()
 {
-	CalcVibrationIncrease();
+	CalculateVibrationIncrease();
 	m_vibration += m_vibrationIncrease;
 
 	//U“®—Ê‚ªãŒÀ‚ð’´‚¦‚½‚çŽ€‚Ê
@@ -186,7 +223,14 @@ void ButiEngine::Enemy::DecreaseVibration()
 	m_vibration = max(m_vibration, 0.0f);
 }
 
-void ButiEngine::Enemy::CalcVibrationIncrease()
+void ButiEngine::Enemy::Explosion()
+{
+	auto transform = gameObject.lock()->transform->Clone();
+	transform->SetLocalScale(m_explosionScale);
+	auto explosion = GetManager().lock()->AddObjectFromCereal("Explosion", transform);
+}
+
+void ButiEngine::Enemy::CalculateVibrationIncrease()
 {
 	float playerVibrationForce = m_vlp_playerComponent->GetVibrationForce();
 	float workerVibrationForce = Worker::GetVibrationForce();
