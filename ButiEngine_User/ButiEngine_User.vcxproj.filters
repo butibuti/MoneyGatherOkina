@@ -54,6 +54,7 @@
     <ClCompile Include="Enemy_Tutorial.cpp" />
     <ClCompile Include="BeeSoulComponent.cpp" />
     <ClCompile Include="BeeSoulPodUIComponent.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Enemy_Tutorial.h" />
     <ClInclude Include="BeeSoulComponent.h" />
     <ClInclude Include="BeeSoulPodUIComponent.h" />
+    <ClInclude Include="EnemySpawner.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
