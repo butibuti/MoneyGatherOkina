@@ -16,7 +16,7 @@ void ButiEngine::StartPopUpComponent::Start()
 {
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 
-	m_defaultScale = Vector3(4, 2, 2);
+	m_defaultScale = Vector3(4, 4, 4);
 	m_currentScale = m_defaultScale;
 	m_previousScale = m_currentScale;
 	m_knockBackCount = 15;
