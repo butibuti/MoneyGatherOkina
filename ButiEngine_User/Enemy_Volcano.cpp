@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Loiter.h"
 #include "SphereExclusion.h"
+#include "SeparateDrawObject.h"
 
 #include "InputManager.h"
 
@@ -57,6 +58,8 @@ void ButiEngine::Enemy_Volcano::OnShowUI()
 
 void ButiEngine::Enemy_Volcano::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Volcano");
+
 	SetEnemyParameter();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1000.0f);

@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "VolcanoRock.h"
 #include "ParticleGenerater.h"
+#include "SeparateDrawObject.h"
 
 void ButiEngine::VolcanoRock::OnUpdate()
 {
@@ -43,6 +44,7 @@ void ButiEngine::VolcanoRock::OnShowUI()
 
 void ButiEngine::VolcanoRock::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Rock");
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_gravity = 0.05f;
 	m_life = 105;

@@ -46,6 +46,8 @@ void ButiEngine::Enemy_Kiba::OnShowUI()
 
 void ButiEngine::Enemy_Kiba::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Kiba");
+
 	CreateDamageArea();
 	SetEnemyParameter();
 	SetLoiterParameter();
@@ -103,8 +105,7 @@ void ButiEngine::Enemy_Kiba::CreateDamageArea()
 	m_vwp_damageArea.lock()->transform->SetLocalScale(scale);
 
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	float damageAreaRadius = m_vwp_damageArea.lock()->transform->GetWorldScale().x * 0.5f;
-	m_vwp_damageArea.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * (radius + damageAreaRadius));
+	m_vwp_damageArea.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * radius);
 }
 
 void ButiEngine::Enemy_Kiba::SetEnemyParameter()

@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Worker.h"
 #include "SphereExclusion.h"
+#include "SeparateDrawObject.h"
 
 void ButiEngine::Enemy_Stalker::OnUpdate()
 {
@@ -56,6 +57,8 @@ void ButiEngine::Enemy_Stalker::OnShowUI()
 
 void ButiEngine::Enemy_Stalker::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Stalker");
+
 	SetEnemyParameter();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(90.0f);

@@ -6,7 +6,7 @@ void ButiEngine::WorkerSpawner::OnUpdate()
 {
 	if (m_vlp_spawnTimer->Update())
 	{
-		//SpawnWorker();
+		SpawnWorker();
 	}
 
 	if (GameDevice::GetInput()->TriggerKey(Keys::P))
@@ -27,7 +27,7 @@ void ButiEngine::WorkerSpawner::Start()
 
 	for (std::uint8_t i = 0; i < 10; i++)
 	{
-		//SpawnWorker();
+		SpawnWorker();
 	}
 }
 

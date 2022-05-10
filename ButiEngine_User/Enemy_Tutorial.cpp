@@ -2,6 +2,7 @@
 #include "Enemy_Tutorial.h"
 #include "Enemy.h"
 #include "SphereExclusion.h"
+#include "SeparateDrawObject.h"
 
 void ButiEngine::Enemy_Tutorial::OnUpdate()
 {
@@ -21,6 +22,8 @@ void ButiEngine::Enemy_Tutorial::OnShowUI()
 
 void ButiEngine::Enemy_Tutorial::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Tutorial");
+
 	SetEnemyParameter();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1000.0f);

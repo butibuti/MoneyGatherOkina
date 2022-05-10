@@ -27,6 +27,8 @@ void ButiEngine::Enemy_Flie::OnShowUI()
 
 void ButiEngine::Enemy_Flie::Start()
 {
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Flie");
+
 	SetEnemyParameter();
 	SetLoiterParameter();
 
