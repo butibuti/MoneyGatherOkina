@@ -116,7 +116,7 @@ void ButiEngine::Player::Start()
 	m_isDead = false;
 
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
-	m_vlp_lookAt->m_speed = 0.1f;
+	m_vlp_lookAt->SetSpeed(0.1f);
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;
@@ -209,7 +209,7 @@ void ButiEngine::Player::Move()
 		/////////////////////////////////////////////
 		auto lookTarget = gameObject.lock()->transform->Clone();
 		lookTarget->Translate(dir);
-		m_vlp_lookAt->m_vlp_lookTarget = lookTarget;
+		m_vlp_lookAt->SetLookTarget(lookTarget);
 		/////////////////////////////////////////////
 
 		m_velocity += dir.GetNormalize() * m_acceleration;

@@ -66,6 +66,8 @@ void ButiEngine::Flocking::Start()
 
 	m_rotationSpeed = 0.05f;
 	m_moveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f;
+	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	m_vlp_lookAt->SetSpeed(m_rotationSpeed);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Flocking::Clone()
@@ -116,7 +118,8 @@ void ButiEngine::Flocking::CalculateMoveSpeed(std::vector<Value_ptr<GameObject>>
 		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f, 0.3f);
 	}
 
-	m_rotationSpeed = MathHelper::Lerp(0.01f, 0.1f, m_moveSpeed * 10);
+	m_rotationSpeed = MathHelper::Lerp(0.0f, 0.1f, m_moveSpeed * 10);
+	m_vlp_lookAt->SetSpeed(m_rotationSpeed);
 }
 
 void ButiEngine::Flocking::CalculateGatherVec()
@@ -222,21 +225,28 @@ void ButiEngine::Flocking::CalculateSurroundVec(std::vector<Value_ptr<GameObject
 
 void ButiEngine::Flocking::Move()
 {
-	Vector3 dir = (m_gatherDir * m_gatherWeight);
-	dir += (m_cohesionVec * m_cohesionWeight);
-	dir += (m_alignmentVec * m_alignmentWeight);
-	dir += (m_separationVec * m_separationWeight);
-	dir += (m_avoidPlayerVec * m_avoidPlayerWeight);
-	dir += (m_surroundVec * m_surroundWeight);
-	dir.y = 0.0f;
-	dir.Normalize();
+	Vector3 velocity = (m_gatherDir * m_gatherWeight);
+	velocity += (m_cohesionVec * m_cohesionWeight);
+	velocity += (m_alignmentVec * m_alignmentWeight);
+	velocity += (m_separationVec * m_separationWeight);
+	velocity += (m_avoidPlayerVec * m_avoidPlayerWeight);
+	velocity += (m_surroundVec * m_surroundWeight);
+	velocity.y = 0.0f;
+	velocity.Normalize();
 
-	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 
-	auto rotationTarget = gameObject.lock()->transform->GetMatrix();
-	rotationTarget.SetLookAt(pos + dir);
-	auto rotation = MathHelper::LearpQuat(gameObject.lock()->transform->GetLocalRotation().ToQuat(), rotationTarget.ToQuat(), 1.0f);
-	gameObject.lock()->transform->SetLocalRotation(rotation.ToMatrix());
+	gameObject.lock()->transform->Translate(velocity * m_moveSpeed);
 
-	gameObject.lock()->transform->Translate(Vector3Const::ZAxis * rotation.ToMatrix() * m_moveSpeed);
+	auto lookTarget = gameObject.lock()->transform->Clone();
+	lookTarget->Translate(velocity);
+	m_vlp_lookAt->SetLookTarget(lookTarget);
+
+
+	//Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	//auto rotationTarget = gameObject.lock()->transform->GetMatrix();
+	//rotationTarget.SetLookAt(pos + velocity);
+	//auto rotation = MathHelper::LearpQuat(gameObject.lock()->transform->GetLocalRotation().ToQuat(), rotationTarget.ToQuat(), 1.0f);
+	//gameObject.lock()->transform->SetLocalRotation(rotation.ToMatrix());
+
+	//gameObject.lock()->transform->Translate(Vector3Const::ZAxis * rotation.ToMatrix() * m_moveSpeed);
 }

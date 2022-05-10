@@ -65,7 +65,7 @@ void ButiEngine::Enemy_Stalker::Start()
 	m_acceleration = 0.01f;
 
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
-	m_vlp_lookAt->m_speed = 0.1f;
+	m_vlp_lookAt->SetSpeed(0.1f);
 	m_vlp_preyTimer = ObjectFactory::Create<RelativeTimer>(300);
 	m_isPrey = false;
 }
@@ -103,7 +103,7 @@ void ButiEngine::Enemy_Stalker::Move()
 
 	auto lookTarget = gameObject.lock()->transform->Clone();
 	lookTarget->Translate(dir);
-	m_vlp_lookAt->m_vlp_lookTarget = lookTarget;
+	m_vlp_lookAt->SetLookTarget(lookTarget);
 }
 
 void ButiEngine::Enemy_Stalker::Prey(Value_weak_ptr<GameObject> arg_vwp_other)
@@ -118,7 +118,7 @@ void ButiEngine::Enemy_Stalker::Prey(Value_weak_ptr<GameObject> arg_vwp_other)
 
 	m_velocity = Vector3Const::Zero;
 
-	m_vlp_lookAt->m_vlp_lookTarget = arg_vwp_other.lock()->transform->Clone();
+	m_vlp_lookAt->SetLookTarget(arg_vwp_other.lock()->transform->Clone());
 	m_vlp_preyTimer->Start();
 	m_isPrey = true;
 }
