@@ -39,10 +39,19 @@ void ButiEngine::Enemy_Stalker::OnSet()
 
 void ButiEngine::Enemy_Stalker::OnRemove()
 {
+	if (m_vlp_enemy)
+	{
+		m_vlp_enemy->Explosion();
+	}
 }
 
 void ButiEngine::Enemy_Stalker::OnShowUI()
 {
+	GUI::BulletText("MaxMoveSpeed");
+	GUI::DragFloat("##moveSpeed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
+
+	GUI::BulletText("Acceleration");
+	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
 }
 
 void ButiEngine::Enemy_Stalker::Start()

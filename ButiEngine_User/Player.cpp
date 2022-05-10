@@ -68,12 +68,27 @@ void ButiEngine::Player::OnShowUI()
 	{
 		LevelUp();
 	}
-	GUI::Text("Vibration:%f", m_vibration);
 
 	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
+
+	GUI::BulletText("Acceleration");
+	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText("Deceleration");
+	GUI::DragFloat("##decel", &m_deceleration, 0.001f, 0.0f, 1.0f);
+
+
+	GUI::Text("Vibration:%f", m_vibration);
+
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText("VibrationIncrease");
+	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText("VibrationDecrease");
+	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
 }
 
 void ButiEngine::Player::Start()

@@ -13,6 +13,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnRemove()override;
 		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
@@ -25,6 +26,8 @@ namespace ButiEngine {
 		void ShotVolcanoRock();
 		void AddPredictedPoint();
 		void ScaleAnimation();
+
+		void SetEnemyParameter();
 
 		Value_ptr<Enemy> m_vlp_enemy;
 
