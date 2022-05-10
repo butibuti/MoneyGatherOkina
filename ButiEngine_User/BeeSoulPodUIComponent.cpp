@@ -32,7 +32,7 @@ void ButiEngine::BeeSoulPodUIComponent::SetExpRate(const float arg_expRate)
 	float expRate = 1.0f / (float)m_maxAnimationCount;
 	for (std::int8_t i = 0; i < m_maxAnimationCount; i++)
 	{
-		if (arg_expRate <= expRate * i)
+		if (arg_expRate >= expRate * i)
 		{
 			m_animationCount = i;
 		}

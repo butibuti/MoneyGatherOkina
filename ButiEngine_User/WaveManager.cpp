@@ -230,10 +230,16 @@ void ButiEngine::WaveManager::GameOverAnimation()
 	//ウェーブの途中からやり直す
 	if (InputManager::IsTriggerDecideKey() && m_isGameOverButton)
 	{
-		m_waveNum--;
-		m_isGameOver = false;
-		m_vwp_playerComponent.lock()->Revival(); //プレイヤー蘇生
-		WaveFinish();
+		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+		std::string sceneName = "GamePlay";
+		sceneManager->RemoveScene(sceneName);
+		sceneManager->LoadScene(sceneName);
+		sceneManager->ChangeScene(sceneName);
+
+		//m_waveNum--;
+		//m_isGameOver = false;
+		//m_vwp_playerComponent.lock()->Revival(); //プレイヤー蘇生
+		//WaveFinish();
 	}
 }
 

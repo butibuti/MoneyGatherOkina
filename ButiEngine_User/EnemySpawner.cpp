@@ -9,24 +9,24 @@ void ButiEngine::EnemySpawner::OnUpdate()
 		switch (m_spawnType)
 		{
 		case 0: //ハエ
-			m_spawnRate = 300;
-			m_maxSpawnRate = 240;
+			m_spawnRate = 360;
+			m_maxSpawnRate = 360;
 			m_spawnStartTimer = 0;
 			break;
 		case 1: //ストーカー
-			m_spawnRate = 420;
-			m_maxSpawnRate = 300;
-			m_spawnStartTimer = 900;
+			m_spawnRate = 1200;
+			m_maxSpawnRate = 960;
+			m_spawnStartTimer = 1020;
 			break;
 		case 2: //キバ
-			m_spawnRate = 540;
-			m_maxSpawnRate = 360;
-			m_spawnStartTimer = 1800;
+			m_spawnRate = 900;
+			m_maxSpawnRate = 780;
+			m_spawnStartTimer = 1920;
 			break;
 		case 3: //カザン
-			m_spawnRate = 660;
-			m_maxSpawnRate = 420;
-			m_spawnStartTimer = 2700;
+			m_spawnRate = 1200;
+			m_maxSpawnRate = 1020;
+			m_spawnStartTimer = 3000;
 			break;
 		default:
 			break;
@@ -38,7 +38,7 @@ void ButiEngine::EnemySpawner::OnUpdate()
 		m_spawnStartTimer--;
 		return;
 	}
-	if (m_subWaitTimer < 5)
+	if (m_subWaitTimer < 10)
 	{
 		m_subWaitTimer++;
 	}
