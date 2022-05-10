@@ -2,13 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Suicide :public GameComponent
+	class ShockWave :public GameComponent
 	{
 	public:
-		Suicide(const std::uint32_t arg_frame) : m_suicideFrame(arg_frame){}
-		Suicide() : m_suicideFrame(0){}
+
 		std::string GetGameComponentName()const override {
-			return "Suicide";
+			return "ShockWave";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -19,11 +18,13 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void Appear();
+		void Disappear();
 	private:
-		Value_ptr<Timer> m_vlp_timer;
-		std::uint32_t m_suicideFrame;
+		Value_weak_ptr<GameObject> m_vwp_player;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Suicide, true);
+BUTI_REGIST_GAMECOMPONENT(ShockWave, true);

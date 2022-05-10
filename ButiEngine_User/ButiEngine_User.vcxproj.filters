@@ -38,6 +38,10 @@
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="SplashEffectComponent.cpp" />
     <ClCompile Include="VibrationSensor.cpp" />
+    <ClCompile Include="Suicide.cpp" />
+    <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="ShockWave.cpp" />
+    <ClCompile Include="PlayerSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -75,6 +79,10 @@
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="SplashEffectComponent.h" />
     <ClInclude Include="VibrationSensor.h" />
+    <ClInclude Include="Suicide.h" />
+    <ClInclude Include="Explosion.h" />
+    <ClInclude Include="ShockWave.h" />
+    <ClInclude Include="PlayerSensor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

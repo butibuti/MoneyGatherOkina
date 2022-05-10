@@ -14,6 +14,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnRemove()override;
 		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
@@ -27,21 +28,25 @@ namespace ButiEngine {
 		float GetMoveSpeed() { return m_velocity.GetLength(); }
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
+		void SetIsIncrease(const bool arg_isIncrease) { m_isIncrease = arg_isIncrease; }
 
 		bool IsDead() { return m_isDead; }
 
-		void SetVibrationStart();
-
 		void Revival();
 		void AddExp();
+		void AddNearEnemyCount() { m_nearEnemyCount++; }
 		void KnockBack(const Vector3& arg_velocity);
+		void SetShockWaveScale(const Vector3& arg_scale);
 	private:
 		void Move();
 		void LevelUp();
 		void MoveKnockBack();
 		void TrajectoryParticleWaitCount();
 		void Damage();
+
 		void VibrationController();
+		void IncreaseVibration();
+		void DecreaseVibration();
 
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
@@ -80,8 +85,15 @@ namespace ButiEngine {
 		bool m_isDead;
 
 		//振動
+		Value_weak_ptr<GameObject> m_vwp_shockWave;
 		float m_vibrationForce;
-		bool m_isVibration;
+		bool m_isVibrate;
+		bool m_isIncrease;
+		float m_vibration;
+		float m_maxVibration;
+		std::uint8_t m_nearEnemyCount;
+		float m_vibrationIncrease;
+		float m_vibrationDecrease;
 
 		//パーティクル
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;

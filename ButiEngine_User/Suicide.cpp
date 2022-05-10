@@ -11,6 +11,8 @@ void ButiEngine::Suicide::OnUpdate()
 
 void ButiEngine::Suicide::OnSet()
 {
+	m_vlp_timer = ObjectFactory::Create<RelativeTimer>(m_suicideFrame);
+	m_vlp_timer->Start();
 }
 
 void ButiEngine::Suicide::Start()

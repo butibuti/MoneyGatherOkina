@@ -136,4 +136,5 @@ void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
 	m_vlp_enemy->SetVibrationCapacity(100.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
+	m_vlp_enemy->SetExplosionScale(3.0f);
 }

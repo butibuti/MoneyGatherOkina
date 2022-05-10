@@ -53,6 +53,7 @@ void ButiEngine::Enemy_Volcano::Start()
 	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
+	m_vlp_enemy->SetExplosionScale(10.0f);
 
 	m_defaultScale = Vector3(3, 3, 3);
 	m_currentScale = m_defaultScale;
