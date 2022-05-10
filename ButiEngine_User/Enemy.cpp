@@ -5,6 +5,7 @@
 #include "Worker.h"
 #include "WaveManager.h"
 #include "InputManager.h"
+#include "VibrationEffectComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 
@@ -18,10 +19,27 @@ void ButiEngine::Enemy::OnUpdate()
 	{
 		IncreaseVibration();
 		m_vlp_playerComponent->SetVibrationStart();
+		if (m_vwp_vibrationEffect.lock() == nullptr)
+		{
+			auto transform = gameObject.lock()->transform;
+			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
+
+			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+		}
+		else
+		{
+			float vibrationPower = m_vibration / m_vibrationCapacity;
+			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, false);
+			auto transform = gameObject.lock()->transform;
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+		}
 	}
 	else
 	{
 		DecreaseVibration();
+		StopVibrationEffect();
 	}
 }
 
@@ -30,6 +48,8 @@ void ButiEngine::Enemy::OnSet()
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+
+	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 
 	m_isVibrate = false;
 	m_nearBorder = 3.0f;
@@ -43,11 +63,12 @@ void ButiEngine::Enemy::OnRemove()
 {
 	RemoveAllPocket();
 	SubDeadCount();
+	StopVibrationEffect();
 
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
-	deadEffect.lock()->transform->SetLocalScale(transform->GetLocalScale());
+	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
 
 	//GetManager().lock()->GetGameObject("Particle")
 }
@@ -205,4 +226,13 @@ void ButiEngine::Enemy::SubDeadCount()
 {
 	//ウェーブマネージャーのカウント減少関数を呼ぶ
 	m_vwp_waveManager.lock()->SubEnemyDeadCount();
+}
+
+void ButiEngine::Enemy::StopVibrationEffect()
+{
+	if (m_vwp_vibrationEffect.lock() != nullptr)
+	{
+		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
+		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
+	}
 }

@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class Player;
 	class WaveManager;
+	class VibrationEffectComponent;
 
 	class Enemy :public GameComponent
 	{
@@ -43,15 +44,20 @@ namespace ButiEngine {
 		std::uint8_t GetStickWorkerCount();
 		void RemoveAllPocket();
 		void SubDeadCount();
+		void StopVibrationEffect();
 
 		//êUìÆÇÃå∏è≠ó 
 		static float m_vibrationDecrease;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
+		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
+		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_ptr<Player> m_vlp_playerComponent;
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
 		std::int32_t m_testPocketCount;
+
+		Vector3 m_defaultScale;
 
 		bool m_isVibrate;
 		float m_nearBorder;

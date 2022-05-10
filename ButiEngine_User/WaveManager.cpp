@@ -7,6 +7,12 @@
 
 void ButiEngine::WaveManager::OnUpdate()
 {
+	if (InputManager::IsTriggerPauseKey())
+	{
+		auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
+		deadEffect.lock()->transform->SetLocalPosition(Vector3(10, 0, -10));
+	}
+
 	MoveWave();
 
 	if (m_isWaveTime)

@@ -561,6 +561,7 @@ cd ..\</Command>
     </ClCompile>
     <ClCompile Include="Stick.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
+    <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="VibrationSensor.cpp" />
     <ClCompile Include="VolcanoRock.cpp" />
     <ClCompile Include="WaveManager.cpp" />
@@ -598,6 +599,7 @@ cd ..\</Command>
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
     <ClInclude Include="TitleManagerComponent.h" />
+    <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="VibrationSensor.h" />
     <ClInclude Include="VolcanoRock.h" />
     <ClInclude Include="WaveManager.h" />

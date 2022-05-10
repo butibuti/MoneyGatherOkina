@@ -4,10 +4,6 @@
 
 void ButiEngine::EnemySpawnManager::OnUpdate()
 {
-    if (InputManager::IsTriggerPauseKey())
-    {
-        GetManager().lock()->AddObjectFromCereal("TestEnemy");
-    }
 }
 
 void ButiEngine::EnemySpawnManager::OnSet()

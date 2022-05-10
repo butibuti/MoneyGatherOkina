@@ -23,8 +23,12 @@ void ButiEngine::VolcanoRock::OnUpdate()
 	{
 		//ライフが消えたら爆発エフェクトを出して死ぬ
 		//ここで爆発エフェクト発生
-		auto position = gameObject.lock()->transform->GetWorldPosition();
-		m_vwp_particleGenerater.lock()->ExplosionParticles(position);
+		//auto position = gameObject.lock()->transform->GetWorldPosition();
+		//m_vwp_particleGenerater.lock()->ExplosionParticles(position);
+		auto transform = gameObject.lock()->transform;
+		auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
+		deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+		deadEffect.lock()->transform->SetLocalScale(transform->GetLocalScale() * 5.0f);
 		gameObject.lock()->SetIsRemove(true); //死
 	}
 }

@@ -28,7 +28,7 @@ void ButiEngine::SplashEffectComponent::Start()
 {
 	m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
 	m_animationFrame = 0;
-	m_animationRate = 10;
+	m_animationRate = 4;
 	m_animationCount = 0;
 	m_maxAnimationCount = 8;
 }
