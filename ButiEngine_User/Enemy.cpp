@@ -240,7 +240,7 @@ void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
 void ButiEngine::Enemy::RemovePocket(const std::uint8_t arg_pocketNum)
 {
 	if (arg_pocketNum >= m_vec_pockets.size()) { return; }
-	m_vec_pockets[arg_pocketNum].lock()->SetIsRemove(true);
+	m_vec_pockets[arg_pocketNum].lock()->GetGameComponent<Pocket>()->Dead();
 	m_vec_pockets.erase(m_vec_pockets.begin() + arg_pocketNum);
 }
 
@@ -268,7 +268,15 @@ void ButiEngine::Enemy::VibrationStickWoker()
 	auto end = vec_stickWorkers.end();
 	for (auto itr = vec_stickWorkers.begin(); itr != end; ++itr)
 	{
-		(*itr).lock()->GetGameComponent<Worker>()->SetVibration(IsVibrate());
+		if ((*itr).lock() != nullptr)
+		{
+			auto workerComponent = (*itr).lock()->GetGameComponent<Worker>();
+			if (workerComponent)
+			{
+				workerComponent->SetVibration(IsVibrate());
+			}
+		}
+		
 	}
 }
 
@@ -304,7 +312,7 @@ void ButiEngine::Enemy::RemoveAllPocket()
 	auto end = m_vec_pockets.end();
 	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
 	{
-		(*itr).lock()->SetIsRemove(true);
+		(*itr).lock()->GetGameComponent<Pocket>()->Dead();
 	}
 	m_vec_pockets.clear();
 }

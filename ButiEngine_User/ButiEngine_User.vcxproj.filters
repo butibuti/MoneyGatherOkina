@@ -52,6 +52,8 @@
     <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="HeartUIManagerComponent.cpp" />
     <ClCompile Include="Enemy_Tutorial.cpp" />
+    <ClCompile Include="BeeSoulComponent.cpp" />
+    <ClCompile Include="BeeSoulPodUIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -103,6 +105,8 @@
     <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="HeartUIManagerComponent.h" />
     <ClInclude Include="Enemy_Tutorial.h" />
+    <ClInclude Include="BeeSoulComponent.h" />
+    <ClInclude Include="BeeSoulPodUIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

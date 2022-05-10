@@ -26,6 +26,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> GetWorker() { return m_vwp_worker; }
 
 		bool ExistStickWorker() { return m_vwp_worker.lock(); }
+		void Dead();
 	private:
 		Value_weak_ptr<GameObject> m_vwp_enemy;
 		Value_weak_ptr<GameObject> m_vwp_worker;
