@@ -22,6 +22,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetVibration();
 		void SetVibrationViolent(const float arg_vibrationPower, const bool arg_isPlayer);
 		void SetEffectPosition(const Vector3& arg_position);
 

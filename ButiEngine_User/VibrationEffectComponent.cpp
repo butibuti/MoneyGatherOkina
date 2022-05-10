@@ -31,7 +31,7 @@ void ButiEngine::VibrationEffectComponent::Start()
 	m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_calcScale = m_defaultScale;
-	m_randomPosY = ButiRandom::GetInt(-500, 500) * 0.0001f;
+	m_randomPosY = ButiRandom::GetInt(1, 500) * 0.0001f;
 	m_animationFrame = 0;
 	m_animationRate = 4;
 	m_animationCount = 0;
@@ -41,6 +41,15 @@ void ButiEngine::VibrationEffectComponent::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::VibrationEffectComponent::Clone()
 {
 	return ObjectFactory::Create<VibrationEffectComponent>();
+}
+
+void ButiEngine::VibrationEffectComponent::SetVibration()
+{
+	float vibPower = 0.5f;
+	std::int32_t animationRate = vibPower * 4;
+	m_animationRate = 4 - animationRate;
+	float scaleRate = 1.0f + vibPower;
+	m_calcScale = m_defaultScale * scaleRate;
 }
 
 void ButiEngine::VibrationEffectComponent::SetVibrationViolent(const float arg_vibrationPower, const bool arg_isPlayer)

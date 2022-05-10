@@ -10,6 +10,7 @@
 #include "WorkerSpawner.h"
 #include "SphereExclusion.h"
 #include "Enemy_Stalker.h"
+#include "VibrationEffectComponent.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -17,6 +18,29 @@ float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
+	if (m_isVibration)
+	{
+		if (m_vwp_vibrationEffect.lock() == nullptr)
+		{
+			auto transform = gameObject.lock()->transform;
+			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetWorldPosition());
+			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
+
+			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+		}
+		else
+		{
+			auto transform = gameObject.lock()->transform;
+			m_vwp_vibrationEffectComponent.lock()->SetVibration();
+			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetWorldPosition());
+		}
+	}
+	else
+	{
+		StopVibrationEffect();
+	}
+
 }
 
 void ButiEngine::Worker::OnSet()
@@ -54,6 +78,8 @@ void ButiEngine::Worker::OnRemove()
 	{
 		workerSpawner->StartTimer();
 	}
+
+	StopVibrationEffect();
 }
 
 void ButiEngine::Worker::OnShowUI()
@@ -68,6 +94,8 @@ void ButiEngine::Worker::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(0.1f);
+
+	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
@@ -140,5 +168,14 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
+	}
+}
+
+void ButiEngine::Worker::StopVibrationEffect()
+{
+	if (m_vwp_vibrationEffect.lock() != nullptr)
+	{
+		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
+		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
 	}
 }

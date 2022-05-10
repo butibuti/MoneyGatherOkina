@@ -13,9 +13,8 @@ float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 void ButiEngine::Enemy::OnUpdate()
 {
 	//Player‚ª‹ß‚¢‚©ÕŒ‚”g‚ª“–‚½‚Á‚Ä‚¢‚½‚çU“®‚·‚é
-	if (IsVibrate())
+	if (m_vibration > 0)
 	{
-		IncreaseVibration();
 		if (m_vwp_vibrationEffect.lock() == nullptr)
 		{
 			auto transform = gameObject.lock()->transform;
@@ -35,9 +34,18 @@ void ButiEngine::Enemy::OnUpdate()
 	}
 	else
 	{
-		DecreaseVibration();
 		StopVibrationEffect();
 	}
+
+	if (IsVibrate())
+	{
+		IncreaseVibration();	
+	}
+	else
+	{
+		DecreaseVibration();
+	}
+	VibrationStickWoker();
 }
 
 void ButiEngine::Enemy::OnSet()
@@ -153,6 +161,21 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetNearFre
 	return Value_weak_ptr<GameObject>();
 }
 
+std::vector<ButiEngine::Value_weak_ptr<ButiEngine::GameObject>> ButiEngine::Enemy::GetStickWorkers()
+{
+	std::vector<Value_weak_ptr<GameObject>> vec_stickWorkers;
+	auto end = m_vec_pockets.end();
+	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
+	{
+		auto worker = (*itr).lock()->GetGameComponent<Pocket>()->GetWorker();
+		if (worker.lock() != nullptr)
+		{
+			vec_stickWorkers.push_back(worker);
+		}
+	}
+	return vec_stickWorkers;
+}
+
 bool ButiEngine::Enemy::IsVibrate()
 {
 	return m_isNearPlayer || m_isHitShockWave;
@@ -221,6 +244,16 @@ void ButiEngine::Enemy::DecreaseVibration()
 {
 	m_vibration -= m_vibrationDecrease;
 	m_vibration = max(m_vibration, 0.0f);
+}
+
+void ButiEngine::Enemy::VibrationStickWoker()
+{
+	auto vec_stickWorkers = GetStickWorkers();
+	auto end = vec_stickWorkers.end();
+	for (auto itr = vec_stickWorkers.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->GetGameComponent<Worker>()->SetVibration(IsVibrate());
+	}
 }
 
 void ButiEngine::Enemy::Explosion()

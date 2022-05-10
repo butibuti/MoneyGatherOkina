@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class VibrationEffectComponent;
+
 	class Worker :public GameComponent
 	{
 	public:
@@ -22,12 +24,24 @@ namespace ButiEngine {
 		}
 
 		static float GetVibrationForce() { return m_vibrationForce; }
+
+		void SetVibration(const bool arg_isVibration) { m_isVibration = arg_isVibration; }
+
 	private:
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
 
+		void StopVibrationEffect();
+
 		static float m_nearBorder;
 		static float m_vibrationForce;
+
+		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
+		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
+
+		Vector3 m_defaultScale;
+
+		bool m_isVibration;
 	};
 
 }
