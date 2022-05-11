@@ -40,10 +40,6 @@ void ButiEngine::Enemy_Stalker::OnSet()
 
 void ButiEngine::Enemy_Stalker::OnRemove()
 {
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
-	}
 }
 
 void ButiEngine::Enemy_Stalker::OnShowUI()
@@ -76,6 +72,19 @@ void ButiEngine::Enemy_Stalker::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Stalker::Clone()
 {
 	return ObjectFactory::Create<Enemy_Stalker>();
+}
+
+void ButiEngine::Enemy_Stalker::Dead()
+{
+	if (m_vlp_enemy)
+	{
+		m_vlp_enemy->Explosion();
+	}
+
+	if (m_vwp_preyTarget.lock())
+	{
+		m_vwp_preyTarget.lock()->GetGameComponent<Worker>()->Dead();
+	}
 }
 
 void ButiEngine::Enemy_Stalker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other)

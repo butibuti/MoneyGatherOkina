@@ -6,12 +6,23 @@
 #include "WaveManager.h"
 #include "InputManager.h"
 #include "PlayerSensor.h"
+#include "Enemy_Flie.h"
+#include "Enemy_Kiba.h"
+#include "Enemy_Stalker.h"
+#include "Enemy_Tutorial.h"
+#include "Enemy_Volcano.h"
+#include "SeparateDrawObject.h"
 #include "VibrationEffectComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
+bool ButiEngine::Enemy::m_test_isExplosion = true;
 
 void ButiEngine::Enemy::OnUpdate()
 {
+	if (GameDevice::GetInput()->TriggerKey(Keys::B))
+	{
+		m_test_isExplosion = !m_test_isExplosion;
+	}
 	//Player‚ª‹ß‚¢‚©ÕŒ‚”g‚ª“–‚½‚Á‚Ä‚¢‚½‚çU“®‚·‚é
 	if (m_vibration > 0)
 	{
@@ -88,21 +99,6 @@ void ButiEngine::Enemy::OnSet()
 
 void ButiEngine::Enemy::OnRemove()
 {
-	RemoveAllPocket();
-	SubDeadCount();
-	StopVibrationEffect();
-
-	if (m_vwp_playerSensor.lock())
-	{
-		m_vwp_playerSensor.lock()->SetIsRemove(true);
-	}
-
-	auto transform = gameObject.lock()->transform;
-	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
-	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
-	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
-
-	//GetManager().lock()->GetGameObject("Particle")
 }
 
 void ButiEngine::Enemy::OnShowUI()
@@ -190,11 +186,61 @@ bool ButiEngine::Enemy::IsVibrate()
 	return m_isNearPlayer || m_isHitShockWave;
 }
 
+void ButiEngine::Enemy::Dead()
+{
+	auto flie = gameObject.lock()->GetGameComponent<Enemy_Flie>();
+	if (flie)
+	{
+		flie->Dead();
+	}
+	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
+	if (kiba)
+	{
+		kiba->Dead();
+	}
+	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
+	if (stalker)
+	{
+		stalker->Dead();
+	}
+	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
+	if (tutorial)
+	{
+		tutorial->Dead();
+	}
+	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
+	if (volcano)
+	{
+		volcano->Dead();
+	}
+
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+
+	RemoveAllPocket();
+	SubDeadCount();
+	StopVibrationEffect();
+
+	if (m_vwp_playerSensor.lock())
+	{
+		m_vwp_playerSensor.lock()->GetGameComponent<PlayerSensor>()->Dead();
+	}
+
+	auto transform = gameObject.lock()->transform;
+	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
+	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
+
+	gameObject.lock()->SetIsRemove(true);
+
+	//GetManager().lock()->GetGameObject("Particle")
+}
+
 void ButiEngine::Enemy::Explosion()
 {
+	if (!m_test_isExplosion) { return; }
 	auto transform = gameObject.lock()->transform->Clone();
 	transform->SetLocalScale(m_explosionScale);
-	auto explosion = GetManager().lock()->AddObjectFromCereal("Explosion", transform);
+	GetManager().lock()->AddObjectFromCereal("Explosion", transform);
 }
 
 void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
@@ -252,7 +298,7 @@ void ButiEngine::Enemy::IncreaseVibration()
 	//U“®—Ê‚ªãŒÀ‚ð’´‚¦‚½‚çŽ€‚Ê
 	if (m_vibration > m_vibrationCapacity)
 	{
-		gameObject.lock()->SetIsRemove(true);
+		Dead();
 	}
 }
 

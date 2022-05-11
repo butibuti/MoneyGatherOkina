@@ -24,6 +24,7 @@ namespace ButiEngine {
 
 		void SetVelocity(const Vector3& arg_velocity);
 
+		void Dead();
 	private:
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Vector3 m_velocity;

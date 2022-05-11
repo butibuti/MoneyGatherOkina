@@ -15,10 +15,6 @@ void ButiEngine::Enemy_Flie::OnSet()
 
 void ButiEngine::Enemy_Flie::OnRemove()
 {
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
-	}
 }
 
 void ButiEngine::Enemy_Flie::OnShowUI()
@@ -38,6 +34,14 @@ void ButiEngine::Enemy_Flie::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Flie::Clone()
 {
 	return ObjectFactory::Create<Enemy_Flie>();
+}
+
+void ButiEngine::Enemy_Flie::Dead()
+{
+	if (m_vlp_enemy)
+	{
+		m_vlp_enemy->Explosion();
+	}
 }
 
 void ButiEngine::Enemy_Flie::SetEnemyParameter()

@@ -38,6 +38,7 @@ namespace ButiEngine {
 
 		bool IsVibrate();
 
+		void Dead();
 		void Explosion();
 		void CreatePocket(const std::uint8_t arg_pocketCount);
 		void RemovePocket(const std::uint8_t arg_pocketNum);
@@ -52,6 +53,8 @@ namespace ButiEngine {
 		void RemoveAllPocket();
 		void SubDeadCount();
 		void StopVibrationEffect();
+
+		static bool m_test_isExplosion;
 
 		//êUìÆÇÃå∏è≠ó 
 		static float m_vibrationDecrease;

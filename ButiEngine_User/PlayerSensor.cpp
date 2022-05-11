@@ -37,7 +37,6 @@ void ButiEngine::PlayerSensor::OnSet()
 
 void ButiEngine::PlayerSensor::OnRemove()
 {
-	m_vlp_player->SetIsIncrease(false);
 }
 
 void ButiEngine::PlayerSensor::Start()
@@ -53,4 +52,11 @@ void ButiEngine::PlayerSensor::SetParentEnemy(Value_weak_ptr<GameObject> arg_vwp
 {
 	m_vwp_enemy = arg_vwp_enemy;
 	m_vlp_enemy = m_vwp_enemy.lock()->GetGameComponent<Enemy>();
+}
+
+void ButiEngine::PlayerSensor::Dead()
+{
+	m_vlp_player->SetIsIncrease(false);
+
+	gameObject.lock()->SetIsRemove(true);
 }

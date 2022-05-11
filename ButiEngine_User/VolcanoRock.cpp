@@ -30,7 +30,7 @@ void ButiEngine::VolcanoRock::OnUpdate()
 		auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 		deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 		deadEffect.lock()->transform->SetLocalScale(transform->GetLocalScale() * 5.0f);
-		gameObject.lock()->SetIsRemove(true); //Ž€
+		Dead(); //Ž€
 	}
 }
 
@@ -58,4 +58,10 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::VolcanoRock::Clone(
 void ButiEngine::VolcanoRock::SetVelocity(const Vector3& arg_velocity)
 {
 	m_velocity = arg_velocity;
+}
+
+void ButiEngine::VolcanoRock::Dead()
+{
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+	gameObject.lock()->SetIsRemove(true);
 }
