@@ -11,6 +11,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -30,7 +31,7 @@ namespace ButiEngine {
 		void SpawnWorker();
 
 		Value_ptr<Timer> m_vlp_spawnTimer;
-		std::uint8_t m_spawnIntervalFrame;
+		std::int32_t m_spawnIntervalFrame;
 	};
 
 }

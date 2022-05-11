@@ -83,7 +83,11 @@ void ButiEngine::Enemy_Stalker::Dead()
 
 	if (m_vwp_preyTarget.lock())
 	{
-		m_vwp_preyTarget.lock()->GetGameComponent<Worker>()->Dead();
+		auto worker = m_vwp_preyTarget.lock()->GetGameComponent<Worker>();
+		if (worker)
+		{
+			worker->Dead();
+		}
 	}
 }
 
@@ -143,7 +147,11 @@ void ButiEngine::Enemy_Stalker::OnPrey()
 
 		if (m_vwp_preyTarget.lock())
 		{
-			m_vwp_preyTarget.lock()->GetGameComponent<Worker>()->Dead();
+			auto worker = m_vwp_preyTarget.lock()->GetGameComponent<Worker>();
+			if (worker)
+			{
+				worker->Dead();
+			}
 		}
 
 		m_isPrey = false;

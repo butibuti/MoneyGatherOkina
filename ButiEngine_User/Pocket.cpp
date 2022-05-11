@@ -27,7 +27,11 @@ void ButiEngine::Pocket::Dead()
 {
 	if (m_vwp_worker.lock())
 	{
-		m_vwp_worker.lock()->GetGameComponent<Worker>()->Dead();
+		auto worker = m_vwp_worker.lock()->GetGameComponent<Worker>();
+		if (worker)
+		{
+			worker->Dead();
+		}
 	}
 
 	gameObject.lock()->SetIsRemove(true);

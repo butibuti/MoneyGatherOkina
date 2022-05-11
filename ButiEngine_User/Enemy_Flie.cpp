@@ -49,7 +49,7 @@ void ButiEngine::Enemy_Flie::SetEnemyParameter()
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
 	m_vlp_enemy->CreatePocket(3);
 	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
-	m_vlp_enemy->SetVibrationCapacity(100.0f);
+	m_vlp_enemy->SetVibrationCapacity(200.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
 	m_vlp_enemy->SetExplosionScale(2.0f);
 }
@@ -57,7 +57,7 @@ void ButiEngine::Enemy_Flie::SetEnemyParameter()
 void ButiEngine::Enemy_Flie::SetLoiterParameter()
 {
 	auto loiterComponent = gameObject.lock()->GetGameComponent<Loiter>();
-	loiterComponent->SetMoveRange(20.0f);
+	loiterComponent->SetMoveRange(2.0f);
 	loiterComponent->SetMaxMoveSpeed(0.2f);
 	loiterComponent->SetWaitFrame(60);
 	loiterComponent->SetAccelFrame(30);

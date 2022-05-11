@@ -102,7 +102,7 @@ void ButiEngine::Player::Start()
 
 	m_level = 1;
 	m_maxLevel = 10;
-	m_maxWorkerCount = 10;
+	m_maxWorkerCount = 5;
 	m_exp = 0;
 
 	m_knockBackVelocity = Vector3(0, 0, 0);
@@ -128,11 +128,11 @@ void ButiEngine::Player::Start()
 
 	m_isIncrease = false;
 	m_isVibrate = false;
-	m_vibrationForce = 3.0f;
+	m_vibrationForce = 5.0f;
 	m_vibration = 0.0f;
 	m_maxVibration = 1.0f;
 	m_nearEnemyCount = 0;
-	m_vibrationIncrease = m_maxVibration / 180.0f;
+	m_vibrationIncrease = 0.24f;
 	m_vibrationDecrease = m_maxVibration / 300.0f;
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
@@ -325,7 +325,7 @@ void ButiEngine::Player::VibrationController()
 {
 	InputManager::VibrationStop();
 	if (!m_isVibrate) { return; }
-	InputManager::VibrationStart(0.5f);
+	InputManager::VibrationStart(m_vibration);
 }
 
 void ButiEngine::Player::IncreaseVibration()

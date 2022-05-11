@@ -19,13 +19,24 @@ void ButiEngine::WorkerSpawner::OnSet()
 {
 }
 
+void ButiEngine::WorkerSpawner::OnShowUI()
+{
+	GUI::BulletText("IntervalFrame");
+	GUI::DragInt("##interv", &m_spawnIntervalFrame, 1, 0, 300);
+	if (GUI::Button("SetInterval"))
+	{
+		m_vlp_spawnTimer->Reset();
+		m_vlp_spawnTimer->ChangeCountFrame(m_spawnIntervalFrame);
+	}
+}
+
 void ButiEngine::WorkerSpawner::Start()
 {
-	m_spawnIntervalFrame = 180;
-	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(180);
+	m_spawnIntervalFrame = 30;
+	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(m_spawnIntervalFrame);
 	m_vlp_spawnTimer->Start();
 
-	for (std::uint8_t i = 0; i < 10; i++)
+	for (std::uint8_t i = 0; i < 5; i++)
 	{
 		SpawnWorker();
 	}

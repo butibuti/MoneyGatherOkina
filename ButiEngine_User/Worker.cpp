@@ -23,7 +23,7 @@ void ButiEngine::Worker::OnUpdate()
 		if (m_vwp_vibrationEffect.lock() == nullptr)
 		{
 			auto transform = gameObject.lock()->transform;
-			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
+			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_Player");
 			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetWorldPosition());
 			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
 
