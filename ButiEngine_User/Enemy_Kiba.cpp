@@ -25,15 +25,6 @@ void ButiEngine::Enemy_Kiba::OnSet()
 
 void ButiEngine::Enemy_Kiba::OnRemove()
 {
-	if (m_vwp_damageArea.lock())
-	{
-		m_vwp_damageArea.lock()->SetIsRemove(true);
-	}
-
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
-	}
 }
 
 void ButiEngine::Enemy_Kiba::OnShowUI()
@@ -61,6 +52,19 @@ void ButiEngine::Enemy_Kiba::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Kiba::Clone()
 {
 	return ObjectFactory::Create<Enemy_Kiba>();
+}
+
+void ButiEngine::Enemy_Kiba::Dead()
+{
+	if (m_vwp_damageArea.lock())
+	{
+		m_vwp_damageArea.lock()->SetIsRemove(true);
+	}
+
+	if (m_vlp_enemy)
+	{
+		m_vlp_enemy->Explosion();
+	}
 }
 
 void ButiEngine::Enemy_Kiba::LookAtPlayer()

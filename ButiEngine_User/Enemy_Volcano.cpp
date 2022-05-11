@@ -46,10 +46,6 @@ void ButiEngine::Enemy_Volcano::OnSet()
 
 void ButiEngine::Enemy_Volcano::OnRemove()
 {
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
-	}
 }
 
 void ButiEngine::Enemy_Volcano::OnShowUI()
@@ -75,6 +71,14 @@ void ButiEngine::Enemy_Volcano::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Volcano::Clone()
 {
 	return ObjectFactory::Create<Enemy_Volcano>();
+}
+
+void ButiEngine::Enemy_Volcano::Dead()
+{
+	if (m_vlp_enemy)
+	{
+		m_vlp_enemy->Explosion();
+	}
 }
 
 void ButiEngine::Enemy_Volcano::ShotVolcanoRock()

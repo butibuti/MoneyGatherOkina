@@ -24,6 +24,8 @@ namespace ButiEngine {
 		}
 
 		bool IsPrey() { return m_isPrey; }
+
+		void Dead();
 	private:
 		void OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionWorker(Value_weak_ptr<GameObject> arg_vwp_other);

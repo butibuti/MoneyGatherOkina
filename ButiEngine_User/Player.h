@@ -34,6 +34,7 @@ namespace ButiEngine {
 
 		bool IsDead() { return m_isDead; }
 
+		void Dead();
 		void Revival();
 		void AddExp();
 		void AddNearEnemyCount() { m_nearEnemyCount++; }

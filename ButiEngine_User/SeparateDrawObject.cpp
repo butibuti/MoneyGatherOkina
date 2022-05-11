@@ -11,8 +11,6 @@ void ButiEngine::SeparateDrawObject::OnSet()
 
 void ButiEngine::SeparateDrawObject::OnRemove()
 {
-	if (!m_vwp_drawObject.lock()) { return; }
-	m_vwp_drawObject.lock()->SetIsRemove(true);
 }
 
 void ButiEngine::SeparateDrawObject::OnShowUI()
@@ -34,4 +32,12 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::SeparateDrawObjec
 	m_vwp_drawObject = gameObject.lock()->GetGameObjectManager().lock()->AddObjectFromCereal("DrawObject_" + arg_objectName);
 	m_vwp_drawObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	return m_vwp_drawObject;
+}
+
+void ButiEngine::SeparateDrawObject::Dead()
+{
+	if (m_vwp_drawObject.lock())
+	{
+		m_vwp_drawObject.lock()->SetIsRemove(true);
+	}
 }

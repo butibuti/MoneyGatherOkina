@@ -24,6 +24,8 @@ namespace ButiEngine {
 		}
 
 		void SetParentEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
+
+		void Dead();
 	private:
 		Value_weak_ptr<GameObject> m_vwp_enemy;
 		Value_weak_ptr<GameObject> m_vwp_player;

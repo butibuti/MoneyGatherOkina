@@ -68,19 +68,6 @@ void ButiEngine::Worker::OnSet()
 
 void ButiEngine::Worker::OnRemove()
 {
-	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
-	if (player)
-	{
-		player->AddExp();
-	}
-
-	auto workerSpawner = GetManager().lock()->GetGameObject(GameObjectTag("WorkerSpawner")).lock()->GetGameComponent<WorkerSpawner>();
-	if (workerSpawner)
-	{
-		workerSpawner->StartTimer();
-	}
-
-	StopVibrationEffect();
 }
 
 void ButiEngine::Worker::OnShowUI()
@@ -110,6 +97,22 @@ void ButiEngine::Worker::Dead()
 	Vector3 screenPosition = GetCamera("main")->WorldToScreen(gameObject.lock()->transform->GetWorldPosition());
 	screenPosition.z = 0;
 	beeSoul.lock()->transform->SetLocalPosition(screenPosition);
+
+	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
+	if (player)
+	{
+		player->AddExp();
+	}
+
+	auto workerSpawner = GetManager().lock()->GetGameObject(GameObjectTag("WorkerSpawner")).lock()->GetGameComponent<WorkerSpawner>();
+	if (workerSpawner)
+	{
+		workerSpawner->StartTimer();
+	}
+
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+
+	StopVibrationEffect();
 
 	gameObject.lock()->SetIsRemove(true);
 }

@@ -55,10 +55,6 @@ void ButiEngine::Player::OnSet()
 
 void ButiEngine::Player::OnRemove()
 {
-	if (m_vwp_shockWave.lock())
-	{
-		m_vwp_shockWave.lock()->SetIsRemove(true);
-	}
 }
 
 void ButiEngine::Player::OnShowUI()
@@ -147,6 +143,25 @@ void ButiEngine::Player::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 {
 	return ObjectFactory::Create<Player>();
+}
+
+void ButiEngine::Player::Dead()
+{
+	//if (m_vwp_shockWave.lock())
+	//{
+	//	m_vwp_shockWave.lock()->SetIsRemove(true);
+	//}
+
+	if (m_vwp_shockWave.lock())
+	{
+		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
+	}
+
+	m_vibration = 0.0f;
+	m_isVibrate = false;
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+
+	//gameObject.lock()->SetIsRemove(ture);
 }
 
 void ButiEngine::Player::Revival()
@@ -292,6 +307,7 @@ void ButiEngine::Player::Damage()
 	if (m_life == 0)
 	{
 		m_isDead = true;
+		Dead();
 		return;
 	}
 
@@ -308,6 +324,8 @@ void ButiEngine::Player::VibrationController()
 
 void ButiEngine::Player::IncreaseVibration()
 {
+	if (m_isDead) { return; }
+
 	m_vibration += m_vibrationIncrease * m_nearEnemyCount;
 	m_vibration = min(m_vibration, m_maxVibration);
 
@@ -320,6 +338,7 @@ void ButiEngine::Player::IncreaseVibration()
 
 void ButiEngine::Player::DecreaseVibration()
 {
+	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
 
 	m_vibration -= m_vibrationDecrease;

@@ -23,6 +23,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void Dead();
 	private:
 		void LookAtPlayer();
 		void CreateDamageArea();

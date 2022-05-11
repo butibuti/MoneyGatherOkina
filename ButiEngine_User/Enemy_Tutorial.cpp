@@ -34,6 +34,10 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Tutorial::Clo
 	return ObjectFactory::Create<Enemy_Tutorial>();
 }
 
+void ButiEngine::Enemy_Tutorial::Dead()
+{
+}
+
 void ButiEngine::Enemy_Tutorial::SetEnemyParameter()
 {
 	auto enemy = gameObject.lock()->GetGameComponent<Enemy>();

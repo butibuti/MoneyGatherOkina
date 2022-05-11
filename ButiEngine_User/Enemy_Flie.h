@@ -22,6 +22,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void Dead();
 	private:
 		void SetEnemyParameter();
 		void SetLoiterParameter();
