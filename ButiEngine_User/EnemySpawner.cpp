@@ -108,6 +108,24 @@ void ButiEngine::EnemySpawner::Start()
 
 void ButiEngine::EnemySpawner::OnShowUI()
 {
+	switch (m_spawnType)
+	{
+	case 0: //ハエ
+		GUI::BulletText("FlieSpawner");
+		break;
+	case 1: //ストーカー
+		GUI::BulletText("StalkerSpawner");
+		break;
+	case 2: //キバ
+		GUI::BulletText("KibaSpawner");
+		break;
+	case 3: //カザン
+		GUI::BulletText("VolcanoSpawner");
+		break;
+	default:
+		break;
+	}
+	
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::EnemySpawner::Clone()

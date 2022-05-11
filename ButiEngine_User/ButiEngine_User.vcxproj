@@ -539,6 +539,7 @@ cd ..\</Command>
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="HeartUIManagerComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LevelUpUIComponent.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
     <ClCompile Include="Loiter.cpp" />
     <ClCompile Include="main.cpp">
@@ -597,6 +598,7 @@ cd ..\</Command>
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="HeartUIManagerComponent.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LevelUpUIComponent.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="Loiter.h" />
     <ClInclude Include="MoveRestriction.h" />
