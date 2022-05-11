@@ -134,6 +134,7 @@ void ButiEngine::Player::Start()
 	m_nearEnemyCount = 0;
 	m_vibrationIncrease = 0.24f;
 	m_vibrationDecrease = m_maxVibration / 300.0f;
+	m_nearEnemyVibrationRate = 0.0f;
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_addTrajectoryParticleCounter = 0;
@@ -325,7 +326,8 @@ void ButiEngine::Player::VibrationController()
 {
 	InputManager::VibrationStop();
 	if (!m_isVibrate) { return; }
-	InputManager::VibrationStart(m_vibration);
+	//InputManager::VibrationStart(m_vibration);
+	InputManager::VibrationStart(m_nearEnemyVibrationRate);
 }
 
 void ButiEngine::Player::IncreaseVibration()
@@ -373,8 +375,8 @@ void ButiEngine::Player::VibrationEffect()
 		else
 		{
 			auto transform = gameObject.lock()->transform;
-			float vibrationPower = m_vibration / m_maxVibration;
-			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, true);
+			float vibrationRate = m_vibration / m_maxVibration;
+			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, true);
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
 		}
 	}

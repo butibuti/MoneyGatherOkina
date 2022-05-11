@@ -30,7 +30,10 @@ namespace ButiEngine {
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
 		std::int8_t GetLife() { return m_life; }
+		float GetNearEnemyVibrationRate() { return m_nearEnemyVibrationRate; }
+
 		void SetIsIncrease(const bool arg_isIncrease) { m_isIncrease = arg_isIncrease; }
+		void SetNearEnemyVibrationRate(const float arg_vibrationRate) { m_nearEnemyVibrationRate = arg_vibrationRate; }
 
 		bool IsDead() { return m_isDead; }
 
@@ -103,6 +106,7 @@ namespace ButiEngine {
 		std::uint8_t m_nearEnemyCount;
 		float m_vibrationIncrease;
 		float m_vibrationDecrease;
+		float m_nearEnemyVibrationRate;
 
 		//パーティクル
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;

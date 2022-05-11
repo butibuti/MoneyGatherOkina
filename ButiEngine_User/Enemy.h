@@ -33,6 +33,7 @@ namespace ButiEngine {
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
+		float GetVibrationRate() { return m_vibration / m_vibrationCapacity; }
 
 		std::vector<Value_weak_ptr<GameObject>> GetStickWorkers();
 
