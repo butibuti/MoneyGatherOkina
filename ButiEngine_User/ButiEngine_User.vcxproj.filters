@@ -5,7 +5,7 @@
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Enemy_Flie.cpp" />
+    <ClCompile Include="Enemy_Fly.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="Enemy_Kiba.cpp" />
     <ClCompile Include="Enemy_Stalker.cpp" />
@@ -61,7 +61,7 @@
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Enemy_Flie.h" />
+    <ClInclude Include="Enemy_Fly.h" />
     <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="Enemy_Kiba.h" />
     <ClInclude Include="Enemy_Stalker.h" />

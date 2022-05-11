@@ -16,21 +16,35 @@ void ButiEngine::EnemySpawnManager::Start()
 
 void ButiEngine::EnemySpawnManager::OnShowUI()
 {
-    if (GUI::Button("Add_Enemy_Flie"))
+    if (GUI::Button("Add_Enemy_Fly"))
     {
-        GetManager().lock()->AddObjectFromCereal("Enemy_Flie");
+        auto fly = GetManager().lock()->AddObjectFromCereal("Enemy_Fly");
+        auto drawFly = GetManager().lock()->AddObjectFromCereal("DrawObject_Fly");
+        drawFly.lock()->transform->SetBaseTransform(fly.lock()->transform, true);
     }
     if (GUI::Button("Add_Enemy_Kiba"))
     {
-        GetManager().lock()->AddObjectFromCereal("Enemy_Kiba");
+        auto kiba = GetManager().lock()->AddObjectFromCereal("Enemy_Kiba");
+        auto drawKiba = GetManager().lock()->AddObjectFromCereal("DrawObject_Kiba");
+        drawKiba.lock()->transform->SetBaseTransform(kiba.lock()->transform, true);
     }
     if (GUI::Button("Add_Enemy_Stalker"))
     {
-        GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
+        auto stalker = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
+        auto drawStalker = GetManager().lock()->AddObjectFromCereal("DrawObject_Stalker");
+        drawStalker.lock()->transform->SetBaseTransform(stalker.lock()->transform, true);
     }
     if (GUI::Button("Add_Enemy_Volcano"))
     {
-        GetManager().lock()->AddObjectFromCereal("Enemy_Volcano");
+        auto volcano = GetManager().lock()->AddObjectFromCereal("Enemy_Volcano");
+        auto drawVolcano = GetManager().lock()->AddObjectFromCereal("DrawObject_Volcano");
+        drawVolcano.lock()->transform->SetBaseTransform(volcano.lock()->transform, true);
+    }
+    if (GUI::Button("Add_Enemy_Tutorial"))
+    {
+        auto tutorial = GetManager().lock()->AddObjectFromCereal("Enemy_Tutorial");
+        auto drawTutorial = GetManager().lock()->AddObjectFromCereal("DrawObject_Tutorial");
+        drawTutorial.lock()->transform->SetBaseTransform(tutorial.lock()->transform, true);
     }
     GUI::BulletText("StageNum : WaveNum");
     GUI::InputInt2("##StageData", m_stageAndWaveNum);
@@ -46,15 +60,16 @@ void ButiEngine::EnemySpawnManager::OnShowUI()
             //‚±‚±‚Å–¼‘O®—
             std::string gameObjectFullName = vlp_gameObject->GetGameObjectName();
             std::string gameObjectName;
-            if (gameObjectFullName.find("_") != std::string::npos)
+            auto secondUnderScoreIndex = gameObjectFullName.rfind("_");
+            if (gameObjectFullName.find("_") != secondUnderScoreIndex)
             {
-                std::int8_t underScoreIndex = gameObjectFullName.find("_");
-                gameObjectName = gameObjectFullName.substr(0, underScoreIndex);
+                gameObjectName = gameObjectFullName.substr(0, secondUnderScoreIndex);
             }
             else
             {
                 gameObjectName = gameObjectFullName;
             }
+
             vec_outputDatas.push_back({ gameObjectName, vlp_gameObject->transform->Clone() });
         }
         std::string outputFileName = "EnemyData/" + std::to_string(m_stageAndWaveNum[0]) + "_" + std::to_string(m_stageAndWaveNum[1]) + ".enemyData";

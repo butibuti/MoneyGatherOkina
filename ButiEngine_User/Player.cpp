@@ -339,7 +339,6 @@ void ButiEngine::Player::IncreaseVibration()
 
 	if (!m_isVibrate)
 	{
-		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Appear();
 		m_isVibrate = true;
 	}
 }
@@ -378,6 +377,7 @@ void ButiEngine::Player::VibrationEffect()
 			float vibrationRate = m_vibration / m_maxVibration;
 			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, true);
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
+			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
 		}
 	}
 	else

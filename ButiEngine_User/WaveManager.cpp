@@ -138,43 +138,43 @@ void ButiEngine::WaveManager::MoveWave()
 	//フィールド内の敵をすべて倒していたら
 	if (m_enemyCount <= 0 && m_isWaveTime)
 	{
-		//WaveFinish();
+		WaveFinish();
 	}
 }
 
 void ButiEngine::WaveManager::SpawnEnemy()
 {
-	////ウェーブ番号に応じて出現させる敵のパターンや配置を変える
-	////何ステージ目・何ウェーブ目・敵の名前・位置
+	//ウェーブ番号に応じて出現させる敵のパターンや配置を変える
+	//何ステージ目・何ウェーブ目・敵の名前・位置
 
-	//auto sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
-	//std::int16_t underScoreIndex = sceneName.find("_");
-	//auto size = sceneName.size();
-	//std::string stageNum = sceneName.substr(underScoreIndex + 1, size);
+	auto sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+	std::int16_t underScoreIndex = sceneName.find("_");
+	auto size = sceneName.size();
+	std::string stageNum = sceneName.substr(underScoreIndex + 1, size);
 
-	//std::string fileName = "EnemyData/0_" /*+ stageNum + "_"*/ + std::to_string(m_waveNum) + ".enemyData";
+	std::string fileName = "EnemyData/0_" /*+ stageNum + "_"*/ + std::to_string(m_waveNum) + ".enemyData";
 
-	//std::vector<EnemySpawnData> vec_enemySpawnDatas;
-	//InputCereal(vec_enemySpawnDatas, fileName);
+	std::vector<EnemySpawnData> vec_enemySpawnDatas;
+	InputCereal(vec_enemySpawnDatas, fileName);
 
-	//for (auto enemyData : vec_enemySpawnDatas)
-	//{
-	//	auto enemy = GetManager().lock()->AddObjectFromCereal(enemyData.m_enemyName);
-	//	auto transformData = enemyData.m_vlp_enemyTransform;
-	//	enemy.lock()->transform->SetLocalPosition(transformData->GetLocalPosition());
-	//	enemy.lock()->transform->SetLocalRotation(transformData->GetLocalRotation());
+	for (auto enemyData : vec_enemySpawnDatas)
+	{
+		auto enemy = GetManager().lock()->AddObjectFromCereal(enemyData.m_enemyName);
+		auto transformData = enemyData.m_vlp_enemyTransform;
+		enemy.lock()->transform->SetLocalPosition(transformData->GetLocalPosition());
+		enemy.lock()->transform->SetLocalRotation(transformData->GetLocalRotation());
 
-	//	m_enemyCount++;
-	//}
+		m_enemyCount++;
+	}
 
-	auto enemy0 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy0->SetType(0);
-	auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy1->SetType(1);
-	auto enemy2 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy2->SetType(2);
-	auto enemy3 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy3->SetType(3);
+	//auto enemy0 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	//enemy0->SetType(0);
+	//auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	//enemy1->SetType(1);
+	//auto enemy2 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	//enemy2->SetType(2);
+	//auto enemy3 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	//enemy3->SetType(3);
 
 }
 

@@ -3,6 +3,7 @@
 
 void ButiEngine::ShockWave::OnUpdate()
 {
+	gameObject.lock()->transform->SetLocalScale(m_calcScale);
 }
 
 void ButiEngine::ShockWave::OnSet()
@@ -17,9 +18,8 @@ void ButiEngine::ShockWave::OnShowUI()
 
 void ButiEngine::ShockWave::Start()
 {
-	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
-
-	m_maxScale = Vector3(10.0f, 10.0f, 10.0f);
+	m_calcScale = Vector3(0, 0, 0);
+	m_maxScale = Vector3(9.0f, 9.0f, 9.0f);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::ShockWave::Clone()
@@ -27,14 +27,14 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::ShockWave::Clone()
 	return ObjectFactory::Create<ShockWave>();
 }
 
-void ButiEngine::ShockWave::Appear()
-{
-	Vector3 playerScale = m_vwp_player.lock()->transform->GetLocalScale();
-	Vector3 scale = Vector3(10.0f, 10.0f, 10.0f) / playerScale;
-	gameObject.lock()->transform->SetLocalScale(scale);
-}
-
 void ButiEngine::ShockWave::Disappear()
 {
-	gameObject.lock()->transform->SetLocalScale(0.0f);
+	m_calcScale = Vector3(0, 0, 0);
+}
+
+void ButiEngine::ShockWave::SetScale(const float arg_vibrationPower)
+{
+	float vibPower = arg_vibrationPower;
+	float scaleRate = 0.2f + vibPower;
+	m_calcScale = m_maxScale * scaleRate;
 }

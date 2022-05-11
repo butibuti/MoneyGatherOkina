@@ -4,12 +4,12 @@ namespace ButiEngine {
 
 	class Enemy;
 
-	class Enemy_Flie :public GameComponent
+	class Enemy_Fly :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Enemy_Flie";
+			return "Enemy_Fly";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -33,4 +33,4 @@ namespace ButiEngine {
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Enemy_Flie, true);
+BUTI_REGIST_GAMECOMPONENT(Enemy_Fly, true);

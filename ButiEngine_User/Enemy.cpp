@@ -6,7 +6,7 @@
 #include "WaveManager.h"
 #include "InputManager.h"
 #include "PlayerSensor.h"
-#include "Enemy_Flie.h"
+#include "Enemy_Fly.h"
 #include "Enemy_Kiba.h"
 #include "Enemy_Stalker.h"
 #include "Enemy_Tutorial.h"
@@ -188,10 +188,10 @@ bool ButiEngine::Enemy::IsVibrate()
 
 void ButiEngine::Enemy::Dead()
 {
-	auto flie = gameObject.lock()->GetGameComponent<Enemy_Flie>();
-	if (flie)
+	auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
+	if (fly)
 	{
-		flie->Dead();
+		fly->Dead();
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
 	if (kiba)

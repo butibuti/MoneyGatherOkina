@@ -20,12 +20,13 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void Appear();
 		void Disappear();
-	private:
-		Value_weak_ptr<GameObject> m_vwp_player;
+		void SetScale(const float arg_vibrationPower);
 
+	private:
 		Vector3 m_maxScale;
+		Vector3 m_calcScale;
+
 	};
 
 }
