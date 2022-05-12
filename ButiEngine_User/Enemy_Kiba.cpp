@@ -85,10 +85,10 @@ void ButiEngine::Enemy_Kiba::LookAtPlayer()
 
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 	Vector3 playerPos = m_vlp_enemy->GetPlayer().lock()->transform->GetLocalPosition();
-	Vector3 diff = playerPos - pos;
+	Vector3 dir = (playerPos - pos).GetNormalize();
 	Vector3 front = gameObject.lock()->transform->GetFront();
 
-	float angle = MathHelper::ToDegree(std::acos(front.Dot(diff) / (front.GetLength() * diff.GetLength())));
+	float angle = MathHelper::ToDegree(std::acos(front.Dot(dir)));
 	if (angle < abs(m_rotationAngle))
 	{
 		gameObject.lock()->transform->RollLocalRotationY_Degrees(rotationDirection * angle);
