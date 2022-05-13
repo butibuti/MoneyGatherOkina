@@ -4,6 +4,7 @@
 #include "Loiter.h"
 #include "SeparateDrawObject.h"
 #include "SphereExclusion.h"
+#include "ShakeComponent.h"
 
 void ButiEngine::Enemy_Fly::OnUpdate()
 {

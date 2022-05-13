@@ -6,18 +6,18 @@ float shakePower = 0.1f;
 
 void ButiEngine::ShakeComponent::OnUpdate()
 {
-	if (InputManager::IsTriggerLeftKey())
-	{
-		ShakeStart();
-	}
-	else if (InputManager::IsTriggerRightKey())
-	{
-		ShakeStop();
-	}
+	//if (InputManager::IsTriggerLeftKey())
+	//{
+	//	ShakeStart();
+	//}
+	//else if (InputManager::IsTriggerRightKey())
+	//{
+	//	ShakeStop();
+	//}
 
-	SetShakePower(shakePower);
+	//SetShakePower(shakePower);
 
-	if (!m_isShake)
+	if (!m_isShake || m_amplitude <= 0.0f)
 	{
 		return;
 	}
@@ -59,10 +59,6 @@ void ButiEngine::ShakeComponent::OnUpdate()
 
 void ButiEngine::ShakeComponent::OnSet()
 {
-}
-
-void ButiEngine::ShakeComponent::Start()
-{
 	m_isShake = false;
 	m_isMove = false;
 	m_currentRotate = gameObject.lock()->transform->GetLocalRotation().GetEulerOneValue_local().ToDegrees();
@@ -70,6 +66,11 @@ void ButiEngine::ShakeComponent::Start()
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
 	m_movePos = Vector3(0, 0, 0);
 	m_amplitude = 0.5f;
+}
+
+void ButiEngine::ShakeComponent::Start()
+{
+
 }
 
 void ButiEngine::ShakeComponent::OnShowUI()
@@ -112,6 +113,7 @@ void ButiEngine::ShakeComponent::ShakeStop()
 void ButiEngine::ShakeComponent::SetShakePower(const float arg_amplitude)
 {
 	m_amplitude = arg_amplitude;
+	m_amplitude *= 0.5f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::ShakeComponent::Clone()

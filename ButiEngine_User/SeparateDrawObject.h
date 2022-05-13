@@ -22,6 +22,7 @@ namespace ButiEngine {
 		}
 
 		Value_weak_ptr<GameObject> CreateDrawObject(const std::string& arg_objectName);
+		Value_weak_ptr<GameObject> GetDrawObject();
 
 		void Dead();
 	private:

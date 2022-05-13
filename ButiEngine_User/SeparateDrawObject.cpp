@@ -34,6 +34,11 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::SeparateDrawObjec
 	return m_vwp_drawObject;
 }
 
+ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::SeparateDrawObject::GetDrawObject()
+{
+	return m_vwp_drawObject;
+}
+
 void ButiEngine::SeparateDrawObject::Dead()
 {
 	if (m_vwp_drawObject.lock())

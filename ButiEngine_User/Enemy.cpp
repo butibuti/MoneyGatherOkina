@@ -13,6 +13,7 @@
 #include "Enemy_Volcano.h"
 #include "SeparateDrawObject.h"
 #include "VibrationEffectComponent.h"
+#include "ShakeComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = true;
@@ -57,6 +58,7 @@ void ButiEngine::Enemy::OnUpdate()
 		DecreaseVibration();
 	}
 	VibrationStickWoker();
+	ShakeDrawObject();
 }
 
 void ButiEngine::Enemy::OnSet()
@@ -324,6 +326,19 @@ void ButiEngine::Enemy::VibrationStickWoker()
 		}
 		
 	}
+}
+
+void ButiEngine::Enemy::ShakeDrawObject()
+{
+	if (!m_vwp_shakeComponent.lock())
+	{
+		m_vwp_shakeComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+		m_vwp_shakeComponent.lock()->ShakeStart();
+		return;
+	}
+
+	float vibrationRate = m_vibration / m_vibrationCapacity;
+	m_vwp_shakeComponent.lock()->SetShakePower(vibrationRate);
 }
 
 

@@ -5,6 +5,7 @@ namespace ButiEngine {
 	class Player;
 	class WaveManager;
 	class VibrationEffectComponent;
+	class ShakeComponent;
 
 	class Enemy :public GameComponent
 	{
@@ -47,6 +48,7 @@ namespace ButiEngine {
 		void IncreaseVibration();
 		void DecreaseVibration();
 		void VibrationStickWoker();
+		void ShakeDrawObject();
 
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
 		void CalculateVibrationIncrease();
@@ -64,6 +66,7 @@ namespace ButiEngine {
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
+		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_weak_ptr<GameObject> m_vwp_playerSensor;
 
