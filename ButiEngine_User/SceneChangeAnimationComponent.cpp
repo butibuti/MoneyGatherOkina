@@ -28,6 +28,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SceneChangeAnimatio
 
 void ButiEngine::SceneChangeAnimationComponent::SceneStart()
 {
+	if (m_vec_vwp_hexagons[m_panelCount - 1].lock()->GetGameComponent<HexagonAnimationComponent>()->IsAnimation()) { return; }
 	auto end = m_vec_vwp_hexagons.end();
 	for (auto itr = m_vec_vwp_hexagons.begin(); itr != end; ++itr)
 	{
@@ -37,6 +38,7 @@ void ButiEngine::SceneChangeAnimationComponent::SceneStart()
 
 void ButiEngine::SceneChangeAnimationComponent::SceneEnd()
 {
+	if (m_vec_vwp_hexagons[m_panelCount - 1].lock()->GetGameComponent<HexagonAnimationComponent>()->IsAnimation()) { return; }
 	auto end = m_vec_vwp_hexagons.end();
 	for (auto itr = m_vec_vwp_hexagons.begin(); itr != end; ++itr)
 	{

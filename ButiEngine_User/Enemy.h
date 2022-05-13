@@ -35,6 +35,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 		float GetVibrationRate() { return m_vibration / m_vibrationCapacity; }
+		Vector3 GetScale() { return m_previousScale; }
 
 		std::vector<Value_weak_ptr<GameObject>> GetStickWorkers();
 
@@ -49,6 +50,7 @@ namespace ButiEngine {
 		void DecreaseVibration();
 		void VibrationStickWoker();
 		void ShakeDrawObject();
+		void ScaleAnimation();
 
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
 		void CalculateVibrationIncrease();
@@ -76,6 +78,8 @@ namespace ButiEngine {
 		bool m_isNearPlayer;
 		bool m_isHitShockWave;
 		Vector3 m_defaultScale;
+		Vector3 m_maxPlusScale;
+		Vector3 m_previousScale;
 
 		float m_vibration;
 		float m_vibrationIncrease;

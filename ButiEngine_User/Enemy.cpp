@@ -59,6 +59,7 @@ void ButiEngine::Enemy::OnUpdate()
 	}
 	VibrationStickWoker();
 	ShakeDrawObject();
+	ScaleAnimation();
 }
 
 void ButiEngine::Enemy::OnSet()
@@ -88,6 +89,8 @@ void ButiEngine::Enemy::OnSet()
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
+	m_previousScale = m_defaultScale;
+	m_maxPlusScale = m_defaultScale * 0.2f;
 
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
@@ -339,6 +342,20 @@ void ButiEngine::Enemy::ShakeDrawObject()
 
 	float vibrationRate = m_vibration / m_vibrationCapacity;
 	m_vwp_shakeComponent.lock()->SetShakePower(vibrationRate);
+}
+
+void ButiEngine::Enemy::ScaleAnimation()
+{
+	float lerpScale = m_vibration / m_vibrationCapacity;
+
+	m_previousScale = m_defaultScale + m_maxPlusScale * Easing::EaseOutCubic(lerpScale);
+
+	////position‚Ì•âŠÔ
+	//m_previousScale.x = m_previousScale.x * (1.0f - lerpScale) + m_currentScale.x * lerpScale;
+	//m_previousScale.y = m_previousScale.y * (1.0f - lerpScale) + m_currentScale.y * lerpScale;
+	//m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;
+
+	gameObject.lock()->transform->SetLocalScale(m_previousScale);
 }
 
 

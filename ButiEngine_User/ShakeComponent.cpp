@@ -37,7 +37,7 @@ void ButiEngine::ShakeComponent::OnUpdate()
 		randomPosition.z = ButiRandom::GetRandom(-5, 5);
 		randomPosition.Normalize();
 
-		m_movePos = randomPosition * m_amplitude * 0.5f;
+		m_movePos = randomPosition * m_amplitude * 0.2f;
 	}
 	else
 	{

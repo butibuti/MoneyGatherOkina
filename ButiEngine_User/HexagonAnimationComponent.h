@@ -20,6 +20,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		bool IsAnimation() { return m_isAnimation; }
 		void SetNumber(const std::int8_t arg_myNumber) { m_myNumber = arg_myNumber; }
 		void StartAnimation(const bool arg_isChange);
 

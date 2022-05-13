@@ -33,7 +33,7 @@ void ButiEngine::HexagonAnimationComponent::StartAnimation(const bool arg_isChan
 {
 	bool isMistake = (m_isShow && arg_isChange) || (!m_isShow && !arg_isChange);
 	if (isMistake) { return; }
-	m_animationTimer = m_myNumber * 3;
+	m_animationTimer = m_myNumber * 3;	
 	m_isAnimation = true;
 }
 

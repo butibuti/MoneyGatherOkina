@@ -13,7 +13,9 @@ void ButiEngine::VolcanoRock::OnUpdate()
 	velocity.z *= 0.075f;
 
 	gameObject.lock()->transform->Translate(velocity);
-
+	gameObject.lock()->transform->RollLocalRotationX_Degrees(m_rotateSpeed.x);
+	gameObject.lock()->transform->RollLocalRotationY_Degrees(m_rotateSpeed.y);
+	gameObject.lock()->transform->RollLocalRotationZ_Degrees(m_rotateSpeed.z);
 
 
 	if (m_life > 0)
@@ -47,6 +49,10 @@ void ButiEngine::VolcanoRock::Start()
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Rock");
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_gravity = 0.05f;
+	float rotateSpeedRate = 5.0f;
+	m_rotateSpeed = Vector3(ButiRandom::GetInt(-5, 5), ButiRandom::GetInt(-5, 5), ButiRandom::GetInt(-5, 5));
+	m_rotateSpeed.Normalize();
+	m_rotateSpeed *= rotateSpeedRate;
 	m_life = 105;
 }
 

@@ -9,14 +9,14 @@
 
 void ButiEngine::WaveManager::OnUpdate()
 {
-	if (InputManager::IsTriggerRightKey())
+	if (InputManager::IsTriggerPauseKey())
 	{
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneStart();
 	}
-	if (InputManager::IsTriggerLeftKey())
-	{
-		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
-	}
+	//if (InputManager::IsTriggerLeftKey())
+	//{
+	//	m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
+	//}
 
 
 

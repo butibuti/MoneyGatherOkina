@@ -35,7 +35,7 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 		m_rockShotCount = 0;
 		ShotVolcanoRock();
 		AddPredictedPoint();
-		m_previousScale = Vector3(3.5f, 10.0f, 3.5f);
+		m_previousScale = Vector3(0.5f, 1.3f, 0.5f);
 	}
 	ScaleAnimation();
 }
@@ -60,7 +60,7 @@ void ButiEngine::Enemy_Volcano::Start()
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1000.0f);
 
-	m_defaultScale = Vector3(7, 7, 7);
+	m_defaultScale = Vector3(1, 1, 1);
 	m_currentScale = m_defaultScale;
 	m_previousScale = m_currentScale;
 
@@ -125,7 +125,9 @@ void ButiEngine::Enemy_Volcano::ScaleAnimation()
 	m_previousScale.y = m_previousScale.y * (1.0f - lerpScale) + m_currentScale.y * lerpScale;
 	m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;
 
-	gameObject.lock()->transform->SetLocalScale(m_previousScale);
+	auto scale = m_vlp_enemy->GetScale() * m_previousScale;
+
+	gameObject.lock()->transform->SetLocalScale(scale);
 }
 
 void ButiEngine::Enemy_Volcano::SetEnemyParameter()

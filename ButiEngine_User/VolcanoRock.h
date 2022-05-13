@@ -28,6 +28,7 @@ namespace ButiEngine {
 	private:
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Vector3 m_velocity;
+		Vector3 m_rotateSpeed;
 		float m_gravity;
 		std::int32_t m_life;
 
