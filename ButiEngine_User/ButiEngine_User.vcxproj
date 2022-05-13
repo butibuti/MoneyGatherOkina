@@ -538,6 +538,7 @@ cd ..\</Command>
     <ClCompile Include="FloatMotionParent.cpp" />
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="HeartUIManagerComponent.cpp" />
+    <ClCompile Include="HexagonAnimationComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LevelUpUIComponent.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
@@ -553,6 +554,7 @@ cd ..\</Command>
     <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
+    <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="ShockWave.cpp" />
@@ -597,6 +599,7 @@ cd ..\</Command>
     <ClInclude Include="FloatMotionParent.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="HeartUIManagerComponent.h" />
+    <ClInclude Include="HexagonAnimationComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LevelUpUIComponent.h" />
     <ClInclude Include="LogoSceneManager.h" />
@@ -608,6 +611,7 @@ cd ..\</Command>
     <ClInclude Include="Pocket.h" />
     <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="PredictedPoint.h" />
+    <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="ShockWave.h" />

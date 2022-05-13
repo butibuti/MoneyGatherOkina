@@ -5,14 +5,21 @@
 #include "Player.h"
 #include "InputManager.h"
 #include "EnemySpawner.h"
+#include "SceneChangeAnimationComponent.h"
 
 void ButiEngine::WaveManager::OnUpdate()
 {
-	if (InputManager::IsTriggerPauseKey())
+	if (InputManager::IsTriggerRightKey())
 	{
-		auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
-		deadEffect.lock()->transform->SetLocalPosition(Vector3(10, 0, -10));
+		m_vwp_sceneChangeAnimationComponent.lock()->SceneStart();
 	}
+	if (InputManager::IsTriggerLeftKey())
+	{
+		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
+	}
+
+
+
 
 	MoveWave();
 
@@ -56,6 +63,8 @@ void ButiEngine::WaveManager::Start()
 {
 	m_vwp_startPopUpObject = GetManager().lock()->GetGameObject("StartPopUpObject").lock()->GetGameComponent<StartPopUpComponent>();
 	m_vwp_playerComponent = GetManager().lock()->GetGameObject("Player").lock()->GetGameComponent<Player>();
+	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
+	m_vwp_sceneChangeAnimationComponent = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
 
 	m_waveNum = 0;
 	m_maxWaveNum = 20;

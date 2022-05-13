@@ -5,6 +5,7 @@ namespace ButiEngine {
 
 	class StartPopUpComponent;
 	class Player;
+	class SceneChangeAnimationComponent;
 
 	class WaveManager :public GameComponent
 	{
@@ -37,6 +38,7 @@ namespace ButiEngine {
 
 		Value_weak_ptr<StartPopUpComponent> m_vwp_startPopUpObject;
 		Value_weak_ptr<Player> m_vwp_playerComponent;
+		Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimationComponent;
 
 		//ウェーブ番号
 		std::int32_t m_waveNum;

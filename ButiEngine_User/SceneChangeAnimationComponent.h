@@ -20,8 +20,18 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-	private:
+		void SceneStart();
+		void SceneEnd();
 
+	private:
+		void CreateHexagonPanel();
+
+		std::vector<Value_weak_ptr<GameObject>> m_vec_vwp_hexagons;
+
+		Vector3 m_defaultPosition;
+		Vector3 m_space;
+
+		std::int8_t m_panelCount;
 	};
 }
 
