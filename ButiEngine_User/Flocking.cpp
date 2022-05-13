@@ -4,14 +4,15 @@
 #include "SeparateDrawObject.h"
 
 std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking::m_vec_workers;
-float ButiEngine::Flocking::m_gatherWeight = 0.5f;
+float ButiEngine::Flocking::m_gatherWeight = 0.1f;
 float ButiEngine::Flocking::m_cohesionWeight = 0.5f;
 float ButiEngine::Flocking::m_alignmentWeight = 1.0f;
-float ButiEngine::Flocking::m_separationWeight = 0.5f;
-float ButiEngine::Flocking::m_avoidPlayerWeight = 1.0f;
-float ButiEngine::Flocking::m_surroundWeight = 1.0f;
+float ButiEngine::Flocking::m_separationWeight = 0.125f;
+float ButiEngine::Flocking::m_avoidPlayerWeight = 0.3f;
+float ButiEngine::Flocking::m_surroundWeight = 0.0f;
 float ButiEngine::Flocking::m_viewRadius = 10.0f;
 float ButiEngine::Flocking::m_nearBorder = 1.2f;
+float ButiEngine::Flocking::m_playerNearBorder = 1.7f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
@@ -71,9 +72,10 @@ void ButiEngine::Flocking::Start()
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
 
-	m_rotationSpeed = 0.2f;
-	m_maxRotationSpeed = 0.2f;
-	m_moveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f;
+	m_maxRotationSpeed = 0.3f;
+	m_rotationSpeed = m_maxRotationSpeed;
+	m_maxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f;
+	m_moveSpeed = m_maxMoveSpeed;
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetSpeed(m_rotationSpeed);
 }
@@ -127,7 +129,7 @@ void ButiEngine::Flocking::CalculateMoveSpeed()
 		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f, 0.3f);
 	}
 
-	m_rotationSpeed = MathHelper::Lerp(0.0f, m_maxRotationSpeed, m_moveSpeed * 10);
+	m_rotationSpeed = MathHelper::Lerp(0.0f, m_maxRotationSpeed, m_moveSpeed / m_maxMoveSpeed);
 	m_vlp_lookAt->SetSpeed(m_rotationSpeed);
 }
 
@@ -209,7 +211,7 @@ void ButiEngine::Flocking::CalculateAvoidPlayerVec()
 
 	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
-	float nearBorderSqr = m_nearBorder * m_nearBorder;
+	float nearBorderSqr = m_playerNearBorder * m_playerNearBorder;
 	float distanceSqr = (pos - playerPos).GetLengthSqr();
 	if (distanceSqr <= nearBorderSqr)
 	{
@@ -248,11 +250,11 @@ void ButiEngine::Flocking::Move()
 	m_vlp_lookAt->SetLookTarget(lookTarget);
 
 
-	//Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
-	//auto rotationTarget = gameObject.lock()->transform->GetMatrix();
-	//rotationTarget.SetLookAt(pos + velocity);
-	//auto rotation = MathHelper::LearpQuat(gameObject.lock()->transform->GetLocalRotation().ToQuat(), rotationTarget.ToQuat(), 1.0f);
-	//gameObject.lock()->transform->SetLocalRotation(rotation.ToMatrix());
+	/*Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	auto rotationTarget = gameObject.lock()->transform->GetMatrix();
+	rotationTarget.SetLookAt(pos + velocity);
+	auto rotation = MathHelper::LearpQuat(gameObject.lock()->transform->GetLocalRotation().ToQuat(), rotationTarget.ToQuat(), m_rotationSpeed);
+	gameObject.lock()->transform->SetLocalRotation(rotation.ToMatrix());
 
-	//gameObject.lock()->transform->Translate(Vector3Const::ZAxis * rotation.ToMatrix() * m_moveSpeed);
+	gameObject.lock()->transform->Translate(Vector3Const::ZAxis * rotation.ToMatrix() * m_moveSpeed);*/
 }

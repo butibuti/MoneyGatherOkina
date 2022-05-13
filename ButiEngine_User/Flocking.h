@@ -42,12 +42,14 @@ namespace ButiEngine {
 		static float m_surroundWeight;
 		static float m_viewRadius;
 		static float m_nearBorder;
+		static float m_playerNearBorder;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<Player> m_vlp_playerComponent;
-		float m_rotationSpeed;
 		float m_maxRotationSpeed;
+		float m_rotationSpeed;
+		float m_maxMoveSpeed;
 		float m_moveSpeed;
 
 		Vector3 m_averagePos;

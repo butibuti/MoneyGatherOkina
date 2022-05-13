@@ -81,7 +81,7 @@ void ButiEngine::Worker::OnShowUI()
 void ButiEngine::Worker::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(0.1f);
+	//gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(0.1f);
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 }
