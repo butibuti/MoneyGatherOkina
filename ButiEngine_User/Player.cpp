@@ -116,7 +116,9 @@ void ButiEngine::Player::Start()
 	m_isDead = false;
 
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
-	m_vlp_lookAt->SetSpeed(0.1f);
+	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
+	m_vlp_lookAt->SetSpeed(0.2f);
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
@@ -233,12 +235,6 @@ void ButiEngine::Player::Move()
 		Vector3 dir = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
 		dir.y = 0.0f;
 
-		/////////////////////////////////////////////
-		auto lookTarget = gameObject.lock()->transform->Clone();
-		lookTarget->Translate(dir);
-		m_vlp_lookAt->SetLookTarget(lookTarget);
-		/////////////////////////////////////////////
-
 		m_velocity += dir.GetNormalize() * m_acceleration;
 		if (m_velocity.GetLength() > m_maxMoveSpeed)
 		{
@@ -252,6 +248,8 @@ void ButiEngine::Player::Move()
 			m_vwp_particleGenerater.lock()->TrajectoryParticles(position);
 			m_vwp_particleGenerater.lock()->PachiPachiParticles(pachiPachiPosition);
 		}
+
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition((gameObject.lock()->transform->GetLocalPosition() + dir.GetNormalize() * 100.0f));
 	}
 	else
 	{
@@ -261,6 +259,12 @@ void ButiEngine::Player::Move()
 		}
 		m_velocity -= m_velocity.GetNormalize() * m_deceleration;
 		m_velocity.y = 0;
+	}
+
+	if (m_vlp_lookAt->GetLookTarget())
+	{
+		auto pos = gameObject.lock()->transform->GetLocalPosition();
+		auto lookPos = m_vlp_lookAt->GetLookTarget()->GetLocalPosition();
 	}
 
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();

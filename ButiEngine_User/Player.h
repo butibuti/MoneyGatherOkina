@@ -26,7 +26,12 @@ namespace ButiEngine {
 		}
 
 		std::uint8_t GetMaxWorkerCount() { return m_maxWorkerCount; }
-		float GetMoveSpeed() { return (gameObject.lock()->transform->GetLocalPosition() - m_prevPos).GetLength(); }
+		float GetMoveSpeed()
+		{ 
+			float speed = (gameObject.lock()->transform->GetLocalPosition() - m_prevPos).GetLength();
+			speed = min(speed, m_maxMoveSpeed);
+			return  speed;
+		}
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
 		std::int8_t GetLife() { return m_life; }
