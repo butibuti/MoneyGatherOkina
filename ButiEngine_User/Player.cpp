@@ -118,6 +118,7 @@ void ButiEngine::Player::Start()
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetSpeed(0.1f);
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
+	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;
 	m_acceleration = 0.01f;
@@ -243,7 +244,6 @@ void ButiEngine::Player::Move()
 		{
 			m_velocity = m_velocity.GetNormalize() * m_maxMoveSpeed;
 		}
-		//m_velocity.Normalize();
 
 		if (m_addTrajectoryParticleCounter == 0)
 		{
@@ -263,6 +263,7 @@ void ButiEngine::Player::Move()
 		m_velocity.y = 0;
 	}
 
+	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	gameObject.lock()->transform->Translate(m_velocity);
 }
 

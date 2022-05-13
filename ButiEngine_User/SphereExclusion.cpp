@@ -10,6 +10,11 @@ void ButiEngine::SphereExclusion::OnSet()
 {
 	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			//Worker“¯Žm‚Í”»’è‚µ‚È‚¢
+			if (gameObject.lock()->HasGameObjectTag(GameObjectTag("Worker")) && arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Worker")))
+			{
+				return;
+			}
 			auto exclusion = arg_vwp_other.lock()->GetGameComponent<SphereExclusion>();
 			if (exclusion)
 			{

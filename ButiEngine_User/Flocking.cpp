@@ -6,8 +6,8 @@
 std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking::m_vec_workers;
 float ButiEngine::Flocking::m_gatherWeight = 0.5f;
 float ButiEngine::Flocking::m_cohesionWeight = 0.5f;
-float ButiEngine::Flocking::m_alignmentWeight = 0.5f;
-float ButiEngine::Flocking::m_separationWeight = 1.0f;
+float ButiEngine::Flocking::m_alignmentWeight = 1.0f;
+float ButiEngine::Flocking::m_separationWeight = 0.5f;
 float ButiEngine::Flocking::m_avoidPlayerWeight = 1.0f;
 float ButiEngine::Flocking::m_surroundWeight = 1.0f;
 float ButiEngine::Flocking::m_viewRadius = 10.0f;
@@ -119,6 +119,7 @@ void ButiEngine::Flocking::CalculateMoveSpeed()
 
 	if (distanceSqr <= nearBorderSqr)
 	{
+		float playerSpeed = m_vlp_playerComponent->GetMoveSpeed();
 		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_vlp_playerComponent->GetMoveSpeed(), 0.1f);
 	}
 	else
