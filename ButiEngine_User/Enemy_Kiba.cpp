@@ -10,11 +10,13 @@ void ButiEngine::Enemy_Kiba::OnUpdate()
 	if (m_vlp_enemy->IsVibrate())
 	{
 		m_vlp_loiter->MoveStop();
+		m_vlp_lookAt->SetIsActive(false);
 		LookAtPlayer();
 	}
 	else
 	{
 		m_rotationAngle = 0.0f;
+		m_vlp_lookAt->SetIsActive(true);
 		m_vlp_loiter->MoveStart();
 	}
 }
@@ -42,6 +44,8 @@ void ButiEngine::Enemy_Kiba::Start()
 	CreateDamageArea();
 	SetEnemyParameter();
 	SetLoiterParameter();
+	SetLookAtParameter();
+
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(100.0f);
 
 	m_rotationAngle = 0.0f;
@@ -131,6 +135,13 @@ void ButiEngine::Enemy_Kiba::SetLoiterParameter()
 	m_vlp_loiter->SetWaitFrame(60);
 	m_vlp_loiter->SetAccelFrame(30);
 	m_vlp_loiter->SetBrakeFrame(30);
+}
+
+void ButiEngine::Enemy_Kiba::SetLookAtParameter()
+{
+	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	m_vlp_lookAt->SetSpeed(0.1f);
 }
 
 float ButiEngine::Enemy_Kiba::CalculateRotationDirection()

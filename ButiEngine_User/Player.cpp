@@ -115,10 +115,7 @@ void ButiEngine::Player::Start()
 
 	m_isDead = false;
 
-	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
-	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
-	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
-	m_vlp_lookAt->SetSpeed(0.2f);
+	SetLookAtParameter();
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
@@ -135,7 +132,7 @@ void ButiEngine::Player::Start()
 	m_vibration = 0.0f;
 	m_maxVibration = 1.0f;
 	m_nearEnemyCount = 0;
-	m_vibrationIncrease = 0.24f;
+	m_vibrationIncrease = 0.024f;
 	m_vibrationDecrease = m_maxVibration / 300.0f;
 	m_nearEnemyVibrationRate = 0.0f;
 
@@ -438,4 +435,12 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 std::uint16_t ButiEngine::Player::CalculateRequestExp()
 {
 	return m_level * 10;
+}
+
+void ButiEngine::Player::SetLookAtParameter()
+{
+	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
+	m_vlp_lookAt->SetSpeed(0.2f);
 }

@@ -66,6 +66,7 @@ namespace ButiEngine {
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		std::uint16_t CalculateRequestExp();
+		void SetLookAtParameter();
 
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 

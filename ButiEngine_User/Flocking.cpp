@@ -4,7 +4,7 @@
 #include "SeparateDrawObject.h"
 
 std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking::m_vec_workers;
-float ButiEngine::Flocking::m_gatherWeight = 0.f;
+float ButiEngine::Flocking::m_gatherWeight = 0.0f;
 float ButiEngine::Flocking::m_cohesionWeight = 0.1f;
 float ButiEngine::Flocking::m_alignmentWeight = 1.0f;
 float ButiEngine::Flocking::m_separationWeight = 0.125f;
@@ -77,8 +77,6 @@ void ButiEngine::Flocking::Start()
 	m_maxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f;
 	m_moveSpeed = m_maxMoveSpeed;
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
-	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
-	m_vlp_lookAt->SetSpeed(m_rotationSpeed);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Flocking::Clone()

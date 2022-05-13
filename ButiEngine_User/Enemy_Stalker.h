@@ -36,6 +36,7 @@ namespace ButiEngine {
 		void OnPrey();
 
 		void SetEnemyParameter();
+		void SetLookAtParameter();
 
 		Value_ptr<Enemy> m_vlp_enemy;
 
