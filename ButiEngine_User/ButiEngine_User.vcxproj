@@ -524,6 +524,7 @@ cd ..\</Command>
     <ClCompile Include="CameraAxis.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
+    <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Enemy_Fly.cpp" />
@@ -572,6 +573,7 @@ cd ..\</Command>
     </ClCompile>
     <ClCompile Include="Stick.cpp" />
     <ClCompile Include="Suicide.cpp" />
+    <ClCompile Include="TiltMotion.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="VibrationSensor.cpp" />
@@ -585,6 +587,7 @@ cd ..\</Command>
     <ClInclude Include="BeeSoulPodUIComponent.h" />
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="DrawObject.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Enemy_Fly.h" />
@@ -622,6 +625,7 @@ cd ..\</Command>
     <ClInclude Include="stdafx_u.h" />
     <ClInclude Include="Stick.h" />
     <ClInclude Include="Suicide.h" />
+    <ClInclude Include="TiltMotion.h" />
     <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="VibrationSensor.h" />

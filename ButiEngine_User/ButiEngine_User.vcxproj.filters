@@ -58,6 +58,8 @@
     <ClCompile Include="LevelUpUIComponent.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="HexagonAnimationComponent.cpp" />
+    <ClCompile Include="TiltMotion.cpp" />
+    <ClCompile Include="DrawObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -115,6 +117,8 @@
     <ClInclude Include="LevelUpUIComponent.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="HexagonAnimationComponent.h" />
+    <ClInclude Include="TiltMotion.h" />
+    <ClInclude Include="DrawObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

@@ -9,6 +9,8 @@
 #include "ShockWave.h"
 #include "VibrationEffectComponent.h"
 #include "BeeSoulPodUIComponent.h"
+#include "FloatMotionComponent.h"
+#include "DrawObject.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -92,7 +94,9 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
+	auto drawObject = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
+	drawObject.lock()->GetGameComponent<DrawObject>()->SetParent(gameObject);
+
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
@@ -442,5 +446,5 @@ void ButiEngine::Player::SetLookAtParameter()
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
-	m_vlp_lookAt->SetSpeed(0.2f);
+	m_vlp_lookAt->SetSpeed(0.05f);
 }

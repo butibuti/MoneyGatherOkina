@@ -3,12 +3,12 @@
 
 namespace ButiEngine {
 
-	class FloatMotionParent :public GameComponent
+	class TiltMotion :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "FloatMotionParent";
+			return "TiltMotion";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -20,11 +20,17 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
 	private:
+		float CalculateRotationDirection();
+
+		Value_weak_ptr<GameObject> m_vwp_parent;
+		Value_ptr<Transform> m_vlp_lookTarget;
+		Vector3 m_front;
+		Vector3 m_rotationTarget;
+		float m_motionSpeed;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(FloatMotionParent, true);
+BUTI_REGIST_GAMECOMPONENT(TiltMotion, true);
 

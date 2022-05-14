@@ -66,7 +66,6 @@ void ButiEngine::Loiter::Start()
 	m_isMove = false;
 	m_isAccel = true;
 	m_isBrake = false;
-	SetMoveTarget();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Loiter::Clone()

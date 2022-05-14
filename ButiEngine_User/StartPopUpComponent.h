@@ -26,6 +26,8 @@ namespace ButiEngine {
 		void CheckHitPlayer();
 		void ScaleUpdate();
 
+		void SetFloatMotionParameter();
+
 		Value_weak_ptr<GameObject> m_vwp_player;
 
 		Vector3 m_defaultScale;

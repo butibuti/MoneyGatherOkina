@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "StartPopUpComponent.h"
 #include "Player.h"
+#include "FloatMotionComponent.h"
 
 void ButiEngine::StartPopUpComponent::OnUpdate()
 {
@@ -14,6 +15,8 @@ void ButiEngine::StartPopUpComponent::OnSet()
 
 void ButiEngine::StartPopUpComponent::Start()
 {
+	SetFloatMotionParameter();
+
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 
 	m_defaultScale = Vector3(4, 4, 4);
@@ -95,6 +98,14 @@ void ButiEngine::StartPopUpComponent::ScaleUpdate()
 		anim->SetSpeed(0.0175f);
 		anim->SetEaseType(Easing::EasingType::EaseOutElastic);
 	}
+}
+
+void ButiEngine::StartPopUpComponent::SetFloatMotionParameter()
+{
+	auto floatMotion = gameObject.lock()->GetGameComponent<FloatMotionComponent>();
+	floatMotion->SetAmplitude(0.5f);
+	floatMotion->SetMotionSpeed(0.03f);
+	floatMotion->SetIsRandomSpeed(false);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::StartPopUpComponent::Clone()

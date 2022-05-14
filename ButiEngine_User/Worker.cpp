@@ -11,6 +11,7 @@
 #include "SphereExclusion.h"
 #include "Enemy_Stalker.h"
 #include "VibrationEffectComponent.h"
+#include "DrawObject.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -80,8 +81,9 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(0.1f);
+	auto drawObject = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
+	drawObject.lock()->GetGameComponent<DrawObject>()->SetParent(gameObject);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
 	SetLookAtParameter();
 
@@ -202,5 +204,5 @@ void ButiEngine::Worker::SetLookAtParameter()
 {
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
-	m_vlp_lookAt->SetSpeed(0.3f);
+	m_vlp_lookAt->SetSpeed(0.1f);
 }
