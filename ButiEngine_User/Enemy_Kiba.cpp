@@ -74,7 +74,7 @@ void ButiEngine::Enemy_Kiba::Dead()
 void ButiEngine::Enemy_Kiba::LookAtPlayer()
 {
 	float rotationDirection = CalculateRotationDirection();
-	m_rotationAngle += m_rotationAcceleration * rotationDirection;
+	m_rotationAngle += m_rotationAcceleration * rotationDirection * GameDevice::WorldSpeed;
 	if (abs(m_rotationAngle) > m_maxRotationAngle)
 	{
 		if (m_rotationAngle > 0)
@@ -95,12 +95,12 @@ void ButiEngine::Enemy_Kiba::LookAtPlayer()
 	float angle = MathHelper::ToDegree(std::acos(front.Dot(dir)));
 	if (angle < abs(m_rotationAngle))
 	{
-		gameObject.lock()->transform->RollLocalRotationY_Degrees(rotationDirection * angle);
+		gameObject.lock()->transform->RollLocalRotationY_Degrees(rotationDirection * angle * GameDevice::WorldSpeed);
 		m_rotationAngle = 0.0f;
 		return;
 	}
 
-	gameObject.lock()->transform->RollLocalRotationY_Degrees(m_rotationAngle);
+	gameObject.lock()->transform->RollLocalRotationY_Degrees(m_rotationAngle * GameDevice::WorldSpeed);
 }
 
 void ButiEngine::Enemy_Kiba::CreateDamageArea()

@@ -60,6 +60,7 @@
     <ClCompile Include="HexagonAnimationComponent.cpp" />
     <ClCompile Include="TiltMotion.cpp" />
     <ClCompile Include="DrawObject.cpp" />
+    <ClCompile Include="WorldSpeedManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="HexagonAnimationComponent.h" />
     <ClInclude Include="TiltMotion.h" />
     <ClInclude Include="DrawObject.h" />
+    <ClInclude Include="WorldSpeedManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

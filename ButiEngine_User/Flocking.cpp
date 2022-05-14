@@ -259,7 +259,7 @@ void ButiEngine::Flocking::Move()
 	velocity.Normalize();
 
 
-	gameObject.lock()->transform->Translate(velocity * m_moveSpeed);
+	gameObject.lock()->transform->Translate(velocity * m_moveSpeed * GameDevice::WorldSpeed);
 	
 	if (abs(m_moveSpeed) > m_maxMoveSpeed * 0.3f)
 	{

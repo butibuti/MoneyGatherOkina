@@ -107,13 +107,13 @@ void ButiEngine::Enemy_Stalker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_
 void ButiEngine::Enemy_Stalker::Move()
 {
 	Vector3 dir = m_vlp_enemy->GetPlayer().lock()->transform->GetLocalPosition() - gameObject.lock()->transform->GetLocalPosition();
-	m_velocity += dir.GetNormalize() * m_acceleration;
+	m_velocity += dir.GetNormalize() * m_acceleration * GameDevice::WorldSpeed;
 	if (m_velocity.GetLength() > m_maxMoveSpeed)
 	{
 		m_velocity = m_velocity.GetNormalize() * m_maxMoveSpeed;
 	}
 
-	gameObject.lock()->transform->Translate(m_velocity);
+	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + dir);
 }
 

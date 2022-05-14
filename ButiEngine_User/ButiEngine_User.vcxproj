@@ -581,6 +581,7 @@ cd ..\</Command>
     <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
+    <ClCompile Include="WorldSpeedManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BeeSoulComponent.h" />
@@ -633,6 +634,7 @@ cd ..\</Command>
     <ClInclude Include="WaveManager.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerSpawner.h" />
+    <ClInclude Include="WorldSpeedManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

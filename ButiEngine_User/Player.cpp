@@ -236,7 +236,7 @@ void ButiEngine::Player::Move()
 		Vector3 dir = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
 		dir.y = 0.0f;
 
-		m_velocity += dir.GetNormalize() * m_acceleration;
+		m_velocity += dir.GetNormalize() * m_acceleration * GameDevice::WorldSpeed;
 		if (m_velocity.GetLength() > m_maxMoveSpeed)
 		{
 			m_velocity = m_velocity.GetNormalize() * m_maxMoveSpeed;
@@ -258,7 +258,7 @@ void ButiEngine::Player::Move()
 		{
 			m_velocity = Vector3Const::Zero;
 		}
-		m_velocity -= m_velocity.GetNormalize() * m_deceleration;
+		m_velocity -= m_velocity.GetNormalize() * m_deceleration * GameDevice::WorldSpeed;
 		m_velocity.y = 0;
 	}
 
@@ -269,7 +269,7 @@ void ButiEngine::Player::Move()
 	}
 
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
-	gameObject.lock()->transform->Translate(m_velocity);
+	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
 }
 
 void ButiEngine::Player::LevelUp()
@@ -340,7 +340,7 @@ void ButiEngine::Player::IncreaseVibration()
 {
 	if (m_isDead) { return; }
 
-	m_vibration += m_vibrationIncrease * m_nearEnemyCount;
+	m_vibration += m_vibrationIncrease * m_nearEnemyCount * GameDevice::WorldSpeed;
 	m_vibration = min(m_vibration, m_maxVibration);
 
 	if (!m_isVibrate)
@@ -354,7 +354,7 @@ void ButiEngine::Player::DecreaseVibration()
 	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
 
-	m_vibration -= m_vibrationDecrease;
+	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 
 	if (m_vibration <= 0.0f)
 	{
@@ -431,8 +431,8 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 	bool isPrey = stalker->IsPrey();
 	if (isPrey) { return; }
 
-	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
-	KnockBack(velocity);
+	Vector3 knockBackVelocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
+	KnockBack(knockBackVelocity);
 	Damage();
 }
 

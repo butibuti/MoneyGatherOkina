@@ -298,7 +298,7 @@ void ButiEngine::Enemy::RemovePocket(const std::uint8_t arg_pocketNum)
 void ButiEngine::Enemy::IncreaseVibration()
 {
 	CalculateVibrationIncrease();
-	m_vibration += m_vibrationIncrease;
+	m_vibration += m_vibrationIncrease * GameDevice::WorldSpeed;
 
 	//U“®—Ê‚ªãŒÀ‚ð’´‚¦‚½‚çŽ€‚Ê
 	if (m_vibration > m_vibrationCapacity)
@@ -309,7 +309,7 @@ void ButiEngine::Enemy::IncreaseVibration()
 
 void ButiEngine::Enemy::DecreaseVibration()
 {
-	m_vibration -= m_vibrationDecrease;
+	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 	m_vibration = max(m_vibration, 0.0f);
 }
 

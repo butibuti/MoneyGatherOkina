@@ -62,7 +62,7 @@ void ButiEngine::Stick::MoveToEnemy()
 void ButiEngine::Stick::MoveToPocket()
 {
 	constexpr float rotationSpeed = 0.1f;
-	auto rotation = MathHelper::LearpQuat(m_vlp_center->GetLocalRotation().ToQuat(), m_vlp_rotationTarget->GetLocalRotation().ToQuat(), rotationSpeed);
+	auto rotation = MathHelper::LearpQuat(m_vlp_center->GetLocalRotation().ToQuat(), m_vlp_rotationTarget->GetLocalRotation().ToQuat(), rotationSpeed * GameDevice::WorldSpeed);
 	m_vlp_center->SetLocalRotation(rotation.ToMatrix());
 }
 
@@ -78,7 +78,5 @@ void ButiEngine::Stick::SetCenter()
 
 	m_vlp_center->SetLookAtRotation(gameObject.lock()->transform->GetLocalPosition());
 
-	Vector3 a = gameObject.lock()->transform->GetWorldPosition();
 	gameObject.lock()->transform->SetBaseTransform(m_vlp_center);
-	Vector3 b = gameObject.lock()->transform->GetWorldPosition();
 }
