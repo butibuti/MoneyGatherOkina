@@ -63,7 +63,7 @@ void ButiEngine::Loiter::Start()
 	m_moveSpeed = 0.0f;
 	m_speedBeforeBrake = 0.0f;
 	m_isStop = false;
-	m_isMove = true;
+	m_isMove = false;
 	m_isAccel = true;
 	m_isBrake = false;
 	SetMoveTarget();

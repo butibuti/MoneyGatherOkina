@@ -70,5 +70,6 @@ void ButiEngine::Enemy_Fly::SetLookAtParameter()
 {
 	auto lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
 	lookAt->SetSpeed(0.1f);
 }

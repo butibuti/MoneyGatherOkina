@@ -167,5 +167,6 @@ void ButiEngine::Enemy_Stalker::SetLookAtParameter()
 {
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
 	m_vlp_lookAt->SetSpeed(0.1f);
 }
