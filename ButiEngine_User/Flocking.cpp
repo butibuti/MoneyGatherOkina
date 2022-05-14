@@ -7,7 +7,7 @@ std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking:
 float ButiEngine::Flocking::m_gatherWeight = 0.0f;
 float ButiEngine::Flocking::m_cohesionWeight = 0.1f;
 float ButiEngine::Flocking::m_alignmentWeight = 1.0f;
-float ButiEngine::Flocking::m_separationWeight = 0.125f;
+float ButiEngine::Flocking::m_separationWeight = 0.23f;
 float ButiEngine::Flocking::m_avoidPlayerWeight = 0.3f;
 float ButiEngine::Flocking::m_surroundWeight = 1.0f;
 float ButiEngine::Flocking::m_viewRadius = 10.0f;
@@ -86,6 +86,8 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Flocking::Clone()
 
 void ButiEngine::Flocking::CalculateAveragePos()
 {
+	//見えている範囲のWorkerとプレイヤーの平均の位置を計算する
+
 	m_averagePos = Vector3Const::Zero;
 
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
@@ -94,6 +96,7 @@ void ButiEngine::Flocking::CalculateAveragePos()
 	auto end = m_vec_workers.end();
 	for (auto itr = m_vec_workers.begin(); itr != end; ++itr)
 	{
+		//見えているWorkerを追加
 		Vector3 workerPos = (*itr)->transform->GetLocalPosition();
 		float viewRadiusSqr = m_viewRadius * m_viewRadius;
 		float distanceSqr = (pos - workerPos).GetLengthSqr();
@@ -104,37 +107,30 @@ void ButiEngine::Flocking::CalculateAveragePos()
 		}
 	}
 
-	if (workerNum > 1)
-	{
-		m_averagePos /= workerNum;
-	}
+	//プレイヤーは見えていなくても追加
+	m_averagePos += m_vwp_player.lock()->transform->GetLocalPosition();
+	m_averagePos /= workerNum + 1;
 }
 
 void ButiEngine::Flocking::CalculateMoveSpeed()
 {
 	//プレイヤーに近い時プレイヤーの速度に合わせる
-	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
 
-	float nearBorderSqr = m_nearBorder * m_nearBorder;
-	float distanceSqr = (playerPos - m_averagePos).GetLengthSqr();
-
-	if (distanceSqr <= nearBorderSqr)
+	if (IsNearPlayer(m_averagePos))
 	{
 		float playerSpeed = m_vlp_playerComponent->GetMoveSpeed();
-		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_vlp_playerComponent->GetMoveSpeed(), 0.1f);
+		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, playerSpeed, 0.1f * GameDevice::WorldSpeed);
 	}
 	else
 	{
-		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f, 0.3f);
+		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_maxMoveSpeed, 0.3f * GameDevice::WorldSpeed);
 	}
-
-	m_rotationSpeed = MathHelper::Lerp(0.0f, m_maxRotationSpeed, m_moveSpeed / m_maxMoveSpeed);
-	//m_vlp_lookAt->SetSpeed(m_rotationSpeed);
 }
 
 void ButiEngine::Flocking::CalculateGatherVec()
 {
-	//プレイヤーのいる方向を向く
+	//プレイヤーへ向かう
+
 	m_gatherVec = Vector3Const::Zero;
 	if (m_gatherWeight == 0.0f) { return; }
 
@@ -157,7 +153,7 @@ void ButiEngine::Flocking::CalculateCohesionVec()
 
 void ButiEngine::Flocking::CalculateALignmentVec()
 {
-	//周りと同じ方向を向く
+	//周りと同じ方向へ向かう
 
 	m_alignmentVec = Vector3Const::Zero;
 	if (m_alignmentWeight == 0.0f) { return; }
@@ -184,7 +180,7 @@ void ButiEngine::Flocking::CalculateALignmentVec()
 
 void ButiEngine::Flocking::CalculateSeparationVec()
 {
-	//近づきすぎたWorkerと離れる方向を向く
+	//近づきすぎたWorkerと離れる方向へ向かう
 
 	m_separationVec = Vector3Const::Zero;
 	if (m_separationWeight == 0.0f) { return; }
@@ -215,7 +211,7 @@ void ButiEngine::Flocking::CalculateSeparationVec()
 
 void ButiEngine::Flocking::CalculateAvoidPlayerVec()
 {
-	//近づきすぎたPlayerと離れる方向を向く
+	//近づきすぎたPlayerと離れる方向へ向かう
 
 	m_avoidPlayerVec = Vector3Const::Zero;
 	if (m_avoidPlayerWeight == 0.0f) { return; }
@@ -234,7 +230,7 @@ void ButiEngine::Flocking::CalculateAvoidPlayerVec()
 
 void ButiEngine::Flocking::CalculateSurroundVec()
 {
-	//プレイヤーを囲む方向を向く
+	//プレイヤーを囲む方向へ向かう
 
 	m_surroundVec = Vector3Const::Zero;
 	if (m_surroundWeight == 0.0f) { return; }
@@ -265,4 +261,18 @@ void ButiEngine::Flocking::Move()
 	{
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + velocity);
 	}
+	else if (abs(m_moveSpeed) <= 0.001f)
+	{
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront());
+	}
+}
+
+bool ButiEngine::Flocking::IsNearPlayer(const Vector3& arg_pos)
+{
+	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
+
+	float nearBorderSqr = m_nearBorder * m_nearBorder;
+	float distanceSqr = (playerPos - arg_pos).GetLengthSqr();
+
+	return distanceSqr <= nearBorderSqr;
 }

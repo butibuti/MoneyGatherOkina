@@ -32,6 +32,8 @@ namespace ButiEngine {
 		void CalculateSurroundVec();
 		void Move();
 
+		bool IsNearPlayer(const Vector3& arg_pos);
+
 		static std::vector<Value_ptr<GameObject>> m_vec_workers;
 
 		static float m_gatherWeight;

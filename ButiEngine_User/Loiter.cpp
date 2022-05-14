@@ -122,13 +122,15 @@ void ButiEngine::Loiter::Move()
 		}
 	}
 
-	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed);
+	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
 }
 
 void ButiEngine::Loiter::Accel()
 {
-	m_moveSpeed = m_maxMoveSpeed * Easing::EaseInCubic(m_vlp_accelTimer->GetPercent());
+	float progress = m_vlp_accelTimer->GetPercent() * GameDevice::WorldSpeed;
+	progress = min(progress, 1.0f);
+	m_moveSpeed = m_maxMoveSpeed * Easing::EaseInCubic(progress);
 
 	if (m_vlp_accelTimer->Update())
 	{
@@ -139,7 +141,9 @@ void ButiEngine::Loiter::Accel()
 
 void ButiEngine::Loiter::Brake()
 {
-	m_moveSpeed = m_speedBeforeBrake * (1.0f - Easing::EaseInCubic(m_vlp_brakeTimer->GetPercent()));
+	float progress = m_vlp_brakeTimer->GetPercent() * GameDevice::WorldSpeed;
+	progress = min(progress, 1.0f);
+	m_moveSpeed = m_speedBeforeBrake * (1.0f - Easing::EaseInCubic(progress));
 
 	if (m_vlp_brakeTimer->Update())
 	{
