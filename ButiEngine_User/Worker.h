@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class VibrationEffectComponent;
 	class ShakeComponent;
+	class ParticleGenerater;
 
 	class Worker :public GameComponent
 	{
@@ -47,6 +48,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_beeSoul;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
+		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 
 		Vector3 m_defaultScale;

@@ -13,6 +13,7 @@
 #include "VibrationEffectComponent.h"
 #include "ShakeComponent.h"
 #include "BeeSoulComponent.h"
+#include "ParticleGenerater.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -65,6 +66,8 @@ void ButiEngine::Worker::OnSet()
 				Dead();
 			}
 		});
+
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 	gameObject.lock()->AddCollisionStayReaction(collisionLambda);

@@ -20,8 +20,6 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void ExplosionPolygonParticles(const Vector3& arg_position, const bool arg_isBig);
-
 	private:
 		void Flickering();
 

@@ -7,7 +7,7 @@ namespace ButiEngine {
 	class VibrationEffectComponent;
 	class ShakeComponent;
 	class EnemyScaleAnimationComponent;
-	class PolygonParticleGenerater;
+	class ParticleGenerater;
 
 	class Enemy :public GameComponent
 	{
@@ -71,7 +71,7 @@ namespace ButiEngine {
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
-		Value_weak_ptr<PolygonParticleGenerater> m_vwp_polygonParticleGenerater;
+		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_weak_ptr<GameObject> m_vwp_playerSensor;
 

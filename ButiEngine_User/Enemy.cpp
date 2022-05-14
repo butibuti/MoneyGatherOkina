@@ -15,7 +15,7 @@
 #include "VibrationEffectComponent.h"
 #include "ShakeComponent.h"
 #include "EnemyScaleAnimationComponent.h"
-#include "PolygonParticleGenerator.h"
+#include "ParticleGenerater.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = true;
@@ -29,26 +29,26 @@ void ButiEngine::Enemy::OnUpdate()
 	//Player‚ª‹ß‚¢‚©ÕŒ‚”g‚ª“–‚½‚Á‚Ä‚¢‚½‚çU“®‚·‚é
 	if (m_vibration > 0)
 	{
-		if (m_vwp_vibrationEffect.lock() == nullptr)
-		{
-			auto transform = gameObject.lock()->transform;
-			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
-			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
-			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
+		//if (m_vwp_vibrationEffect.lock() == nullptr)
+		//{
+		//	auto transform = gameObject.lock()->transform;
+		//	m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
+		//	m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+		//	m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
 
-			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
-		}
-		else
-		{
-			auto transform = gameObject.lock()->transform;
-			float vibrationPower = m_vibration / m_vibrationCapacity;
-			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, false);
-			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
-		}
+		//	m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+		//}
+		//else
+		//{
+		//	auto transform = gameObject.lock()->transform;
+		//	float vibrationPower = m_vibration / m_vibrationCapacity;
+		//	m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, false);
+		//	m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
+		//}
 	}
 	else
 	{
-		StopVibrationEffect();
+		//StopVibrationEffect();
 	}
 
 	if (IsVibrate())
@@ -92,7 +92,7 @@ void ButiEngine::Enemy::OnSet()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 
-	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<PolygonParticleGenerater>();
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
@@ -200,31 +200,31 @@ void ButiEngine::Enemy::Dead()
 	if (fly)
 	{
 		fly->Dead();
-		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
 	if (kiba)
 	{
 		kiba->Dead();
-		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, true);
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 	if (stalker)
 	{
 		stalker->Dead();
-		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
 	if (tutorial)
 	{
 		tutorial->Dead();
-		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
 	if (volcano)
 	{
 		volcano->Dead();
-		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, true);
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
