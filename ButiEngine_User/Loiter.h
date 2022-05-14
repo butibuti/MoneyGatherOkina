@@ -37,7 +37,8 @@ namespace ButiEngine {
 		void Wait();
 		void SetMoveTarget();
 
-		Value_ptr<Transform> m_targetSpawner;
+		Value_ptr<Transform> m_vlp_targetSpawner;
+		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		
 		float m_moveRange = 0.0f;
 		float m_maxMoveSpeed = 0.0f;

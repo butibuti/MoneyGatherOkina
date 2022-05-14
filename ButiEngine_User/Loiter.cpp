@@ -49,12 +49,14 @@ void ButiEngine::Loiter::OnShowUI()
 
 void ButiEngine::Loiter::Start()
 {
-	m_targetSpawner = ObjectFactory::Create<Transform>();
-	m_targetSpawner->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	m_vlp_targetSpawner = ObjectFactory::Create<Transform>();
+	m_vlp_targetSpawner->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 
 	m_vlp_waitTimer->Start();
 	m_vlp_accelTimer->Start();
 	m_vlp_brakeTimer->Start();
+
+	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 
 	m_velocity = Vector3Const::Zero;
 	m_moveTarget = Vector3Const::Zero;
@@ -85,6 +87,8 @@ void ButiEngine::Loiter::StartBrake()
 
 void ButiEngine::Loiter::MoveStart()
 {
+	if (!m_isStop) { return; }
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront());
 	m_isStop = false;
 }
 
@@ -120,6 +124,7 @@ void ButiEngine::Loiter::Move()
 	}
 
 	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed);
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
 }
 
 void ButiEngine::Loiter::Accel()
@@ -160,15 +165,15 @@ void ButiEngine::Loiter::Wait()
 
 void ButiEngine::Loiter::SetMoveTarget()
 {
-	m_targetSpawner->RollLocalRotationY_Degrees(ButiRandom::GetRandom(110, 250));
-	m_moveTarget = m_targetSpawner->GetLocalPosition() + m_targetSpawner->GetFront() * ButiRandom::GetRandom(m_moveRange * 0.9f, m_moveRange);
+	m_vlp_targetSpawner->RollLocalRotationY_Degrees(ButiRandom::GetRandom(90, 270));
+	m_moveTarget = m_vlp_targetSpawner->GetLocalPosition() + m_vlp_targetSpawner->GetFront() * ButiRandom::GetRandom(m_moveRange * 0.9f, m_moveRange);
 
 	//フィールドから出ている分戻す
 	auto moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
 	if (moveRestriction->IsOutField(m_moveTarget))
 	{
 		float outLength = moveRestriction->GetOutLength(m_moveTarget);
-		m_moveTarget -= m_targetSpawner->GetFront() * outLength;
+		m_moveTarget -= m_vlp_targetSpawner->GetFront() * outLength;
 	}
 
 	m_velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();

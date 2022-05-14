@@ -35,11 +35,14 @@ namespace ButiEngine {
 
 		void StopVibrationEffect();
 
+		void SetLookAtParameter();
+
 		static float m_nearBorder;
 		static float m_vibrationForce;
 
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
+		Value_ptr<LookAtComponent> m_vlp_lookAt;
 
 		Vector3 m_defaultScale;
 

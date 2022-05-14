@@ -83,6 +83,8 @@ void ButiEngine::Worker::Start()
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(0.1f);
 
+	SetLookAtParameter();
+
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 }
 
@@ -179,6 +181,8 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 			collider->SetIsRemove(true);
 		}
 
+		m_vlp_lookAt->SetLookTarget(arg_vwp_enemy.lock()->transform);
+
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
@@ -192,4 +196,11 @@ void ButiEngine::Worker::StopVibrationEffect()
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
 	}
+}
+
+void ButiEngine::Worker::SetLookAtParameter()
+{
+	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	m_vlp_lookAt->SetSpeed(0.3f);
 }

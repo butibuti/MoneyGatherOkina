@@ -30,11 +30,13 @@ namespace ButiEngine {
 		void CreateDamageArea();
 		void SetEnemyParameter();
 		void SetLoiterParameter();
+		void SetLookAtParameter();
 		float CalculateRotationDirection();
 
 		Value_ptr<Enemy> m_vlp_enemy;
 		Value_ptr<Loiter> m_vlp_loiter;
 		Value_weak_ptr<GameObject> m_vwp_damageArea;
+		Value_ptr<LookAtComponent> m_vlp_lookAt;
 
 		float m_rotationAngle;
 		float m_maxRotationAngle;

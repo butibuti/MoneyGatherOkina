@@ -15,7 +15,7 @@ void ButiEngine::SphereExclusion::OnSet()
 			{
 				//‘Šè‚æ‚èŒy‚©‚Á‚½‚ç‰Ÿ‚µ–ß‚³‚ê‚é
 				float otherMass = exclusion->GetMass();
-				if (m_mass <= otherMass)
+				if (m_mass < otherMass)
 				{
 					Exclusion(arg_vwp_other, exclusion);
 				}

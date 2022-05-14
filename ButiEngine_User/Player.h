@@ -26,7 +26,12 @@ namespace ButiEngine {
 		}
 
 		std::uint8_t GetMaxWorkerCount() { return m_maxWorkerCount; }
-		float GetMoveSpeed() { return m_velocity.GetLength(); }
+		float GetMoveSpeed()
+		{ 
+			float speed = (gameObject.lock()->transform->GetLocalPosition() - m_prevPos).GetLength();
+			speed = min(speed, m_maxMoveSpeed);
+			return  speed;
+		}
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
 		std::int8_t GetLife() { return m_life; }
@@ -61,6 +66,7 @@ namespace ButiEngine {
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		std::uint16_t CalculateRequestExp();
+		void SetLookAtParameter();
 
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 
@@ -77,6 +83,7 @@ namespace ButiEngine {
 		//ˆÚ“®
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<ButiRendering::ICamera> m_vlp_camera;
+		Vector3 m_prevPos;
 		Vector3 m_velocity;
 		float m_maxMoveSpeed;
 		float m_acceleration;

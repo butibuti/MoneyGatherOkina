@@ -28,6 +28,7 @@ void ButiEngine::Enemy_Fly::Start()
 
 	SetEnemyParameter();
 	SetLoiterParameter();
+	SetLookAtParameter();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(50.0f);
 }
@@ -63,4 +64,11 @@ void ButiEngine::Enemy_Fly::SetLoiterParameter()
 	loiterComponent->SetWaitFrame(60);
 	loiterComponent->SetAccelFrame(30);
 	loiterComponent->SetBrakeFrame(30);
+}
+
+void ButiEngine::Enemy_Fly::SetLookAtParameter()
+{
+	auto lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	lookAt->SetSpeed(0.1f);
 }

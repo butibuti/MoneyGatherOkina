@@ -28,6 +28,7 @@ namespace ButiEngine {
 	private:
 		void SetEnemyParameter();
 		void SetLoiterParameter();
+		void SetLookAtParameter();
 
 		Value_ptr<Enemy> m_vlp_enemy;
 	};
