@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class Enemy;
+	class EnemyScaleAnimationComponent;
 
 	class Enemy_Volcano :public GameComponent
 	{
@@ -32,6 +33,7 @@ namespace ButiEngine {
 		void SetEnemyParameter();
 
 		Value_ptr<Enemy> m_vlp_enemy;
+		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 
 		Vector3 m_randomVelocity;
 		Vector3 m_defaultScale;

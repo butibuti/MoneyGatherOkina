@@ -6,6 +6,7 @@ namespace ButiEngine {
 	class WaveManager;
 	class VibrationEffectComponent;
 	class ShakeComponent;
+	class EnemyScaleAnimationComponent;
 
 	class Enemy :public GameComponent
 	{
@@ -35,7 +36,6 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 		float GetVibrationRate() { return m_vibration / m_vibrationCapacity; }
-		Vector3 GetScale() { return m_previousScale; }
 
 		std::vector<Value_weak_ptr<GameObject>> GetStickWorkers();
 
@@ -69,6 +69,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
+		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_weak_ptr<GameObject> m_vwp_playerSensor;
 
@@ -78,8 +79,6 @@ namespace ButiEngine {
 		bool m_isNearPlayer;
 		bool m_isHitShockWave;
 		Vector3 m_defaultScale;
-		Vector3 m_maxPlusScale;
-		Vector3 m_previousScale;
 
 		float m_vibration;
 		float m_vibrationIncrease;

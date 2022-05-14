@@ -14,6 +14,7 @@
 #include "SeparateDrawObject.h"
 #include "VibrationEffectComponent.h"
 #include "ShakeComponent.h"
+#include "EnemyScaleAnimationComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = true;
@@ -89,8 +90,6 @@ void ButiEngine::Enemy::OnSet()
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
-	m_previousScale = m_defaultScale;
-	m_maxPlusScale = m_defaultScale * 0.2f;
 
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
@@ -346,16 +345,15 @@ void ButiEngine::Enemy::ShakeDrawObject()
 
 void ButiEngine::Enemy::ScaleAnimation()
 {
+	if (!m_vwp_scaleAnimationComponent.lock())
+	{
+		m_vwp_scaleAnimationComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<EnemyScaleAnimationComponent>();
+		return;
+	}
+
+	//ここでスケール割合値をセットしてあげる
 	float lerpScale = m_vibration / m_vibrationCapacity;
-
-	m_previousScale = m_defaultScale + m_maxPlusScale * Easing::EaseOutCubic(lerpScale);
-
-	////positionの補間
-	//m_previousScale.x = m_previousScale.x * (1.0f - lerpScale) + m_currentScale.x * lerpScale;
-	//m_previousScale.y = m_previousScale.y * (1.0f - lerpScale) + m_currentScale.y * lerpScale;
-	//m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;
-
-	gameObject.lock()->transform->SetLocalScale(m_previousScale);
+	m_vwp_scaleAnimationComponent.lock()->SetScaleRate(lerpScale);
 }
 
 

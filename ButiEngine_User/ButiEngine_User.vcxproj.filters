@@ -59,6 +59,7 @@
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="HexagonAnimationComponent.cpp" />
     <ClCompile Include="PolygonParticleGenerator.cpp" />
+    <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="HexagonAnimationComponent.h" />
     <ClInclude Include="PolygonParticleGenerator.h" />
+    <ClInclude Include="EnemyScaleAnimationComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

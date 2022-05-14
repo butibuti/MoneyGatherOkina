@@ -525,6 +525,7 @@ cd ..\</Command>
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Enemy_Fly.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
@@ -587,6 +588,7 @@ cd ..\</Command>
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyScaleAnimationComponent.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Enemy_Fly.h" />
     <ClInclude Include="EnemySpawnManager.h" />
