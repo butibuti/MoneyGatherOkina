@@ -72,7 +72,7 @@ void ButiEngine::EnemySpawner::OnUpdate()
 		switch (m_spawnType)
 		{
 		case 0: //ハエ
-			enemy = GetManager().lock()->AddObjectFromCereal("Enemy_Flie");
+			enemy = GetManager().lock()->AddObjectFromCereal("Enemy_Fly");
 			break;
 		case 1: //ストーカー
 			enemy = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
@@ -111,7 +111,7 @@ void ButiEngine::EnemySpawner::OnShowUI()
 	switch (m_spawnType)
 	{
 	case 0: //ハエ
-		GUI::BulletText("FlieSpawner");
+		GUI::BulletText("FlySpawner");
 		break;
 	case 1: //ストーカー
 		GUI::BulletText("StalkerSpawner");

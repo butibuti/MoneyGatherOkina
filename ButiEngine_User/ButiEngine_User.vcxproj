@@ -553,6 +553,7 @@ cd ..\</Command>
     <ClCompile Include="PlayerSensor.cpp" />
     <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
+    <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
@@ -610,6 +611,7 @@ cd ..\</Command>
     <ClInclude Include="PlayerSensor.h" />
     <ClInclude Include="Pocket.h" />
     <ClInclude Include="CameraShakeComponent.h" />
+    <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="SeparateDrawObject.h" />
