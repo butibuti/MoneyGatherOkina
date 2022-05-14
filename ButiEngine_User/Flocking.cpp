@@ -261,7 +261,7 @@ void ButiEngine::Flocking::Move()
 	{
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + velocity);
 	}
-	else if (abs(m_moveSpeed) <= 0.001f)
+	else
 	{
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront());
 	}
