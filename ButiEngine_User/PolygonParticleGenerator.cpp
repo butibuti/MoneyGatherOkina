@@ -38,6 +38,16 @@ void ButiEngine::PolygonParticleGenerater::ExplosionPolygonParticles(const Vecto
 {
 	Particle3D particle;
 
+	float explosionScale = 1.0f;
+	if (arg_isBig)
+	{
+		explosionScale = 1.0f;
+	}
+	else
+	{
+		explosionScale = 0.75f;
+	}
+
 	for (std::int8_t i = 0; i < 60; i++)
 	{
 		Vector3 randomPos = Vector3(ButiRandom::GetInt(-10, 10), ButiRandom::GetInt(-10, 10),
@@ -57,39 +67,41 @@ void ButiEngine::PolygonParticleGenerater::ExplosionPolygonParticles(const Vecto
 		{
 			//オレンジ
 			particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_8);
-			speed = 0.1f;
+			speed = 0.3f;
 			particle.size = 7.0f;
-			accel = 1.0f;
+			accel = 1.15f;
 			particle.life = 60;
 		}
 		else if(i % 3 == 1)
 		{
 			//黄色
 			particle.color = ButiColor::Yellow(ButiColor::ShadeIndex::Shade_4);
-			speed = 0.15f;
+			speed = 0.45f;
 			particle.size = 5.0f;
-			accel = 0.95f;
+			accel = 1.0925f;
 			particle.life = 120;
 		}
 		else
 		{
 			//白色
 			particle.color = Vector4(1, 1, 1, 1);
-			speed = 0.3f;
+			speed = 0.9f;
 			particle.size = 2.5f;
-			accel = 0.95f;
+			accel = 1.0925f;
 			particle.life = 180;
 		}
 		//particle.sizePase = -(particle.size / particle.life);
+
+		particle.size *= explosionScale;
 
 		Vector3 velocity;
 		velocity.x = (float)ButiRandom::GetRandom(-50, 50, 100);
 		velocity.y = (float)ButiRandom::GetRandom(-50, 50, 100);
 		velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
-		particle.velocity = velocity.Normalize() * speed * 3.0f;
+		particle.velocity = velocity.Normalize() * speed * explosionScale;
 		
 		particle.force = Vector3(0, -0.05, 0);
-		particle.accelation = 1.15f * accel;
+		particle.accelation = accel;
 
 		m_vwp_immediateParticleController.lock()->AddParticle(particle);
 	}

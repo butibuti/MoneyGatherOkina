@@ -9,6 +9,7 @@
 #include "ShockWave.h"
 #include "VibrationEffectComponent.h"
 #include "BeeSoulPodUIComponent.h"
+#include "ShakeComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -34,6 +35,7 @@ void ButiEngine::Player::OnUpdate()
 	}
 
 	VibrationController();
+	ShakeDrawObject();
 }
 
 void ButiEngine::Player::OnSet()
@@ -395,6 +397,24 @@ void ButiEngine::Player::StopVibrationEffect()
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
 	}
+}
+
+void ButiEngine::Player::ShakeDrawObject()
+{
+	if (!m_vwp_shakeComponent.lock())
+	{
+		m_vwp_shakeComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+		m_vwp_shakeComponent.lock()->ShakeStart();
+		return;
+	}
+
+	float vibrationRate = m_vibration / m_maxVibration;
+	vibrationRate *= 3.0f;
+	if (vibrationRate >= 1.0f)
+	{
+		vibrationRate = 1.0f;
+	}
+	m_vwp_shakeComponent.lock()->SetShakePower(vibrationRate);
 }
 
 void ButiEngine::Player::OnInvincible()

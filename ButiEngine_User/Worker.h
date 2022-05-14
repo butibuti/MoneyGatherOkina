@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class VibrationEffectComponent;
+	class ShakeComponent;
 
 	class Worker :public GameComponent
 	{
@@ -34,6 +35,8 @@ namespace ButiEngine {
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
 
 		void StopVibrationEffect();
+		void ShakeDrawObject();
+		void StopShakeDrawObject();
 
 		void SetLookAtParameter();
 
@@ -41,7 +44,9 @@ namespace ButiEngine {
 		static float m_vibrationForce;
 
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
+		Value_weak_ptr<GameObject> m_vwp_beeSoul;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
+		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 
 		Vector3 m_defaultScale;

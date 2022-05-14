@@ -15,6 +15,7 @@
 #include "VibrationEffectComponent.h"
 #include "ShakeComponent.h"
 #include "EnemyScaleAnimationComponent.h"
+#include "PolygonParticleGenerator.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = true;
@@ -90,6 +91,8 @@ void ButiEngine::Enemy::OnSet()
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
+
+	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<PolygonParticleGenerater>();
 
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
@@ -192,30 +195,36 @@ bool ButiEngine::Enemy::IsVibrate()
 
 void ButiEngine::Enemy::Dead()
 {
+	auto position = gameObject.lock()->transform->GetWorldPosition();
 	auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
 	if (fly)
 	{
 		fly->Dead();
+		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
 	if (kiba)
 	{
 		kiba->Dead();
+		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 	if (stalker)
 	{
 		stalker->Dead();
+		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
 	if (tutorial)
 	{
 		tutorial->Dead();
+		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
 	if (volcano)
 	{
 		volcano->Dead();
+		m_vwp_polygonParticleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
