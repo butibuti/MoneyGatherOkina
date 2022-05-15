@@ -20,6 +20,12 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void SetParent(Value_weak_ptr<GameObject> arg_vwp_parent)
+		{
+			m_vwp_parent = arg_vwp_parent; 
+			gameObject.lock()->transform->SetBaseTransform(arg_vwp_parent.lock()->transform, true);
+		}
 	private:
 		float CalculateRotationDirection();
 

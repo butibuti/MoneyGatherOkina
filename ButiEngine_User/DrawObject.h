@@ -20,11 +20,7 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
-		void SetParent(Value_weak_ptr<GameObject> arg_vwp_parent) { m_vwp_parent = arg_vwp_parent; }
-		Value_weak_ptr<GameObject> GetParent() { return m_vwp_parent; }
 	private:
-		Value_weak_ptr<GameObject> m_vwp_parent;
 	};
 
 }

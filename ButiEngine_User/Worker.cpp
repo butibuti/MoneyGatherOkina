@@ -14,7 +14,7 @@
 #include "ShakeComponent.h"
 #include "BeeSoulComponent.h"
 #include "ParticleGenerater.h"
-#include "DrawObject.h"
+#include "TiltMotion.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -88,8 +88,8 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
-	auto drawObject = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
-	drawObject.lock()->GetGameComponent<DrawObject>()->SetParent(gameObject);
+	CreateDrawObject();
+
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
 	SetLookAtParameter();
@@ -119,7 +119,7 @@ void ButiEngine::Worker::Dead()
 		workerSpawner->StartTimer();
 	}
 
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
 	StopVibrationEffect();
 
@@ -209,7 +209,7 @@ void ButiEngine::Worker::ShakeDrawObject()
 {
 	if (!m_vwp_shakeComponent.lock())
 	{
-		m_vwp_shakeComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+		m_vwp_shakeComponent = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
 		m_vwp_shakeComponent.lock()->ShakeStart();
 		return;
 	}
@@ -220,11 +220,19 @@ void ButiEngine::Worker::StopShakeDrawObject()
 {
 	if (!m_vwp_shakeComponent.lock())
 	{
-		m_vwp_shakeComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+		m_vwp_shakeComponent = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
 		m_vwp_shakeComponent.lock()->ShakeStart();
 		return;
 	}
 	m_vwp_shakeComponent.lock()->SetShakePower(0.0f);
+}
+
+void ButiEngine::Worker::CreateDrawObject()
+{
+	m_vwp_tiltFloatObject = GetManager().lock()->AddObjectFromCereal("TiltFloatObject");
+	m_vwp_tiltFloatObject.lock()->SetObjectName(m_vwp_tiltFloatObject.lock()->GetGameObjectName() + "_" + gameObject.lock()->GetGameObjectName());
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>()->SetParent(gameObject);
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
 }
 
 void ButiEngine::Worker::SetLookAtParameter()

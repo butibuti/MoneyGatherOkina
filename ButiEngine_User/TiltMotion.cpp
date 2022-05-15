@@ -5,7 +5,7 @@
 
 void ButiEngine::TiltMotion::OnUpdate()
 {
-	m_front = gameObject.lock()->transform->GetFront();
+	m_front = m_vwp_parent.lock()->transform->GetFront();
 	m_front.y = 0.0f;
 	m_front.Normalize();
 
@@ -37,9 +37,8 @@ void ButiEngine::TiltMotion::OnShowUI()
 
 void ButiEngine::TiltMotion::Start()
 {
-	m_vwp_parent = gameObject.lock()->GetGameComponent<DrawObject>()->GetParent();
 	m_vlp_lookTarget = m_vwp_parent.lock()->GetGameComponent<LookAtComponent>()->GetLookTarget();
-	m_front = gameObject.lock()->transform->GetFront();
+	m_front = m_vwp_parent.lock()->transform->GetFront();
 	m_rotationTarget = (m_vlp_lookTarget->GetLocalPosition() - m_vwp_parent.lock()->transform->GetLocalPosition()).GetNormalize();
 	m_motionSpeed = 0.1f;
 }
