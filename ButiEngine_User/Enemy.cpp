@@ -19,7 +19,7 @@
 #include "CameraShakeComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
-bool ButiEngine::Enemy::m_test_isExplosion = true;
+bool ButiEngine::Enemy::m_test_isExplosion = false;
 
 void ButiEngine::Enemy::OnUpdate()
 {
