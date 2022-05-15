@@ -1,13 +1,13 @@
 #pragma once
 #include"Header/GameComponentHeader.h"
+
 namespace ButiEngine {
 
-	class PredictedPoint :public GameComponent
+	class FadeOutComponent : public GameComponent
 	{
 	public:
-
 		std::string GetGameComponentName()const override {
-			return "PredictedPoint";
+			return "FadeOutComponent";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -21,11 +21,9 @@ namespace ButiEngine {
 		}
 
 	private:
-		Value_ptr<Timer> m_vlp_lifeTimer;
-
+		float m_alpha;
 	};
-
 }
 
-BUTI_REGIST_GAMECOMPONENT(PredictedPoint, true);
+BUTI_REGIST_GAMECOMPONENT(FadeOutComponent, true);
 

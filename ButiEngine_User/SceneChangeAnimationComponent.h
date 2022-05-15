@@ -22,6 +22,7 @@ namespace ButiEngine {
 
 		void SceneStart();
 		void SceneEnd();
+		bool IsAnimation();
 
 	private:
 		void CreateHexagonPanel();

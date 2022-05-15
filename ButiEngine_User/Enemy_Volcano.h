@@ -33,6 +33,7 @@ namespace ButiEngine {
 		void SetEnemyParameter();
 
 		Value_ptr<Enemy> m_vlp_enemy;
+		Value_ptr<Timer> m_vlp_rockShotTimer;
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 
 		Vector3 m_randomVelocity;
@@ -40,7 +41,6 @@ namespace ButiEngine {
 		Vector3 m_currentScale;
 		Vector3 m_previousScale;
 
-		std::int32_t m_rockShotCount;
 		std::int32_t m_rockShotRate;
 	};
 

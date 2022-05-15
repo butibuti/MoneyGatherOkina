@@ -6,6 +6,7 @@ namespace ButiEngine {
 	class StartPopUpComponent;
 	class Player;
 	class SceneChangeAnimationComponent;
+	class GameOverManagerComponent;
 
 	class WaveManager :public GameComponent
 	{
@@ -39,13 +40,13 @@ namespace ButiEngine {
 		Value_weak_ptr<StartPopUpComponent> m_vwp_startPopUpObject;
 		Value_weak_ptr<Player> m_vwp_playerComponent;
 		Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimationComponent;
+		Value_weak_ptr<GameOverManagerComponent> m_vwp_gameOverManagerComponent;
 
 		//ウェーブ番号
 		std::int32_t m_waveNum;
 		std::int32_t m_maxWaveNum;
 
 		std::int32_t m_clearAnimationTime;
-		std::int32_t m_gameOverAnimationTime;
 
 		//Wave中かどうか
 		bool m_isWaveTime; 
@@ -59,6 +60,8 @@ namespace ButiEngine {
 		bool m_isNextSceneButton;
 		//ゲームオーバー時のリトライボタン用
 		bool m_isGameOverButton;
+		bool m_isNextScene;
+		bool m_isSceneStart;
 
 		//次のウェーブに進むまでの仮のカウント
 		std::int8_t m_enemyCount;

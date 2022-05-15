@@ -2,14 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class ParticleGenerater;
-
-	class VolcanoRock :public GameComponent
+	class GameOverManagerComponent :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "VolcanoRock";
+			return "GameOverManagerComponent";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -22,19 +20,21 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetVelocity(const Vector3& arg_velocity);
+		bool IsRetry() { return m_isRetry; }
+		bool IsNext() { return m_isNext; }
+		void AppearUI();
 
-		void Dead();
 	private:
-		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
-		Value_ptr<Timer> m_vlp_lifeTimer;
-		Vector3 m_velocity;
-		Vector3 m_rotateSpeed;
-		float m_gravity;
+		void InputSelect();
 
+		Value_ptr<Timer> m_vlp_waitTimer;
+
+		bool m_isRetry;
+		bool m_isNext;
+		bool m_isInput;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(VolcanoRock, true);
+BUTI_REGIST_GAMECOMPONENT(GameOverManagerComponent, true);
 

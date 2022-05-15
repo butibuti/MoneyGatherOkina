@@ -536,9 +536,11 @@ cd ..\</Command>
     <ClCompile Include="Enemy_Tutorial.cpp" />
     <ClCompile Include="Enemy_Volcano.cpp" />
     <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="FadeOutComponent.cpp" />
     <ClCompile Include="FloatMotionComponent.cpp" />
     <ClCompile Include="FloatMotionParent.cpp" />
     <ClCompile Include="Flocking.cpp" />
+    <ClCompile Include="GameOverManagerComponent.cpp" />
     <ClCompile Include="HeartUIManagerComponent.cpp" />
     <ClCompile Include="HexagonAnimationComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -602,9 +604,11 @@ cd ..\</Command>
     <ClInclude Include="Enemy_Tutorial.h" />
     <ClInclude Include="Enemy_Volcano.h" />
     <ClInclude Include="Explosion.h" />
+    <ClInclude Include="FadeOutComponent.h" />
     <ClInclude Include="FloatMotionComponent.h" />
     <ClInclude Include="FloatMotionParent.h" />
     <ClInclude Include="Flocking.h" />
+    <ClInclude Include="GameOverManagerComponent.h" />
     <ClInclude Include="HeartUIManagerComponent.h" />
     <ClInclude Include="HexagonAnimationComponent.h" />
     <ClInclude Include="InputManager.h" />

@@ -46,6 +46,11 @@ void ButiEngine::SceneChangeAnimationComponent::SceneEnd()
 	}
 }
 
+bool ButiEngine::SceneChangeAnimationComponent::IsAnimation()
+{
+	return m_vec_vwp_hexagons[m_panelCount - 1].lock()->GetGameComponent<HexagonAnimationComponent>()->IsAnimation();
+}
+
 void ButiEngine::SceneChangeAnimationComponent::CreateHexagonPanel()
 {
 	//4Å~5É}ÉX

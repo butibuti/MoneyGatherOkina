@@ -11,15 +11,17 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
-		void ShakeStart(const float arg_amplitude);
-		void ShakeStart(const float arg_amplitude, const std::int32_t arg_frame);
-		void ShakeStop();
 		Value_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
 		}
+
+		void ShakeStart(const float arg_amplitude);
+		void ShakeStart(const float arg_amplitude, const std::int32_t arg_frame);
+		void ShakeStop();
+
 	private:
 		bool m_startFlag;
 		float m_amplitude;

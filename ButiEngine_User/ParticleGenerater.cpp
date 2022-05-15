@@ -13,10 +13,10 @@ void ButiEngine::ParticleGenerater::OnUpdate()
 	//{
 	//	SparkParticle(Vector3(0, 10, 0));
 	//}
-	if (InputManager::IsTriggerPauseKey())
-	{
-		CatchParticles(Vector3(0, 0, 0));
-	}
+	//if (InputManager::IsTriggerPauseKey())
+	//{
+	//	CatchParticles(Vector3(0, 0, 0));
+	//}
 
 	Flickering();
 }
@@ -210,7 +210,7 @@ void ButiEngine::ParticleGenerater::PachiPachiParticles(const Vector3& arg_posit
 	}
 }
 
-void ButiEngine::ParticleGenerater::CatchParticles(const Vector3& arg_position)
+void ButiEngine::ParticleGenerater::CatchParticles(const Vector3& arg_position, Value_ptr<ButiEngine::Transform> arg_vlp_parentTransform)
 {
 	Particle3D particle;
 
@@ -239,8 +239,7 @@ void ButiEngine::ParticleGenerater::CatchParticles(const Vector3& arg_position)
 		particle.force = -particle.velocity * 0.2f;
 		particle.accelation = 1.10f;
 
-
-		m_vwp_immediateParticleController.lock()->AddParticle(particle);
+		m_vwp_immediateParticleController.lock()->AddParticle(particle, arg_vlp_parentTransform);
 	}
 
 }

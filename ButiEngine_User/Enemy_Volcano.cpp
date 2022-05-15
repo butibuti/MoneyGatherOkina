@@ -27,22 +27,21 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 		m_rockShotRate = 90;
 	}
 
-	if (m_rockShotCount < m_rockShotRate)
+	m_vlp_rockShotTimer->ChangeCountFrame(m_rockShotRate);
+
+	if (m_vlp_rockShotTimer->Update())
 	{
-		m_rockShotCount++;
-	}
-	else
-	{
-		m_rockShotCount = 0;
 		ShotVolcanoRock();
 		AddPredictedPoint();
 		m_previousScale = Vector3(0.5f, 1.3f, 0.5f);
 	}
+
 	ScaleAnimation();
 }
 
 void ButiEngine::Enemy_Volcano::OnSet()
 {
+	m_vlp_rockShotTimer = ObjectFactory::Create<RelativeTimer>();
 }
 
 void ButiEngine::Enemy_Volcano::OnRemove()
@@ -56,6 +55,8 @@ void ButiEngine::Enemy_Volcano::OnShowUI()
 void ButiEngine::Enemy_Volcano::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Volcano");
+	
+	m_vlp_rockShotTimer->Start();
 
 	SetEnemyParameter();
 
@@ -65,8 +66,9 @@ void ButiEngine::Enemy_Volcano::Start()
 	m_currentScale = m_defaultScale;
 	m_previousScale = m_currentScale;
 
-	m_rockShotCount = 0;
 	m_rockShotRate = 90;
+
+	m_vlp_rockShotTimer->ChangeCountFrame(m_rockShotRate);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Volcano::Clone()
@@ -125,7 +127,7 @@ void ButiEngine::Enemy_Volcano::ScaleAnimation()
 		return;
 	}
 
-	float lerpScale = 0.05f;
+	float lerpScale = 0.05f * GameDevice::WorldSpeed;
 	m_previousScale.x = m_previousScale.x * (1.0f - lerpScale) + m_currentScale.x * lerpScale;
 	m_previousScale.y = m_previousScale.y * (1.0f - lerpScale) + m_currentScale.y * lerpScale;
 	m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;

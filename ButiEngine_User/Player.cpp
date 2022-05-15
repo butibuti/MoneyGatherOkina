@@ -12,6 +12,7 @@
 #include "FloatMotionComponent.h"
 #include "DrawObject.h"
 #include "ShakeComponent.h"
+#include "CameraShakeComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -318,6 +319,7 @@ void ButiEngine::Player::TrajectoryParticleWaitCount()
 void ButiEngine::Player::Damage()
 {
 	m_life--;
+	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 
 	if (m_life == 0)
 	{
@@ -334,8 +336,9 @@ void ButiEngine::Player::VibrationController()
 {
 	InputManager::VibrationStop();
 	if (!m_isVibrate) { return; }
-	//InputManager::VibrationStart(m_vibration);
-	InputManager::VibrationStart(m_nearEnemyVibrationRate);
+	//float vibrationPower = m_vibration / m_maxVibration;
+	InputManager::VibrationStart(m_vibration);
+	//InputManager::VibrationStart(m_nearEnemyVibrationRate);
 }
 
 void ButiEngine::Player::IncreaseVibration()

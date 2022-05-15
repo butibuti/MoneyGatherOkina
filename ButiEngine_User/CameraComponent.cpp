@@ -16,12 +16,12 @@ void ButiEngine::CameraComponent::OnSet()
 void ButiEngine::CameraComponent::Start()
 {
     //カメラの初期位置
-    m_defaultPosition = Vector3(0, 15.0f, -12.0f);
+    m_defaultPosition = Vector3(0, 7.0f, -10.0f);
     m_currentPosition = m_defaultPosition;
     m_previousPosition = m_currentPosition;
 
     //カメラの初期角度
-    m_defaultRotateX = 0.9f;
+    m_defaultRotateX = 0.6f;
     m_currentRotateX = m_defaultRotateX;
     m_previousRotateX = m_currentRotateX;
 

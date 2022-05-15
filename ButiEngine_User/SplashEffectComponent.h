@@ -27,8 +27,7 @@ namespace ButiEngine {
 
 		Value_weak_ptr<SpriteAnimationComponent> m_vwp_spriteAnimationComponent;
 
-		std::int16_t m_animationFrame;
-		std::int16_t m_animationRate;
+		Value_ptr<Timer> m_vlp_animationTimer;
 		std::int16_t m_animationCount;
 		std::int16_t m_maxAnimationCount;
 

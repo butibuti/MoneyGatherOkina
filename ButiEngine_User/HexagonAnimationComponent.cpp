@@ -9,15 +9,15 @@ void ButiEngine::HexagonAnimationComponent::OnUpdate()
 
 void ButiEngine::HexagonAnimationComponent::OnSet()
 {
-}
-
-void ButiEngine::HexagonAnimationComponent::Start()
-{
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_scale = Vector3(0, 0, 0);
 	m_isShow = true;
 	m_isAnimation = false;
 	m_animationTimer = 0;
+}
+
+void ButiEngine::HexagonAnimationComponent::Start()
+{
 }
 
 void ButiEngine::HexagonAnimationComponent::OnShowUI()

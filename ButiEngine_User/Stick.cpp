@@ -74,8 +74,8 @@ void ButiEngine::Stick::MoveToPocket()
 		if (!m_isPocketCatch)
 		{
 			m_isPocketCatch = true;
-			auto position = gameObject.lock()->transform->GetWorldPosition();
-			m_vwp_particleGenerater.lock()->CatchParticles(position);
+			auto position = gameObject.lock()->transform->GetLocalPosition();
+			m_vwp_particleGenerater.lock()->CatchParticles(position, gameObject.lock()->transform);
 		}
 		return;
 	}

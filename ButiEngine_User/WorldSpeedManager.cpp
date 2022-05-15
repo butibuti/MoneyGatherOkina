@@ -8,7 +8,7 @@ void ButiEngine::WorldSpeedManager::OnUpdate()
 {
 	if (GameDevice::GetInput()->TriggerKey(Keys::K))
 	{
-		SetSpeed(0.0f, 30);
+		SetSpeed(0.0f, 180);
 	}
 	if (m_isChangeSpeed)
 	{

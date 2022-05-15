@@ -16,6 +16,7 @@
 #include "ShakeComponent.h"
 #include "EnemyScaleAnimationComponent.h"
 #include "ParticleGenerater.h"
+#include "CameraShakeComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = true;
@@ -246,6 +247,9 @@ void ButiEngine::Enemy::Dead()
 	gameObject.lock()->SetIsRemove(true);
 
 	//GetManager().lock()->GetGameObject("Particle")
+
+	//Ž€‚ñ‚¾‚ç‰æ–Ê—h‚ç‚·
+	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 }
 
 void ButiEngine::Enemy::Explosion()

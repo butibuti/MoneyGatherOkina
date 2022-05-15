@@ -63,6 +63,8 @@
     <ClCompile Include="WorldSpeedManager.cpp" />
     <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
+    <ClCompile Include="GameOverManagerComponent.cpp" />
+    <ClCompile Include="FadeOutComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -125,6 +127,8 @@
     <ClInclude Include="WorldSpeedManager.h" />
     <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="EnemyScaleAnimationComponent.h" />
+    <ClInclude Include="GameOverManagerComponent.h" />
+    <ClInclude Include="FadeOutComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
