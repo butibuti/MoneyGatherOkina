@@ -119,6 +119,12 @@ void ButiEngine::Worker::Dead()
 		workerSpawner->StartTimer();
 	}
 
+	auto stick = gameObject.lock()->GetGameComponent<Stick>();
+	if (stick)
+	{
+		stick->Dead();
+	}
+
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
 	StopVibrationEffect();
@@ -145,12 +151,6 @@ void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 		flocking->SetIsRemove(true);
 	}
 
-	auto moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
-	if (moveRestriction)
-	{
-		moveRestriction->SetIsRemove(true);
-	}
-
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
 	if (collider)
 	{
@@ -174,12 +174,6 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 		if (flocking)
 		{
 			flocking->SetIsRemove(true);
-		}
-
-		auto moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
-		if (moveRestriction)
-		{
-			moveRestriction->SetIsRemove(true);
 		}
 
 		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();

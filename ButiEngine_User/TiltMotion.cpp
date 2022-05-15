@@ -9,8 +9,9 @@ void ButiEngine::TiltMotion::OnUpdate()
 	m_front.y = 0.0f;
 	m_front.Normalize();
 
-	m_rotationTarget = (m_vlp_lookTarget->GetLocalPosition() - m_vwp_parent.lock()->transform->GetLocalPosition()).GetNormalize();
+	m_rotationTarget = m_vlp_lookTarget->GetWorldPosition() - m_vwp_parent.lock()->transform->GetWorldPosition();
 	m_rotationTarget.y = 0.0f;
+	m_rotationTarget.Normalize();
 
 	float dot = m_front.Dot(m_rotationTarget);
 	dot = min(dot, 1.0f);

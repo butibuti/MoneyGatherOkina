@@ -25,23 +25,22 @@ namespace ButiEngine {
 
 		void SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket);
 		bool IsPocketCatch() { return m_isPocketCatch; }
-
+		
+		void Dead();
 	private:
-		void Move();
 		//敵に接する位置まで移動する
-		void MoveToEnemy();
+		void KeepDistance();
 		//ポケットへ移動する
-		void MoveToPocket();
+		void CheckMoveFinish();
 		//移動の中心を設定する
-		void SetCenter();
+		void CreateCenter();
 
 		Value_weak_ptr<GameObject> m_vwp_pocket;
-		Value_ptr<Transform> m_vlp_center;
-		Value_ptr<Transform> m_vlp_rotationTarget;
+		Value_weak_ptr<GameObject> m_vwp_center;
 
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
-		float m_angle;
 		bool m_isPocketCatch;
+		bool m_isMoveToPocket;
 	};
 
 }
