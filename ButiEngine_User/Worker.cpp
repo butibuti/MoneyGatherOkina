@@ -11,6 +11,9 @@
 #include "SphereExclusion.h"
 #include "Enemy_Stalker.h"
 #include "VibrationEffectComponent.h"
+#include "ShakeComponent.h"
+#include "BeeSoulComponent.h"
+#include "ParticleGenerater.h"
 #include "DrawObject.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
@@ -19,6 +22,7 @@ float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
+
 	if (m_isVibration)
 	{
 		if (m_vwp_vibrationEffect.lock() == nullptr)
@@ -36,12 +40,13 @@ void ButiEngine::Worker::OnUpdate()
 			m_vwp_vibrationEffectComponent.lock()->SetVibration();
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetWorldPosition());
 		}
+		ShakeDrawObject();
 	}
 	else
 	{
 		StopVibrationEffect();
+		StopShakeDrawObject();
 	}
-
 }
 
 void ButiEngine::Worker::OnSet()
@@ -62,6 +67,8 @@ void ButiEngine::Worker::OnSet()
 				Dead();
 			}
 		});
+
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
@@ -97,10 +104,8 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
 
 void ButiEngine::Worker::Dead()
 {
-	auto beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
-	Vector3 screenPosition = GetCamera("main")->WorldToScreen(gameObject.lock()->transform->GetWorldPosition());
-	screenPosition.z = 0;
-	beeSoul.lock()->transform->SetLocalPosition(screenPosition);
+	m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
+	m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
 
 	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
 	if (player)
@@ -198,6 +203,28 @@ void ButiEngine::Worker::StopVibrationEffect()
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
 	}
+}
+
+void ButiEngine::Worker::ShakeDrawObject()
+{
+	if (!m_vwp_shakeComponent.lock())
+	{
+		m_vwp_shakeComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+		m_vwp_shakeComponent.lock()->ShakeStart();
+		return;
+	}
+	m_vwp_shakeComponent.lock()->SetShakePower(1.0f);
+}
+
+void ButiEngine::Worker::StopShakeDrawObject()
+{
+	if (!m_vwp_shakeComponent.lock())
+	{
+		m_vwp_shakeComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+		m_vwp_shakeComponent.lock()->ShakeStart();
+		return;
+	}
+	m_vwp_shakeComponent.lock()->SetShakePower(0.0f);
 }
 
 void ButiEngine::Worker::SetLookAtParameter()

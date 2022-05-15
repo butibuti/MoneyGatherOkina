@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class RigidBodyComponent;
+	class ParticleGenerater;
 
 	class Stick :public GameComponent
 	{
@@ -23,6 +24,8 @@ namespace ButiEngine {
 		}
 
 		void SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket);
+		bool IsPocketCatch() { return m_isPocketCatch; }
+
 	private:
 		void Move();
 		//“G‚ÉÚ‚·‚éˆÊ’u‚Ü‚ÅˆÚ“®‚·‚é
@@ -35,6 +38,10 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_pocket;
 		Value_ptr<Transform> m_vlp_center;
 		Value_ptr<Transform> m_vlp_rotationTarget;
+
+		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
+		float m_angle;
+		bool m_isPocketCatch;
 	};
 
 }

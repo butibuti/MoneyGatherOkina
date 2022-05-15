@@ -61,6 +61,8 @@
     <ClCompile Include="TiltMotion.cpp" />
     <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="WorldSpeedManager.cpp" />
+    <ClCompile Include="PolygonParticleGenerator.cpp" />
+    <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -121,6 +123,8 @@
     <ClInclude Include="TiltMotion.h" />
     <ClInclude Include="DrawObject.h" />
     <ClInclude Include="WorldSpeedManager.h" />
+    <ClInclude Include="PolygonParticleGenerator.h" />
+    <ClInclude Include="EnemyScaleAnimationComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

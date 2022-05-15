@@ -526,6 +526,7 @@ cd ..\</Command>
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Enemy_Fly.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
@@ -554,6 +555,7 @@ cd ..\</Command>
     <ClCompile Include="PlayerSensor.cpp" />
     <ClCompile Include="Pocket.cpp" />
     <ClCompile Include="CameraShakeComponent.cpp" />
+    <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
@@ -590,6 +592,7 @@ cd ..\</Command>
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="DrawObject.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyScaleAnimationComponent.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Enemy_Fly.h" />
     <ClInclude Include="EnemySpawnManager.h" />
@@ -614,6 +617,7 @@ cd ..\</Command>
     <ClInclude Include="PlayerSensor.h" />
     <ClInclude Include="Pocket.h" />
     <ClInclude Include="CameraShakeComponent.h" />
+    <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="SeparateDrawObject.h" />

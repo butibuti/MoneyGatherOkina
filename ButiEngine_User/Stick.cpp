@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "Stick.h"
 #include "Pocket.h"
+#include "ParticleGenerater.h"
 
 void ButiEngine::Stick::OnUpdate()
 {
@@ -11,6 +12,9 @@ void ButiEngine::Stick::OnUpdate()
 void ButiEngine::Stick::OnSet()
 {
 	m_vlp_center = ObjectFactory::Create<Transform>();
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_angle = 0;
+	m_isPocketCatch = false;
 }
 
 void ButiEngine::Stick::OnShowUI()
@@ -64,6 +68,23 @@ void ButiEngine::Stick::MoveToPocket()
 	constexpr float rotationSpeed = 0.1f;
 	auto rotation = MathHelper::LearpQuat(m_vlp_center->GetLocalRotation().ToQuat(), m_vlp_rotationTarget->GetLocalRotation().ToQuat(), rotationSpeed * GameDevice::WorldSpeed);
 	m_vlp_center->SetLocalRotation(rotation.ToMatrix());
+
+	if (m_angle < 5.0f)
+	{
+		if (!m_isPocketCatch)
+		{
+			m_isPocketCatch = true;
+			auto position = gameObject.lock()->transform->GetWorldPosition();
+			m_vwp_particleGenerater.lock()->CatchParticles(position);
+		}
+		return;
+	}
+
+	Vector3 front = m_vlp_center->GetFront();
+	Vector3 targetDir = m_vlp_rotationTarget->GetFront();
+	float dot = front.Dot(targetDir);
+	dot = min(dot, 1.0f);
+	m_angle = MathHelper::ToDegree(std::acos(dot));
 }
 
 void ButiEngine::Stick::SetCenter()

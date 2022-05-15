@@ -29,7 +29,7 @@ void ButiEngine::ShakeComponent::OnUpdate()
 		randomRotate.y = ButiRandom::GetRandom(-5, 5);
 		randomRotate.z = ButiRandom::GetRandom(-5, 5);
 		
-		m_moveRotate = randomRotate * m_amplitude;
+		m_moveRotate = randomRotate * m_amplitude * 2.0f;
 
 		Vector3 randomPosition;
 		randomPosition.x = ButiRandom::GetRandom(-5, 5);
@@ -37,7 +37,7 @@ void ButiEngine::ShakeComponent::OnUpdate()
 		randomPosition.z = ButiRandom::GetRandom(-5, 5);
 		randomPosition.Normalize();
 
-		m_movePos = randomPosition * m_amplitude * 0.2f;
+		m_movePos = randomPosition * m_amplitude * 0.1f;
 	}
 	else
 	{
@@ -113,7 +113,6 @@ void ButiEngine::ShakeComponent::ShakeStop()
 void ButiEngine::ShakeComponent::SetShakePower(const float arg_amplitude)
 {
 	m_amplitude = arg_amplitude;
-	m_amplitude *= 0.5f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::ShakeComponent::Clone()

@@ -14,6 +14,8 @@
 #include "SeparateDrawObject.h"
 #include "VibrationEffectComponent.h"
 #include "ShakeComponent.h"
+#include "EnemyScaleAnimationComponent.h"
+#include "ParticleGenerater.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = true;
@@ -27,26 +29,26 @@ void ButiEngine::Enemy::OnUpdate()
 	//Playerが近いか衝撃波が当たっていたら振動する
 	if (m_vibration > 0)
 	{
-		if (m_vwp_vibrationEffect.lock() == nullptr)
-		{
-			auto transform = gameObject.lock()->transform;
-			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
-			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
-			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
+		//if (m_vwp_vibrationEffect.lock() == nullptr)
+		//{
+		//	auto transform = gameObject.lock()->transform;
+		//	m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
+		//	m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+		//	m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
 
-			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
-		}
-		else
-		{
-			auto transform = gameObject.lock()->transform;
-			float vibrationPower = m_vibration / m_vibrationCapacity;
-			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, false);
-			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
-		}
+		//	m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+		//}
+		//else
+		//{
+		//	auto transform = gameObject.lock()->transform;
+		//	float vibrationPower = m_vibration / m_vibrationCapacity;
+		//	m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationPower, false);
+		//	m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
+		//}
 	}
 	else
 	{
-		StopVibrationEffect();
+		//StopVibrationEffect();
 	}
 
 	if (IsVibrate())
@@ -89,8 +91,8 @@ void ButiEngine::Enemy::OnSet()
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
-	m_previousScale = m_defaultScale;
-	m_maxPlusScale = m_defaultScale * 0.2f;
+
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
@@ -193,30 +195,36 @@ bool ButiEngine::Enemy::IsVibrate()
 
 void ButiEngine::Enemy::Dead()
 {
+	auto position = gameObject.lock()->transform->GetWorldPosition();
 	auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
 	if (fly)
 	{
 		fly->Dead();
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
 	if (kiba)
 	{
 		kiba->Dead();
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 	if (stalker)
 	{
 		stalker->Dead();
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
 	if (tutorial)
 	{
 		tutorial->Dead();
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
 	if (volcano)
 	{
 		volcano->Dead();
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
@@ -346,16 +354,15 @@ void ButiEngine::Enemy::ShakeDrawObject()
 
 void ButiEngine::Enemy::ScaleAnimation()
 {
+	if (!m_vwp_scaleAnimationComponent.lock())
+	{
+		m_vwp_scaleAnimationComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<EnemyScaleAnimationComponent>();
+		return;
+	}
+
+	//ここでスケール割合値をセットしてあげる
 	float lerpScale = m_vibration / m_vibrationCapacity;
-
-	m_previousScale = m_defaultScale + m_maxPlusScale * Easing::EaseOutCubic(lerpScale);
-
-	////positionの補間
-	//m_previousScale.x = m_previousScale.x * (1.0f - lerpScale) + m_currentScale.x * lerpScale;
-	//m_previousScale.y = m_previousScale.y * (1.0f - lerpScale) + m_currentScale.y * lerpScale;
-	//m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;
-
-	gameObject.lock()->transform->SetLocalScale(m_previousScale);
+	m_vwp_scaleAnimationComponent.lock()->SetScaleRate(lerpScale);
 }
 
 

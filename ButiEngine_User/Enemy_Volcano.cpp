@@ -5,6 +5,7 @@
 #include "Loiter.h"
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
+#include "EnemyScaleAnimationComponent.h"
 
 #include "InputManager.h"
 
@@ -118,16 +119,18 @@ void ButiEngine::Enemy_Volcano::AddPredictedPoint()
 
 void ButiEngine::Enemy_Volcano::ScaleAnimation()
 {
-	float lerpScale = 0.05f;
+	if (!m_vwp_scaleAnimationComponent.lock())
+	{
+		m_vwp_scaleAnimationComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<EnemyScaleAnimationComponent>();
+		return;
+	}
 
-	//position‚Ì•âŠÔ
+	float lerpScale = 0.05f;
 	m_previousScale.x = m_previousScale.x * (1.0f - lerpScale) + m_currentScale.x * lerpScale;
 	m_previousScale.y = m_previousScale.y * (1.0f - lerpScale) + m_currentScale.y * lerpScale;
 	m_previousScale.z = m_previousScale.z * (1.0f - lerpScale) + m_currentScale.z * lerpScale;
 
-	auto scale = m_vlp_enemy->GetScale() * m_previousScale;
-
-	gameObject.lock()->transform->SetLocalScale(scale);
+	m_vwp_scaleAnimationComponent.lock()->SetAnotherScale(m_previousScale);
 }
 
 void ButiEngine::Enemy_Volcano::SetEnemyParameter()

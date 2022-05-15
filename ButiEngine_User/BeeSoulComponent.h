@@ -23,15 +23,20 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetPosition(const Vector3& arg_position) { m_residualPosition = arg_position; }
+
 	private:
 		void Move();
 		void Animation();
 
 		Value_weak_ptr<SpriteAnimationComponent> m_vwp_spriteAnimationComponent;
 
+		Vector3 m_residualPosition;
+
 		float m_speed;
 
 		std::int16_t m_life;
+		std::int16_t m_residualFrame;
 
 		std::int16_t m_animationFrame;
 		std::int16_t m_animationRate;

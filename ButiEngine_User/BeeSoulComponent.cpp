@@ -4,7 +4,22 @@
 
 void ButiEngine::BeeSoulComponent::OnUpdate()
 {
-	Move();
+    if (m_residualFrame > 0)
+    {
+        m_residualFrame--;
+
+        //スクリーン座標に変換
+        Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_residualPosition);
+        screenPosition.z = 0;
+
+        gameObject.lock()->transform->SetLocalPosition(screenPosition);
+    }
+    else
+    {
+        Move();
+    }
+
+
     Animation();
 
     if (m_animationCount >= m_maxAnimationCount)
@@ -18,6 +33,7 @@ void ButiEngine::BeeSoulComponent::OnUpdate()
     else
     {
         gameObject.lock()->SetIsRemove(true);
+        return;
     }
 }
 
@@ -37,7 +53,8 @@ void ButiEngine::BeeSoulComponent::Start()
 {
     m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
     m_speed = 0.02f;
-    m_life = (std::int16_t)(1.0f / m_speed);
+    m_residualFrame = 60;
+    m_life = (std::int16_t)(1.0f / m_speed) + m_residualFrame;
     m_animationFrame = 0;
     m_animationRate = 4;
     m_animationCount = 0;
