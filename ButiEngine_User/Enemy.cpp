@@ -267,7 +267,7 @@ void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
 
 	//自身の周りに等間隔でポケットを作成する
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	float workerRadius = /*tmpWorker.lock()->transform->GetLocalScale().x*/1.0f * 0.5f;
+	float workerRadius = /*tmpWorker.lock()->transform->GetLocalScale().x*/0.5f * 0.5f;
 
 	auto pocketCenter = gameObject.lock()->transform->Clone();
 	auto pocketTransform = ObjectFactory::Create<Transform>();
