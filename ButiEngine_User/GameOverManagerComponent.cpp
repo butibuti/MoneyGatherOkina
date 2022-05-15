@@ -11,6 +11,8 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 		m_isNext = true;
 		AppearUI();
 	}
+
+	ScaleAnimation();
 }
 
 void ButiEngine::GameOverManagerComponent::OnSet()
@@ -39,8 +41,11 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::GameOverManagerComp
 void ButiEngine::GameOverManagerComponent::AppearUI()
 {
 	GetManager().lock()->AddObjectFromCereal("GameOverUI");
-	GetManager().lock()->AddObjectFromCereal("RetryUI");
-	GetManager().lock()->AddObjectFromCereal("NextTitleUI");
+	GetManager().lock()->AddObjectFromCereal("GameOverPlayerUI");
+	m_vwp_retryUI = GetManager().lock()->AddObjectFromCereal("RetryUI");
+	m_vwp_nextTitleUI = GetManager().lock()->AddObjectFromCereal("NextTitleUI");
+
+	m_defaultScale = m_vwp_retryUI.lock()->transform->GetLocalScale();
 }
 
 void ButiEngine::GameOverManagerComponent::InputSelect()
@@ -55,5 +60,22 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 	if (InputManager::IsTriggerDecideKey())
 	{
 		m_isNext = false;
+	}
+}
+
+void ButiEngine::GameOverManagerComponent::ScaleAnimation()
+{
+	if (!m_vwp_retryUI.lock() || !m_vwp_nextTitleUI.lock()) { return; }
+
+	Vector3 upScale = m_defaultScale * 1.2f;
+	if (m_isRetry)
+	{
+		m_vwp_retryUI.lock()->transform->SetLocalScale(upScale);
+		m_vwp_nextTitleUI.lock()->transform->SetLocalScale(m_defaultScale);
+	}
+	else
+	{
+		m_vwp_retryUI.lock()->transform->SetLocalScale(m_defaultScale);
+		m_vwp_nextTitleUI.lock()->transform->SetLocalScale(upScale);
 	}
 }

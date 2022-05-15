@@ -27,7 +27,13 @@ namespace ButiEngine {
 	private:
 		void InputSelect();
 
+		void ScaleAnimation(); //‰¼
+
 		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_weak_ptr<GameObject> m_vwp_retryUI;
+		Value_weak_ptr<GameObject> m_vwp_nextTitleUI;
+
+		Vector3 m_defaultScale;
 
 		bool m_isRetry;
 		bool m_isNext;
