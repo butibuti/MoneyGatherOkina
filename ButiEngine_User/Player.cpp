@@ -10,7 +10,7 @@
 #include "VibrationEffectComponent.h"
 #include "BeeSoulPodUIComponent.h"
 #include "FloatMotionComponent.h"
-#include "DrawObject.h"
+#include "TiltMotion.h"
 #include "ShakeComponent.h"
 
 void ButiEngine::Player::OnUpdate()
@@ -96,8 +96,7 @@ void ButiEngine::Player::OnShowUI()
 
 void ButiEngine::Player::Start()
 {
-	auto drawObject = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
-	drawObject.lock()->GetGameComponent<DrawObject>()->SetParent(gameObject);
+	CreateDrawObject();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
 
@@ -166,7 +165,7 @@ void ButiEngine::Player::Dead()
 
 	m_vibration = 0.0f;
 	m_isVibrate = false;
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
 	//gameObject.lock()->SetIsRemove(ture);
 }
@@ -407,7 +406,7 @@ void ButiEngine::Player::ShakeDrawObject()
 {
 	if (!m_vwp_shakeComponent.lock())
 	{
-		m_vwp_shakeComponent = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+		m_vwp_shakeComponent = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
 		m_vwp_shakeComponent.lock()->ShakeStart();
 		return;
 	}
@@ -459,6 +458,14 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 std::uint16_t ButiEngine::Player::CalculateRequestExp()
 {
 	return m_level * 10;
+}
+
+void ButiEngine::Player::CreateDrawObject()
+{
+	m_vwp_tiltFloatObject = GetManager().lock()->AddObjectFromCereal("TiltFloatObject");
+	m_vwp_tiltFloatObject.lock()->SetObjectName(m_vwp_tiltFloatObject.lock()->GetGameObjectName() + "_" + gameObject.lock()->GetGameObjectName());
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>()->SetParent(gameObject);
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
 }
 
 void ButiEngine::Player::SetLookAtParameter()

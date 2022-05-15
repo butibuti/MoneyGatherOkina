@@ -68,6 +68,8 @@ namespace ButiEngine {
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		std::uint16_t CalculateRequestExp();
+
+		void CreateDrawObject();
 		void SetLookAtParameter();
 
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
@@ -103,11 +105,14 @@ namespace ButiEngine {
 
 		bool m_isDead;
 
+		//アニメーション
+		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
+		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
+
 		//振動
 		Value_weak_ptr<GameObject> m_vwp_shockWave;
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
-		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		float m_vibrationForce;
 		bool m_isVibrate;
 		bool m_isIncrease;

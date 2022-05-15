@@ -39,10 +39,13 @@ namespace ButiEngine {
 		void ShakeDrawObject();
 		void StopShakeDrawObject();
 
+		void CreateDrawObject();
 		void SetLookAtParameter();
 
 		static float m_nearBorder;
 		static float m_vibrationForce;
+
+		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
 
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<GameObject> m_vwp_beeSoul;
