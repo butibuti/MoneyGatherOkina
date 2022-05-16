@@ -18,7 +18,7 @@
 #include "FloatMotionComponent.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
-float ButiEngine::Worker::m_nearBorder = 3.0f;
+float ButiEngine::Worker::m_nearBorder = 1.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
@@ -64,7 +64,6 @@ void ButiEngine::Worker::OnSet()
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
-
 				Dead();
 			}
 		});
@@ -126,7 +125,11 @@ void ButiEngine::Worker::Dead()
 		stick->Dead();
 	}
 
-	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+	if (m_vwp_tiltFloatObject.lock())
+	{
+		m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+		m_vwp_tiltFloatObject.lock()->SetIsRemove(true);
+	}
 
 	StopVibrationEffect();
 
@@ -172,6 +175,8 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 	if (pocket.lock())
 	{
 		gameObject.lock()->transform->SetLookAtRotation(arg_vwp_enemy.lock()->transform->GetLocalPosition());
+
+		enemyComponent->SetIsStickWorker(true);
 
 		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
 		if (flocking)

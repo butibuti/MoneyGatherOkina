@@ -33,6 +33,7 @@ namespace ButiEngine {
 		void SetVibrationResistance(const float arg_resistance) { m_vibrationResistance = arg_resistance; }
 		void SetExplosionScale(const float arg_scale) { m_explosionScale = arg_scale; }
 		void SetIsNearPlayer(const bool arg_isNearPlayer) { m_isNearPlayer = arg_isNearPlayer; }
+		void SetIsStickWorker(const bool arg_isStickWorker) { m_isStickWorker = arg_isStickWorker; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
@@ -80,6 +81,7 @@ namespace ButiEngine {
 
 		bool m_isNearPlayer;
 		bool m_isHitShockWave;
+		bool m_isStickWorker;
 		Vector3 m_defaultScale;
 
 		float m_vibration;
