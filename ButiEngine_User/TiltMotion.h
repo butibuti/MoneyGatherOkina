@@ -27,10 +27,14 @@ namespace ButiEngine {
 			gameObject.lock()->transform->SetBaseTransform(arg_vwp_parent.lock()->transform, true);
 		}
 	private:
+		void SetXAngle();
+		void SetZAngle();
+
 		float CalculateRotationDirection();
 
 		Value_weak_ptr<GameObject> m_vwp_parent;
 		Value_ptr<Transform> m_vlp_lookTarget;
+		Vector3 m_rotation;
 		Vector3 m_front;
 		Vector3 m_rotationTarget;
 		float m_motionSpeed;

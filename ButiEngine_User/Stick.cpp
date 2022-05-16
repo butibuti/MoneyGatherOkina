@@ -93,7 +93,7 @@ void ButiEngine::Stick::CheckMoveFinish()
 	dot = min(dot, 1.0f);
 	float angle = MathHelper::ToDegree(std::acos(dot));
 
-	if (angle <= 1.0f)
+	if (angle < 1.0f)
 	{
 		//gameObject.lock()->transform->SetBaseTransform(m_vwp_pocket.lock()->transform);
 		//gameObject.lock()->transform->SetLocalPosition(Vector3Const::Zero);
