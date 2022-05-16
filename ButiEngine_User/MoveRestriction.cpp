@@ -22,7 +22,6 @@ void ButiEngine::MoveRestriction::OnShowUI()
 void ButiEngine::MoveRestriction::Start()
 {
 	m_vwp_field = GetManager().lock()->GetGameObject(GameObjectTag("Field"));
-	m_vlp_rigidBody = gameObject.lock()->GetGameComponent<RigidBodyComponent>();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::MoveRestriction::Clone()
@@ -44,6 +43,24 @@ float ButiEngine::MoveRestriction::GetOutLength(const Vector3& arg_pos)
 	float outLength = max(0.0f, distance - border);
 
 	return outLength;
+}
+
+float ButiEngine::MoveRestriction::GetDistanceSqrToFieldCenter(const Vector3& arg_pos)
+{
+	Vector3 fieldPos = m_vwp_field.lock()->transform->GetLocalPosition();
+	fieldPos.y = arg_pos.y;
+	float distanceSqr = (arg_pos - fieldPos).GetLengthSqr();
+	return distanceSqr;
+}
+
+float ButiEngine::MoveRestriction::GetBorderSqr()
+{
+	float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
+	float fieldRadius = m_vwp_field.lock()->transform->GetLocalScale().x * 0.5f;
+
+	float border = fieldRadius - radius;
+	float borderSqr = border * border;
+	return borderSqr;
 }
 
 bool ButiEngine::MoveRestriction::IsOutField(const Vector3& arg_pos)
@@ -77,9 +94,4 @@ void ButiEngine::MoveRestriction::SetNewPosition()
 	Vector3 dir = (pos - fieldPos).GetNormalize();
 	Vector3 newPos = fieldPos + dir * border;
 	gameObject.lock()->transform->SetWorldPosition(newPos);
-
-	if (m_vlp_rigidBody)
-	{
-		m_vlp_rigidBody->TransformApply();
-	}
 }

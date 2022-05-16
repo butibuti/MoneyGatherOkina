@@ -2,6 +2,7 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class MoveRestriction;
 
 	class Loiter :public GameComponent
 	{
@@ -37,6 +38,7 @@ namespace ButiEngine {
 		void Wait();
 		void SetMoveTarget();
 
+		Value_ptr<MoveRestriction> m_vlp_moveRestriction;
 		Value_ptr<Transform> m_vlp_targetSpawner;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		

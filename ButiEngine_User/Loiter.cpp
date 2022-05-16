@@ -49,6 +49,7 @@ void ButiEngine::Loiter::OnShowUI()
 
 void ButiEngine::Loiter::Start()
 {
+	m_vlp_moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
 	m_vlp_targetSpawner = ObjectFactory::Create<Transform>();
 	m_vlp_targetSpawner->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 
@@ -106,14 +107,14 @@ void ButiEngine::Loiter::Move()
 		Accel();
 	}
 
-	//ターゲットにある程度近づいたらスピードを落とす
 	if (m_isBrake)
 	{
 		Brake();
 	}
 	else
 	{
-		float nearBorder = m_moveRange * 0.3f;
+		//ターゲットにある程度近づいたらスピードを落とす
+		float nearBorder = 0.5f;
 		float nearBorderSqr = nearBorder * nearBorder;
 		float distanceSqr = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetLengthSqr();
 		if (distanceSqr <= nearBorderSqr)
@@ -124,6 +125,12 @@ void ButiEngine::Loiter::Move()
 
 	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
+
+	//フィールドの外に出たらブレーキをかけ始める
+	if (m_vlp_moveRestriction->IsOutField(gameObject.lock()->transform->GetLocalPosition()))
+	{
+		StartBrake();
+	}
 }
 
 void ButiEngine::Loiter::Accel()
@@ -169,15 +176,8 @@ void ButiEngine::Loiter::Wait()
 void ButiEngine::Loiter::SetMoveTarget()
 {
 	m_vlp_targetSpawner->RollLocalRotationY_Degrees(ButiRandom::GetRandom(90, 270));
-	m_moveTarget = m_vlp_targetSpawner->GetLocalPosition() + m_vlp_targetSpawner->GetFront() * ButiRandom::GetRandom(m_moveRange * 0.9f, m_moveRange);
-
-	//フィールドから出ている分戻す
-	auto moveRestriction = gameObject.lock()->GetGameComponent<MoveRestriction>();
-	if (moveRestriction->IsOutField(m_moveTarget))
-	{
-		float outLength = moveRestriction->GetOutLength(m_moveTarget);
-		m_moveTarget -= m_vlp_targetSpawner->GetFront() * outLength;
-	}
+	float length = ButiRandom::GetRandom(m_moveRange * 0.9f, m_moveRange);
+	m_moveTarget = m_vlp_targetSpawner->GetLocalPosition() + m_vlp_targetSpawner->GetFront() * length;
 
 	m_velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 }

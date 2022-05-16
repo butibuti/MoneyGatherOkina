@@ -2,8 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class RigidBodyComponent;
-
 	class MoveRestriction :public GameComponent
 	{
 	public:
@@ -23,12 +21,13 @@ namespace ButiEngine {
 		}
 
 		float GetOutLength(const Vector3& arg_pos);
+		float GetDistanceSqrToFieldCenter(const Vector3& arg_pos);
+		float GetBorderSqr();
 		bool IsOutField(const Vector3& arg_pos);
 	private:
 		void SetNewPosition();
 
 		Value_weak_ptr<GameObject> m_vwp_field;
-		Value_ptr<RigidBodyComponent> m_vlp_rigidBody;
 		float m_outLength;
 	};
 

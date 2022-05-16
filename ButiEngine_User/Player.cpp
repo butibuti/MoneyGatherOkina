@@ -336,7 +336,7 @@ void ButiEngine::Player::VibrationController()
 	InputManager::VibrationStop();
 	if (!m_isVibrate) { return; }
 	//float vibrationPower = m_vibration / m_maxVibration;
-	InputManager::VibrationStart(m_vibration);
+	InputManager::VibrationStart(m_vibration * 0.3f);
 	//InputManager::VibrationStart(m_nearEnemyVibrationRate);
 }
 
