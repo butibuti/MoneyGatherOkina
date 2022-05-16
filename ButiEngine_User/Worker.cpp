@@ -160,6 +160,18 @@ void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 	{
 		collider->SetIsRemove(true);
 	}
+
+	auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
+	if (tiltMotion)
+	{
+		tiltMotion->SetIsRemove(true);
+	}
+
+	auto floatMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<FloatMotionComponent>();
+	if (floatMotion)
+	{
+		floatMotion->SetIsRemove(true);
+	}
 }
 
 void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy)
@@ -176,7 +188,7 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 	{
 		gameObject.lock()->transform->SetLookAtRotation(arg_vwp_enemy.lock()->transform->GetLocalPosition());
 
-		enemyComponent->SetIsStickWorker(true);
+		enemyComponent->AddStickWorkerCount();
 
 		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
 		if (flocking)

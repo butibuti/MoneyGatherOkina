@@ -97,7 +97,7 @@ void ButiEngine::Enemy::OnSet()
 
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
-	m_isStickWorker = false;
+	m_stickWorkerCount = 0;
 	m_vibration = 0.0f;
 	m_vibrationIncrease = 0.0f;
 	m_vibrationCapacity = 100.0f;
@@ -192,7 +192,7 @@ std::vector<ButiEngine::Value_weak_ptr<ButiEngine::GameObject>> ButiEngine::Enem
 
 bool ButiEngine::Enemy::IsVibrate()
 {
-	return m_isStickWorker || m_isNearPlayer || m_isHitShockWave;
+	return m_stickWorkerCount > 0 || m_isNearPlayer || m_isHitShockWave;
 }
 
 void ButiEngine::Enemy::Dead()
@@ -375,9 +375,15 @@ void ButiEngine::Enemy::CalculateVibrationIncrease()
 {
 	float playerVibrationForce = m_vlp_playerComponent->GetVibrationForce();
 	float workerVibrationForce = Worker::GetVibrationForce();
-	float stickWorkerCount = GetStickWorkerCount();
 
-	m_vibrationIncrease = playerVibrationForce + workerVibrationForce * stickWorkerCount - m_vibrationResistance;
+	m_vibrationIncrease = 0.0f;
+
+	if (m_isNearPlayer || m_isHitShockWave)
+	{
+		m_vibrationIncrease += playerVibrationForce;
+	}
+
+	m_vibrationIncrease += workerVibrationForce * m_stickWorkerCount - m_vibrationResistance;
 	m_vibrationIncrease = max(m_vibrationIncrease, 0.0f);
 }
 
