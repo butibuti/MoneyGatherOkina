@@ -28,7 +28,6 @@ void ButiEngine::Player::OnUpdate()
 
 	m_nearEnemyCount = 0;
 
-	TrajectoryParticleWaitCount();
 	MoveKnockBack();
 	Move();
 
@@ -56,6 +55,8 @@ void ButiEngine::Player::OnSet()
 		});
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
+
+	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
 }
 
 void ButiEngine::Player::OnRemove()
@@ -142,9 +143,9 @@ void ButiEngine::Player::Start()
 	m_vibrationDecrease = m_maxVibration / 300.0f;
 	m_nearEnemyVibrationRate = 0.0f;
 
+	m_vlp_particleTimer->Start();
+	m_vlp_particleTimer->ChangeCountFrame(4);
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
-	m_addTrajectoryParticleCounter = 0;
-	m_addTrajectoryParticleWait = 4;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -244,7 +245,7 @@ void ButiEngine::Player::Move()
 			m_velocity = m_velocity.GetNormalize() * m_maxMoveSpeed;
 		}
 
-		if (m_addTrajectoryParticleCounter == 0)
+		if (m_vlp_particleTimer->Update())
 		{
 			auto position = gameObject.lock()->transform->GetWorldPosition();
 			Vector3 pachiPachiPosition = position - m_velocity * 10.0f;
@@ -303,18 +304,6 @@ void ButiEngine::Player::MoveKnockBack()
 	}
 }
 
-void ButiEngine::Player::TrajectoryParticleWaitCount()
-{
-	if (m_addTrajectoryParticleCounter < m_addTrajectoryParticleWait)
-	{
-		m_addTrajectoryParticleCounter++;
-	}
-	else
-	{
-		m_addTrajectoryParticleCounter = 0;
-	}
-}
-
 void ButiEngine::Player::Damage()
 {
 	if (m_isDead) { return; }
@@ -341,7 +330,7 @@ void ButiEngine::Player::VibrationController()
 	if (!m_isVibrate) { return; }
 
 	//float vibrationPower = m_vibration / m_maxVibration;
-	InputManager::VibrationStart(m_vibration);
+	InputManager::VibrationStart(m_vibration * 0.3f);
 	//InputManager::VibrationStart(m_nearEnemyVibrationRate);
 }
 

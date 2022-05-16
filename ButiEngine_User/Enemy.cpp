@@ -231,7 +231,7 @@ void ButiEngine::Enemy::Dead()
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
 	RemoveAllPocket();
-	SubDeadCount();
+	AddDeadCount();
 	StopVibrationEffect();
 
 	if (m_vwp_playerSensor.lock())
@@ -406,10 +406,10 @@ void ButiEngine::Enemy::RemoveAllPocket()
 	m_vec_pockets.clear();
 }
 
-void ButiEngine::Enemy::SubDeadCount()
+void ButiEngine::Enemy::AddDeadCount()
 {
-	//ウェーブマネージャーのカウント減少関数を呼ぶ
-	m_vwp_waveManager.lock()->SubEnemyDeadCount();
+	//ウェーブマネージャーの討伐数カウント関数を呼ぶ
+	m_vwp_waveManager.lock()->AddEnemyDeadCount();
 }
 
 void ButiEngine::Enemy::StopVibrationEffect()

@@ -57,7 +57,7 @@ namespace ButiEngine {
 		void CalculateVibrationIncrease();
 		std::uint8_t GetStickWorkerCount();
 		void RemoveAllPocket();
-		void SubDeadCount();
+		void AddDeadCount();
 		void StopVibrationEffect();
 
 		static bool m_test_isExplosion;

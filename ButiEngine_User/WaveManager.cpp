@@ -62,7 +62,7 @@ void ButiEngine::WaveManager::Start()
 	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
 	m_vwp_sceneChangeAnimationComponent = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
 	m_waveNum = 0;
-	m_maxWaveNum = 20;
+	m_maxWaveNum = 1;
 	m_clearAnimationTime = 0;
 	m_isWaveTime = false;
 	m_isPopupSpawn = false;
@@ -73,7 +73,9 @@ void ButiEngine::WaveManager::Start()
 	m_isNextScene = false;
 	m_isSceneStart = false;
 
-	m_enemyCount = 0;
+	m_enemyDeadCount = 0;
+	m_maxEnemyCount = 10;
+	m_enemySpawnCount = 0;
 }
 
 void ButiEngine::WaveManager::OnShowUI()
@@ -89,14 +91,14 @@ void ButiEngine::WaveManager::WaveStart()
 	m_isWaveTime = true;
 }
 
-void ButiEngine::WaveManager::SubEnemyDeadCount()
+void ButiEngine::WaveManager::AddEnemyDeadCount()
 {
-	m_enemyCount--;
+	m_enemyDeadCount++;
 }
 
-bool ButiEngine::WaveManager::IsClearAnimationFlag()
+void ButiEngine::WaveManager::AddSpawnCount()
 {
-	return m_isLastWaveClear;
+	m_enemySpawnCount++;
 }
 
 void ButiEngine::WaveManager::FixWaveNum()
@@ -141,9 +143,9 @@ void ButiEngine::WaveManager::MoveWave()
 	//	m_enemyCount++;
 	//}
 	//フィールド内の敵をすべて倒していたら
-	if (m_enemyCount <= 0 && m_isWaveTime)
+	if (m_enemyDeadCount >= m_maxEnemyCount && m_isWaveTime)
 	{
-		//WaveFinish();
+		WaveFinish();
 	}
 }
 
@@ -172,6 +174,8 @@ void ButiEngine::WaveManager::SpawnEnemy()
 	//	m_enemyCount++;
 	//}
 
+
+	//スポナーを生成
 	auto enemy0 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
 	enemy0->SetType(0);
 	auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
@@ -188,7 +192,7 @@ void ButiEngine::WaveManager::WaveFinish()
 	//ウェーブ終了
 	m_isWaveTime = false;
 	m_isPopupSpawn = true;
-	m_enemyCount = 0;
+	m_enemyDeadCount = 0;
 }
 
 void ButiEngine::WaveManager::StageClearAnimation()

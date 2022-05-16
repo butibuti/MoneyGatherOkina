@@ -53,7 +53,6 @@ namespace ButiEngine {
 		void Move();
 		void LevelUp();
 		void MoveKnockBack();
-		void TrajectoryParticleWaitCount();
 		void Damage();
 
 		void VibrationController();
@@ -124,9 +123,8 @@ namespace ButiEngine {
 		float m_nearEnemyVibrationRate;
 
 		//パーティクル
+		Value_ptr<Timer> m_vlp_particleTimer;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
-		std::int8_t m_addTrajectoryParticleCounter;
-		std::int8_t m_addTrajectoryParticleWait;
 	};
 
 }

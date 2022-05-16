@@ -3,6 +3,8 @@
 
 namespace ButiEngine {
 
+	class WaveManager;
+
 	class EnemySpawner :public GameComponent
 	{
 	public:
@@ -23,15 +25,17 @@ namespace ButiEngine {
 		void SetType(const std::int8_t arg_num);
 
 	private:
+		void OnceUpdate();
+		void SpawnEnemy();
 
-		Vector3 m_randomPosition;
+		Value_weak_ptr<WaveManager> m_waveManagerComponent;
+		Value_ptr<Timer> m_vlp_spawnTimer;
+		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_ptr<Timer> m_vlp_subWaitTimer;
 		
 		std::int8_t m_spawnType;
-		std::int32_t m_spawnTimer;
 		std::int32_t m_spawnRate;
 		std::int32_t m_maxSpawnRate;
-		std::int32_t m_spawnStartTimer;
-		std::int16_t m_subWaitTimer;
 
 		bool m_isOnce;
 	};
