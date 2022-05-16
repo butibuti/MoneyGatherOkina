@@ -12,7 +12,7 @@ void ButiEngine::SceneChangeAnimationComponent::OnSet()
 
 void ButiEngine::SceneChangeAnimationComponent::Start()
 {
-	m_defaultPosition = Vector3(-750, 500, -0.2f);
+	m_defaultPosition = Vector3(-750, 500, -200.0f);
 	m_space = Vector3(433, 375, 0);
 	CreateHexagonPanel();
 }

@@ -6,16 +6,7 @@ float shakePower = 0.1f;
 
 void ButiEngine::ShakeComponent::OnUpdate()
 {
-	//if (InputManager::IsTriggerLeftKey())
-	//{
-	//	ShakeStart();
-	//}
-	//else if (InputManager::IsTriggerRightKey())
-	//{
-	//	ShakeStop();
-	//}
-
-	//SetShakePower(shakePower);
+	ShakeLimited();
 
 	if (!m_isShake || m_amplitude <= 0.0f)
 	{
@@ -59,8 +50,10 @@ void ButiEngine::ShakeComponent::OnUpdate()
 
 void ButiEngine::ShakeComponent::OnSet()
 {
+	m_vlp_shakeTimer = ObjectFactory::Create<RelativeTimer>();
 	m_isShake = false;
 	m_isMove = false;
+	m_isShakeLimited = false;
 	m_currentRotate = gameObject.lock()->transform->GetLocalRotation().GetEulerOneValue_local().ToDegrees();
 	m_moveRotate = Vector3(0, 0, 0);
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
@@ -79,6 +72,22 @@ void ButiEngine::ShakeComponent::OnShowUI()
 	GUI::DragFloat("##ShakePower", &shakePower, 0.01f, 0.0f, 1.0f);
 }
 
+void ButiEngine::ShakeComponent::Shake(const float arg_amplitude, const std::int32_t arg_shakeFrame)
+{
+	m_vlp_shakeTimer->Reset();
+	m_vlp_shakeTimer->ChangeCountFrame(arg_shakeFrame);
+	m_vlp_shakeTimer->Start();
+
+	ShakeStop();
+	m_isMove = false;
+	m_isShake = true;
+	m_isShakeLimited = true;
+	m_currentRotate = gameObject.lock()->transform->GetLocalRotation().GetEulerOneValue_local().ToDegrees();
+	m_moveRotate = Vector3(0, 0, 0);
+	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
+	m_movePos = Vector3(0, 0, 0);
+}
+
 void ButiEngine::ShakeComponent::ShakeStart()
 {
 	ShakeStop();
@@ -94,6 +103,7 @@ void ButiEngine::ShakeComponent::ShakeStart()
 void ButiEngine::ShakeComponent::ShakeStop()
 {
 	m_isShake = false;
+	m_isShakeLimited = false;
 	if (m_isMove)
 	{
 		m_moveRotate = -m_moveRotate;
@@ -113,6 +123,15 @@ void ButiEngine::ShakeComponent::ShakeStop()
 void ButiEngine::ShakeComponent::SetShakePower(const float arg_amplitude)
 {
 	m_amplitude = arg_amplitude;
+}
+
+void ButiEngine::ShakeComponent::ShakeLimited()
+{
+	if (!m_isShakeLimited) { return; }
+	if (m_vlp_shakeTimer->Update())
+	{
+		ShakeStop();
+	}
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::ShakeComponent::Clone()

@@ -317,6 +317,8 @@ void ButiEngine::Player::TrajectoryParticleWaitCount()
 
 void ButiEngine::Player::Damage()
 {
+	if (m_isDead) { return; }
+
 	m_life--;
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 
@@ -334,7 +336,10 @@ void ButiEngine::Player::Damage()
 void ButiEngine::Player::VibrationController()
 {
 	InputManager::VibrationStop();
+
+	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
+
 	//float vibrationPower = m_vibration / m_maxVibration;
 	InputManager::VibrationStart(m_vibration);
 	//InputManager::VibrationStart(m_nearEnemyVibrationRate);
@@ -370,6 +375,8 @@ void ButiEngine::Player::DecreaseVibration()
 
 void ButiEngine::Player::VibrationEffect()
 {
+	if (m_isDead) { return; }
+
 	if (m_isVibrate)
 	{
 		if (m_vwp_vibrationEffect.lock() == nullptr)
@@ -398,6 +405,8 @@ void ButiEngine::Player::VibrationEffect()
 
 void ButiEngine::Player::StopVibrationEffect()
 {
+	if (m_isDead) { return; }
+
 	if (m_vwp_vibrationEffect.lock() != nullptr)
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
@@ -407,6 +416,8 @@ void ButiEngine::Player::StopVibrationEffect()
 
 void ButiEngine::Player::ShakeDrawObject()
 {
+	if (m_isDead) { return; }
+
 	if (!m_vwp_shakeComponent.lock())
 	{
 		m_vwp_shakeComponent = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();

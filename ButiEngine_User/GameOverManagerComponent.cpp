@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "GameOverManagerComponent.h"
+#include "ShakeComponent.h"
 #include "InputManager.h"
 
 void ButiEngine::GameOverManagerComponent::OnUpdate()
@@ -13,11 +14,13 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 	}
 
 	ScaleAnimation();
+	PlayerPikuPiku();
 }
 
 void ButiEngine::GameOverManagerComponent::OnSet()
 {
 	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_pikupikuTimer = ObjectFactory::Create<RelativeTimer>();
 }
 
 void ButiEngine::GameOverManagerComponent::OnShowUI()
@@ -28,6 +31,8 @@ void ButiEngine::GameOverManagerComponent::Start()
 {
 	m_vlp_waitTimer->Start();
 	m_vlp_waitTimer->ChangeCountFrame(120);
+	m_vlp_pikupikuTimer->Start();
+	m_vlp_pikupikuTimer->ChangeCountFrame(ButiRandom::GetRandom(3, 30));
 	GetManager().lock()->AddObjectFromCereal("FadeOutUI");
 	m_isRetry = true;
 	m_isNext = false;
@@ -41,7 +46,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::GameOverManagerComp
 void ButiEngine::GameOverManagerComponent::AppearUI()
 {
 	GetManager().lock()->AddObjectFromCereal("GameOverUI");
-	GetManager().lock()->AddObjectFromCereal("GameOverPlayerUI");
+	m_vwp_gameOverPlayerUI = GetManager().lock()->AddObjectFromCereal("GameOverPlayerUI");
 	m_vwp_retryUI = GetManager().lock()->AddObjectFromCereal("RetryUI");
 	m_vwp_nextTitleUI = GetManager().lock()->AddObjectFromCereal("NextTitleUI");
 
@@ -78,4 +83,16 @@ void ButiEngine::GameOverManagerComponent::ScaleAnimation()
 		m_vwp_retryUI.lock()->transform->SetLocalScale(m_defaultScale);
 		m_vwp_nextTitleUI.lock()->transform->SetLocalScale(upScale);
 	}
+}
+
+void ButiEngine::GameOverManagerComponent::PlayerPikuPiku()
+{
+	if (!m_vwp_gameOverPlayerUI.lock()) { return; }
+
+	if (m_vlp_pikupikuTimer->Update())
+	{
+		m_vlp_pikupikuTimer->ChangeCountFrame(ButiRandom::GetRandom(20, 40));
+		m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ShakeComponent>()->Shake(0.5f, 2);
+	}
+	
 }
