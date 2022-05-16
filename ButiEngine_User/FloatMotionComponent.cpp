@@ -8,11 +8,16 @@ void ButiEngine::FloatMotionComponent::OnUpdate()
 		SetRandomSpeed();
 	}
 	m_theta += m_motionSpeed * GameDevice::WorldSpeed;
-	gameObject.lock()->transform->SetWorldPostionY(std::sin(m_theta) * m_amplitude);
+	gameObject.lock()->transform->SetLocalPositionY(std::sin(m_theta) * m_amplitude);
 }
 
 void ButiEngine::FloatMotionComponent::OnSet()
 {
+}
+
+void ButiEngine::FloatMotionComponent::OnRemove()
+{
+	gameObject.lock()->transform->SetWorldPostionY(0.0f);
 }
 
 void ButiEngine::FloatMotionComponent::OnShowUI()

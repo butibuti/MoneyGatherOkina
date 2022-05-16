@@ -12,6 +12,7 @@ namespace ButiEngine {
 		}
 		void OnUpdate()override;
 		void OnSet()override;
+		void OnRemove()override;
 		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;

@@ -17,6 +17,11 @@ void ButiEngine::TiltMotion::OnSet()
 {
 }
 
+void ButiEngine::TiltMotion::OnRemove()
+{
+	gameObject.lock()->transform->RollIdentity();
+}
+
 void ButiEngine::TiltMotion::OnShowUI()
 {
 	GUI::BulletText("MotionSpeed");

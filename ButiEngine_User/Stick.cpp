@@ -8,18 +8,10 @@ void ButiEngine::Stick::OnUpdate()
 {
 	if (!m_vwp_pocket.lock()) { return; }
 
-	auto parent = gameObject.lock()->transform->GetBaseTransform();
-	Vector3 defaultScale = Vector3(0.5f, 0.5f, 0.5f);
-	Vector3 scale = defaultScale;
-	if (parent)
-	{
-		scale = scale / parent->GetWorldScale();
-	}
-	gameObject.lock()->transform->SetLocalScale(scale);
-
-	KeepDistance();
+	KeepWorldScale();
 	if (m_vwp_center.lock())
 	{
+		KeepDistance();
 		CheckMoveFinish();
 	}
 }
@@ -52,11 +44,6 @@ void ButiEngine::Stick::SetPocket(Value_weak_ptr<GameObject> arg_vwp_pocket)
 
 	KeepDistance();
 	CreateCenter();
-
-	/*m_vlp_rotationTarget = m_vlp_center->Clone();
-	m_vlp_rotationTarget->SetLookAtRotation(m_vwp_pocket.lock()->transform->GetWorldPosition());*/
-
-	m_isMoveToPocket = true;
 }
 
 void ButiEngine::Stick::Dead()
@@ -65,6 +52,18 @@ void ButiEngine::Stick::Dead()
 	{
 		m_vwp_center.lock()->SetIsRemove(true);
 	}
+}
+
+void ButiEngine::Stick::KeepWorldScale()
+{
+	auto parent = gameObject.lock()->transform->GetBaseTransform();
+	Vector3 defaultScale = Vector3(0.5f, 0.5f, 0.5f);
+	Vector3 scale = defaultScale;
+	if (parent)
+	{
+		scale = scale / parent->GetWorldScale();
+	}
+	gameObject.lock()->transform->SetLocalScale(scale);
 }
 
 void ButiEngine::Stick::KeepDistance()
@@ -95,10 +94,7 @@ void ButiEngine::Stick::CheckMoveFinish()
 
 	if (angle < 1.0f)
 	{
-		//gameObject.lock()->transform->SetBaseTransform(m_vwp_pocket.lock()->transform);
-		//gameObject.lock()->transform->SetLocalPosition(Vector3Const::Zero);
 		gameObject.lock()->transform->SetBaseTransform(m_vwp_pocket.lock()->GetGameComponent<Pocket>()->GetEnemy().lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->transform);
-		//gameObject.lock()->transform->SetBaseTransform(nullptr);
 		m_vwp_center.lock()->SetIsRemove(true);
 		m_vwp_center = Value_weak_ptr<GameObject>();
 	}

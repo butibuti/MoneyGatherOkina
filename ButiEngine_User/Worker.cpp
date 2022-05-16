@@ -15,6 +15,7 @@
 #include "BeeSoulComponent.h"
 #include "ParticleGenerater.h"
 #include "TiltMotion.h"
+#include "FloatMotionComponent.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 3.0f;
@@ -170,6 +171,8 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 	if (pocket.lock())
 	{
+		gameObject.lock()->transform->SetLookAtRotation(arg_vwp_enemy.lock()->transform->GetLocalPosition());
+
 		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
 		if (flocking)
 		{
@@ -182,7 +185,23 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 			collider->SetIsRemove(true);
 		}
 
-		m_vlp_lookAt->SetLookTarget(arg_vwp_enemy.lock()->transform);
+		auto lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+		if (lookAt)
+		{
+			lookAt->SetIsRemove(true);
+		}
+
+		auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
+		if (tiltMotion)
+		{
+			tiltMotion->SetIsRemove(true);
+		}
+
+		//auto floatMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<FloatMotionComponent>();
+		//if (floatMotion)
+		//{
+		//	//floatMotion->SetIsRemove(true);
+		//}
 
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();

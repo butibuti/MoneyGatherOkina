@@ -28,7 +28,7 @@ namespace ButiEngine {
 		
 		void Dead();
 	private:
-		//敵に接する位置まで移動する
+		void KeepWorldScale();
 		void KeepDistance();
 		//ポケットへ移動する
 		void CheckMoveFinish();
