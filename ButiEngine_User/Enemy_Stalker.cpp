@@ -121,6 +121,13 @@ void ButiEngine::Enemy_Stalker::Prey(Value_weak_ptr<GameObject> arg_vwp_other)
 {
 	if (m_isPrey) { return; }
 
+	m_velocity = Vector3Const::Zero;
+
+	gameObject.lock()->transform->SetLookAtRotation((arg_vwp_other.lock()->transform->GetWorldPosition()));
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront());
+	m_vlp_preyTimer->Start();
+	m_isPrey = true;
+
 	//Worker‚È‚ç•ß‚Ü‚¦‚é
 	auto worker = arg_vwp_other.lock()->GetGameComponent<Worker>();
 	if (worker)
@@ -128,21 +135,10 @@ void ButiEngine::Enemy_Stalker::Prey(Value_weak_ptr<GameObject> arg_vwp_other)
 		m_vwp_preyTarget = arg_vwp_other;
 		worker->Predated(gameObject);
 	}
-
-	m_velocity = Vector3Const::Zero;
-
-	m_vlp_lookAt->GetLookTarget()->SetLocalPosition((arg_vwp_other.lock()->transform->GetWorldPosition()));
-	m_vlp_preyTimer->Start();
-	m_isPrey = true;
 }
 
 void ButiEngine::Enemy_Stalker::OnPrey()
 {
-	if (m_vwp_preyTarget.lock())
-	{
-		m_vlp_lookAt->GetLookTarget()->SetLocalPosition((m_vwp_preyTarget.lock()->transform->GetWorldPosition()));
-	}
-
 	if (m_vlp_preyTimer->Update())
 	{
 		m_vlp_preyTimer->Stop();
