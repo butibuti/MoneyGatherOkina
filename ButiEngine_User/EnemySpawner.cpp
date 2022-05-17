@@ -93,9 +93,9 @@ void ButiEngine::EnemySpawner::OnceUpdate()
 	switch (m_spawnType)
 	{
 	case 0: //ハエ
-		m_spawnRate = 360;
-		m_maxSpawnRate = 360;
-		waitFrame = 60;
+		m_spawnRate = 180;
+		m_maxSpawnRate = 120;
+		waitFrame = 30;
 		break;
 	case 1: //ストーカー
 		m_spawnRate = 1200;
@@ -103,9 +103,9 @@ void ButiEngine::EnemySpawner::OnceUpdate()
 		waitFrame = 1020;
 		break;
 	case 2: //キバ
-		m_spawnRate = 900;
-		m_maxSpawnRate = 780;
-		waitFrame = 1920;
+		m_spawnRate = 600;
+		m_maxSpawnRate = 300;
+		waitFrame = 1800;
 		break;
 	case 3: //カザン
 		m_spawnRate = 1200;

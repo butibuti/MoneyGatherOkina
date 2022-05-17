@@ -76,7 +76,7 @@ void ButiEngine::WaveManager::Start()
 	m_isSceneStart = false;
 
 	m_enemyDeadCount = 0;
-	m_maxEnemyCount = 10;
+	m_maxEnemyCount = 100;
 	m_enemySpawnCount = 0;
 }
 
@@ -182,12 +182,12 @@ void ButiEngine::WaveManager::SpawnEnemy()
 	//スポナーを生成
 	auto enemy0 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
 	enemy0->SetType(0);
-	auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy1->SetType(1);
+	//auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	//enemy1->SetType(1);
 	auto enemy2 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
 	enemy2->SetType(2);
-	auto enemy3 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy3->SetType(3);
+	//auto enemy3 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	//enemy3->SetType(3);
 
 }
 
