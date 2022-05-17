@@ -113,8 +113,10 @@ void ButiEngine::Loiter::Move()
 	}
 	else
 	{
+		m_velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
+
 		//ターゲットにある程度近づいたらスピードを落とす
-		float nearBorder = 1.0f;
+		float nearBorder = 0.5f;
 		float nearBorderSqr = nearBorder * nearBorder;
 		float distanceSqr = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetLengthSqr();
 		if (distanceSqr <= nearBorderSqr)
@@ -123,7 +125,6 @@ void ButiEngine::Loiter::Move()
 		}
 	}
 
-	m_velocity = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
 
