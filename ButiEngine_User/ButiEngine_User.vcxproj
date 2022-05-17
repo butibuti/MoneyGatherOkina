@@ -570,6 +570,7 @@ cd ..\</Command>
     <ClCompile Include="ShockWave.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
     <ClCompile Include="SplashEffectComponent.cpp" />
+    <ClCompile Include="StageProgressUIComponent.cpp" />
     <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="StartPopUpComponent.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -639,6 +640,7 @@ cd ..\</Command>
     <ClInclude Include="ShockWave.h" />
     <ClInclude Include="SphereExclusion.h" />
     <ClInclude Include="SplashEffectComponent.h" />
+    <ClInclude Include="StageProgressUIComponent.h" />
     <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="StartPopUpComponent.h" />
     <ClInclude Include="stdafx_u.h" />

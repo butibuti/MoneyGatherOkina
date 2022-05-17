@@ -96,6 +96,9 @@ void ButiEngine::Worker::Start()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_isPredated = false;
+
+	auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
+	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()

@@ -7,6 +7,7 @@
 #include "EnemySpawner.h"
 #include "SceneChangeAnimationComponent.h"
 #include "GameOverManagerComponent.h"
+#include "StageProgressUIComponent.h"
 
 void ButiEngine::WaveManager::OnUpdate()
 {
@@ -48,7 +49,7 @@ void ButiEngine::WaveManager::OnUpdate()
 
 	StageClearAnimation();
 	GameOverAnimation();
-
+	StageProgressAnimation();
 }
 
 void ButiEngine::WaveManager::OnSet()
@@ -61,6 +62,7 @@ void ButiEngine::WaveManager::Start()
 	m_vwp_playerComponent = GetManager().lock()->GetGameObject("Player").lock()->GetGameComponent<Player>();
 	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
 	m_vwp_sceneChangeAnimationComponent = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
+	m_vwp_stageProgressUIComponent = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline").lock()->GetGameComponent<StageProgressUIComponent>();
 	m_waveNum = 0;
 	m_maxWaveNum = 1;
 	m_clearAnimationTime = 0;
@@ -265,6 +267,14 @@ void ButiEngine::WaveManager::GameOverAnimation()
 		//m_vwp_playerComponent.lock()->Revival(); //ƒvƒŒƒCƒ„[‘h¶
 		//WaveFinish();
 	}
+}
+
+void ButiEngine::WaveManager::StageProgressAnimation()
+{
+	if (!m_vwp_stageProgressUIComponent.lock()) { return; }
+
+	auto rate = (float)m_enemyDeadCount / (float)m_maxEnemyCount;
+	m_vwp_stageProgressUIComponent.lock()->SetRate(rate);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::WaveManager::Clone()

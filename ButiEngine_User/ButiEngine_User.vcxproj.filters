@@ -70,6 +70,7 @@
     <ClCompile Include="KnockBack.cpp" />
     <ClCompile Include="NumberManagerComponent.cpp" />
     <ClCompile Include="AnimationRemoverComponent.cpp" />
+    <ClCompile Include="StageProgressUIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="AttackFlashSpawner.h" />
     <ClInclude Include="KnockBack.h" />
     <ClInclude Include="NumberManagerComponent.h" />
+    <ClInclude Include="StageProgressUIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
