@@ -51,7 +51,7 @@ void ButiEngine::Enemy_Fly::SetEnemyParameter()
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
 	m_vlp_enemy->CreatePocket(3);
 	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
-	m_vlp_enemy->SetVibrationCapacity(200.0f);
+	m_vlp_enemy->SetVibrationCapacity(10.0f);
 	m_vlp_enemy->SetVibrationResistance(1.0f);
 	m_vlp_enemy->SetExplosionScale(2.0f);
 	m_vlp_enemy->SetWeight(100.0f);

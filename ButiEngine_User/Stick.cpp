@@ -95,9 +95,6 @@ void ButiEngine::Stick::CheckMoveFinish()
 
 	if (angle < 1.0f)
 	{
-		Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
-		float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
-		gameObject.lock()->GetGameComponent<Worker>()->CreateAttackFlash(pos + front * radius);
 		gameObject.lock()->transform->SetBaseTransform(m_vwp_pocket.lock()->GetGameComponent<Pocket>()->GetEnemy().lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->transform);
 		m_vwp_center.lock()->SetIsRemove(true);
 		m_vwp_center = Value_weak_ptr<GameObject>();

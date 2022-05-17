@@ -411,7 +411,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	m_vlp_attackFlashSpawner->SpawnStart(pos);
 
 	float playerVibration = m_vlp_playerComponent->GetVibration();
-	Vector3 scale = MathHelper::Lerp(0.5f, 3.0f, playerVibration);
+	Vector3 scale = MathHelper::Lerp(1.0f, 6.0f, playerVibration);
 	m_vlp_attackFlashSpawner->SetEffectScale(scale);
 
 	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(6, 1, playerVibration);

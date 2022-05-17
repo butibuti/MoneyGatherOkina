@@ -19,7 +19,7 @@ void ButiEngine::WorkerAttackFlashEffect::Start()
 {
 	m_vlp_spriteAnimation = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
 
-	std::uint8_t animationInterval = 3;
+	std::uint8_t animationInterval = 2;
 	m_vlp_animationIntervalTimer = ObjectFactory::Create<RelativeTimer>(animationInterval);
 	m_vlp_animationIntervalTimer->Start();
 }

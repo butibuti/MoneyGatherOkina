@@ -256,6 +256,11 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 		//	//floatMotion->SetIsRemove(true);
 		//}
 
+		Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
+		float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
+		Vector3 dir = (arg_vwp_enemy.lock()->transform->GetLocalPosition() - pocket.lock()->transform->GetWorldPosition()).GetNormalize();
+		gameObject.lock()->GetGameComponent<Worker>()->CreateAttackFlash(pos + dir * radius);
+
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
