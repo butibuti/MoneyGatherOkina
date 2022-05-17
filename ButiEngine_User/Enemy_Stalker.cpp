@@ -58,7 +58,7 @@ void ButiEngine::Enemy_Stalker::Start()
 	SetEnemyParameter();
 	SetLookAtParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(90.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(m_vlp_enemy->GetWeight());
 
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;
@@ -122,20 +122,27 @@ void ButiEngine::Enemy_Stalker::Prey(Value_weak_ptr<GameObject> arg_vwp_other)
 	if (m_isPrey) { return; }
 
 	//Worker‚È‚ç•ß‚Ü‚¦‚é
-	if (arg_vwp_other.lock()->GetGameComponent<Worker>())
+	auto worker = arg_vwp_other.lock()->GetGameComponent<Worker>();
+	if (worker)
 	{
 		m_vwp_preyTarget = arg_vwp_other;
+		worker->Predated(gameObject);
 	}
 
 	m_velocity = Vector3Const::Zero;
 
-	m_vlp_lookAt->GetLookTarget()->SetLocalPosition((arg_vwp_other.lock()->transform->GetLocalPosition()));
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition((arg_vwp_other.lock()->transform->GetWorldPosition()));
 	m_vlp_preyTimer->Start();
 	m_isPrey = true;
 }
 
 void ButiEngine::Enemy_Stalker::OnPrey()
 {
+	if (m_vwp_preyTarget.lock())
+	{
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition((m_vwp_preyTarget.lock()->transform->GetWorldPosition()));
+	}
+
 	if (m_vlp_preyTimer->Update())
 	{
 		m_vlp_preyTimer->Stop();
@@ -162,6 +169,7 @@ void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 	m_vlp_enemy->SetVibrationCapacity(100.0f);
 	m_vlp_enemy->SetVibrationResistance(1.0f);
 	m_vlp_enemy->SetExplosionScale(3.0f);
+	m_vlp_enemy->SetWeight(100.0f);
 }
 
 void ButiEngine::Enemy_Stalker::SetLookAtParameter()

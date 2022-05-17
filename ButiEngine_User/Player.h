@@ -36,6 +36,7 @@ namespace ButiEngine {
 		}
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
+		float GetVibration() { return m_vibration; }
 		std::int8_t GetLife() { return m_life; }
 		float GetNearEnemyVibrationRate() { return m_nearEnemyVibrationRate; }
 

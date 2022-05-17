@@ -519,6 +519,8 @@ cd ..\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AttackFlashEffect.cpp" />
+    <ClCompile Include="AttackFlashSpawner.cpp" />
     <ClCompile Include="BeeSoulComponent.cpp" />
     <ClCompile Include="BeeSoulPodUIComponent.cpp" />
     <ClCompile Include="CameraAxis.cpp" />
@@ -544,6 +546,7 @@ cd ..\</Command>
     <ClCompile Include="HeartUIManagerComponent.cpp" />
     <ClCompile Include="HexagonAnimationComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="KnockBack.cpp" />
     <ClCompile Include="LevelUpUIComponent.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
     <ClCompile Include="Loiter.cpp" />
@@ -590,6 +593,8 @@ cd ..\</Command>
     <ClCompile Include="WorldSpeedManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AttackFlashEffect.h" />
+    <ClInclude Include="AttackFlashSpawner.h" />
     <ClInclude Include="BeeSoulComponent.h" />
     <ClInclude Include="BeeSoulPodUIComponent.h" />
     <ClInclude Include="CameraAxis.h" />
@@ -614,6 +619,7 @@ cd ..\</Command>
     <ClInclude Include="HeartUIManagerComponent.h" />
     <ClInclude Include="HexagonAnimationComponent.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="KnockBack.h" />
     <ClInclude Include="LevelUpUIComponent.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="Loiter.h" />

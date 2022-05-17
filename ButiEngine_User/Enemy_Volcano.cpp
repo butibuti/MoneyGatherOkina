@@ -60,7 +60,7 @@ void ButiEngine::Enemy_Volcano::Start()
 
 	SetEnemyParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1000.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1000.0f);
 
 	m_defaultScale = Vector3(1, 1, 1);
 	m_currentScale = m_defaultScale;

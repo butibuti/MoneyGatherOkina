@@ -66,6 +66,9 @@
     <ClCompile Include="GameOverManagerComponent.cpp" />
     <ClCompile Include="FadeOutComponent.cpp" />
     <ClCompile Include="NumberComponent.cpp" />
+    <ClCompile Include="AttackFlashEffect.cpp" />
+    <ClCompile Include="AttackFlashSpawner.cpp" />
+    <ClCompile Include="KnockBack.cpp" />
     <ClCompile Include="NumberManagerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +135,9 @@
     <ClInclude Include="GameOverManagerComponent.h" />
     <ClInclude Include="FadeOutComponent.h" />
     <ClInclude Include="NumberComponent.h" />
+    <ClInclude Include="AttackFlashEffect.h" />
+    <ClInclude Include="AttackFlashSpawner.h" />
+    <ClInclude Include="KnockBack.h" />
     <ClInclude Include="NumberManagerComponent.h" />
   </ItemGroup>
   <ItemGroup>

@@ -20,10 +20,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		float GetMass() { return m_mass; }
-		void SetMass(const float arg_mass) { m_mass = arg_mass; }
+		float GetWeight() { return m_weight; }
+		void SetWeight(const float arg_weight) { m_weight = arg_weight; }
 	private:
-		float m_mass = 0.0f;
+		float m_weight = 0.0f;
 
 		void Exclusion(Value_weak_ptr<GameObject> arg_vwp_other, Value_ptr<SphereExclusion> arg_vlp_exclusion);
 	};

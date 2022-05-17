@@ -1,19 +1,18 @@
 #pragma once
 #include"Header/GameComponentHeader.h"
+
 namespace ButiEngine {
 
-	class Enemy;
+	class SpriteAnimationComponent;
 
-	class Enemy_Tutorial :public GameComponent
+	class AttackFlashEffect : public GameComponent
 	{
 	public:
-
 		std::string GetGameComponentName()const override {
-			return "Enemy_Tutorial";
+			return "AttackFlashEffect";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
-		void OnRemove()override;
 		void OnShowUI()override;
 		void Start()override;
 		Value_ptr<GameComponent> Clone()override;
@@ -23,13 +22,12 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void Dead();
 	private:
-		void SetEnemyParameter();
+		void Animation();
 
-		Value_ptr<Enemy> m_vlp_enemy;
+		Value_ptr<SpriteAnimationComponent> m_vlp_spriteAnimation;
+		Value_ptr<Timer> m_vlp_animationIntervalTimer;
 	};
-
 }
 
-BUTI_REGIST_GAMECOMPONENT(Enemy_Tutorial, true);
+BUTI_REGIST_GAMECOMPONENT(AttackFlashEffect, true);

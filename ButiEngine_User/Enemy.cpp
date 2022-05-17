@@ -17,9 +17,12 @@
 #include "EnemyScaleAnimationComponent.h"
 #include "ParticleGenerater.h"
 #include "CameraShakeComponent.h"
+#include "AttackFlashSpawner.h"
+#include "KnockBack.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = false;
+float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
@@ -54,11 +57,20 @@ void ButiEngine::Enemy::OnUpdate()
 
 	if (IsVibrate())
 	{
-		IncreaseVibration();	
+		IncreaseVibration();
 	}
 	else
 	{
 		DecreaseVibration();
+	}
+
+	if (m_isNearPlayer || m_isHitShockWave)
+	{
+		CreateAttackFlashEffect();
+	}
+	else
+	{
+		m_vlp_attackFlashSpawner->SpawnStop();
 	}
 	VibrationStickWoker();
 	ShakeDrawObject();
@@ -67,6 +79,14 @@ void ButiEngine::Enemy::OnUpdate()
 
 void ButiEngine::Enemy::OnSet()
 {
+	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+		{
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			{
+				OnCollisionEnemy(arg_vwp_other);
+			}
+		});
+
 	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
@@ -83,6 +103,7 @@ void ButiEngine::Enemy::OnSet()
 			}
 		});
 
+	gameObject.lock()->AddCollisionEnterReaction(collisionEnterLambda);
 	gameObject.lock()->AddCollisionStayReaction(collisionStayLambda);
 	gameObject.lock()->AddCollisionLeaveReaction(collisionLeaveLambda);
 
@@ -102,6 +123,7 @@ void ButiEngine::Enemy::OnSet()
 	m_vibrationIncrease = 0.0f;
 	m_vibrationCapacity = 100.0f;
 	m_vibrationResistance = 10.0f;
+	m_weight = 100.0f;
 
 	m_explosionScale = 1.0f;
 }
@@ -124,6 +146,8 @@ void ButiEngine::Enemy::OnShowUI()
 	GUI::DragFloat("##capacity", &m_vibrationCapacity, 1.0f, 0.0f, 1000.0f);
 	GUI::BulletText("Resistance");
 	GUI::DragFloat("##resistance", &m_vibrationResistance, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText("Coefficient");
+	GUI::DragFloat("##coefficient", &m_playerVibrationCoefficient, 0.1f, 0.0f, 10.0f);
 	GUI::BulletText("Vibration:%f / %f", m_vibration, m_vibrationCapacity);
 	GUI::BulletText("PocketCount");
 	GUI::DragInt("##p", m_testPocketCount, 1.0f, 0, 20);
@@ -142,6 +166,9 @@ void ButiEngine::Enemy::Start()
 	m_vwp_playerSensor = GetManager().lock()->AddObjectFromCereal("PlayerSensor");
 	m_vwp_playerSensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	m_vwp_playerSensor.lock()->GetGameComponent<PlayerSensor>()->SetParentEnemy(gameObject);
+
+	auto attackFlashSpawner = GetManager().lock()->AddObjectFromCereal("AttackFlashSpawner");
+	m_vlp_attackFlashSpawner = attackFlashSpawner.lock()->GetGameComponent<AttackFlashSpawner>();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
@@ -238,6 +265,11 @@ void ButiEngine::Enemy::Dead()
 	if (m_vwp_playerSensor.lock())
 	{
 		m_vwp_playerSensor.lock()->GetGameComponent<PlayerSensor>()->Dead();
+	}
+
+	if (m_vlp_attackFlashSpawner)
+	{
+		m_vlp_attackFlashSpawner->Dead();
 	}
 
 	auto transform = gameObject.lock()->transform;
@@ -370,6 +402,22 @@ void ButiEngine::Enemy::ScaleAnimation()
 	m_vwp_scaleAnimationComponent.lock()->SetScaleRate(lerpScale);
 }
 
+void ButiEngine::Enemy::CreateAttackFlashEffect()
+{
+	Vector3 dir = (m_vwp_player.lock()->transform->GetLocalPosition() - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
+	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
+
+	m_vlp_attackFlashSpawner->SpawnStart(pos);
+
+	float playerVibration = m_vlp_playerComponent->GetVibration();
+	Vector3 scale = MathHelper::Lerp(0.5f, 3.0f, playerVibration);
+	m_vlp_attackFlashSpawner->SetEffectScale(scale);
+
+	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(6, 1, playerVibration);
+	m_vlp_attackFlashSpawner->SetSpawnIntervalFrame(spawnIntervalFrame);
+}
+
 
 void ButiEngine::Enemy::CalculateVibrationIncrease()
 {
@@ -380,7 +428,8 @@ void ButiEngine::Enemy::CalculateVibrationIncrease()
 
 	if (m_isNearPlayer || m_isHitShockWave)
 	{
-		m_vibrationIncrease += playerVibrationForce;
+		float playerVibration = m_vlp_playerComponent->GetVibration();
+		m_vibrationIncrease += playerVibrationForce * (1 + playerVibration * m_playerVibrationCoefficient);
 	}
 
 	m_vibrationIncrease += workerVibrationForce * m_stickWorkerCount - m_vibrationResistance;
@@ -425,5 +474,28 @@ void ButiEngine::Enemy::StopVibrationEffect()
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
+	}
+}
+
+void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	//重さが相手以下だったらノックバックされる
+	auto vlp_enemyComponent = arg_vwp_other.lock()->GetGameComponent<Enemy>();
+	float otherWeight = vlp_enemyComponent->GetWeight();
+
+	if (m_weight <= otherWeight)
+	{
+		//ノックバック中だったら止める
+		auto vlp_knockBack = gameObject.lock()->GetGameComponent<KnockBack>();
+		if (vlp_knockBack)
+		{
+			vlp_knockBack->SetIsRemove(true);
+		}
+
+		Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+		Vector3 otherPos = arg_vwp_other.lock()->transform->GetLocalPosition();
+		Vector3 dir = (otherPos - pos).GetNormalize();
+
+		gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.5f, 10);
 	}
 }

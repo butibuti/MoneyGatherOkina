@@ -30,7 +30,7 @@ namespace ButiEngine {
 		void SetVibration(const bool arg_isVibration) { m_isVibration = arg_isVibration; }
 
 		void Dead();
-
+		void Predated(Value_weak_ptr<GameObject> arg_vwp_other);
 	private:
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
@@ -57,6 +57,7 @@ namespace ButiEngine {
 		Vector3 m_defaultScale;
 
 		bool m_isVibration;
+		bool m_isPredated;
 	};
 
 }

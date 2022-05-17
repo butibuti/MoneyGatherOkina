@@ -102,7 +102,7 @@ void ButiEngine::Player::Start()
 {
 	CreateDrawObject();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
@@ -240,6 +240,7 @@ void ButiEngine::Player::SetShockWaveScale(const Vector3& arg_scale)
 
 void ButiEngine::Player::Move()
 {
+	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	//ノックバック中は操作不能
 	if (m_isKnockBack) { return; }
 	//リザルト(クリア演出)中は操作不能
@@ -289,7 +290,6 @@ void ButiEngine::Player::Move()
 		auto lookPos = m_vlp_lookAt->GetLookTarget()->GetLocalPosition();
 	}
 
-	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
 }
 

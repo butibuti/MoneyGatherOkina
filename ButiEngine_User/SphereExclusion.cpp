@@ -14,8 +14,8 @@ void ButiEngine::SphereExclusion::OnSet()
 			if (exclusion)
 			{
 				//‘ŠŽè‚æ‚èŒy‚©‚Á‚½‚ç‰Ÿ‚µ–ß‚³‚ê‚é
-				float otherMass = exclusion->GetMass();
-				if (m_mass < otherMass)
+				float otherWeight = exclusion->GetWeight();
+				if (m_weight < otherWeight)
 				{
 					Exclusion(arg_vwp_other, exclusion);
 				}
@@ -32,7 +32,7 @@ void ButiEngine::SphereExclusion::Start()
 
 void ButiEngine::SphereExclusion::OnShowUI()
 {
-	GUI::DragFloat("##mass", &m_mass, 0.1f, 0.0f, 10000.0f);
+	GUI::DragFloat("##weight", &m_weight, 0.1f, 0.0f, 10000.0f);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SphereExclusion::Clone()

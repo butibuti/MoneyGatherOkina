@@ -90,11 +90,12 @@ void ButiEngine::Worker::Start()
 {
 	CreateDrawObject();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
 
 	SetLookAtParameter();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
+	m_isPredated = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
@@ -136,18 +137,10 @@ void ButiEngine::Worker::Dead()
 	gameObject.lock()->SetIsRemove(true);
 }
 
-void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)
+void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 {
-	auto stalker = arg_vwp_other.lock()->GetGameComponent<Enemy_Stalker>();
-	if (!stalker) { return; }
-
-	//捕食中ならしがみつく
-	bool isPrey = stalker->IsPrey();
-	if (isPrey)
-	{
-		OnCollisionEnemy(arg_vwp_other);
-		return; 
-	}
+	//捕食されていたら何もしない
+	if (m_isPredated) { return; }
 
 	auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
 	if (flocking)
@@ -172,10 +165,35 @@ void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 	{
 		floatMotion->SetIsRemove(true);
 	}
+
+	gameObject.lock()->transform->SetBaseTransform(arg_vwp_other.lock()->transform);
+
+	m_isPredated = true;
+}
+
+void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	//捕食されていたら何もしない
+	if (m_isPredated) { return; }
+
+	auto stalker = arg_vwp_other.lock()->GetGameComponent<Enemy_Stalker>();
+	if (!stalker) { return; }
+
+	//捕食中ならしがみつく
+	bool isPrey = stalker->IsPrey();
+	if (isPrey)
+	{
+		OnCollisionEnemy(arg_vwp_other);
+		return; 
+	}
+
+	Predated(arg_vwp_other);
 }
 
 void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy)
 {
+	//捕食されていたら何もしない
+	if (m_isPredated) { return; }
 	//既にしがみついていたら何もしない
 	if (gameObject.lock()->GetGameComponent<Stick>()) { return; }
 
