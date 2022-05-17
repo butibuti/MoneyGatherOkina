@@ -8,6 +8,7 @@ namespace ButiEngine {
 	class ShakeComponent;
 	class EnemyScaleAnimationComponent;
 	class ParticleGenerater;
+	class AttackFlashSpawner;
 
 	class Enemy :public GameComponent
 	{
@@ -53,6 +54,7 @@ namespace ButiEngine {
 		void VibrationStickWoker();
 		void ShakeDrawObject();
 		void ScaleAnimation();
+		void CreateAttackFlashEffect();
 
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
 		void CalculateVibrationIncrease();
@@ -75,6 +77,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_weak_ptr<GameObject> m_vwp_playerSensor;
+		Value_ptr<AttackFlashSpawner> m_vlp_attackFlashSpawner;
 
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
 		std::int32_t m_testPocketCount;
@@ -88,6 +91,8 @@ namespace ButiEngine {
 		float m_vibrationIncrease;
 		float m_vibrationCapacity;
 		float m_vibrationResistance;
+
+		static float m_playerVibrationCoefficient;
 
 		float m_explosionScale;
 	};

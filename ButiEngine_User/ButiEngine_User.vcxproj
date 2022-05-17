@@ -519,6 +519,8 @@ cd ..\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AttackFlashEffect.cpp" />
+    <ClCompile Include="AttackFlashSpawner.cpp" />
     <ClCompile Include="BeeSoulComponent.cpp" />
     <ClCompile Include="BeeSoulPodUIComponent.cpp" />
     <ClCompile Include="CameraAxis.cpp" />
@@ -589,6 +591,8 @@ cd ..\</Command>
     <ClCompile Include="WorldSpeedManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AttackFlashEffect.h" />
+    <ClInclude Include="AttackFlashSpawner.h" />
     <ClInclude Include="BeeSoulComponent.h" />
     <ClInclude Include="BeeSoulPodUIComponent.h" />
     <ClInclude Include="CameraAxis.h" />
