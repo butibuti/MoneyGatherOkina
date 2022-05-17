@@ -60,7 +60,7 @@ void ButiEngine::Enemy_Volcano::Start()
 
 	SetEnemyParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1000.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 
 	m_defaultScale = Vector3(1, 1, 1);
 	m_currentScale = m_defaultScale;
@@ -143,4 +143,5 @@ void ButiEngine::Enemy_Volcano::SetEnemyParameter()
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
 	m_vlp_enemy->SetExplosionScale(10.0f);
+	m_vlp_enemy->SetWeight(1000.0f);
 }

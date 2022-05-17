@@ -23,6 +23,8 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void ResetVelocity() { m_velocity = Vector3Const::Zero; }
+
 		bool IsPrey() { return m_isPrey; }
 
 		void Dead();

@@ -58,7 +58,7 @@ void ButiEngine::Enemy_Stalker::Start()
 	SetEnemyParameter();
 	SetLookAtParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(m_vlp_enemy->GetWeight());
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.15f;

@@ -46,7 +46,7 @@ void ButiEngine::Enemy_Kiba::Start()
 	SetLoiterParameter();
 	SetLookAtParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(m_vlp_enemy->GetWeight());
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 
 	m_rotationAngle = 0.0f;
 	m_rotationAcceleration = 0.03f;
