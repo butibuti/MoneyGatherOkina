@@ -26,8 +26,12 @@ namespace ButiEngine {
 		}
 
 		void WaveStart();
-		void SubEnemyDeadCount();
-		bool IsClearAnimationFlag();
+		void AddEnemyDeadCount();
+		void AddSpawnCount();
+
+		bool IsClearAnimationFlag() { return m_isLastWaveClear; }
+		std::int16_t GetSpawnCount() { return m_enemySpawnCount; }
+		std::int16_t GetMaxEnemyCount() { return m_maxEnemyCount; }
 
 	private:
 		void FixWaveNum();
@@ -63,8 +67,12 @@ namespace ButiEngine {
 		bool m_isNextScene;
 		bool m_isSceneStart;
 
-		//次のウェーブに進むまでの仮のカウント
-		std::int8_t m_enemyCount;
+		//ステージクリアまでの敵討伐カウント
+		std::int16_t m_enemyDeadCount;
+		//ステージクリアまでの敵討伐カウント最大値
+		std::int16_t m_maxEnemyCount;
+		//〇体まで出現させるためのカウント
+		std::int16_t m_enemySpawnCount;
 	};
 
 }

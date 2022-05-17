@@ -27,7 +27,16 @@ namespace ButiEngine {
 	private:
 		void InputSelect();
 
+		void ScaleAnimation(); //‰¼
+		void PlayerPikuPiku();
+
 		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_ptr<Timer> m_vlp_pikupikuTimer;
+		Value_weak_ptr<GameObject> m_vwp_gameOverPlayerUI;
+		Value_weak_ptr<GameObject> m_vwp_retryUI;
+		Value_weak_ptr<GameObject> m_vwp_nextTitleUI;
+
+		Vector3 m_defaultScale;
 
 		bool m_isRetry;
 		bool m_isNext;

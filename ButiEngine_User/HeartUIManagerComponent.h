@@ -24,6 +24,7 @@ namespace ButiEngine {
 	private:
 		void ResetHeartUI();
 
+		Value_ptr<GameObject> m_vlp_player;
 		Value_weak_ptr<Player> m_vwp_playerComponent;
 		std::vector<Value_ptr<GameObject>> m_vec_vlp_heartUI;
 

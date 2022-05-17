@@ -104,8 +104,8 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
 
 void ButiEngine::Worker::Dead()
 {
-	m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
-	m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
+	//m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
+	//m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
 
 	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
 	if (player)
