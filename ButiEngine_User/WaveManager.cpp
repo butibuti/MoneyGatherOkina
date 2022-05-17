@@ -84,6 +84,8 @@ void ButiEngine::WaveManager::OnShowUI()
 	GUI::InputInt("##waveNum", m_waveNum);
 	GUI::BulletText("MaxWaveNum");
 	GUI::InputInt("##maxWaveNum", m_maxWaveNum);
+	GUI::BulletText("MaxEnemyCount");
+	GUI::InputInt("##maxEnemyCount", m_maxEnemyCount);
 }
 
 void ButiEngine::WaveManager::WaveStart()
