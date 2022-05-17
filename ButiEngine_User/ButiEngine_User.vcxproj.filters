@@ -65,6 +65,7 @@
     <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
     <ClCompile Include="GameOverManagerComponent.cpp" />
     <ClCompile Include="FadeOutComponent.cpp" />
+    <ClCompile Include="NumberComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -129,6 +130,7 @@
     <ClInclude Include="EnemyScaleAnimationComponent.h" />
     <ClInclude Include="GameOverManagerComponent.h" />
     <ClInclude Include="FadeOutComponent.h" />
+    <ClInclude Include="NumberComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
