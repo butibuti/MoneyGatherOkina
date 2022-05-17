@@ -13,6 +13,7 @@
 #include "TiltMotion.h"
 #include "ShakeComponent.h"
 #include "CameraShakeComponent.h"
+#include "NumberManagerComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -36,6 +37,7 @@ void ButiEngine::Player::OnUpdate()
 		OnInvincible();
 	}
 
+	VibrationPowerDrawUpdate();
 	VibrationController();
 	ShakeDrawObject();
 }
@@ -132,6 +134,22 @@ void ButiEngine::Player::Start()
 
 	m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
 	m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+
+	auto hzUIParent = GetManager().lock()->AddObjectFromCereal("HzUIParent");
+	hzUIParent.lock()->transform->SetLocalPosition(Vector3(-800, -400, 50));
+	auto numberManager = GetManager().lock()->AddObjectFromCereal("NumberManager");
+	numberManager.lock()->transform->SetBaseTransform(hzUIParent.lock()->transform);
+	numberManager.lock()->transform->SetLocalPosition(Vector3(0, 0, 0));
+	m_vwp_numberManagerComponent = numberManager.lock()->GetGameComponent<NumberManagerComponent>();
+	m_vwp_numberManagerComponent.lock()->SetDigit(2);
+	m_vwp_numberManagerComponent.lock()->SetColor(Vector4(1.0f, 0.714f, 0.0f, 1.0f));
+	auto hzUI = GetManager().lock()->AddObjectFromCereal("HzUI"); //HzのUI生成
+	hzUI.lock()->transform->SetBaseTransform(hzUIParent.lock()->transform);
+	hzUI.lock()->transform->SetLocalPosition(Vector3(250, -30, 0));
+
+	hzUIParent.lock()->transform->SetLocalRotationX_Degrees(20);
+	hzUIParent.lock()->transform->SetLocalRotationY_Degrees(-15);
+
 
 	m_isIncrease = false;
 	m_isVibrate = false;
@@ -401,6 +419,27 @@ void ButiEngine::Player::StopVibrationEffect()
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
 	}
+}
+
+void ButiEngine::Player::VibrationPowerDrawUpdate()
+{
+	//インスタンスが無い場合通らないようにする
+	if (!m_vwp_numberManagerComponent.lock()) { return; }
+
+	auto vibPower = m_vibration / m_maxVibration; //0～1
+	std::int32_t vibParcent = vibPower * 100;
+
+	//0～99に補正
+	if (vibParcent < 0)
+	{
+		vibParcent = 0;
+	}
+	else if (vibParcent >= 100)
+	{
+		vibParcent = 99;
+	}
+
+	m_vwp_numberManagerComponent.lock()->SetNumber(vibParcent);
 }
 
 void ButiEngine::Player::ShakeDrawObject()
