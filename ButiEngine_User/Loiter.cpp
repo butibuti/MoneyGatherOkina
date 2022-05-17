@@ -114,7 +114,7 @@ void ButiEngine::Loiter::Move()
 	else
 	{
 		//ターゲットにある程度近づいたらスピードを落とす
-		float nearBorder = 0.5f;
+		float nearBorder = 1.0f;
 		float nearBorderSqr = nearBorder * nearBorder;
 		float distanceSqr = (m_moveTarget - gameObject.lock()->transform->GetLocalPosition()).GetLengthSqr();
 		if (distanceSqr <= nearBorderSqr)
