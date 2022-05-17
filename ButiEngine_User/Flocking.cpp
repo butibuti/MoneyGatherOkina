@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "Flocking.h"
 #include "Player.h"
+#include "FlockingLeader.h"
 #include "SeparateDrawObject.h"
 
 std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking::m_vec_workers;
@@ -11,11 +12,14 @@ float ButiEngine::Flocking::m_separationWeight = 0.23f;
 float ButiEngine::Flocking::m_avoidPlayerWeight = 0.3f;
 float ButiEngine::Flocking::m_surroundWeight = 1.0f;
 float ButiEngine::Flocking::m_viewRadius = 10.0f;
+float ButiEngine::Flocking::m_minViewRadius = 7.0f;
+float ButiEngine::Flocking::m_maxViewRadius = 10.0f;
 float ButiEngine::Flocking::m_nearBorder = 1.2f;
 float ButiEngine::Flocking::m_playerNearBorder = 1.7f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
+	SetViewRadius();
 	CalculateAveragePos();
 	CalculateMoveSpeed();
 	CalculateGatherVec();
@@ -70,11 +74,13 @@ void ButiEngine::Flocking::OnShowUI()
 void ButiEngine::Flocking::Start()
 {
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
+	m_vwp_leader = GetManager().lock()->GetGameObject(GameObjectTag("Leader"));
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
+	m_vlp_flockingLeader = m_vwp_leader.lock()->GetGameComponent<FlockingLeader>();
 
 	m_maxRotationSpeed = 0.3f;
 	m_rotationSpeed = m_maxRotationSpeed;
-	m_maxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f;
+	m_maxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.3f;
 	m_moveSpeed = m_maxMoveSpeed;
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 }
@@ -84,9 +90,21 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Flocking::Clone()
 	return ObjectFactory::Create<Flocking>();
 }
 
+void ButiEngine::Flocking::SetViewRadius()
+{
+	if (m_vec_workers.size() < 25)
+	{
+		m_viewRadius = m_minViewRadius;
+	}
+	else
+	{
+		m_viewRadius = m_maxViewRadius;
+	}
+}
+
 void ButiEngine::Flocking::CalculateAveragePos()
 {
-	//見えている範囲のWorkerとプレイヤーの平均の位置を計算する
+	//見えている範囲のWorkerとリーダーの平均の位置を計算する
 
 	m_averagePos = Vector3Const::Zero;
 
@@ -107,19 +125,19 @@ void ButiEngine::Flocking::CalculateAveragePos()
 		}
 	}
 
-	//プレイヤーは見えていなくても追加
-	m_averagePos += m_vwp_player.lock()->transform->GetLocalPosition();
+	//リーダーは見えていなくても追加
+	m_averagePos += m_vwp_leader.lock()->transform->GetWorldPosition();
 	m_averagePos /= workerNum + 1;
 }
 
 void ButiEngine::Flocking::CalculateMoveSpeed()
 {
-	//プレイヤーに近い時プレイヤーの速度に合わせる
+	//リーダーに近い時リーダーの速度に合わせる
 
-	if (IsNearPlayer(m_averagePos))
+	if (IsNearLeader(m_averagePos))
 	{
-		float playerSpeed = m_vlp_playerComponent->GetMoveSpeed();
-		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, playerSpeed, 0.1f * GameDevice::WorldSpeed);
+		float leaderSpeed = m_vlp_flockingLeader->GetMoveSpeed();
+		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed, 0.1f * GameDevice::WorldSpeed);
 	}
 	else
 	{
@@ -129,13 +147,13 @@ void ButiEngine::Flocking::CalculateMoveSpeed()
 
 void ButiEngine::Flocking::CalculateGatherVec()
 {
-	//プレイヤーへ向かう
+	//リーダーへ向かう
 
 	m_gatherVec = Vector3Const::Zero;
 	if (m_gatherWeight == 0.0f) { return; }
 
-	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
-	m_gatherVec = (playerPos - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
+	Vector3 leaderPos = m_vwp_leader.lock()->transform->GetWorldPosition();
+	m_gatherVec = (leaderPos - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 	m_gatherVec *= m_gatherWeight;
 }
 
@@ -211,7 +229,7 @@ void ButiEngine::Flocking::CalculateSeparationVec()
 
 void ButiEngine::Flocking::CalculateAvoidPlayerVec()
 {
-	//近づきすぎたPlayerと離れる方向へ向かう
+	//近づきすぎたプレイヤーと離れる方向へ向かう
 
 	m_avoidPlayerVec = Vector3Const::Zero;
 	if (m_avoidPlayerWeight == 0.0f) { return; }
@@ -230,15 +248,15 @@ void ButiEngine::Flocking::CalculateAvoidPlayerVec()
 
 void ButiEngine::Flocking::CalculateSurroundVec()
 {
-	//プレイヤーを囲む方向へ向かう
+	//リーダーを囲む方向へ向かう
 
 	m_surroundVec = Vector3Const::Zero;
 	if (m_surroundWeight == 0.0f) { return; }
 
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 
-	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
-	m_surroundVec = (playerPos - m_averagePos).GetNormalize();
+	Vector3 leaderPos = m_vwp_leader.lock()->transform->GetWorldPosition();
+	m_surroundVec = (leaderPos - m_averagePos).GetNormalize();
 	m_surroundVec *= m_surroundWeight;
 }
 
@@ -267,12 +285,12 @@ void ButiEngine::Flocking::Move()
 	}
 }
 
-bool ButiEngine::Flocking::IsNearPlayer(const Vector3& arg_pos)
+bool ButiEngine::Flocking::IsNearLeader(const Vector3& arg_pos)
 {
-	Vector3 playerPos = m_vwp_player.lock()->transform->GetLocalPosition();
+	Vector3 leaderPos = m_vwp_leader.lock()->transform->GetWorldPosition();
 
 	float nearBorderSqr = m_nearBorder * m_nearBorder;
-	float distanceSqr = (playerPos - arg_pos).GetLengthSqr();
+	float distanceSqr = (leaderPos - arg_pos).GetLengthSqr();
 
 	return distanceSqr <= nearBorderSqr;
 }

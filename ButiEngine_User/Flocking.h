@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class Player;
+	class FlockingLeader;
 	class Flocking :public GameComponent
 	{
 	public:
@@ -22,6 +23,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		void SetViewRadius();
 		void CalculateAveragePos();
 		void CalculateMoveSpeed();
 		void CalculateGatherVec();
@@ -32,7 +34,7 @@ namespace ButiEngine {
 		void CalculateSurroundVec();
 		void Move();
 
-		bool IsNearPlayer(const Vector3& arg_pos);
+		bool IsNearLeader(const Vector3& arg_pos);
 
 		static std::vector<Value_ptr<GameObject>> m_vec_workers;
 
@@ -43,12 +45,16 @@ namespace ButiEngine {
 		static float m_avoidPlayerWeight;
 		static float m_surroundWeight;
 		static float m_viewRadius;
+		static float m_minViewRadius;
+		static float m_maxViewRadius;
 		static float m_nearBorder;
 		static float m_playerNearBorder;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
+		Value_weak_ptr<GameObject> m_vwp_leader;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<Player> m_vlp_playerComponent;
+		Value_ptr<FlockingLeader> m_vlp_flockingLeader;
 		float m_maxRotationSpeed;
 		float m_rotationSpeed;
 		float m_maxMoveSpeed;

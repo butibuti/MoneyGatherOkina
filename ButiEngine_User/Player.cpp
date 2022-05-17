@@ -111,7 +111,7 @@ void ButiEngine::Player::Start()
 
 	m_level = 1;
 	m_maxLevel = 10;
-	m_maxWorkerCount = 5;
+	m_maxWorkerCount = 20;
 	m_exp = 0;
 
 	m_knockBackVelocity = Vector3(0, 0, 0);
@@ -124,6 +124,8 @@ void ButiEngine::Player::Start()
 
 	m_isDead = false;
 
+	m_vwp_flockingLeaderParent = GetManager().lock()->GetGameObject(GameObjectTag("LeaderParent"));
+	
 	SetLookAtParameter();
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
@@ -291,6 +293,7 @@ void ButiEngine::Player::Move()
 	}
 
 	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
+	m_vlp_leaderParentLookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * 100.0f);
 }
 
 void ButiEngine::Player::LevelUp()
@@ -302,7 +305,7 @@ void ButiEngine::Player::LevelUp()
 	levelUpUI.lock()->transform->SetLocalPosition(screenPosition);
 
 	m_level++;
-	m_maxWorkerCount += 10;
+	m_maxWorkerCount += 1;
 }
 
 void ButiEngine::Player::MoveKnockBack()
@@ -515,5 +518,10 @@ void ButiEngine::Player::SetLookAtParameter()
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
-	m_vlp_lookAt->SetSpeed(0.05f);
+	m_vlp_lookAt->SetSpeed(0.1f);
+
+	m_vlp_leaderParentLookAt = m_vwp_flockingLeaderParent.lock()->GetGameComponent<LookAtComponent>();
+	m_vlp_leaderParentLookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	m_vlp_leaderParentLookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
+	m_vlp_leaderParentLookAt->SetSpeed(0.025f);
 }
