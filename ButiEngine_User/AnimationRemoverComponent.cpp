@@ -1,22 +1,22 @@
 #include "stdafx_u.h"
-#include "AttackFlashEffect.h"
+#include "AnimationRemoverComponent.h"
 #include "Suicide.h"
 #include "Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
 
-void ButiEngine::AttackFlashEffect::OnUpdate()
+void ButiEngine::AnimationRemoverComponent::OnUpdate()
 {
 	Animation();
 }
 
-void ButiEngine::AttackFlashEffect::OnSet()
+void ButiEngine::AnimationRemoverComponent::OnSet()
 {
 }
 
-void ButiEngine::AttackFlashEffect::OnShowUI()
+void ButiEngine::AnimationRemoverComponent::OnShowUI()
 {
 }
 
-void ButiEngine::AttackFlashEffect::Start()
+void ButiEngine::AnimationRemoverComponent::Start()
 {
 	m_vlp_spriteAnimation = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
 
@@ -25,12 +25,12 @@ void ButiEngine::AttackFlashEffect::Start()
 	m_vlp_animationIntervalTimer->Start();
 }
 
-ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::AttackFlashEffect::Clone()
+ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::AnimationRemoverComponent::Clone()
 {
-	return ObjectFactory::Create<AttackFlashEffect>();
+	return ObjectFactory::Create<AnimationRemoverComponent>();
 }
 
-void ButiEngine::AttackFlashEffect::Animation()
+void ButiEngine::AnimationRemoverComponent::Animation()
 {
 	if (m_vlp_animationIntervalTimer->Update())
 	{

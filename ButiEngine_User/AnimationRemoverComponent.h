@@ -5,11 +5,11 @@ namespace ButiEngine {
 
 	class SpriteAnimationComponent;
 
-	class AttackFlashEffect : public GameComponent
+	class AnimationRemoverComponent : public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()const override {
-			return "AttackFlashEffect";
+			return "AnimationRemoverComponent";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -30,4 +30,4 @@ namespace ButiEngine {
 	};
 }
 
-BUTI_REGIST_GAMECOMPONENT(AttackFlashEffect, true);
+BUTI_REGIST_GAMECOMPONENT(AnimationRemoverComponent, true);
