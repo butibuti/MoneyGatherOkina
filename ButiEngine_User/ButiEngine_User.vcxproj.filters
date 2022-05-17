@@ -68,6 +68,7 @@
     <ClCompile Include="NumberComponent.cpp" />
     <ClCompile Include="AttackFlashEffect.cpp" />
     <ClCompile Include="AttackFlashSpawner.cpp" />
+    <ClCompile Include="KnockBack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="NumberComponent.h" />
     <ClInclude Include="AttackFlashEffect.h" />
     <ClInclude Include="AttackFlashSpawner.h" />
+    <ClInclude Include="KnockBack.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

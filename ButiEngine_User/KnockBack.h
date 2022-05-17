@@ -2,14 +2,13 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Enemy;
-
-	class Enemy_Tutorial :public GameComponent
+	class KnockBack :public GameComponent
 	{
 	public:
-
+		KnockBack(const Vector3& arg_dir, const float arg_force, const std::int32_t arg_knockBackFrame);
+		KnockBack(){}
 		std::string GetGameComponentName()const override {
-			return "Enemy_Tutorial";
+			return "KnockBack";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -22,14 +21,12 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
-		void Dead();
 	private:
-		void SetEnemyParameter();
-
-		Value_ptr<Enemy> m_vlp_enemy;
+		Value_ptr<Timer> m_vlp_timer;
+		Vector3 m_velocity;
+		Vector3 m_startVelocity;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Enemy_Tutorial, true);
+BUTI_REGIST_GAMECOMPONENT(KnockBack, true);

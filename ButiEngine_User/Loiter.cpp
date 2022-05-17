@@ -123,6 +123,7 @@ void ButiEngine::Loiter::Move()
 		}
 	}
 
+	m_velocity = m_moveTarget - gameObject.lock()->transform->GetLocalPosition();
 	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
 

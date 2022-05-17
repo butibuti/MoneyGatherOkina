@@ -100,7 +100,7 @@ void ButiEngine::Player::Start()
 {
 	CreateDrawObject();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(1.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 

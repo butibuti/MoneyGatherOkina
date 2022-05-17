@@ -7,7 +7,7 @@
 
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
-	if (m_vlp_enemy->IsVibrate())
+	if (m_vlp_enemy->IsNearPlayer())
 	{
 		m_vlp_loiter->MoveStop();
 		m_vlp_lookAt->SetIsActive(false);
@@ -46,7 +46,7 @@ void ButiEngine::Enemy_Kiba::Start()
 	SetLoiterParameter();
 	SetLookAtParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(100.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(m_vlp_enemy->GetWeight());
 
 	m_rotationAngle = 0.0f;
 	m_rotationAcceleration = 0.03f;
@@ -125,6 +125,7 @@ void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
 	m_vlp_enemy->SetExplosionScale(8.0f);
+	m_vlp_enemy->SetWeight(1000.0f);
 }
 
 void ButiEngine::Enemy_Kiba::SetLoiterParameter()

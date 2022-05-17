@@ -34,14 +34,17 @@ namespace ButiEngine {
 		void SetVibrationResistance(const float arg_resistance) { m_vibrationResistance = arg_resistance; }
 		void SetExplosionScale(const float arg_scale) { m_explosionScale = arg_scale; }
 		void SetIsNearPlayer(const bool arg_isNearPlayer) { m_isNearPlayer = arg_isNearPlayer; }
+		void SetWeight(const float arg_weight) { m_weight = arg_weight; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 		float GetVibrationRate() { return m_vibration / m_vibrationCapacity; }
+		float GetWeight() { return m_weight; }
 
 		std::vector<Value_weak_ptr<GameObject>> GetStickWorkers();
 
 		bool IsVibrate();
+		bool IsNearPlayer() { return m_isNearPlayer; }
 
 		void Dead();
 		void Explosion();
@@ -62,6 +65,8 @@ namespace ButiEngine {
 		void RemoveAllPocket();
 		void AddDeadCount();
 		void StopVibrationEffect();
+
+		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		static bool m_test_isExplosion;
 
@@ -86,6 +91,8 @@ namespace ButiEngine {
 		bool m_isHitShockWave;
 		std::uint8_t m_stickWorkerCount;
 		Vector3 m_defaultScale;
+
+		float m_weight;
 
 		float m_vibration;
 		float m_vibrationIncrease;

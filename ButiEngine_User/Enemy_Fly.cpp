@@ -30,7 +30,7 @@ void ButiEngine::Enemy_Fly::Start()
 	SetLoiterParameter();
 	SetLookAtParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetMass(50.0f);
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(m_vlp_enemy->GetWeight());
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Fly::Clone()
@@ -54,6 +54,7 @@ void ButiEngine::Enemy_Fly::SetEnemyParameter()
 	m_vlp_enemy->SetVibrationCapacity(200.0f);
 	m_vlp_enemy->SetVibrationResistance(1.0f);
 	m_vlp_enemy->SetExplosionScale(2.0f);
+	m_vlp_enemy->SetWeight(100.0f);
 }
 
 void ButiEngine::Enemy_Fly::SetLoiterParameter()

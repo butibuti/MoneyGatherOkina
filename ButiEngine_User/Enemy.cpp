@@ -18,6 +18,7 @@
 #include "ParticleGenerater.h"
 #include "CameraShakeComponent.h"
 #include "AttackFlashSpawner.h"
+#include "KnockBack.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = false;
@@ -78,6 +79,14 @@ void ButiEngine::Enemy::OnUpdate()
 
 void ButiEngine::Enemy::OnSet()
 {
+	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+		{
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			{
+				OnCollisionEnemy(arg_vwp_other);
+			}
+		});
+
 	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
@@ -94,6 +103,7 @@ void ButiEngine::Enemy::OnSet()
 			}
 		});
 
+	gameObject.lock()->AddCollisionEnterReaction(collisionEnterLambda);
 	gameObject.lock()->AddCollisionStayReaction(collisionStayLambda);
 	gameObject.lock()->AddCollisionLeaveReaction(collisionLeaveLambda);
 
@@ -113,6 +123,7 @@ void ButiEngine::Enemy::OnSet()
 	m_vibrationIncrease = 0.0f;
 	m_vibrationCapacity = 100.0f;
 	m_vibrationResistance = 10.0f;
+	m_weight = 100.0f;
 
 	m_explosionScale = 1.0f;
 }
@@ -463,5 +474,28 @@ void ButiEngine::Enemy::StopVibrationEffect()
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
+	}
+}
+
+void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	//重さが相手以下だったらノックバックされる
+	auto vlp_enemyComponent = arg_vwp_other.lock()->GetGameComponent<Enemy>();
+	float otherWeight = vlp_enemyComponent->GetWeight();
+
+	if (m_weight <= otherWeight)
+	{
+		//ノックバック中だったら止める
+		auto vlp_knockBack = gameObject.lock()->GetGameComponent<KnockBack>();
+		if (vlp_knockBack)
+		{
+			vlp_knockBack->SetIsRemove(true);
+		}
+
+		Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+		Vector3 otherPos = arg_vwp_other.lock()->transform->GetLocalPosition();
+		Vector3 dir = (otherPos - pos).GetNormalize();
+
+		gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.5f, 10);
 	}
 }
