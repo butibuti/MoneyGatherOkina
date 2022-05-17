@@ -26,7 +26,7 @@ void ButiEngine::Enemy_Tutorial::Start()
 
 	SetEnemyParameter();
 
-	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(m_vlp_enemy->GetWeight());
+	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Tutorial::Clone()

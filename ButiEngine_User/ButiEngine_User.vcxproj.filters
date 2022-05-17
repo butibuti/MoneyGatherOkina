@@ -70,6 +70,8 @@
     <ClCompile Include="KnockBack.cpp" />
     <ClCompile Include="NumberManagerComponent.cpp" />
     <ClCompile Include="AnimationRemoverComponent.cpp" />
+    <ClCompile Include="FlockingLeader.cpp" />
+    <ClCompile Include="WorkerAttackFlashEffect.cpp" />
     <ClCompile Include="StageProgressUIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +142,8 @@
     <ClInclude Include="AttackFlashSpawner.h" />
     <ClInclude Include="KnockBack.h" />
     <ClInclude Include="NumberManagerComponent.h" />
+    <ClInclude Include="FlockingLeader.h" />
+    <ClInclude Include="WorkerAttackFlashEffect.h" />
     <ClInclude Include="StageProgressUIComponent.h" />
   </ItemGroup>
   <ItemGroup>

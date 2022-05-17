@@ -32,11 +32,11 @@ void ButiEngine::WorkerSpawner::OnShowUI()
 
 void ButiEngine::WorkerSpawner::Start()
 {
-	m_spawnIntervalFrame = 30;
+	m_spawnIntervalFrame = 6;
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(m_spawnIntervalFrame);
 	m_vlp_spawnTimer->Start();
 
-	for (std::uint8_t i = 0; i < 5; i++)
+	for (std::uint8_t i = 0; i < 20; i++)
 	{
 		SpawnWorker();
 	}

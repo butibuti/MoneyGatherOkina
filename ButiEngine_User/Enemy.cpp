@@ -494,8 +494,14 @@ void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_othe
 
 		Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 		Vector3 otherPos = arg_vwp_other.lock()->transform->GetLocalPosition();
-		Vector3 dir = (otherPos - pos).GetNormalize();
+		Vector3 dir = (pos - otherPos).GetNormalize();
 
-		gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.5f, 10);
+		gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.5f, 30);
+
+		auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
+		if (stalker)
+		{
+			stalker->ResetVelocity();
+		}
 	}
 }
