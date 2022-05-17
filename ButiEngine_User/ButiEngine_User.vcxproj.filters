@@ -71,6 +71,7 @@
     <ClCompile Include="NumberManagerComponent.cpp" />
     <ClCompile Include="AnimationRemoverComponent.cpp" />
     <ClCompile Include="FlockingLeader.cpp" />
+    <ClCompile Include="WorkerAttackFlashEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="KnockBack.h" />
     <ClInclude Include="NumberManagerComponent.h" />
     <ClInclude Include="FlockingLeader.h" />
+    <ClInclude Include="WorkerAttackFlashEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

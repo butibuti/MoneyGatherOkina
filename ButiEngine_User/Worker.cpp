@@ -16,6 +16,7 @@
 #include "ParticleGenerater.h"
 #include "TiltMotion.h"
 #include "FloatMotionComponent.h"
+#include "WorkerAttackFlashEffect.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 1.0f;
@@ -132,6 +133,11 @@ void ButiEngine::Worker::Dead()
 		m_vwp_tiltFloatObject.lock()->SetIsRemove(true);
 	}
 
+	if (m_vwp_attackFlash.lock())
+	{
+		m_vwp_attackFlash.lock()->GetGameComponent<WorkerAttackFlashEffect>()->Dead();
+	}
+
 	StopVibrationEffect();
 
 	gameObject.lock()->SetIsRemove(true);
@@ -169,6 +175,15 @@ void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 	gameObject.lock()->transform->SetBaseTransform(arg_vwp_other.lock()->transform);
 
 	m_isPredated = true;
+}
+
+void ButiEngine::Worker::CreateAttackFlash(const Vector3& arg_pos)
+{
+	if (m_vwp_attackFlash.lock()) { return; }
+
+	m_vwp_attackFlash = GetManager().lock()->AddObjectFromCereal("WorkerAttackFlashEffect");
+	m_vwp_attackFlash.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+	m_vwp_attackFlash.lock()->transform->SetWorldPosition(arg_pos);
 }
 
 void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)

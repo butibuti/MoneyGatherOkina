@@ -590,6 +590,7 @@ cd ..\</Command>
     <ClCompile Include="VolcanoRock.cpp" />
     <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="Worker.cpp" />
+    <ClCompile Include="WorkerAttackFlashEffect.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="WorldSpeedManager.cpp" />
   </ItemGroup>
@@ -653,6 +654,7 @@ cd ..\</Command>
     <ClInclude Include="VolcanoRock.h" />
     <ClInclude Include="WaveManager.h" />
     <ClInclude Include="Worker.h" />
+    <ClInclude Include="WorkerAttackFlashEffect.h" />
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="WorldSpeedManager.h" />
   </ItemGroup>

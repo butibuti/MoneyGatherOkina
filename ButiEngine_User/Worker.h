@@ -31,6 +31,7 @@ namespace ButiEngine {
 
 		void Dead();
 		void Predated(Value_weak_ptr<GameObject> arg_vwp_other);
+		void CreateAttackFlash(const Vector3& arg_pos);
 	private:
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
@@ -53,6 +54,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
+		Value_weak_ptr<GameObject> m_vwp_attackFlash;
 
 		Vector3 m_defaultScale;
 
