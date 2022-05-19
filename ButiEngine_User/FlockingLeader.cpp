@@ -24,7 +24,7 @@ void ButiEngine::FlockingLeader::OnShowUI()
 
 void ButiEngine::FlockingLeader::Start()
 {
-	m_pos = Vector3Const::Zero;
+	m_pos = gameObject.lock()->transform->GetWorldPosition();
 	m_prevPos = m_pos;
 }
 

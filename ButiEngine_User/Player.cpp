@@ -524,5 +524,5 @@ void ButiEngine::Player::SetLookAtParameter()
 	m_vlp_leaderParentLookAt = m_vwp_flockingLeaderParent.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_leaderParentLookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_leaderParentLookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
-	m_vlp_leaderParentLookAt->SetSpeed(0.025f);
+	m_vlp_leaderParentLookAt->SetSpeed(1.0f);
 }
