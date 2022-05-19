@@ -81,6 +81,7 @@ void ButiEngine::Enemy::OnSet()
 {
 	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				OnCollisionEnemy(arg_vwp_other);
@@ -89,6 +90,7 @@ void ButiEngine::Enemy::OnSet()
 
 	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
 				m_isHitShockWave = true;
@@ -97,6 +99,7 @@ void ButiEngine::Enemy::OnSet()
 
 	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
 				m_isHitShockWave = false;
