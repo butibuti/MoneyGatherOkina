@@ -48,7 +48,6 @@ void ButiEngine::FloatMotionComponent::Start()
 
 	m_vlp_changeSpeedInterval = ObjectFactory::Create<RelativeTimer>(30);
 	m_vlp_changeSpeedInterval->Start();
-	m_isRandomSpeed = true;
 	m_targetSpeed = m_motionSpeed;
 	m_minTargetSpeed = 0.03f;
 	m_maxTargetSpeed = 0.3f;

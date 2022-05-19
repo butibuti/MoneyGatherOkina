@@ -543,6 +543,7 @@ cd ..\</Command>
     <ClCompile Include="FloatMotionParent.cpp" />
     <ClCompile Include="Flocking.cpp" />
     <ClCompile Include="FlockingLeader.cpp" />
+    <ClCompile Include="FlockingLeaderParent.cpp" />
     <ClCompile Include="GameOverManagerComponent.cpp" />
     <ClCompile Include="HeartUIManagerComponent.cpp" />
     <ClCompile Include="HexagonAnimationComponent.cpp" />
@@ -619,6 +620,7 @@ cd ..\</Command>
     <ClInclude Include="FloatMotionParent.h" />
     <ClInclude Include="Flocking.h" />
     <ClInclude Include="FlockingLeader.h" />
+    <ClInclude Include="FlockingLeaderParent.h" />
     <ClInclude Include="GameOverManagerComponent.h" />
     <ClInclude Include="HeartUIManagerComponent.h" />
     <ClInclude Include="HexagonAnimationComponent.h" />

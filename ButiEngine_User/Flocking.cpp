@@ -20,7 +20,7 @@ float ButiEngine::Flocking::m_leaderNearBorder = 1.7f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
-	//SetViewRadius();
+	SetViewRadius();
 	CalculateAveragePos();
 	CalculateMoveSpeed();
 	CalculateGatherVec();
@@ -85,7 +85,7 @@ void ButiEngine::Flocking::Start()
 
 	m_maxRotationSpeed = 0.3f;
 	m_rotationSpeed = m_maxRotationSpeed;
-	m_maxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 2.0f;
+	m_maxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f;
 	m_moveSpeed = m_maxMoveSpeed;
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 
@@ -228,7 +228,7 @@ void ButiEngine::Flocking::CalculateSeparationVec()
 			nearWorkerNum++;
 			if (distanceSqr == 0.0f)
 			{
-				m_separationVec += Vector3(100.0f, 0.0f, 100.0f);
+				m_separationVec += Vector3(10.0f, 0.0f, 10.0f);
 			}
 			else
 			{
@@ -257,7 +257,7 @@ void ButiEngine::Flocking::CalculateAvoidPlayerVec()
 	{
 		if (distanceSqr == 0.0f)
 		{
-			m_avoidPlayerVec += Vector3(100.0f, 0.0f, 100.0f);
+			m_avoidPlayerVec += Vector3(10.0f, 0.0f, 10.0f);
 		}
 		else
 		{

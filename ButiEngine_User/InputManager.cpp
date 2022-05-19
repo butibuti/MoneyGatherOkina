@@ -79,8 +79,8 @@ bool ButiEngine::InputManager::IsTriggerLeftKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::A) ||
 		GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_LEFT) ||
-		(m_currentRightStick.x <= m_DEADZONE && m_previousRightStick.x > m_DEADZONE) ||
-		(m_currentLeftStick.x <= m_DEADZONE && m_previousLeftStick.x > m_DEADZONE));
+		(m_currentRightStick.x <= -m_DEADZONE && m_previousRightStick.x > -m_DEADZONE) ||
+		(m_currentLeftStick.x <= -m_DEADZONE && m_previousLeftStick.x > -m_DEADZONE));
 }
 
 bool ButiEngine::InputManager::IsTriggerUpKey()
@@ -95,8 +95,8 @@ bool ButiEngine::InputManager::IsTriggerDownKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::S) ||
 		GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_DOWN) ||
-		(m_currentRightStick.y <= m_DEADZONE && m_previousRightStick.y > m_DEADZONE) ||
-		(m_currentLeftStick.y <= m_DEADZONE && m_previousLeftStick.y > m_DEADZONE));
+		(m_currentRightStick.y <= -m_DEADZONE && m_previousRightStick.y > -m_DEADZONE) ||
+		(m_currentLeftStick.y <= -m_DEADZONE && m_previousLeftStick.y > -m_DEADZONE));
 }
 
 bool ButiEngine::InputManager::IsTriggerDecideKey()

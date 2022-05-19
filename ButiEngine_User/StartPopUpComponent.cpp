@@ -6,7 +6,7 @@
 void ButiEngine::StartPopUpComponent::OnUpdate()
 {
 	CheckHitPlayer();
-	ScaleUpdate();
+	//ScaleUpdate();
 }
 
 void ButiEngine::StartPopUpComponent::OnSet()

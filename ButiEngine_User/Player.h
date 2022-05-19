@@ -94,8 +94,6 @@ namespace ButiEngine {
 		float m_maxMoveSpeed;
 		float m_acceleration;
 		float m_deceleration;
-		Value_weak_ptr<GameObject> m_vwp_flockingLeaderParent;
-		Value_ptr<LookAtComponent> m_vlp_leaderParentLookAt;
 
 		//ノックバック
 		Vector3 m_knockBackVelocity;
