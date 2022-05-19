@@ -218,8 +218,15 @@ void ButiEngine::Flocking::CalculateSeparationVec()
 		if (distanceSqr <= nearBorderSqr)
 		{
 			nearWorkerNum++;
-			Vector3 diff = pos - workerPos;
-			m_separationVec += diff / diff.GetLengthSqr();
+			if (distanceSqr == 0.0f)
+			{
+				m_separationVec += Vector3(100.0f, 0.0f, 100.0f);
+			}
+			else
+			{
+				Vector3 diff = pos - workerPos;
+				m_separationVec += diff / distanceSqr;
+			}
 		}
 	}
 
@@ -240,8 +247,15 @@ void ButiEngine::Flocking::CalculateAvoidPlayerVec()
 	float distanceSqr = (pos - playerPos).GetLengthSqr();
 	if (distanceSqr <= nearBorderSqr)
 	{
-		Vector3 diff = pos - playerPos;
-		m_avoidPlayerVec = diff / diff.GetLengthSqr();
+		if (distanceSqr == 0.0f)
+		{
+			m_avoidPlayerVec += Vector3(100.0f, 0.0f, 100.0f);
+		}
+		else
+		{
+			Vector3 diff = pos - playerPos;
+			m_avoidPlayerVec = diff / distanceSqr;
+		}
 		m_avoidPlayerVec *= m_avoidPlayerWeight;
 	}
 }
