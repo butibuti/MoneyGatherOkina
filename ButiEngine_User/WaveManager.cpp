@@ -54,6 +54,11 @@ void ButiEngine::WaveManager::OnUpdate()
 
 void ButiEngine::WaveManager::OnSet()
 {
+	auto oneFrameObject = GetManager().lock()->GetGameObject("DrawObject_OneFrame");
+	if (!oneFrameObject.lock())
+	{
+		oneFrameObject = GetManager().lock()->AddObjectFromCereal("DrawObject_OneFrame");
+	}
 }
 
 void ButiEngine::WaveManager::Start()

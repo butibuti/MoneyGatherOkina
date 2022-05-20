@@ -15,6 +15,11 @@ void ButiEngine::SceneChangeAnimationComponent::Start()
 	m_defaultPosition = Vector3(-750, 500, -390.0f);
 	m_space = Vector3(433, 375, 0);
 	CreateHexagonPanel();
+	auto oneFrameObject = GetManager().lock()->GetGameObject("DrawObject_OneFrame");
+	if (oneFrameObject.lock())
+	{
+		oneFrameObject.lock()->SetIsRemove(true);
+	}
 }
 
 void ButiEngine::SceneChangeAnimationComponent::OnShowUI()
