@@ -86,7 +86,10 @@ void ButiEngine::Enemy_Stalker::Dead()
 		auto worker = m_vwp_preyTarget.lock()->GetGameComponent<Worker>();
 		if (worker)
 		{
-			worker->Dead();
+			Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+			Vector3 workerPos = m_vwp_preyTarget.lock()->transform->GetWorldPosition();
+			Vector3 dir = (workerPos - pos).GetNormalize();
+			worker->Rupture(dir);
 		}
 	}
 }
@@ -149,7 +152,10 @@ void ButiEngine::Enemy_Stalker::OnPrey()
 			auto worker = m_vwp_preyTarget.lock()->GetGameComponent<Worker>();
 			if (worker)
 			{
-				worker->Dead();
+				Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+				Vector3 workerPos = m_vwp_preyTarget.lock()->transform->GetWorldPosition();
+				Vector3 dir = (workerPos - pos).GetNormalize();
+				worker->Rupture(dir);
 			}
 		}
 

@@ -5,7 +5,7 @@ namespace ButiEngine {
 	class KnockBack :public GameComponent
 	{
 	public:
-		KnockBack(const Vector3& arg_dir, const float arg_force, const std::int32_t arg_knockBackFrame);
+		KnockBack(const Vector3& arg_dir, const float arg_force, const bool arg_isGravity, const std::int32_t arg_knockBackFrame);
 		KnockBack(){}
 		std::string GetGameComponentName()const override {
 			return "KnockBack";
@@ -24,6 +24,8 @@ namespace ButiEngine {
 	private:
 		Value_ptr<Timer> m_vlp_timer;
 		Vector3 m_velocity;
+		bool m_isGravity;
+		float m_velocityY;
 		Vector3 m_startVelocity;
 	};
 

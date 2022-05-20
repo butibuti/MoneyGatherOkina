@@ -18,26 +18,26 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	//if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
-	//{
-	//	m_isBomb = !m_isBomb;
-	//	auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
-	//	if (m_isBomb)
-	//	{
-	//		bomb->Appear();
-	//		m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
-	//	}
-	//	else
-	//	{
-	//		bomb->Disappear();
-	//		m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
-	//	}
-	//}
-
-	if (GameDevice::GetInput()->TriggerKey(Keys::O))
+	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
 	{
-		Damage();
+		m_isBomb = !m_isBomb;
+		auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
+		if (m_isBomb)
+		{
+			bomb->Appear();
+			m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
+		}
+		else
+		{
+			bomb->Disappear();
+			m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
+		}
 	}
+
+	//if (GameDevice::GetInput()->TriggerKey(Keys::O))
+	//{
+	//	Damage();
+	//}
 
 	if (m_isIncrease)
 	{
@@ -383,9 +383,15 @@ void ButiEngine::Player::VibrationController()
 void ButiEngine::Player::IncreaseVibration()
 {
 	if (m_isDead) { return; }
+	if (m_isCapaOver) { return; }
 
 	m_vibration += m_vibrationIncrease * m_nearEnemyCount * GameDevice::WorldSpeed;
-	m_vibration = min(m_vibration, m_maxVibration);
+
+	if (GetVibrationRate() >= 1.0f)
+	{
+		m_isCapaOver = true;
+		m_vibration = m_maxVibration + m_vibrationDecrease * 600;
+	}
 
 	if (!m_isVibrate)
 	{
@@ -399,6 +405,11 @@ void ButiEngine::Player::DecreaseVibration()
 	if (!m_isVibrate) { return; }
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
+
+	if (GetVibrationRate() < 1.0f)
+	{
+		m_isCapaOver = false;
+	}
 
 	if (m_vibration <= 0.0f)
 	{
@@ -572,4 +583,5 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_vibrationIncrease = 0.024f;
 	m_vibrationDecrease = 0.0006f;
 	m_nearEnemyVibrationRate = 0.0f;
+	m_isCapaOver = false;
 }

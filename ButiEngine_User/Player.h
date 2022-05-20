@@ -37,6 +37,7 @@ namespace ButiEngine {
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
 		float GetVibration() { return m_vibration; }
+		float GetVibrationRate() { return m_vibration / m_maxVibration; }
 		std::int8_t GetLife() { return m_life; }
 		float GetNearEnemyVibrationRate() { return m_nearEnemyVibrationRate; }
 
@@ -128,6 +129,7 @@ namespace ButiEngine {
 		float m_vibrationIncrease;
 		float m_vibrationDecrease;
 		float m_nearEnemyVibrationRate;
+		bool m_isCapaOver;
 
 		//ÉZÉìÉTÅ[
 		Value_weak_ptr<GameObject> m_vwp_sensor;

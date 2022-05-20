@@ -30,7 +30,10 @@ void ButiEngine::Pocket::Dead()
 		auto worker = m_vwp_worker.lock()->GetGameComponent<Worker>();
 		if (worker)
 		{
-			worker->Dead();
+			Vector3 enemyPos = m_vwp_enemy.lock()->transform->GetLocalPosition();
+			Vector3 workerPos = m_vwp_worker.lock()->transform->GetWorldPosition();
+			Vector3 dir = (workerPos - enemyPos).GetNormalize();
+			worker->Rupture(dir);
 		}
 	}
 

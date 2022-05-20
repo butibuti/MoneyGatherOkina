@@ -17,6 +17,7 @@
 #include "TiltMotion.h"
 #include "FloatMotionComponent.h"
 #include "WorkerAttackFlashEffect.h"
+#include "KnockBack.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 1.0f;
@@ -24,6 +25,14 @@ float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
+	if (m_isNearPlayer)
+	{
+		OnNearPlayer();
+	}
+	if (m_isRupture)
+	{
+		OnRupture();
+	}
 
 	if (m_isVibration)
 	{
@@ -58,7 +67,7 @@ void ButiEngine::Worker::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
-
+				OnCollisionPlayer(arg_vwp_other);
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Stalker")))
 			{
@@ -70,7 +79,10 @@ void ButiEngine::Worker::OnSet()
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
-				Dead();
+				Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+				Vector3 damageAreaPos = arg_vwp_other.lock()->transform->GetWorldPosition();
+				Vector3 dir = (pos - damageAreaPos).GetNormalize();
+				Rupture(dir);
 			}
 		});
 
@@ -103,6 +115,8 @@ void ButiEngine::Worker::Start()
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_isPredated = false;
 
+	m_vlp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
+
 	auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
 	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 }
@@ -117,10 +131,9 @@ void ButiEngine::Worker::Dead()
 	//m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
 	//m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
 
-	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
-	if (player)
+	if (m_vlp_player)
 	{
-		player->AddExp();
+		m_vlp_player->AddExp();
 	}
 
 	auto workerSpawner = GetManager().lock()->GetGameObject(GameObjectTag("WorkerSpawner")).lock()->GetGameComponent<WorkerSpawner>();
@@ -141,14 +154,47 @@ void ButiEngine::Worker::Dead()
 		m_vwp_tiltFloatObject.lock()->SetIsRemove(true);
 	}
 
+	gameObject.lock()->SetIsRemove(true);
+}
+
+void ButiEngine::Worker::Rupture(const Vector3& arg_dir)
+{
+	if (m_isRupture) { return; }
+	gameObject.lock()->transform->SetBaseTransform(nullptr);
+
+	auto stick = gameObject.lock()->GetGameComponent<Stick>();
+	if (stick)
+	{
+		stick->Dead();
+		stick->SetIsRemove(true);
+	}
+
+	auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
+	if (tiltMotion)
+	{
+		tiltMotion->SetIsRemove(true);
+	}
+
+	auto floatMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<FloatMotionComponent>();
+	if (floatMotion)
+	{
+		floatMotion->SetIsRemove(true);
+	}
+
 	if (m_vwp_attackFlash.lock())
 	{
 		m_vwp_attackFlash.lock()->GetGameComponent<WorkerAttackFlashEffect>()->Dead();
 	}
 
+	m_isVibration = false;
 	StopVibrationEffect();
 
-	gameObject.lock()->SetIsRemove(true);
+	std::int8_t frame = 30;
+	gameObject.lock()->AddGameComponent<KnockBack>(arg_dir, 0.6f, true, frame);
+	m_vlp_ruptureTimer = ObjectFactory::Create<RelativeTimer>(frame);
+	m_vlp_ruptureTimer->Start();
+
+	m_isRupture = true;
 }
 
 void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
@@ -192,6 +238,32 @@ void ButiEngine::Worker::CreateAttackFlash(const Vector3& arg_pos)
 	m_vwp_attackFlash = GetManager().lock()->AddObjectFromCereal("WorkerAttackFlashEffect");
 	m_vwp_attackFlash.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	m_vwp_attackFlash.lock()->transform->SetWorldPosition(arg_pos);
+}
+
+void ButiEngine::Worker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	if (m_isNearPlayer) { return; }
+
+	float playerVibrationRate = m_vlp_player->GetVibrationRate();
+	if (playerVibrationRate >= 1.0f)
+	{
+		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
+		if (flocking)
+		{
+			flocking->SetIsRemove(true);
+		}
+
+		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
+		if (collider)
+		{
+			collider->SetIsRemove(true);
+		}
+
+		m_vlp_nearPlayerTimer = ObjectFactory::Create<RelativeTimer>(30);
+		m_vlp_nearPlayerTimer->Start();
+		m_isNearPlayer = true;
+		m_isVibration = true;
+	}
 }
 
 void ButiEngine::Worker::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)
@@ -269,6 +341,28 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
+	}
+}
+
+void ButiEngine::Worker::OnNearPlayer()
+{
+	if (m_isRupture) { return; }
+
+	if (m_vlp_nearPlayerTimer->Update())
+	{
+		auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
+		Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+		Vector3 playerPos = player.lock()->transform->GetLocalPosition();
+		Vector3 dir = (pos - playerPos).GetNormalize();
+		Rupture(dir);
+	}
+}
+
+void ButiEngine::Worker::OnRupture()
+{
+	if (m_vlp_ruptureTimer->Update())
+	{
+		Dead();
 	}
 }
 

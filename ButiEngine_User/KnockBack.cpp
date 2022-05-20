@@ -1,10 +1,12 @@
 #include "stdafx_u.h"
 #include "KnockBack.h"
 
-ButiEngine::KnockBack::KnockBack(const Vector3& arg_dir, const float arg_force, const std::int32_t arg_knockBackFrame)
+ButiEngine::KnockBack::KnockBack(const Vector3& arg_dir, const float arg_force, const bool arg_isGravity, const std::int32_t arg_knockBackFrame)
 {
 	m_velocity = arg_dir * arg_force;
 	m_startVelocity = m_velocity;
+	m_isGravity = arg_isGravity;
+	m_velocityY = 0.0f;
 	m_vlp_timer = ObjectFactory::Create<RelativeTimer>(arg_knockBackFrame);
 	m_vlp_timer->Start();
 }
@@ -12,6 +14,14 @@ ButiEngine::KnockBack::KnockBack(const Vector3& arg_dir, const float arg_force, 
 void ButiEngine::KnockBack::OnUpdate()
 {
 	m_velocity = MathHelper::LerpPosition(m_startVelocity, Vector3Const::Zero, m_vlp_timer->GetPercent());
+
+	if (m_isGravity)
+	{
+		constexpr float gravity = 0.005f;
+		m_velocityY -= gravity;
+		m_velocity.y = m_velocityY;
+	}
+
 	gameObject.lock()->transform->Translate(m_velocity);
 
 
