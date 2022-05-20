@@ -191,7 +191,11 @@ void ButiEngine::Worker::Rupture(const Vector3& arg_dir)
 	StopVibrationEffect();
 
 	std::int8_t frame = 30;
-	gameObject.lock()->AddGameComponent<KnockBack>(arg_dir, 0.6f, true, frame);
+
+	Vector3 dir = arg_dir;
+	dir.y = 2.0f;
+	dir.Normalize();
+	gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.9f, true, frame);
 	m_vlp_ruptureTimer = ObjectFactory::Create<RelativeTimer>(frame);
 	m_vlp_ruptureTimer->Start();
 

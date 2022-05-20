@@ -6,7 +6,7 @@ ButiEngine::KnockBack::KnockBack(const Vector3& arg_dir, const float arg_force, 
 	m_velocity = arg_dir * arg_force;
 	m_startVelocity = m_velocity;
 	m_isGravity = arg_isGravity;
-	m_velocityY = 0.0f;
+	m_velocityY = arg_dir.y * arg_force;
 	m_vlp_timer = ObjectFactory::Create<RelativeTimer>(arg_knockBackFrame);
 	m_vlp_timer->Start();
 }
@@ -17,7 +17,7 @@ void ButiEngine::KnockBack::OnUpdate()
 
 	if (m_isGravity)
 	{
-		constexpr float gravity = 0.005f;
+		constexpr float gravity = 0.04f;
 		m_velocityY -= gravity;
 		m_velocity.y = m_velocityY;
 	}
