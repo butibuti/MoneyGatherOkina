@@ -46,6 +46,7 @@ void ButiEngine::Player::OnSet()
 {
 	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
 				OnCollisionDamageArea(arg_vwp_other);
@@ -123,8 +124,6 @@ void ButiEngine::Player::Start()
 	m_isInvincible = false;
 
 	m_isDead = false;
-
-	m_vwp_flockingLeaderParent = GetManager().lock()->GetGameObject(GameObjectTag("LeaderParent"));
 	
 	SetLookAtParameter();
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
@@ -293,7 +292,6 @@ void ButiEngine::Player::Move()
 	}
 
 	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
-	m_vlp_leaderParentLookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * 100.0f);
 }
 
 void ButiEngine::Player::LevelUp()
@@ -519,9 +517,4 @@ void ButiEngine::Player::SetLookAtParameter()
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
 	m_vlp_lookAt->SetSpeed(0.1f);
-
-	m_vlp_leaderParentLookAt = m_vwp_flockingLeaderParent.lock()->GetGameComponent<LookAtComponent>();
-	m_vlp_leaderParentLookAt->SetLookTarget(gameObject.lock()->transform->Clone());
-	m_vlp_leaderParentLookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
-	m_vlp_leaderParentLookAt->SetSpeed(0.025f);
 }

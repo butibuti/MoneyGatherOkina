@@ -11,6 +11,7 @@ void ButiEngine::PlayerSensor::OnSet()
 {
 	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
 			{
 				m_vlp_player->SetIsIncrease(true);
@@ -28,6 +29,7 @@ void ButiEngine::PlayerSensor::OnSet()
 
 	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
 			{
 				m_vlp_player->SetIsIncrease(false);

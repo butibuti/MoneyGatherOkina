@@ -20,6 +20,7 @@ namespace ButiEngine {
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
+			archive(m_isRandomSpeed);
 		}
 
 		void SetAmplitude(const float arg_amplitude) { m_amplitude = arg_amplitude; }
@@ -35,7 +36,7 @@ namespace ButiEngine {
 		float m_motionSpeed;
 
 		Value_ptr<Timer> m_vlp_changeSpeedInterval;
-		bool m_isRandomSpeed;
+		bool m_isRandomSpeed = true;
 		float m_targetSpeed;
 		float m_minTargetSpeed;
 		float m_maxTargetSpeed;

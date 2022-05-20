@@ -21,6 +21,7 @@ void ButiEngine::Enemy_Stalker::OnSet()
 {
 	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
 			{
 				OnCollisionPlayer(arg_vwp_other);
