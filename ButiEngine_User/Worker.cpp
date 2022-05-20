@@ -146,6 +146,7 @@ void ButiEngine::Worker::Dead()
 	if (stick)
 	{
 		stick->Dead();
+		stick->SetIsRemove(true);
 	}
 
 	if (m_vwp_tiltFloatObject.lock())
