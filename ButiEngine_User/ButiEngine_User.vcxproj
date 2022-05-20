@@ -568,6 +568,7 @@ cd ..\</Command>
     <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
+    <ClCompile Include="RotateAnimationComponent.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
@@ -598,6 +599,7 @@ cd ..\</Command>
     <ClCompile Include="WorkerAttackFlashEffect.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="WorldSpeedManager.cpp" />
+    <ClCompile Include="ExpansionAnimationComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationRemoverComponent.h" />
@@ -644,6 +646,7 @@ cd ..\</Command>
     <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
+    <ClInclude Include="RotateAnimationComponent.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="SeparateDrawObject.h" />
@@ -667,6 +670,7 @@ cd ..\</Command>
     <ClInclude Include="WorkerAttackFlashEffect.h" />
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="WorldSpeedManager.h" />
+    <ClInclude Include="ExpansionAnimationComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
