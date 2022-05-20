@@ -567,6 +567,7 @@ cd ..\</Command>
     <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
+    <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="ShockWave.cpp" />
@@ -640,6 +641,7 @@ cd ..\</Command>
     <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
+    <ClInclude Include="Sensor.h" />
     <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="ShockWave.h" />

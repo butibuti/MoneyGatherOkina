@@ -91,7 +91,11 @@ void ButiEngine::Enemy::OnSet()
 	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
+			{
+				m_isNearPlayer = true;
+			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
 				m_isHitShockWave = true;
 			}
@@ -100,7 +104,11 @@ void ButiEngine::Enemy::OnSet()
 	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
+			{
+				m_isNearPlayer = true;
+			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
 				m_isHitShockWave = false;
 			}
@@ -137,12 +145,6 @@ void ButiEngine::Enemy::OnRemove()
 
 void ButiEngine::Enemy::OnShowUI()
 {
-	float nearBorder = m_vwp_playerSensor.lock()->transform->GetWorldScale().x * 0.5f;
-	GUI::BulletText("NearBorder");
-	if (GUI::DragFloat("##nearBorder", &nearBorder, 0.1f, 0.0f, 100.0f))
-	{
-		SetNearBorder(nearBorder);
-	}
 	GUI::BulletText("Decrease");
 	GUI::DragFloat("##decrease", &m_vibrationDecrease, 1.0f, 0.0f, 100.0f);
 	GUI::BulletText("Capacity");
@@ -166,10 +168,6 @@ void ButiEngine::Enemy::OnShowUI()
 
 void ButiEngine::Enemy::Start()
 {
-	m_vwp_playerSensor = GetManager().lock()->AddObjectFromCereal("PlayerSensor");
-	m_vwp_playerSensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
-	m_vwp_playerSensor.lock()->GetGameComponent<PlayerSensor>()->SetParentEnemy(gameObject);
-
 	auto attackFlashSpawner = GetManager().lock()->AddObjectFromCereal("AttackFlashSpawner");
 	m_vlp_attackFlashSpawner = attackFlashSpawner.lock()->GetGameComponent<AttackFlashSpawner>();
 }
@@ -177,13 +175,6 @@ void ButiEngine::Enemy::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
 {
 	return ObjectFactory::Create<Enemy>();
-}
-
-void ButiEngine::Enemy::SetNearBorder(const float arg_nearBorder)
-{
-	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
-	Vector3 sensorScale = Vector3(arg_nearBorder * 2) / scale;
-	m_vwp_playerSensor.lock()->transform->SetLocalScale(sensorScale);
 }
 
 ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GetNearFreePocket(const Vector3& arg_pos, float arg_border)
@@ -265,11 +256,6 @@ void ButiEngine::Enemy::Dead()
 	AddDeadCount();
 	StopVibrationEffect();
 
-	if (m_vwp_playerSensor.lock())
-	{
-		m_vwp_playerSensor.lock()->GetGameComponent<PlayerSensor>()->Dead();
-	}
-
 	if (m_vlp_attackFlashSpawner)
 	{
 		m_vlp_attackFlashSpawner->Dead();
@@ -279,6 +265,8 @@ void ButiEngine::Enemy::Dead()
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
+
+	m_vlp_playerComponent->SetIsIncrease(false);
 
 	gameObject.lock()->SetIsRemove(true);
 

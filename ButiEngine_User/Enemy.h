@@ -29,7 +29,6 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetNearBorder(const float arg_nearBorder);
 		void SetVibrationCapacity(const float arg_capacity) { m_vibrationCapacity = arg_capacity; }
 		void SetVibrationResistance(const float arg_resistance) { m_vibrationResistance = arg_resistance; }
 		void SetExplosionScale(const float arg_scale) { m_explosionScale = arg_scale; }
@@ -81,7 +80,6 @@ namespace ButiEngine {
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_ptr<Player> m_vlp_playerComponent;
-		Value_weak_ptr<GameObject> m_vwp_playerSensor;
 		Value_ptr<AttackFlashSpawner> m_vlp_attackFlashSpawner;
 
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;

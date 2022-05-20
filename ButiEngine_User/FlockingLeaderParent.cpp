@@ -16,6 +16,10 @@ void ButiEngine::FlockingLeaderParent::OnUpdate()
 	{
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + dir * 100.0f);
 	}
+	else
+	{
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() *100.0f);
+	}
 }
 
 void ButiEngine::FlockingLeaderParent::OnSet()

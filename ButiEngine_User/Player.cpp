@@ -133,6 +133,9 @@ void ButiEngine::Player::Start()
 	m_acceleration = 0.01f;
 	m_deceleration = 0.01f;
 
+	m_vwp_sensor = GetManager().lock()->AddObjectFromCereal("Sensor");
+	m_vwp_sensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+
 	m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
 	m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
@@ -178,6 +181,11 @@ void ButiEngine::Player::Dead()
 	//{
 	//	m_vwp_shockWave.lock()->SetIsRemove(true);
 	//}
+
+	if (m_vwp_sensor.lock())
+	{
+		m_vwp_sensor.lock()->SetIsRemove(true);
+	}
 
 	if (m_vwp_shockWave.lock())
 	{

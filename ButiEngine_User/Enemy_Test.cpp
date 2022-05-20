@@ -19,7 +19,6 @@ void ButiEngine::Enemy_Test::Start()
 {
 	auto enemyComponent = gameObject.lock()->GetGameComponent<Enemy>();
 	enemyComponent->CreatePocket(8);
-	enemyComponent->SetNearBorder(6.5f);
 	enemyComponent->SetVibrationCapacity(1000.0f);
 	enemyComponent->SetVibrationResistance(3.0f);
 
