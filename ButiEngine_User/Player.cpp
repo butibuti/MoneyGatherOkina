@@ -17,6 +17,11 @@
 
 void ButiEngine::Player::OnUpdate()
 {
+	if (GameDevice::GetInput()->TriggerKey(Keys::O))
+	{
+		Damage();
+	}
+
 	if (m_isIncrease)
 	{
 		IncreaseVibration();

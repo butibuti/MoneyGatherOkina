@@ -8,11 +8,26 @@ void ButiEngine::FloatMotionComponent::OnUpdate()
 		SetRandomSpeed();
 	}
 	m_theta += m_motionSpeed * GameDevice::WorldSpeed;
-	gameObject.lock()->transform->SetLocalPositionY(std::sin(m_theta) * m_amplitude);
+	float positionY = m_position.y + std::sin(m_theta) * m_amplitude;
+	gameObject.lock()->transform->SetLocalPositionY(positionY);
 }
 
 void ButiEngine::FloatMotionComponent::OnSet()
 {
+	m_position = gameObject.lock()->transform->GetLocalPosition();
+
+	m_theta = 0.0f;
+	m_amplitude = 0.1f;
+	m_motionSpeed = 0.01f;
+
+	m_vlp_changeSpeedInterval = ObjectFactory::Create<RelativeTimer>(30);
+	m_vlp_changeSpeedInterval->Start();
+	m_targetSpeed = m_motionSpeed;
+	m_minTargetSpeed = 0.03f;
+	m_maxTargetSpeed = 0.3f;
+	m_lerpSpeed = 0.1f;
+
+	m_changeSpeedFrame = 30;
 }
 
 void ButiEngine::FloatMotionComponent::OnRemove()
@@ -23,7 +38,7 @@ void ButiEngine::FloatMotionComponent::OnRemove()
 void ButiEngine::FloatMotionComponent::OnShowUI()
 {
 	GUI::BulletText("Amplitude");
-	GUI::DragFloat("##amplitude", &m_amplitude, 0.01f, 0.0f, 10.0f);
+	GUI::DragFloat("##amplitude", &m_amplitude, 0.01f, 0.0f, 15.0f);
 	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_motionSpeed, 0.01f, 0.0f, 1.0f);
 	GUI::Checkbox("isRandom", &m_isRandomSpeed);
@@ -42,18 +57,6 @@ void ButiEngine::FloatMotionComponent::OnShowUI()
 
 void ButiEngine::FloatMotionComponent::Start()
 {
-	m_theta = 0.0f;
-	m_amplitude = 0.1f;
-	m_motionSpeed = 0.01f;
-
-	m_vlp_changeSpeedInterval = ObjectFactory::Create<RelativeTimer>(30);
-	m_vlp_changeSpeedInterval->Start();
-	m_targetSpeed = m_motionSpeed;
-	m_minTargetSpeed = 0.03f;
-	m_maxTargetSpeed = 0.3f;
-	m_lerpSpeed = 0.1f;
-
-	m_changeSpeedFrame = 30;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FloatMotionComponent::Clone()

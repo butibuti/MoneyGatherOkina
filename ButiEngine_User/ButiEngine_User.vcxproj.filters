@@ -74,6 +74,7 @@
     <ClCompile Include="WorkerAttackFlashEffect.cpp" />
     <ClCompile Include="StageProgressUIComponent.cpp" />
     <ClCompile Include="FlockingLeaderParent.cpp" />
+    <ClCompile Include="PauseManagerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="WorkerAttackFlashEffect.h" />
     <ClInclude Include="StageProgressUIComponent.h" />
     <ClInclude Include="FlockingLeaderParent.h" />
+    <ClInclude Include="PauseManagerComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

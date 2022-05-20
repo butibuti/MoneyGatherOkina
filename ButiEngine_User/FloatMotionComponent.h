@@ -31,6 +31,8 @@ namespace ButiEngine {
 	private:
 		void SetRandomSpeed();
 
+		Vector3 m_position;
+
 		float m_theta;
 		float m_amplitude;
 		float m_motionSpeed;

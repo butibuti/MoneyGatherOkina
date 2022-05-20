@@ -30,14 +30,13 @@ namespace ButiEngine {
 		void Animation();
 
 		Value_weak_ptr<SpriteAnimationComponent> m_vwp_spriteAnimationComponent;
+		Value_ptr<Timer> m_vlp_animationTimer;
 
 		Vector3 m_defaultScale;
 		Vector3 m_calcScale;
 
 		float m_randomPosY;
 
-		std::int16_t m_animationFrame;
-		std::int32_t m_animationRate;
 		std::int16_t m_animationCount;
 		std::int16_t m_maxAnimationCount;
 

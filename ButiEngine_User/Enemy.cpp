@@ -117,8 +117,6 @@ void ButiEngine::Enemy::OnSet()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 
-	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
-
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
 	m_stickWorkerCount = 0;
@@ -169,6 +167,8 @@ void ButiEngine::Enemy::Start()
 	m_vwp_playerSensor = GetManager().lock()->AddObjectFromCereal("PlayerSensor");
 	m_vwp_playerSensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	m_vwp_playerSensor.lock()->GetGameComponent<PlayerSensor>()->SetParentEnemy(gameObject);
+
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	auto attackFlashSpawner = GetManager().lock()->AddObjectFromCereal("AttackFlashSpawner");
 	m_vlp_attackFlashSpawner = attackFlashSpawner.lock()->GetGameComponent<AttackFlashSpawner>();

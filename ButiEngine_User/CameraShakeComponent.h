@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManagerComponent;
+
 	class CameraShakeComponent :public GameComponent
 	{
 	public:
@@ -23,21 +25,20 @@ namespace ButiEngine {
 		void ShakeStop();
 
 	private:
-		bool m_startFlag;
-		float m_amplitude;
-		float m_subAmplitude;
-		std::int32_t m_oneShakeFrame;
-		std::int32_t m_oneShakeCount;
-
 		std::int8_t GetTwoValue();
 
-
+		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 
 		Vector3 m_moveRotate;
 		Vector3 m_subRotate;
 		Vector3 m_defaultRotate;
 		Vector3 m_startRotate;
 		Vector3 m_endRotate;
+		float m_amplitude;
+		float m_subAmplitude;
+		std::int32_t m_oneShakeFrame;
+		std::int32_t m_oneShakeCount;
+		bool m_startFlag;
 	};
 
 }

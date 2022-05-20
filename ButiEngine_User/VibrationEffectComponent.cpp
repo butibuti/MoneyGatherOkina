@@ -14,6 +14,7 @@ void ButiEngine::VibrationEffectComponent::OnUpdate()
 
 void ButiEngine::VibrationEffectComponent::OnSet()
 {
+	m_vlp_animationTimer = ObjectFactory::Create<RelativeTimer>();
 }
 
 void ButiEngine::VibrationEffectComponent::OnRemove()
@@ -22,18 +23,16 @@ void ButiEngine::VibrationEffectComponent::OnRemove()
 
 void ButiEngine::VibrationEffectComponent::OnShowUI()
 {
-	GUI::BulletText("AnimationRate");
-	GUI::InputInt("##animationRate", m_animationRate);
 }
 
 void ButiEngine::VibrationEffectComponent::Start()
 {
 	m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
+	m_vlp_animationTimer->Start();
+	m_vlp_animationTimer->ChangeCountFrame(4);
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_calcScale = m_defaultScale;
 	m_randomPosY = ButiRandom::GetInt(1, 500) * 0.0001f;
-	m_animationFrame = 0;
-	m_animationRate = 4;
 	m_animationCount = 0;
 	m_maxAnimationCount = 3;
 }
@@ -47,7 +46,7 @@ void ButiEngine::VibrationEffectComponent::SetVibration()
 {
 	float vibPower = 0.5f;
 	std::int32_t animationRate = vibPower * 4;
-	m_animationRate = 4 - animationRate;
+	m_vlp_animationTimer->ChangeCountFrame(4 - animationRate);
 	float scaleRate = 1.0f + vibPower;
 	m_calcScale = m_defaultScale * scaleRate;
 }
@@ -56,7 +55,7 @@ void ButiEngine::VibrationEffectComponent::SetVibrationViolent(const float arg_v
 {
 	float vibPower = arg_vibrationPower;
 	std::int32_t animationRate = vibPower * 4;
-	m_animationRate = 4 - animationRate;
+	m_vlp_animationTimer->ChangeCountFrame(4 - animationRate);
 	float scaleRate;
 	if (arg_isPlayer)
 	{
@@ -78,11 +77,7 @@ void ButiEngine::VibrationEffectComponent::SetEffectPosition(const Vector3& arg_
 
 void ButiEngine::VibrationEffectComponent::Animation()
 {
-	m_animationFrame++;
-
-	if (m_animationFrame < m_animationRate) { return; }
-
-	m_animationFrame = 0;
+	if (!m_vlp_animationTimer->Update()) { return; }
 
 	m_animationCount++;
 

@@ -560,6 +560,7 @@ cd ..\</Command>
     <ClCompile Include="NumberComponent.cpp" />
     <ClCompile Include="NumberManagerComponent.cpp" />
     <ClCompile Include="ParticleGenerater.cpp" />
+    <ClCompile Include="PauseManagerComponent.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerSensor.cpp" />
     <ClCompile Include="Pocket.cpp" />
@@ -633,6 +634,7 @@ cd ..\</Command>
     <ClInclude Include="NumberComponent.h" />
     <ClInclude Include="NumberManagerComponent.h" />
     <ClInclude Include="ParticleGenerater.h" />
+    <ClInclude Include="PauseManagerComponent.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerSensor.h" />
     <ClInclude Include="Pocket.h" />

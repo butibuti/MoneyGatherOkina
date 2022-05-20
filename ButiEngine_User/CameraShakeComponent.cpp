@@ -1,14 +1,12 @@
 #include "stdafx_u.h"
 #include "CameraShakeComponent.h"
+#include "PauseManagerComponent.h"
 
 #include "InputManager.h"
 
 void ButiEngine::CameraShakeComponent::OnUpdate()
 {
-	//if (InputManager::IsTriggerDecideKey())
-	//{
-	//	ShakeStart(4, 40);
-	//}
+	if (m_vwp_pauseManagerComponent.lock()->IsPause()) { return; }
 
 	if (!m_startFlag)
 	{
@@ -62,6 +60,7 @@ void ButiEngine::CameraShakeComponent::OnSet()
 
 void ButiEngine::CameraShakeComponent::Start()
 {
+	m_vwp_pauseManagerComponent = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
 	m_startFlag = false;
 	m_amplitude = 0.0f;
 	m_subAmplitude = 0.0f;
