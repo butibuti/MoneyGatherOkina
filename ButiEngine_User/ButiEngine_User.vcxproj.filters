@@ -75,6 +75,7 @@
     <ClCompile Include="StageProgressUIComponent.cpp" />
     <ClCompile Include="FlockingLeaderParent.cpp" />
     <ClCompile Include="Sensor.cpp" />
+    <ClCompile Include="Bomb_Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="StageProgressUIComponent.h" />
     <ClInclude Include="FlockingLeaderParent.h" />
     <ClInclude Include="Sensor.h" />
+    <ClInclude Include="Bomb_Player.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
