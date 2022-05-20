@@ -2,6 +2,7 @@
 #include "GameOverManagerComponent.h"
 #include "ShakeComponent.h"
 #include "FloatMotionComponent.h"
+#include "RotateAnimationComponent.h"
 #include "InputManager.h"
 
 void ButiEngine::GameOverManagerComponent::OnUpdate()
@@ -46,10 +47,16 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::GameOverManagerComp
 
 void ButiEngine::GameOverManagerComponent::AppearUI()
 {
-	auto floatMotion = GetManager().lock()->AddObjectFromCereal("GameOverUI").lock()->GetGameComponent<FloatMotionComponent>();
+	auto gameOverUI = GetManager().lock()->AddObjectFromCereal("GameOverUI");
+	auto floatMotion = gameOverUI.lock()->GetGameComponent<FloatMotionComponent>();
 	floatMotion->SetAmplitude(15.0f);
 	floatMotion->SetMotionSpeed(0.03f);
 	floatMotion->SetIsRandomSpeed(false);
+	auto rotateAnimation = gameOverUI.lock()->GetGameComponent<RotateAnimationComponent>();
+	rotateAnimation->SetMotionSpeed(0.05f);
+	rotateAnimation->SetIsRandomSpeed(false);
+	rotateAnimation->SetAxisType(2);
+
 	m_vwp_gameOverPlayerUI = GetManager().lock()->AddObjectFromCereal("GameOverPlayerUI");
 	m_vwp_retryUI = GetManager().lock()->AddObjectFromCereal("RetryUI");
 	m_vwp_nextTitleUI = GetManager().lock()->AddObjectFromCereal("NextTitleUI");
