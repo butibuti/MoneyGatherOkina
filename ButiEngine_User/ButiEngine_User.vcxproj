@@ -523,6 +523,7 @@ cd ..\</Command>
     <ClCompile Include="AttackFlashSpawner.cpp" />
     <ClCompile Include="BeeSoulComponent.cpp" />
     <ClCompile Include="BeeSoulPodUIComponent.cpp" />
+    <ClCompile Include="Bomb_Player.cpp" />
     <ClCompile Include="CameraAxis.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
@@ -568,6 +569,7 @@ cd ..\</Command>
     <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
+    <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="ShockWave.cpp" />
@@ -602,6 +604,7 @@ cd ..\</Command>
     <ClInclude Include="AttackFlashSpawner.h" />
     <ClInclude Include="BeeSoulComponent.h" />
     <ClInclude Include="BeeSoulPodUIComponent.h" />
+    <ClInclude Include="Bomb_Player.h" />
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="DrawObject.h" />
@@ -642,6 +645,7 @@ cd ..\</Command>
     <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
+    <ClInclude Include="Sensor.h" />
     <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="ShockWave.h" />

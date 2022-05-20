@@ -121,7 +121,6 @@ void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
 	m_vlp_enemy->CreatePocket(8);
 	m_vlp_enemy->RemovePocket(0);
-	m_vlp_enemy->SetNearBorder(gameObject.lock()->transform->GetLocalScale().x * 0.5f + 1.0f);
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
 	m_vlp_enemy->SetExplosionScale(8.0f);

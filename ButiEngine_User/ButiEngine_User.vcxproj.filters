@@ -74,6 +74,8 @@
     <ClCompile Include="WorkerAttackFlashEffect.cpp" />
     <ClCompile Include="StageProgressUIComponent.cpp" />
     <ClCompile Include="FlockingLeaderParent.cpp" />
+    <ClCompile Include="Sensor.cpp" />
+    <ClCompile Include="Bomb_Player.cpp" />
     <ClCompile Include="PauseManagerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +150,8 @@
     <ClInclude Include="WorkerAttackFlashEffect.h" />
     <ClInclude Include="StageProgressUIComponent.h" />
     <ClInclude Include="FlockingLeaderParent.h" />
+    <ClInclude Include="Sensor.h" />
+    <ClInclude Include="Bomb_Player.h" />
     <ClInclude Include="PauseManagerComponent.h" />
   </ItemGroup>
   <ItemGroup>

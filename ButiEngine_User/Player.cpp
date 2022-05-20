@@ -14,9 +14,26 @@
 #include "ShakeComponent.h"
 #include "CameraShakeComponent.h"
 #include "NumberManagerComponent.h"
+#include "Bomb_Player.h"
 
 void ButiEngine::Player::OnUpdate()
 {
+	//if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
+	//{
+	//	m_isBomb = !m_isBomb;
+	//	auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
+	//	if (m_isBomb)
+	//	{
+	//		bomb->Appear();
+	//		m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
+	//	}
+	//	else
+	//	{
+	//		bomb->Disappear();
+	//		m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
+	//	}
+	//}
+
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		Damage();
@@ -138,8 +155,12 @@ void ButiEngine::Player::Start()
 	m_acceleration = 0.01f;
 	m_deceleration = 0.01f;
 
+	CreateSensorObject();
+
 	m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
 	m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+
+	CreateBombObject();
 
 	auto hzUIParent = GetManager().lock()->AddObjectFromCereal("HzUIParent");
 	hzUIParent.lock()->transform->SetLocalPosition(Vector3(-800, -400, 50));
@@ -156,16 +177,7 @@ void ButiEngine::Player::Start()
 	hzUIParent.lock()->transform->SetLocalRotationX_Degrees(20);
 	hzUIParent.lock()->transform->SetLocalRotationY_Degrees(-15);
 
-
-	m_isIncrease = false;
-	m_isVibrate = false;
-	m_vibrationForce = 5.0f;
-	m_vibration = 0.0f;
-	m_maxVibration = 1.0f;
-	m_nearEnemyCount = 0;
-	m_vibrationIncrease = 0.024f;
-	m_vibrationDecrease = m_maxVibration / 300.0f;
-	m_nearEnemyVibrationRate = 0.0f;
+	SetVibrationParameter();
 
 	m_vlp_particleTimer->Start();
 	m_vlp_particleTimer->ChangeCountFrame(4);
@@ -184,9 +196,19 @@ void ButiEngine::Player::Dead()
 	//	m_vwp_shockWave.lock()->SetIsRemove(true);
 	//}
 
+	if (m_vwp_sensor.lock())
+	{
+		m_vwp_sensor.lock()->SetIsRemove(true);
+	}
+
 	if (m_vwp_shockWave.lock())
 	{
 		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
+	}
+
+	if (m_vwp_bomb.lock())
+	{
+		m_vwp_bomb.lock()->SetIsRemove(true);
 	}
 
 	m_vibration = 0.0f;
@@ -516,10 +538,38 @@ void ButiEngine::Player::CreateDrawObject()
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
 }
 
+void ButiEngine::Player::CreateSensorObject()
+{
+	m_vwp_sensor = GetManager().lock()->AddObjectFromCereal("Sensor");
+	m_vwp_sensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	m_minSensorScale = Vector3(2.0f, 2.0f, 2.0f);
+	m_maxSensorScale = Vector3(8.0f, 8.0f, 8.0f);
+}
+
+void ButiEngine::Player::CreateBombObject()
+{
+	m_vwp_bomb = GetManager().lock()->AddObjectFromCereal("Bomb_Player");
+	m_vwp_bomb.lock()->transform->SetBaseTransform(m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->transform, true);
+	m_isBomb = false;
+}
+
 void ButiEngine::Player::SetLookAtParameter()
 {
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
 	m_vlp_lookAt->SetSpeed(0.1f);
+}
+
+void ButiEngine::Player::SetVibrationParameter()
+{
+	m_isIncrease = false;
+	m_isVibrate = false;
+	m_vibrationForce = 5.0f;
+	m_vibration = 0.0f;
+	m_maxVibration = 1.0f;
+	m_nearEnemyCount = 0;
+	m_vibrationIncrease = 0.024f;
+	m_vibrationDecrease = 0.0006f;
+	m_nearEnemyVibrationRate = 0.0f;
 }

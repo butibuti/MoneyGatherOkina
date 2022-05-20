@@ -72,7 +72,10 @@ namespace ButiEngine {
 		std::uint16_t CalculateRequestExp();
 
 		void CreateDrawObject();
+		void CreateSensorObject();
+		void CreateBombObject();
 		void SetLookAtParameter();
+		void SetVibrationParameter();
 
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 
@@ -125,6 +128,15 @@ namespace ButiEngine {
 		float m_vibrationIncrease;
 		float m_vibrationDecrease;
 		float m_nearEnemyVibrationRate;
+
+		//センサー
+		Value_weak_ptr<GameObject> m_vwp_sensor;
+		Vector3 m_minSensorScale;
+		Vector3 m_maxSensorScale;
+
+		//ボム
+		Value_weak_ptr<GameObject> m_vwp_bomb;
+		bool m_isBomb;
 
 		//パーティクル
 		Value_ptr<Timer> m_vlp_particleTimer;
