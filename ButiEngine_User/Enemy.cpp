@@ -282,7 +282,7 @@ void ButiEngine::Enemy::Dead()
 	//GetManager().lock()->GetGameObject("Particle")
 
 	//Ž€‚ñ‚¾‚ç‰æ–Ê—h‚ç‚·
-	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
+	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
 }
 
 void ButiEngine::Enemy::Explosion()

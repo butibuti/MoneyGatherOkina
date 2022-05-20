@@ -5,7 +5,7 @@
 void ButiEngine::CameraAxis::OnUpdate()
 {
 	ChasePlayer(0.1f);
-	RotateAxis(0.1f);
+	//RotateAxis(0.1f);
 }
 
 void ButiEngine::CameraAxis::OnSet()

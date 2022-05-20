@@ -27,7 +27,7 @@ void ButiEngine::HeartUIManagerComponent::OnUpdate()
 
 		Vector3 screenPosition = GetCamera("main")->WorldToScreen(position);
 		screenPosition.y += 160;
-		screenPosition.z = 0;
+		screenPosition.z = -0.02f;
 
 		screenPosition.x += ((m_heartUIScale.x + m_space) * i) - ((m_heartUIScale.x + m_space) * (playerLife - 1)) * 0.5f;
 		m_vec_vlp_heartUI[i]->transform->SetLocalPosition(screenPosition);
