@@ -18,21 +18,21 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
-	{
-		m_isBomb = !m_isBomb;
-		auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
-		if (m_isBomb)
-		{
-			bomb->Appear();
-			m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
-		}
-		else
-		{
-			bomb->Disappear();
-			m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
-		}
-	}
+	//if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
+	//{
+	//	m_isBomb = !m_isBomb;
+	//	auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
+	//	if (m_isBomb)
+	//	{
+	//		bomb->Appear();
+	//		m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
+	//	}
+	//	else
+	//	{
+	//		bomb->Disappear();
+	//		m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
+	//	}
+	//}
 
 	if (m_isIncrease)
 	{
