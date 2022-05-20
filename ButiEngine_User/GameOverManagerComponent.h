@@ -35,6 +35,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_gameOverPlayerUI;
 		Value_weak_ptr<GameObject> m_vwp_retryUI;
 		Value_weak_ptr<GameObject> m_vwp_nextTitleUI;
+		Value_weak_ptr<GameObject> m_vwp_cursorUI;
 
 		Vector3 m_defaultScale;
 

@@ -14,8 +14,6 @@ void ButiEngine::FloatMotionComponent::OnUpdate()
 
 void ButiEngine::FloatMotionComponent::OnSet()
 {
-	m_position = gameObject.lock()->transform->GetLocalPosition();
-
 	m_theta = 0.0f;
 	m_amplitude = 0.1f;
 	m_motionSpeed = 0.01f;
@@ -57,6 +55,7 @@ void ButiEngine::FloatMotionComponent::OnShowUI()
 
 void ButiEngine::FloatMotionComponent::Start()
 {
+	m_position = gameObject.lock()->transform->GetLocalPosition();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FloatMotionComponent::Clone()

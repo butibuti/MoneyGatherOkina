@@ -78,6 +78,7 @@
     <ClCompile Include="Bomb_Player.cpp" />
     <ClCompile Include="PauseManagerComponent.cpp" />
     <ClCompile Include="RotateAnimationComponent.cpp" />
+    <ClCompile Include="ExpansionAnimationComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Bomb_Player.h" />
     <ClInclude Include="PauseManagerComponent.h" />
     <ClInclude Include="RotateAnimationComponent.h" />
+    <ClInclude Include="ExpansionAnimationComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

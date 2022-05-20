@@ -599,6 +599,7 @@ cd ..\</Command>
     <ClCompile Include="WorkerAttackFlashEffect.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="WorldSpeedManager.cpp" />
+    <ClCompile Include="ExpansionAnimationComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationRemoverComponent.h" />
@@ -669,6 +670,7 @@ cd ..\</Command>
     <ClInclude Include="WorkerAttackFlashEffect.h" />
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="WorldSpeedManager.h" />
+    <ClInclude Include="ExpansionAnimationComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
