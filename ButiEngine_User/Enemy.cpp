@@ -405,7 +405,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 
 	if (m_vlp_attackFlashTimer->Update())
 	{
-		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, size, 1.0f, Vector4(1.0f, 0.745, 0.0f, 1.0f));
+		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, Vector4(1.0f, 0.745, 0.0f, 1.0f));
 	}
 }
 
