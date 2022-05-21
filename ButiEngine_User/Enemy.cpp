@@ -11,6 +11,7 @@
 #include "Enemy_Stalker.h"
 #include "Enemy_Tutorial.h"
 #include "Enemy_Volcano.h"
+#include "Enemy_Boss.h"
 #include "SeparateDrawObject.h"
 #include "VibrationEffectComponent.h"
 #include "ShakeComponent.h"
@@ -107,7 +108,7 @@ void ButiEngine::Enemy::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
-				m_isNearPlayer = true;
+				m_isNearPlayer = false;
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
@@ -256,6 +257,14 @@ void ButiEngine::Enemy::Dead()
 	RemoveAllPocket();
 	AddDeadCount();
 	StopVibrationEffect();
+
+	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
+	if (boss)
+	{
+		boss->Dead();
+		gameObject.lock()->SetIsRemove(true);
+		return;
+	}
 
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
@@ -424,7 +433,7 @@ void ButiEngine::Enemy::CalculateVibrationIncrease()
 	}
 
 	m_vibrationIncrease += workerVibrationForce * m_stickWorkerCount - m_vibrationResistance;
-	m_vibrationIncrease = max(m_vibrationIncrease, 0.0f);
+	m_vibrationIncrease = max(m_vibrationIncrease, 0.5f);
 }
 
 std::uint8_t ButiEngine::Enemy::GetStickWorkerCount()

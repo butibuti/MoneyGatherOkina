@@ -146,7 +146,7 @@ void ButiEngine::WaveManager::MoveWave()
 		m_vwp_startPopUpObject.lock()->DisappearPopUp();
 
 		//“G‚ğƒXƒ|[ƒ“‚³‚¹‚é
-		SpawnEnemy();
+		//SpawnEnemy();
 	}
 
 	

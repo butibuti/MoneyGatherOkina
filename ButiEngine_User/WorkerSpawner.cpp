@@ -64,7 +64,7 @@ void ButiEngine::WorkerSpawner::SpawnWorker()
 	//Playerの周りにランダムにスポーン
 	Vector3 playerPos = player.lock()->transform->GetLocalPosition();
 	gameObject.lock()->transform->RollLocalRotationY_Degrees(ButiRandom::GetRandom(0, 360));
-	gameObject.lock()->transform->SetLocalPosition(playerPos + gameObject.lock()->transform->GetFront() * ButiRandom::GetRandom(5, 10));
+	gameObject.lock()->transform->SetLocalPosition(playerPos + gameObject.lock()->transform->GetFront() * ButiRandom::GetRandom(10, 20));
 
 	auto worker = GetManager().lock()->AddObjectFromCereal("Worker");
 	worker.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());

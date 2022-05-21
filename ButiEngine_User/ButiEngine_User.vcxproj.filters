@@ -80,6 +80,7 @@
     <ClCompile Include="RotateAnimationComponent.cpp" />
     <ClCompile Include="ExpansionAnimationComponent.cpp" />
     <ClCompile Include="SpriteParticleGenerator.cpp" />
+    <ClCompile Include="Enemy_Boss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="RotateAnimationComponent.h" />
     <ClInclude Include="ExpansionAnimationComponent.h" />
     <ClInclude Include="SpriteParticleGenerator.h" />
+    <ClInclude Include="Enemy_Boss.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
