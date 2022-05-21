@@ -28,6 +28,8 @@ void ButiEngine::CameraAxis::Start()
 
 	m_currentRotation = Vector3(0, 0, 0);
 	m_previousRotation = m_currentRotation;
+	//竹渕が書いたブルーム用カメラにmainを親としてセットする処理
+	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform);
 }
 
 void ButiEngine::CameraAxis::ChasePlayer(const float arg_lerpScale)

@@ -149,6 +149,7 @@ void ButiEngine::Player::Start()
 	
 	SetLookAtParameter();
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
+	
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.25f;

@@ -5,6 +5,7 @@
 #include"Header/GameObjects/DefaultGameComponent/ModelDrawComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/MeshDrawComponent_Static.h"
 #include"Header/GameObjects/DefaultGameComponent/ModelDrawComponent.h"
+#include"Header/GameObjects/DefaultGameComponent/BloomComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/ShadowComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
