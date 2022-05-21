@@ -8,6 +8,7 @@ namespace ButiEngine {
 	class SceneChangeAnimationComponent;
 	class GameOverManagerComponent;
 	class StageProgressUIComponent;
+	class PauseManagerComponent;
 
 	class WaveManager :public GameComponent
 	{
@@ -41,6 +42,7 @@ namespace ButiEngine {
 		void WaveFinish();
 		void StageClearAnimation();
 		void GameOverAnimation();
+		void PauseAnimation();
 		void StageProgressAnimation();
 
 		Value_weak_ptr<StartPopUpComponent> m_vwp_startPopUpObject;
@@ -48,6 +50,7 @@ namespace ButiEngine {
 		Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimationComponent;
 		Value_weak_ptr<GameOverManagerComponent> m_vwp_gameOverManagerComponent;
 		Value_weak_ptr<StageProgressUIComponent> m_vwp_stageProgressUIComponent;
+		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 
 		//ウェーブ番号
 		std::int32_t m_waveNum;

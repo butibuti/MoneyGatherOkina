@@ -22,12 +22,13 @@ namespace ButiEngine {
 
 		bool IsRetry() { return m_isRetry; }
 		bool IsNext() { return m_isNext; }
-		void AppearUI();
 
 	private:
 		void InputSelect();
+		void AppearGameOverUI();
+		void AppearSelectUI();
 
-		void ScaleAnimation(); //‰¼
+		void ScaleAnimation();
 		void PlayerPikuPiku();
 
 		Value_ptr<Timer> m_vlp_waitTimer;
@@ -37,7 +38,11 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_nextTitleUI;
 		Value_weak_ptr<GameObject> m_vwp_cursorUI;
 
-		Vector3 m_defaultScale;
+		Vector3 m_defaultSelectScale;
+		Vector3 m_retryScale;
+		Vector3 m_nextTitleScale;
+
+		std::int8_t m_nextCount;
 
 		bool m_isRetry;
 		bool m_isNext;

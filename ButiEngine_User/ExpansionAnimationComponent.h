@@ -21,12 +21,16 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-	private:
-		Value_ptr<Timer> m_timer;
+		void SetScale(const Vector3& arg_scale) { m_defaultScale = arg_scale; }
+		void SetIsActive(const bool arg_isActive) { m_isActive = arg_isActive; }
 
+	private:
 		Vector3 m_defaultScale;
 		Vector3 m_currentScale;
-		Vector3 m_previousScale;
+
+		float m_borderScale;
+
+		bool m_isActive;
 	};
 
 }

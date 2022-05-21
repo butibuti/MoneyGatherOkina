@@ -20,8 +20,13 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetIsFade(const bool arg_isFade) { m_isFade = arg_isFade; }
+		void SetMoveAlpha(const float arg_moveAlpha) { m_moveAlpha = arg_moveAlpha; }
+
 	private:
+		bool m_isFade;
 		float m_alpha;
+		float m_moveAlpha;
 	};
 }
 

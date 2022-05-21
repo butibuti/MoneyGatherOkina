@@ -3,17 +3,29 @@
 
 void ButiEngine::FadeOutComponent::OnUpdate()
 {
-	if (m_alpha < 1.0f)
+	if (!m_isFade)
 	{
-		float moveAlpha = 1.0f / 100.0f;
-		m_alpha += moveAlpha;
+		if (m_alpha < 1.0f)
+		{		
+			m_alpha += m_moveAlpha;
+		}
 	}
+	else
+	{
+		if (m_alpha > 0.0f)
+		{
+			m_alpha -= m_moveAlpha;
+		}
+	}
+
 	gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w = m_alpha;
 
 }
 
 void ButiEngine::FadeOutComponent::OnSet()
 {
+	m_moveAlpha = 1.0f / 60.0f;
+	m_isFade = false;
 }
 
 void ButiEngine::FadeOutComponent::OnShowUI()

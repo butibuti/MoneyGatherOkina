@@ -4,10 +4,8 @@
 
 void ButiEngine::BeeSoulComponent::OnUpdate()
 {
-    if (m_residualFrame > 0)
+    if (!m_vlp_waitTimer->Update_continue())
     {
-        m_residualFrame--;
-
         //スクリーン座標に変換
         Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_residualPosition);
         screenPosition.z = 0;
@@ -19,26 +17,26 @@ void ButiEngine::BeeSoulComponent::OnUpdate()
         Move();
     }
 
-
-    Animation();
+    if (m_vlp_timer->Update())
+    {
+        Animation();
+    }
 
     if (m_animationCount >= m_maxAnimationCount)
     {
         m_animationCount = 0;
     }
-    if (m_life > 0)
-    {
-        m_life--;
-    }
-    else
+    if (m_vlp_lifeTimer->Update())
     {
         gameObject.lock()->SetIsRemove(true);
-        return;
     }
 }
 
 void ButiEngine::BeeSoulComponent::OnSet()
 {
+    m_vlp_timer = ObjectFactory::Create<RelativeTimer>();
+    m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
+    m_vlp_lifeTimer = ObjectFactory::Create<RelativeTimer>();
 }
 
 void ButiEngine::BeeSoulComponent::OnRemove()
@@ -51,14 +49,16 @@ void ButiEngine::BeeSoulComponent::OnShowUI()
 
 void ButiEngine::BeeSoulComponent::Start()
 {
+    m_vlp_timer->Start();
+    m_vlp_timer->ChangeCountFrame(4);
+    m_vlp_waitTimer->Start();
+    m_vlp_waitTimer->ChangeCountFrame(60);
     m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
     m_speed = 0.02f;
-    m_residualFrame = 60;
-    m_life = (std::int16_t)(1.0f / m_speed) + m_residualFrame;
-    m_animationFrame = 0;
-    m_animationRate = 4;
     m_animationCount = 0;
     m_maxAnimationCount = 2;
+    m_vlp_lifeTimer->Start();
+    m_vlp_lifeTimer->ChangeCountFrame((std::int16_t)(1.0f / m_speed) + 60);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulComponent::Clone()
@@ -68,25 +68,24 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulComponent::C
 
 void ButiEngine::BeeSoulComponent::Move()
 {
+    float speed = m_speed * GameDevice::WorldSpeed;
     auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
     if (!anim)
     {
         anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
         anim->SetTargetTransform(gameObject.lock()->transform->Clone());
         anim->GetTargetTransform()->SetWorldPosition(Vector3(-850, 300, 0));
-        anim->SetSpeed(m_speed);
+        anim->SetSpeed(speed);
         anim->SetEaseType(Easing::EasingType::EaseInOutQuad);
+    }
+    else
+    {
+        anim->SetSpeed(speed);
     }
 }
 
 void ButiEngine::BeeSoulComponent::Animation()
 {
-    m_animationFrame++;
-
-    if (m_animationFrame < m_animationRate) { return; }
-
-    m_animationFrame = 0;
-
     m_animationCount++;
 
     m_vwp_spriteAnimationComponent.lock()->UpdateHorizontalAnim(1);
