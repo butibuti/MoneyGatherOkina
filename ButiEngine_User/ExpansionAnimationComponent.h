@@ -25,8 +25,6 @@ namespace ButiEngine {
 		void SetIsActive(const bool arg_isActive) { m_isActive = arg_isActive; }
 
 	private:
-		Value_ptr<Timer> m_timer;
-
 		Vector3 m_defaultScale;
 		Vector3 m_currentScale;
 

@@ -53,6 +53,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_cursorUI;
 
 		Vector3 m_defaultSelectScale;
+		Vector3 m_currentSelectScale;
 		Vector3 m_pauseBackScale;
 		Vector3 m_pauseNextSelectScale;
 

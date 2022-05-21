@@ -9,6 +9,7 @@
 #include "GameOverManagerComponent.h"
 #include "StageProgressUIComponent.h"
 #include "PauseManagerComponent.h"
+#include "WorldSpeedManager.h"
 
 void ButiEngine::WaveManager::OnUpdate()
 {
@@ -294,6 +295,8 @@ void ButiEngine::WaveManager::PauseAnimation()
 		sceneManager->RemoveScene(sceneName);
 		sceneManager->LoadScene(sceneName);
 		sceneManager->ChangeScene(sceneName);
+
+		GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>()->SetSpeed(1.0f);
 	}
 }
 
