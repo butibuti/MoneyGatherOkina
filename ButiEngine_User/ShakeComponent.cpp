@@ -58,7 +58,7 @@ void ButiEngine::ShakeComponent::OnSet()
 	m_moveRotate = Vector3(0, 0, 0);
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
 	m_movePos = Vector3(0, 0, 0);
-	m_amplitude = 0.5f;
+	m_amplitude = 0.0f;
 }
 
 void ButiEngine::ShakeComponent::Start()

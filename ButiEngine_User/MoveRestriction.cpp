@@ -1,6 +1,6 @@
 #include "stdafx_u.h"
 #include "MoveRestriction.h"
-#include "Header/GameObjects/DefaultGameComponent/RigidBodyComponent.h"
+#include "Player.h"
 
 void ButiEngine::MoveRestriction::OnUpdate()
 {
@@ -94,4 +94,12 @@ void ButiEngine::MoveRestriction::SetNewPosition()
 	Vector3 dir = (pos - fieldPos).GetNormalize();
 	Vector3 newPos = fieldPos + dir * border;
 	gameObject.lock()->transform->SetWorldPosition(newPos);
+
+	auto vlp_playerComponent = gameObject.lock()->GetGameComponent<Player>();
+	if (vlp_playerComponent)
+	{
+		Vector3 velocity = vlp_playerComponent->GetVelocity();
+		velocity = velocity - velocity.Dot(dir) * dir;
+		vlp_playerComponent->SetVelocity(velocity);
+	}
 }
