@@ -2,6 +2,7 @@
 #include "StageClearManagerComponent.h"
 #include "WorldSpeedManager.h"
 #include "MoveAnimationComponent.h"
+#include "CameraComponent.h"
 
 void ButiEngine::StageClearManagerComponent::OnUpdate()
 {
@@ -13,9 +14,6 @@ void ButiEngine::StageClearManagerComponent::OnUpdate()
 	{
 		AddUI();
 	}
-
-	//Ç±Ç±Ç≈çXêV
-
 }
 
 void ButiEngine::StageClearManagerComponent::OnSet()
@@ -49,13 +47,18 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 {
 	if (m_uiCount < 5)
 	{
+		if (m_uiCount == 0)
+		{
+			auto cameraComponent = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraComponent>();
+			cameraComponent->SetZoomOperationNum(0);
+		}
 		std::string objectName = "ClearUI_" + std::to_string(m_uiCount);
 		auto clearUI = GetManager().lock()->AddObjectFromCereal(objectName);
 		auto position = clearUI.lock()->transform->GetLocalPosition();
 		auto moveAnimationComponent = clearUI.lock()->GetGameComponent<MoveAnimationComponent>();
 		auto endPosition = Vector3(-750 + 250 * m_uiCount, 100 + 60 * m_uiCount, position.z);
 		moveAnimationComponent->SetEndPosition(endPosition);
-		moveAnimationComponent->SetSpeed(0.75f);
+		moveAnimationComponent->SetSpeed(0.9f);
 		moveAnimationComponent->SetIsShake(true);
 	}
 	else if (m_uiCount == 8)
@@ -65,7 +68,7 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 		auto moveAnimationComponent = backToSelectUI.lock()->GetGameComponent<MoveAnimationComponent>();
 		auto endPosition = Vector3(350, -180, position.z);
 		moveAnimationComponent->SetEndPosition(endPosition);
-		moveAnimationComponent->SetSpeed(0.75f);
+		moveAnimationComponent->SetSpeed(0.9f);
 		moveAnimationComponent->SetIsShake(true);
 	}
 	else if(m_uiCount == 9)
