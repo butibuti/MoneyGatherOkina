@@ -79,10 +79,10 @@ void ButiEngine::Worker::OnSet()
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
-				Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
-				Vector3 damageAreaPos = arg_vwp_other.lock()->transform->GetWorldPosition();
-				Vector3 dir = (pos - damageAreaPos).GetNormalize();
-				Rupture(dir);
+				//Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+				//Vector3 damageAreaPos = arg_vwp_other.lock()->transform->GetWorldPosition();
+				//Vector3 dir = (pos - damageAreaPos).GetNormalize();
+				//Rupture(dir);
 			}
 		});
 

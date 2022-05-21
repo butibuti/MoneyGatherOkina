@@ -32,9 +32,13 @@ void ButiEngine::ParticleGenerater::OnShowUI()
 
 void ButiEngine::ParticleGenerater::Start()
 {
-	if (m_vwp_immediateParticleController.lock() == nullptr)
+	if (!m_vwp_immediateParticleController.lock())
 	{
 		m_vwp_immediateParticleController = gameObject.lock()->GetGameComponent<ImmediateParticleController>();
+	}
+	if (!m_vwp_spriteParticleController.lock())
+	{
+		//m_vwp_spriteParticleController = gameObject.lock()->GetGameComponent<SpriteParticleController>();
 	}
 	m_flickeringFrame = 0;
 	m_isChangeColor = false;
@@ -315,6 +319,24 @@ void ButiEngine::ParticleGenerater::ExplosionPolygonParticles(const Vector3& arg
 
 		m_vwp_immediateParticleController.lock()->AddParticle(particle);
 	}
+}
+
+void ButiEngine::ParticleGenerater::AttackFlashParticles(const Vector3& arg_position, const float arg_size, const Vector4& arg_color)
+{
+	Particle2D particle;
+
+	Vector3 dir;
+	dir.x = ButiRandom::GetInt(-100, 100);
+	dir.y = ButiRandom::GetInt(-100, 100);
+	dir.z = ButiRandom::GetInt(-100, 100);
+	dir.Normalize();
+
+	particle.position = arg_position + dir * ButiRandom::GetRandom(1.0f, 3.0f);
+	particle.angle = ButiRandom::GetRandom(0.0f, 90.0f);
+	particle.size = arg_size * ButiRandom::GetRandom(0.3f, 1.0f);
+	particle.color = arg_color;
+
+	m_vwp_spriteParticleController.lock()->AddParticle(particle);
 }
 
 void ButiEngine::ParticleGenerater::Flickering()

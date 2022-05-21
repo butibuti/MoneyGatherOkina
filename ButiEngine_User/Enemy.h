@@ -79,8 +79,9 @@ namespace ButiEngine {
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
+		Value_weak_ptr<ParticleGenerater> m_vwp_spriteParticleGenerater;
 		Value_ptr<Player> m_vlp_playerComponent;
-		Value_ptr<AttackFlashSpawner> m_vlp_attackFlashSpawner;
+		Value_ptr<Timer> m_vlp_attackFlashTimer;
 
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
 		std::int32_t m_testPocketCount;

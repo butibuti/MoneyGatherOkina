@@ -353,7 +353,6 @@ void ButiEngine::Player::MoveKnockBack()
 void ButiEngine::Player::Damage()
 {
 	if (m_isDead) { return; }
-
 	m_life--;
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 

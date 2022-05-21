@@ -70,7 +70,8 @@ void ButiEngine::Enemy::OnUpdate()
 	}
 	else
 	{
-		m_vlp_attackFlashSpawner->SpawnStop();
+		m_vlp_attackFlashTimer->Stop();
+		m_vlp_attackFlashTimer->Reset();
 	}
 	VibrationStickWoker();
 	ShakeDrawObject();
@@ -166,11 +167,10 @@ void ButiEngine::Enemy::OnShowUI()
 
 void ButiEngine::Enemy::Start()
 {
-
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
-	auto attackFlashSpawner = GetManager().lock()->AddObjectFromCereal("AttackFlashSpawner");
-	m_vlp_attackFlashSpawner = attackFlashSpawner.lock()->GetGameComponent<AttackFlashSpawner>();
+	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
@@ -256,11 +256,6 @@ void ButiEngine::Enemy::Dead()
 	RemoveAllPocket();
 	AddDeadCount();
 	StopVibrationEffect();
-
-	if (m_vlp_attackFlashSpawner)
-	{
-		m_vlp_attackFlashSpawner->Dead();
-	}
 
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
@@ -396,18 +391,22 @@ void ButiEngine::Enemy::ScaleAnimation()
 
 void ButiEngine::Enemy::CreateAttackFlashEffect()
 {
+	m_vlp_attackFlashTimer->Start();
+
 	Vector3 dir = (m_vwp_player.lock()->transform->GetLocalPosition() - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
 
-	m_vlp_attackFlashSpawner->SpawnStart(pos);
-
 	float playerVibration = m_vlp_playerComponent->GetVibration();
-	Vector3 scale = MathHelper::Lerp(1.0f, 6.0f, playerVibration);
-	m_vlp_attackFlashSpawner->SetEffectScale(scale);
+	float size = MathHelper::Lerp(1.0f, 6.0f, playerVibration);
 
 	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(6, 1, playerVibration);
-	m_vlp_attackFlashSpawner->SetSpawnIntervalFrame(spawnIntervalFrame);
+	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
+
+	if (m_vlp_attackFlashTimer->Update())
+	{
+		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, size, ButiColor::White());
+	}
 }
 
 
