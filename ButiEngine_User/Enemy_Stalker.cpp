@@ -67,6 +67,9 @@ void ButiEngine::Enemy_Stalker::Start()
 
 	m_vlp_preyTimer = ObjectFactory::Create<RelativeTimer>(300);
 	m_isPrey = false;
+
+	m_lookTargetAnimationStartPos = Vector3Const::Zero;
+	m_lookTargetMoveDir = gameObject.lock()->transform->GetRight();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Stalker::Clone()
@@ -101,7 +104,7 @@ void ButiEngine::Enemy_Stalker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg
 
 void ButiEngine::Enemy_Stalker::OnCollisionWorker(Value_weak_ptr<GameObject> arg_vwp_other)
 {
-	Prey(arg_vwp_other);
+	//Prey(arg_vwp_other);
 }
 
 void ButiEngine::Enemy_Stalker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other)
@@ -127,8 +130,10 @@ void ButiEngine::Enemy_Stalker::Prey(Value_weak_ptr<GameObject> arg_vwp_other)
 
 	m_velocity = Vector3Const::Zero;
 
-	gameObject.lock()->transform->SetLookAtRotation((arg_vwp_other.lock()->transform->GetWorldPosition()));
-	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront());
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(arg_vwp_other.lock()->transform->GetWorldPosition());
+	gameObject.lock()->transform->SetLookAtRotation(arg_vwp_other.lock()->transform->GetWorldPosition());
+	m_vlp_lookAt->SetSpeed(1.0f);
+
 	m_vlp_preyTimer->Start();
 	m_isPrey = true;
 
@@ -137,16 +142,30 @@ void ButiEngine::Enemy_Stalker::Prey(Value_weak_ptr<GameObject> arg_vwp_other)
 	if (worker)
 	{
 		m_vwp_preyTarget = arg_vwp_other;
+
+		m_lookTargetAnimationStartPos = m_vlp_lookAt->GetLookTarget()->GetLocalPosition();
+		m_lookTargetMoveDir = gameObject.lock()->transform->GetRight();
+
 		worker->Predated(gameObject);
 	}
 }
 
 void ButiEngine::Enemy_Stalker::OnPrey()
 {
+	//モブハチを捕食していた時アニメーションする
+	if (m_vwp_preyTarget.lock())
+	{
+		PreyAnimation();
+	}
+
 	if (m_vlp_preyTimer->Update())
 	{
 		m_vlp_preyTimer->Stop();
 
+		m_vlp_lookAt->SetSpeed(m_defaultLookSpeed);
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(m_lookTargetAnimationStartPos);
+
+		//モブハチ殺す
 		if (m_vwp_preyTarget.lock())
 		{
 			auto worker = m_vwp_preyTarget.lock()->GetGameComponent<Worker>();
@@ -163,12 +182,19 @@ void ButiEngine::Enemy_Stalker::OnPrey()
 	}
 }
 
+void ButiEngine::Enemy_Stalker::PreyAnimation()
+{
+	float progress = m_vlp_preyTimer->GetPercent() * GameDevice::WorldSpeed;
+	Vector3 newLookTargetPos = m_lookTargetAnimationStartPos + m_lookTargetMoveDir * (sin(2 * PI * progress * 10.0f)) * 1.5f;
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(newLookTargetPos);
+}
+
 void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vlp_enemy->CreatePocket(3);
+	m_vlp_enemy->CreatePocket(5);
 	m_vlp_enemy->RemovePocket(0);
-	m_vlp_enemy->SetVibrationCapacity(100.0f);
+	m_vlp_enemy->SetVibrationCapacity(30.0f);
 	m_vlp_enemy->SetVibrationResistance(0.0f);
 	m_vlp_enemy->SetExplosionScale(3.0f);
 	m_vlp_enemy->SetWeight(100.0f);
@@ -176,8 +202,10 @@ void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 
 void ButiEngine::Enemy_Stalker::SetLookAtParameter()
 {
+	m_defaultLookSpeed = 0.1f;
+
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
-	m_vlp_lookAt->SetSpeed(0.1f);
+	m_vlp_lookAt->SetSpeed(m_defaultLookSpeed);
 }

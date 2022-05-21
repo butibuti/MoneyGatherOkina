@@ -69,10 +69,10 @@ void ButiEngine::Worker::OnSet()
 			{
 				OnCollisionPlayer(arg_vwp_other);
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Stalker")))
-			{
-				OnCollisionStalker(arg_vwp_other);
-			}
+			//else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Stalker")))
+			//{
+			//	OnCollisionStalker(arg_vwp_other);
+			//}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				OnCollisionEnemy(arg_vwp_other);
@@ -213,6 +213,11 @@ void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 		flocking->SetIsRemove(true);
 	}
 
+	if (m_vlp_lookAt)
+	{
+		m_vlp_lookAt->SetIsRemove(true);
+	}
+
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
 	if (collider)
 	{
@@ -231,6 +236,14 @@ void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 		floatMotion->SetIsRemove(true);
 	}
 
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 stalkerPos = arg_vwp_other.lock()->transform->GetLocalPosition();
+	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
+	float stalkerRadius = arg_vwp_other.lock()->transform->GetLocalScale().x * 0.5f;
+	Vector3 stalkerFront = arg_vwp_other.lock()->transform->GetFront();
+	Vector3 newPos = stalkerPos + stalkerFront * (radius + stalkerRadius);
+
+	gameObject.lock()->transform->SetLocalPosition(newPos);
 	gameObject.lock()->transform->SetBaseTransform(arg_vwp_other.lock()->transform);
 
 	m_isPredated = true;

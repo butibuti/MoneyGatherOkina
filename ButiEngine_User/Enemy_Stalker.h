@@ -36,6 +36,7 @@ namespace ButiEngine {
 		void Move();
 		void Prey(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnPrey();
+		void PreyAnimation();
 
 		void SetEnemyParameter();
 		void SetLookAtParameter();
@@ -50,6 +51,10 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_preyTarget;
 		Value_ptr<Timer> m_vlp_preyTimer;
 		bool m_isPrey;
+
+		float m_defaultLookSpeed;
+		Vector3 m_lookTargetAnimationStartPos;
+		Vector3 m_lookTargetMoveDir;
 	};
 
 }

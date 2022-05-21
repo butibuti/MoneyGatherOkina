@@ -142,14 +142,14 @@ void ButiEngine::Flocking::CalculateMoveSpeed()
 	//リーダーに近い時リーダーの速度に合わせる
 	//m_moveSpeed = m_vlp_flockingLeader->GetMoveSpeed();
 
+	float leaderSpeed = m_vlp_flockingLeader->GetMoveSpeed();
 	if (IsNearLeader(m_averagePos))
 	{
-		float leaderSpeed = m_vlp_flockingLeader->GetMoveSpeed();
 		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed, 0.5f * GameDevice::WorldSpeed);
 	}
 	else
 	{
-		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, m_maxMoveSpeed, 0.5f * GameDevice::WorldSpeed);
+		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed * 1.3f, 0.5f * GameDevice::WorldSpeed);
 	}
 }
 

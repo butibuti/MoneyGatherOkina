@@ -151,7 +151,7 @@ void ButiEngine::Player::Start()
 	m_vlp_camera = GetManager().lock()->GetScene().lock()->GetCamera("main");
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
-	m_maxMoveSpeed = 0.15f;
+	m_maxMoveSpeed = 0.25f;
 	m_acceleration = 0.01f;
 	m_deceleration = 0.01f;
 
@@ -560,7 +560,7 @@ void ButiEngine::Player::CreateSensorObject()
 void ButiEngine::Player::CreateBombObject()
 {
 	m_vwp_bomb = GetManager().lock()->AddObjectFromCereal("Bomb_Player");
-	m_vwp_bomb.lock()->transform->SetBaseTransform(m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->transform, true);
+	m_vwp_bomb.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	m_isBomb = false;
 }
 

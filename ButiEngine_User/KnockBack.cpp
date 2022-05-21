@@ -13,16 +13,18 @@ ButiEngine::KnockBack::KnockBack(const Vector3& arg_dir, const float arg_force, 
 
 void ButiEngine::KnockBack::OnUpdate()
 {
+	float progress = m_vlp_timer->GetPercent() * GameDevice::WorldSpeed;
+	progress = min(progress, 1.0f);
 	m_velocity = MathHelper::LerpPosition(m_startVelocity, Vector3Const::Zero, m_vlp_timer->GetPercent());
 
 	if (m_isGravity)
 	{
 		constexpr float gravity = 0.04f;
-		m_velocityY -= gravity;
+		m_velocityY -= gravity * GameDevice::WorldSpeed;
 		m_velocity.y = m_velocityY;
 	}
 
-	gameObject.lock()->transform->Translate(m_velocity);
+	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
 
 
 	if (m_vlp_timer->Update())

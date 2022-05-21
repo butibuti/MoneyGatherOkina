@@ -123,7 +123,7 @@ void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 	m_vlp_enemy->CreatePocket(8);
 	m_vlp_enemy->RemovePocket(0);
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
-	m_vlp_enemy->SetVibrationResistance(3.0f);
+	m_vlp_enemy->SetVibrationResistance(0.5f);
 	m_vlp_enemy->SetExplosionScale(8.0f);
 	m_vlp_enemy->SetWeight(1000.0f);
 }
