@@ -9,37 +9,48 @@
 
 void ButiEngine::PauseManagerComponent::OnUpdate()
 {
+	//クリアかゲームオーバー中はポーズできないようにする
 	if (m_vwp_waveManagerComponent.lock()->IsGameOver() ||
 		m_vwp_waveManagerComponent.lock()->IsClearAnimation()) 
 	{
 		return;
 	}
 
+	//入力の受付
 	InputSelect();
 
+	//ポーズボタンを押したとき
 	if (m_vlp_waitTimer->Update_continue() && InputManager::IsTriggerPauseKey())
 	{
+		//タイマー関連を一度リセット
 		Reset();
 		m_vlp_waitTimer->Reset();
 		m_vlp_appearTimer->Reset();
 		m_isPause = !m_isPause;
+
+		//現在がポーズ中かどうかで処理を変える
 		if (m_isPause)
 		{
+			//ポーズ中にする
 			m_vlp_appearTimer->Start();
 			m_vwp_fadeOutComponent.lock()->SetIsFade(false);
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.0f);
 		}
 		else
 		{
+			//ポーズを解除する
 			DeadPauseSelectUI();
 			m_vlp_deadTimer->Start();
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 		}
 	}
 
+	//ポーズ画面のUIを順々に追加していく処理がまとめられた関数
 	PauseUI();
+
 	ScaleAnimation();
 
+	//ポーズ画面を閉じた際にフェードアウトやUIを引っ込めたり色々する場所
 	if (m_vlp_deadTimer->Update())
 	{
 		Reset();
@@ -135,6 +146,7 @@ void ButiEngine::PauseManagerComponent::InputSelect()
 
 void ButiEngine::PauseManagerComponent::PauseUI()
 {
+	//ポーズが解除されていたら通らない
 	if (!m_isPause) { return; }
 
 	if (m_vlp_appearTimer->Update())

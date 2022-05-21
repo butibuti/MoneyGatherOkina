@@ -7,6 +7,7 @@ namespace ButiEngine {
 	class Player;
 	class SceneChangeAnimationComponent;
 	class GameOverManagerComponent;
+	class StageClearManagerComponent;
 	class StageProgressUIComponent;
 	class PauseManagerComponent;
 
@@ -50,6 +51,7 @@ namespace ButiEngine {
 		Value_weak_ptr<Player> m_vwp_playerComponent;
 		Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimationComponent;
 		Value_weak_ptr<GameOverManagerComponent> m_vwp_gameOverManagerComponent;
+		Value_weak_ptr<StageClearManagerComponent> m_vwp_stageClearManagerComponent;
 		Value_weak_ptr<StageProgressUIComponent> m_vwp_stageProgressUIComponent;
 		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 

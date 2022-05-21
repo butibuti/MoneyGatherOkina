@@ -7,6 +7,7 @@
 #include "EnemySpawner.h"
 #include "SceneChangeAnimationComponent.h"
 #include "GameOverManagerComponent.h"
+#include "StageClearManagerComponent.h"
 #include "StageProgressUIComponent.h"
 #include "PauseManagerComponent.h"
 #include "WorldSpeedManager.h"
@@ -85,7 +86,7 @@ void ButiEngine::WaveManager::Start()
 	m_isSceneStart = false;
 
 	m_enemyDeadCount = 0;
-	m_maxEnemyCount = 100;
+	m_maxEnemyCount = 1;
 	m_enemySpawnCount = 0;
 }
 
@@ -213,18 +214,19 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	//最終ウェーブクリア後に通るようにする
 	if (!m_isLastWaveClear) return;
 
-	//仮
-	if (m_clearAnimationTime < 120)
+	if (!m_vwp_stageClearManagerComponent.lock())
 	{
-		m_clearAnimationTime++;
-	}
-	else
-	{
-		m_isNextSceneButton = true;
+		auto stageClearManager = GetManager().lock()->AddObjectFromCereal("StageClearManager");
+		m_vwp_stageClearManagerComponent = stageClearManager.lock()->GetGameComponent<StageClearManagerComponent>();
 	}
 
 	//ステージセレクトへ
-	if (InputManager::IsTriggerDecideKey() && m_isNextSceneButton)
+	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext())
+	{
+		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
+		m_isNextScene = true;
+	}
+	else if (!m_vwp_sceneChangeAnimationComponent.lock()->IsAnimation() && m_isNextScene)
 	{
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 		std::string sceneName = "StageSelect";

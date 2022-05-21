@@ -21,6 +21,7 @@ void ButiEngine::ShakeComponent::OnUpdate()
 		randomRotate.z = ButiRandom::GetRandom(-5, 5);
 		
 		m_moveRotate = randomRotate * m_amplitude * 2.0f;
+		m_moveRotate *= m_shakeAxis;
 
 		Vector3 randomPosition;
 		randomPosition.x = ButiRandom::GetRandom(-5, 5);
@@ -58,6 +59,7 @@ void ButiEngine::ShakeComponent::OnSet()
 	m_moveRotate = Vector3(0, 0, 0);
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
 	m_movePos = Vector3(0, 0, 0);
+	m_shakeAxis = Vector3(1, 1, 1);
 	m_amplitude = 0.5f;
 }
 
@@ -86,6 +88,7 @@ void ButiEngine::ShakeComponent::Shake(const float arg_amplitude, const std::int
 	m_moveRotate = Vector3(0, 0, 0);
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
 	m_movePos = Vector3(0, 0, 0);
+	m_amplitude = arg_amplitude;
 }
 
 void ButiEngine::ShakeComponent::ShakeStart()

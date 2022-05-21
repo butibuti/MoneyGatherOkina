@@ -80,6 +80,8 @@
     <ClCompile Include="RotateAnimationComponent.cpp" />
     <ClCompile Include="ExpansionAnimationComponent.cpp" />
     <ClCompile Include="SpriteParticleGenerator.cpp" />
+    <ClCompile Include="StageClearManagerComponent.cpp" />
+    <ClCompile Include="MoveAnimationComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -159,6 +161,8 @@
     <ClInclude Include="RotateAnimationComponent.h" />
     <ClInclude Include="ExpansionAnimationComponent.h" />
     <ClInclude Include="SpriteParticleGenerator.h" />
+    <ClInclude Include="StageClearManagerComponent.h" />
+    <ClInclude Include="MoveAnimationComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

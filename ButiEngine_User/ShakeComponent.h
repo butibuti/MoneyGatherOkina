@@ -20,6 +20,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetShakeAxis(const Vector3& arg_shakeAxis) { m_shakeAxis = arg_shakeAxis; }
 		void Shake(const float arg_amplitude, const std::int32_t arg_shakeFrame);
 		void ShakeStart();
 		void ShakeStop();
@@ -34,6 +35,7 @@ namespace ButiEngine {
 		Vector3 m_moveRotate;
 		Vector3 m_currentPos;
 		Vector3 m_movePos;
+		Vector3 m_shakeAxis;
 		float m_amplitude;
 		bool m_isShake;
 		bool m_isMove;
