@@ -85,8 +85,8 @@ void ButiEngine::Flocking::Start()
 
 	m_maxRotationSpeed = 0.3f;
 	m_rotationSpeed = m_maxRotationSpeed;
-	m_maxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed() * 1.1f;
-	m_moveSpeed = m_maxMoveSpeed;
+	m_playerMaxMoveSpeed = m_vlp_playerComponent->GetMaxMoveSpeed();
+	m_moveSpeed = m_playerMaxMoveSpeed;
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 
 	m_velocity = Vector3Const::Zero;
@@ -150,6 +150,7 @@ void ButiEngine::Flocking::CalculateMoveSpeed()
 	else
 	{
 		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed * 1.3f, 0.5f * GameDevice::WorldSpeed);
+		m_moveSpeed = max(m_moveSpeed, m_playerMaxMoveSpeed);
 	}
 }
 
@@ -296,7 +297,7 @@ void ButiEngine::Flocking::Move()
 	
 	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
 
-	if (abs(m_moveSpeed) > m_maxMoveSpeed * 0.3f)
+	if (abs(m_moveSpeed) > m_playerMaxMoveSpeed * 0.3f)
 	{
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
 	}

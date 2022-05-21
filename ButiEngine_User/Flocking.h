@@ -58,7 +58,7 @@ namespace ButiEngine {
 		Value_ptr<FlockingLeader> m_vlp_flockingLeader;
 		float m_maxRotationSpeed;
 		float m_rotationSpeed;
-		float m_maxMoveSpeed;
+		float m_playerMaxMoveSpeed;
 		float m_moveSpeed;
 
 		Vector3 m_velocity;

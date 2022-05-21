@@ -5,6 +5,7 @@ namespace ButiEngine {
 	class VibrationEffectComponent;
 	class ShakeComponent;
 	class ParticleGenerater;
+	class SpriteParticleGenerator;
 	class Player;
 
 	class Worker :public GameComponent
@@ -28,12 +29,12 @@ namespace ButiEngine {
 
 		static float GetVibrationForce() { return m_vibrationForce; }
 
-		void SetVibration(const bool arg_isVibration) { m_isVibration = arg_isVibration; }
+		void SetVibration(const bool arg_isVibration) { m_isVibrate = arg_isVibration; }
 
 		void Dead();
 		void Rupture(const Vector3& arg_dir);
 		void Predated(Value_weak_ptr<GameObject> arg_vwp_other);
-		void CreateAttackFlash(const Vector3& arg_pos);
+		void CreateAttackFlashEffect();
 	private:
 		void OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
@@ -59,17 +60,19 @@ namespace ButiEngine {
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
-		Value_weak_ptr<GameObject> m_vwp_attackFlash;
 		Value_ptr<Player> m_vlp_player;
 		Value_ptr<Timer> m_vlp_nearPlayerTimer;
 		Value_ptr<Timer> m_vlp_ruptureTimer;
+		Value_ptr<Timer> m_vlp_attackFlashTimer;
 
 		Vector3 m_defaultScale;
 
 		bool m_isNearPlayer;
 		bool m_isRupture;
-		bool m_isVibration;
+		bool m_isVibrate;
+		bool m_isAttack;
 		bool m_isPredated;
 	};
 

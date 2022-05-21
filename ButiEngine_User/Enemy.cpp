@@ -16,8 +16,8 @@
 #include "ShakeComponent.h"
 #include "EnemyScaleAnimationComponent.h"
 #include "ParticleGenerater.h"
+#include "SpriteParticleGenerator.h"
 #include "CameraShakeComponent.h"
-#include "AttackFlashSpawner.h"
 #include "KnockBack.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
@@ -168,7 +168,7 @@ void ButiEngine::Enemy::OnShowUI()
 void ButiEngine::Enemy::Start()
 {
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
-	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
 
 	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
 }
@@ -398,14 +398,14 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
 
 	float playerVibration = m_vlp_playerComponent->GetVibration();
-	float size = MathHelper::Lerp(1.0f, 6.0f, playerVibration);
+	float size = MathHelper::Lerp(1.0f, 6.0f, playerVibration) * 10.0f;
 
-	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(6, 1, playerVibration);
+	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(4, 1, playerVibration);
 	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
 
 	if (m_vlp_attackFlashTimer->Update())
 	{
-		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, size, ButiColor::White());
+		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, size, 1.0f, Vector4(1.0f, 0.745, 0.0f, 1.0f));
 	}
 }
 

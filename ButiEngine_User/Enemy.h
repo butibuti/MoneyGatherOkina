@@ -8,6 +8,7 @@ namespace ButiEngine {
 	class ShakeComponent;
 	class EnemyScaleAnimationComponent;
 	class ParticleGenerater;
+	class SpriteParticleGenerator;
 	class AttackFlashSpawner;
 
 	class Enemy :public GameComponent
@@ -79,7 +80,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
-		Value_weak_ptr<ParticleGenerater> m_vwp_spriteParticleGenerater;
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_ptr<Timer> m_vlp_attackFlashTimer;
 

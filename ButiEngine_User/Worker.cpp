@@ -14,9 +14,9 @@
 #include "ShakeComponent.h"
 #include "BeeSoulComponent.h"
 #include "ParticleGenerater.h"
+#include "SpriteParticleGenerator.h"
 #include "TiltMotion.h"
 #include "FloatMotionComponent.h"
-#include "WorkerAttackFlashEffect.h"
 #include "KnockBack.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
@@ -34,7 +34,7 @@ void ButiEngine::Worker::OnUpdate()
 		OnRupture();
 	}
 
-	if (m_isVibration)
+	if (m_isVibrate)
 	{
 		if (m_vwp_vibrationEffect.lock() == nullptr)
 		{
@@ -57,6 +57,16 @@ void ButiEngine::Worker::OnUpdate()
 	{
 		StopVibrationEffect();
 		StopShakeDrawObject();
+	}
+
+	if (m_isAttack)
+	{
+		CreateAttackFlashEffect();
+	}
+	else
+	{
+		m_vlp_attackFlashTimer->Stop();
+		m_vlp_attackFlashTimer->Reset();
 	}
 }
 
@@ -86,8 +96,6 @@ void ButiEngine::Worker::OnSet()
 			}
 		});
 
-	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
-
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 }
@@ -114,11 +122,17 @@ void ButiEngine::Worker::Start()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_isPredated = false;
+	m_isAttack = false;
 
 	m_vlp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
 
 	auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
 	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+
+	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+
+	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
@@ -182,12 +196,7 @@ void ButiEngine::Worker::Rupture(const Vector3& arg_dir)
 		floatMotion->SetIsRemove(true);
 	}
 
-	if (m_vwp_attackFlash.lock())
-	{
-		m_vwp_attackFlash.lock()->GetGameComponent<WorkerAttackFlashEffect>()->Dead();
-	}
-
-	m_isVibration = false;
+	m_isVibrate = false;
 	StopVibrationEffect();
 
 	std::int8_t frame = 30;
@@ -249,13 +258,17 @@ void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 	m_isPredated = true;
 }
 
-void ButiEngine::Worker::CreateAttackFlash(const Vector3& arg_pos)
+void ButiEngine::Worker::CreateAttackFlashEffect()
 {
-	if (m_vwp_attackFlash.lock()) { return; }
+	Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
+	Vector3 front = gameObject.lock()->transform->GetFront();
+	float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
+	pos += front * radius;
 
-	m_vwp_attackFlash = GetManager().lock()->AddObjectFromCereal("WorkerAttackFlashEffect");
-	m_vwp_attackFlash.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	m_vwp_attackFlash.lock()->transform->SetWorldPosition(arg_pos);
+	if (m_vlp_attackFlashTimer->Update())
+	{
+		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 10.0f, 0.5f, Vector4(0.35, 1.0f, 1.0f, 1.0f));
+	}
 }
 
 void ButiEngine::Worker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other)
@@ -280,7 +293,7 @@ void ButiEngine::Worker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_ot
 		m_vlp_nearPlayerTimer = ObjectFactory::Create<RelativeTimer>(30);
 		m_vlp_nearPlayerTimer->Start();
 		m_isNearPlayer = true;
-		m_isVibration = true;
+		m_isVibrate = true;
 	}
 }
 
@@ -351,11 +364,8 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 		//	//floatMotion->SetIsRemove(true);
 		//}
 
-		Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
-		float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
-		Vector3 dir = (arg_vwp_enemy.lock()->transform->GetLocalPosition() - pocket.lock()->transform->GetWorldPosition()).GetNormalize();
-		gameObject.lock()->GetGameComponent<Worker>()->CreateAttackFlash(pos + dir * radius);
-
+		m_isAttack = true;
+		m_vlp_attackFlashTimer->Start();
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
