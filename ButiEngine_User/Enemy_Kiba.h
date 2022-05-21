@@ -33,11 +33,16 @@ namespace ButiEngine {
 		void SetLookAtParameter();
 		float CalculateRotationDirection();
 
+		bool IsDetectionPlayer();
+
 		Value_ptr<Enemy> m_vlp_enemy;
 		Value_ptr<Loiter> m_vlp_loiter;
 		Value_weak_ptr<GameObject> m_vwp_damageArea;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 
+		float m_detectionRange;
+
+		//ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚½‚Æ‚«‚Ì‰ñ‚éˆ—
 		float m_rotationAngle;
 		float m_maxRotationAngle;
 		float m_rotationAcceleration;

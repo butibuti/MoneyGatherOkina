@@ -7,17 +7,17 @@
 
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
-	if (m_vlp_enemy->IsNearPlayer())
+	if (IsDetectionPlayer())
 	{
-		m_vlp_loiter->MoveStop();
-		m_vlp_lookAt->SetIsActive(false);
+		//m_vlp_loiter->MoveStop();
+		//m_vlp_lookAt->SetIsActive(false);
 		LookAtPlayer();
 	}
 	else
 	{
 		m_rotationAngle = 0.0f;
-		m_vlp_lookAt->SetIsActive(true);
-		m_vlp_loiter->MoveStart();
+		//m_vlp_lookAt->SetIsActive(true);
+		//m_vlp_loiter->MoveStart();
 	}
 }
 
@@ -43,11 +43,12 @@ void ButiEngine::Enemy_Kiba::Start()
 
 	CreateDamageArea();
 	SetEnemyParameter();
-	SetLoiterParameter();
-	SetLookAtParameter();
+	//SetLoiterParameter();
+	//SetLookAtParameter();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 
+	m_detectionRange = 10.0f;
 	m_rotationAngle = 0.0f;
 	m_rotationAcceleration = 0.03f;
 	m_maxRotationAngle = 1.0f;
@@ -161,5 +162,16 @@ float ButiEngine::Enemy_Kiba::CalculateRotationDirection()
 	}
 
 	return result;
+}
+
+bool ButiEngine::Enemy_Kiba::IsDetectionPlayer()
+{
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 playerPos = m_vlp_enemy->GetPlayer().lock()->transform->GetLocalPosition();
+
+	float rangeSqr = m_detectionRange * m_detectionRange;
+	float distanceSqr = (pos - playerPos).GetLengthSqr();
+
+	return distanceSqr <= rangeSqr;
 }
 

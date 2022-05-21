@@ -19,32 +19,32 @@ void ButiEngine::EnemySpawnManager::OnShowUI()
     if (GUI::Button("Add_Enemy_Fly"))
     {
         auto fly = GetManager().lock()->AddObjectFromCereal("Enemy_Fly");
-        auto drawFly = GetManager().lock()->AddObjectFromCereal("DrawObject_Fly");
-        drawFly.lock()->transform->SetBaseTransform(fly.lock()->transform, true);
+        //auto drawFly = GetManager().lock()->AddObjectFromCereal("DrawObject_Fly");
+        //drawFly.lock()->transform->SetBaseTransform(fly.lock()->transform, true);
     }
     if (GUI::Button("Add_Enemy_Kiba"))
     {
         auto kiba = GetManager().lock()->AddObjectFromCereal("Enemy_Kiba");
-        auto drawKiba = GetManager().lock()->AddObjectFromCereal("DrawObject_Kiba");
-        drawKiba.lock()->transform->SetBaseTransform(kiba.lock()->transform, true);
+        //auto drawKiba = GetManager().lock()->AddObjectFromCereal("DrawObject_Kiba");
+        //drawKiba.lock()->transform->SetBaseTransform(kiba.lock()->transform, true);
     }
     if (GUI::Button("Add_Enemy_Stalker"))
     {
         auto stalker = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
-        auto drawStalker = GetManager().lock()->AddObjectFromCereal("DrawObject_Stalker");
-        drawStalker.lock()->transform->SetBaseTransform(stalker.lock()->transform, true);
+        //auto drawStalker = GetManager().lock()->AddObjectFromCereal("DrawObject_Stalker");
+        //drawStalker.lock()->transform->SetBaseTransform(stalker.lock()->transform, true);
     }
     if (GUI::Button("Add_Enemy_Volcano"))
     {
         auto volcano = GetManager().lock()->AddObjectFromCereal("Enemy_Volcano");
-        auto drawVolcano = GetManager().lock()->AddObjectFromCereal("DrawObject_Volcano");
-        drawVolcano.lock()->transform->SetBaseTransform(volcano.lock()->transform, true);
+        //auto drawVolcano = GetManager().lock()->AddObjectFromCereal("DrawObject_Volcano");
+        //drawVolcano.lock()->transform->SetBaseTransform(volcano.lock()->transform, true);
     }
     if (GUI::Button("Add_Enemy_Tutorial"))
     {
         auto tutorial = GetManager().lock()->AddObjectFromCereal("Enemy_Tutorial");
-        auto drawTutorial = GetManager().lock()->AddObjectFromCereal("DrawObject_Tutorial");
-        drawTutorial.lock()->transform->SetBaseTransform(tutorial.lock()->transform, true);
+        //auto drawTutorial = GetManager().lock()->AddObjectFromCereal("DrawObject_Tutorial");
+        //drawTutorial.lock()->transform->SetBaseTransform(tutorial.lock()->transform, true);
     }
     GUI::BulletText("StageNum : WaveNum");
     GUI::InputInt2("##StageData", m_stageAndWaveNum);
