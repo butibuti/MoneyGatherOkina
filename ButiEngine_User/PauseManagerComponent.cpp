@@ -4,10 +4,17 @@
 #include "ExpansionAnimationComponent.h"
 #include "InputManager.h"
 #include "FadeOutComponent.h"
+#include "WaveManager.h"
 #include "FloatMotionComponent.h"
 
 void ButiEngine::PauseManagerComponent::OnUpdate()
 {
+	if (m_vwp_waveManagerComponent.lock()->IsGameOver() ||
+		m_vwp_waveManagerComponent.lock()->IsClearAnimation()) 
+	{
+		return;
+	}
+
 	InputSelect();
 
 	if (m_vlp_waitTimer->Update_continue() && InputManager::IsTriggerPauseKey())
@@ -56,10 +63,14 @@ void ButiEngine::PauseManagerComponent::Start()
 {
 	m_vlp_waitTimer->Start();
 	m_vlp_appearTimer->Start();
+
 	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
+	m_vwp_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	
 	m_vwp_fadeOutComponent = GetManager().lock()->AddObjectFromCereal("FadeOutUI").lock()->GetGameComponent<FadeOutComponent>();
 	m_vwp_fadeOutComponent.lock()->SetIsFade(true);
 	m_vwp_fadeOutComponent.lock()->SetMoveAlpha(0.1f);
+	m_vwp_fadeOutComponent.lock()->SetPositionZ(-0.051f);
 
 	m_vwp_pauseUI = GetManager().lock()->AddObjectFromCereal("PauseUI");
 	m_vwp_pauseWindowUI = GetManager().lock()->AddObjectFromCereal("PauseWindowUI");

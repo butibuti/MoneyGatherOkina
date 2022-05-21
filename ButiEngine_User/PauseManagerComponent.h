@@ -6,6 +6,7 @@ namespace ButiEngine {
 	class WorldSpeedManager;
 	class ExpansionAnimationComponent;
 	class FadeOutComponent;
+	class WaveManager;
 
 	class PauseManagerComponent :public GameComponent
 	{
@@ -46,6 +47,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ExpansionAnimationComponent> m_vwp_expansionPauseUIComponent;
 		Value_weak_ptr<ExpansionAnimationComponent> m_vwp_expansionPauseWindowUIComponent;
 		Value_weak_ptr<FadeOutComponent> m_vwp_fadeOutComponent;
+		Value_weak_ptr<WaveManager> m_vwp_waveManagerComponent;
 		Value_weak_ptr<GameObject> m_vwp_pauseUI;
 		Value_weak_ptr<GameObject> m_vwp_pauseWindowUI;
 		Value_weak_ptr<GameObject> m_vwp_pauseBackUI;

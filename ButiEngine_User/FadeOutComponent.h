@@ -22,6 +22,7 @@ namespace ButiEngine {
 
 		void SetIsFade(const bool arg_isFade) { m_isFade = arg_isFade; }
 		void SetMoveAlpha(const float arg_moveAlpha) { m_moveAlpha = arg_moveAlpha; }
+		void SetPositionZ(const float arg_positionZ);
 
 	private:
 		bool m_isFade;

@@ -41,3 +41,8 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FadeOutComponent::C
 {
 	return ObjectFactory::Create<FadeOutComponent>();
 }
+
+void ButiEngine::FadeOutComponent::SetPositionZ(const float arg_positionZ)
+{
+	gameObject.lock()->transform->SetLocalPositionZ(arg_positionZ);
+}

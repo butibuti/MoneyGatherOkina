@@ -246,7 +246,7 @@ void ButiEngine::Player::AddExp()
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 {
 	if (m_isKnockBack) return;
-	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) return;
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) return;
 
 	//現在の移動量をゼロにする
 	m_velocity = Vector3Const::Zero;
@@ -273,7 +273,7 @@ void ButiEngine::Player::Move()
 	//ノックバック中は操作不能
 	if (m_isKnockBack) { return; }
 	//リザルト(クリア演出)中は操作不能
-	if (m_vwp_waveManager.lock()->IsClearAnimationFlag()) { return; }
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
 	//死んでる間は操作不能
 	if (m_isDead) { return; }
 
