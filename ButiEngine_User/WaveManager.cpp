@@ -8,6 +8,7 @@
 #include "SceneChangeAnimationComponent.h"
 #include "GameOverManagerComponent.h"
 #include "StageProgressUIComponent.h"
+#include "PauseManagerComponent.h"
 
 void ButiEngine::WaveManager::OnUpdate()
 {
@@ -49,6 +50,7 @@ void ButiEngine::WaveManager::OnUpdate()
 
 	StageClearAnimation();
 	GameOverAnimation();
+	PauseAnimation();
 	StageProgressAnimation();
 }
 
@@ -68,6 +70,7 @@ void ButiEngine::WaveManager::Start()
 	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
 	m_vwp_sceneChangeAnimationComponent = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
 	m_vwp_stageProgressUIComponent = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline").lock()->GetGameComponent<StageProgressUIComponent>();
+	m_vwp_pauseManagerComponent = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
 	m_waveNum = 0;
 	m_maxWaveNum = 1;
 	m_clearAnimationTime = 0;
@@ -271,6 +274,26 @@ void ButiEngine::WaveManager::GameOverAnimation()
 		//m_isGameOver = false;
 		//m_vwp_playerComponent.lock()->Revival(); //ƒvƒŒƒCƒ„[‘h¶
 		//WaveFinish();
+	}
+}
+
+void ButiEngine::WaveManager::PauseAnimation()
+{
+	if (InputManager::IsTriggerDecideKey() && m_vwp_pauseManagerComponent.lock()->IsNext())
+	{
+		if (!m_vwp_pauseManagerComponent.lock()->IsBack())
+		{
+			m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
+			m_isNextScene = true;
+		}
+	}
+	else if (!m_vwp_sceneChangeAnimationComponent.lock()->IsAnimation() && m_isNextScene)
+	{
+		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+		std::string sceneName = "StageSelect";
+		sceneManager->RemoveScene(sceneName);
+		sceneManager->LoadScene(sceneName);
+		sceneManager->ChangeScene(sceneName);
 	}
 }
 
