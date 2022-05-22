@@ -19,7 +19,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetExpRate(const float arg_expRate);
+		void SetSoulRate(const float arg_expRate);
 
 	private:
 		void Animation();

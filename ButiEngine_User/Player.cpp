@@ -18,20 +18,9 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
+	if (!m_isBomb && GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
 	{
-		m_isBomb = !m_isBomb;
-		auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
-		if (m_isBomb)
-		{
-			bomb->Appear();
-			m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
-		}
-		else
-		{
-			bomb->Disappear();
-			m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
-		}
+		BombStart();
 	}
 
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
@@ -95,14 +84,9 @@ void ButiEngine::Player::OnRemove()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::Text("Level:%d", m_level);
-	GUI::Text("Exp:%d", m_exp);
+	GUI::Text("Exp:%d", m_soulCount);
 	GUI::Text("MaxWorker:%d", m_maxWorkerCount);
 	GUI::Text("Life:%d", m_life);
-	if (GUI::Button("LevelUp"))
-	{
-		LevelUp();
-	}
 
 	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
@@ -137,10 +121,9 @@ void ButiEngine::Player::Start()
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_life = 3;
 
-	m_level = 1;
-	m_maxLevel = 10;
 	m_maxWorkerCount = 20;
-	m_exp = 0;
+	m_soulCount = 0;
+	m_maxSoulCount = 100;
 
 	m_knockBackVelocity = Vector3(0, 0, 0);
 	m_knockBackFrame = 0;
@@ -230,22 +213,14 @@ void ButiEngine::Player::Revival()
 	m_isDead = false;
 }
 
-void ButiEngine::Player::AddExp()
+void ButiEngine::Player::AddSoul()
 {
-	if (m_level == m_maxLevel) { return; }
-
-	m_exp++;
-
-	std::uint16_t requestExp = CalculateRequestExp();
+	if (m_soulCount == m_maxSoulCount) { return; }
+	m_soulCount++;
 	
 	auto beeSoulPodUIComponent = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
-	float expRate = 1.0f - ((float)requestExp - (float)m_exp) * 0.1f;
-	beeSoulPodUIComponent->SetExpRate(expRate);
-
-	if (m_exp == requestExp)
-	{
-		LevelUp();
-	}
+	float soulRate = 1.0f - ((float)m_maxSoulCount - (float)m_soulCount) * 0.1f;
+	beeSoulPodUIComponent->SetSoulRate(soulRate);
 }
 
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
@@ -325,18 +300,6 @@ void ButiEngine::Player::Move()
 	}
 
 	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
-}
-
-void ButiEngine::Player::LevelUp()
-{
-	auto levelUpUI = GetManager().lock()->AddObjectFromCereal("LevelUpUI");
-	Vector3 screenPosition = GetCamera("main")->WorldToScreen(gameObject.lock()->transform->GetWorldPosition());
-	screenPosition.y += 100;
-	screenPosition.z = 0;
-	levelUpUI.lock()->transform->SetLocalPosition(screenPosition);
-
-	m_level++;
-	m_maxWorkerCount += 1;
 }
 
 void ButiEngine::Player::MoveKnockBack()
@@ -506,6 +469,31 @@ void ButiEngine::Player::ShakeDrawObject()
 	m_vwp_shakeComponent.lock()->SetShakePower(vibrationRate);
 }
 
+void ButiEngine::Player::BombStart()
+{
+	auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
+	bomb->Appear();
+	m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
+
+	m_soulCount = 0;
+	m_vlp_bombTimer->Start();
+
+	m_isBomb = true;
+}
+
+void ButiEngine::Player::Bomb()
+{
+	if (m_vlp_bombTimer->Update())
+	{
+		m_vlp_bombTimer->Stop();
+		auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
+		bomb->Disappear();
+		m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
+
+		m_isBomb = false;
+	}
+}
+
 void ButiEngine::Player::OnInvincible()
 {
 	if (m_vlp_invincibleTimer->Update())
@@ -541,11 +529,6 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 	Damage();
 }
 
-std::uint16_t ButiEngine::Player::CalculateRequestExp()
-{
-	return m_level * 10;
-}
-
 void ButiEngine::Player::CreateDrawObject()
 {
 	m_vwp_tiltFloatObject = GetManager().lock()->AddObjectFromCereal("TiltFloatObject");
@@ -564,6 +547,8 @@ void ButiEngine::Player::CreateSensorObject()
 
 void ButiEngine::Player::CreateBombObject()
 {
+	m_vlp_bombTimer = ObjectFactory::Create<RelativeTimer>(300);
+
 	m_vwp_bomb = GetManager().lock()->AddObjectFromCereal("Bomb_Player");
 	m_vwp_bomb.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	m_isBomb = false;

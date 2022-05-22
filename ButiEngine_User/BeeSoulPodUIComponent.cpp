@@ -26,7 +26,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulPodUICompone
 	return ObjectFactory::Create<BeeSoulPodUIComponent>();
 }
 
-void ButiEngine::BeeSoulPodUIComponent::SetExpRate(const float arg_expRate)
+void ButiEngine::BeeSoulPodUIComponent::SetSoulRate(const float arg_expRate)
 {
 	m_rate = arg_expRate;
 }

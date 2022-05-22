@@ -148,7 +148,7 @@ void ButiEngine::Worker::Dead()
 
 	if (m_vlp_player)
 	{
-		m_vlp_player->AddExp();
+		m_vlp_player->AddSoul();
 	}
 
 	auto workerSpawner = GetManager().lock()->GetGameObject(GameObjectTag("WorkerSpawner")).lock()->GetGameComponent<WorkerSpawner>();

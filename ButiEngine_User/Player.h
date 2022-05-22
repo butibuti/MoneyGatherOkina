@@ -55,13 +55,12 @@ namespace ButiEngine {
 
 		void Dead();
 		void Revival();
-		void AddExp();
+		void AddSoul();
 		void AddNearEnemyCount() { m_nearEnemyCount++; }
 		void KnockBack(const Vector3& arg_velocity);
 		void SetShockWaveScale(const Vector3& arg_scale);
 	private:
 		void Move();
-		void LevelUp();
 		void MoveKnockBack();
 		void Damage();
 
@@ -72,12 +71,12 @@ namespace ButiEngine {
 		void StopVibrationEffect();
 		void VibrationPowerDrawUpdate();
 		void ShakeDrawObject();
+		void BombStart();
+		void Bomb();
 
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
-
-		std::uint16_t CalculateRequestExp();
 
 		void CreateDrawObject();
 		void CreateSensorObject();
@@ -92,10 +91,9 @@ namespace ButiEngine {
 		std::int8_t m_life;
 
 		//レベル
-		std::uint8_t m_level;
-		std::uint8_t m_maxLevel;
 		std::uint8_t m_maxWorkerCount;
-		std::uint16_t m_exp;
+		std::uint16_t m_soulCount;
+		std::uint16_t m_maxSoulCount;
 
 		//移動
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
@@ -145,6 +143,7 @@ namespace ButiEngine {
 
 		//ボム
 		Value_weak_ptr<GameObject> m_vwp_bomb;
+		Value_ptr<Timer> m_vlp_bombTimer;
 		bool m_isBomb;
 
 		//パーティクル
