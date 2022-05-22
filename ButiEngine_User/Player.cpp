@@ -141,6 +141,7 @@ void ButiEngine::Player::Start()
 	m_maxLevel = 10;
 	m_maxWorkerCount = 20;
 	m_exp = 0;
+	m_isMaxLevel = false;
 
 	m_knockBackVelocity = Vector3(0, 0, 0);
 	m_knockBackFrame = 0;
@@ -331,6 +332,11 @@ void ButiEngine::Player::LevelUp()
 {
 	m_level++;
 	m_maxWorkerCount += 1;
+
+	if (m_level >= m_maxLevel)
+	{
+		m_isMaxLevel = true;
+	}
 }
 
 void ButiEngine::Player::MoveKnockBack()

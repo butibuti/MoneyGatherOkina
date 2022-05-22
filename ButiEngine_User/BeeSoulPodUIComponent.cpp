@@ -14,6 +14,7 @@ void ButiEngine::BeeSoulPodUIComponent::OnSet()
 	m_previousRate = 0.0f;
 	m_soulCount = 0;
 	m_maxSoulCount = 10;
+	m_previousMaxSoulCount = 10;
 }
 
 void ButiEngine::BeeSoulPodUIComponent::OnShowUI()
@@ -40,15 +41,20 @@ void ButiEngine::BeeSoulPodUIComponent::AddSoulCount()
 	{
 		m_vlp_waitTimer->Reset();
 		m_keepSoulCount = m_maxSoulCount;
+		m_previousMaxSoulCount = m_maxSoulCount;
+
 		if (m_vwp_playerComponent.lock())
 		{
 			m_maxSoulCount = m_vwp_playerComponent.lock()->CalculateRequestExp();
 
-			auto levelUpUI = GetManager().lock()->AddObjectFromCereal("LevelUpUI");
-			Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_vwp_player.lock()->transform->GetWorldPosition());
-			screenPosition.y += 100;
-			screenPosition.z = 0;
-			levelUpUI.lock()->transform->SetLocalPosition(screenPosition);
+			if (!m_vwp_playerComponent.lock()->IsMaxLevel())
+			{
+				auto levelUpUI = GetManager().lock()->AddObjectFromCereal("LevelUpUI");
+				Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_vwp_player.lock()->transform->GetWorldPosition());
+				screenPosition.y += 100;
+				screenPosition.z = 0;
+				levelUpUI.lock()->transform->SetLocalPosition(screenPosition);
+			}
 		}
 	}
 }
@@ -61,7 +67,7 @@ void ButiEngine::BeeSoulPodUIComponent::Animation()
 	}
 	else
 	{
-		m_rate = 1.0f - ((float)m_maxSoulCount - (float)m_keepSoulCount * 2.0f) * 0.1f;
+		m_rate = 1.0f - ((float)m_previousMaxSoulCount - (float)m_keepSoulCount) * 0.1f;
 	}
 
 	auto lerpScale = 0.1f * GameDevice::WorldSpeed;

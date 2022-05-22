@@ -56,6 +56,7 @@ namespace ButiEngine {
 		void SetShockWaveScale(const Vector3& arg_scale);
 
 		std::uint16_t CalculateRequestExp();
+		bool IsMaxLevel() { return m_isMaxLevel; }
 
 	private:
 		void Move();
@@ -92,6 +93,7 @@ namespace ButiEngine {
 		std::uint8_t m_maxLevel;
 		std::uint8_t m_maxWorkerCount;
 		std::uint16_t m_exp;
+		bool m_isMaxLevel;
 
 		//ˆÚ“®
 		Value_ptr<LookAtComponent> m_vlp_lookAt;

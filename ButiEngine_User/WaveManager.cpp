@@ -59,7 +59,7 @@ void ButiEngine::WaveManager::Start()
 	m_isSceneStart = false;
 
 	m_enemyDeadCount = 0;
-	m_maxEnemyCount = 10;
+	m_maxEnemyCount = 30;
 	m_enemySpawnCount = 0;
 
 	//“G‚ğƒXƒ|[ƒ“‚³‚¹‚é

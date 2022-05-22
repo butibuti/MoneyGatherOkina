@@ -37,6 +37,7 @@ namespace ButiEngine {
 		std::int16_t m_soulCount;
 		std::int16_t m_keepSoulCount;
 		std::int16_t m_maxSoulCount;
+		std::int16_t m_previousMaxSoulCount;
 	};
 
 }
