@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class SpriteParticleGenerator;
+
 	enum class FireBallPhase
 	{
 		Wait,
@@ -33,6 +35,7 @@ namespace ButiEngine {
 		void SetIsClockwise(const bool arg_isClockwise) { m_isClockwise = arg_isClockwise; }
 		void SetDefaultScale(const Vector3& arg_defaultScale) { m_defaultScale = arg_defaultScale; }
 
+		void DisappeaerStart();
 		void Dead();
 	private:
 		void Wait();
@@ -42,7 +45,8 @@ namespace ButiEngine {
 		void Rotate();
 		void RotateStart();
 		void Disappeaer();
-		void DisappeaerStart();
+
+		void KeepWorldScale();
 
 		void SetPhaseParameter();
 		void SetRotationParameter();
@@ -58,11 +62,14 @@ namespace ButiEngine {
 		bool m_isClockwise;
 
 		Vector3 m_defaultScale;
+		Vector3 m_beforeDisappearScale;
 
 		Value_ptr<Transform> m_vlp_rotationCenter;
 		float m_rotationAngle;
 		float m_maxRotationAngle;
 		float m_rotationAcceleration;
+
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerator;
 	};
 
 }

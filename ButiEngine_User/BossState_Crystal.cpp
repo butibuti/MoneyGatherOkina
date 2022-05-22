@@ -38,3 +38,8 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BossState_Crystal::
 {
 	return ObjectFactory::Create<BossState_Crystal>();
 }
+
+void ButiEngine::BossState_Crystal::Dead()
+{
+	SetIsRemove(true);
+}

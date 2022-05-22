@@ -35,6 +35,8 @@ namespace ButiEngine {
 		void SetExplosionScale(const float arg_scale) { m_explosionScale = arg_scale; }
 		void SetIsNearPlayer(const bool arg_isNearPlayer) { m_isNearPlayer = arg_isNearPlayer; }
 		void SetWeight(const float arg_weight) { m_weight = arg_weight; }
+		void SetIsCapaOver(const bool arg_isCapaOver) { m_isCapaOver = arg_isCapaOver; }
+		void SetVibration(const float arg_vibration) { m_vibration = arg_vibration; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
@@ -45,12 +47,15 @@ namespace ButiEngine {
 
 		bool IsVibrate();
 		bool IsNearPlayer() { return m_isNearPlayer; }
+		bool IsCapaOver() { return m_isCapaOver; }
 
 		void Dead();
 		void Explosion();
 		void CreatePocket(const std::uint8_t arg_pocketCount);
 		void RemovePocket(const std::uint8_t arg_pocketNum);
+		void RemoveAllPocket();
 		void AddStickWorkerCount() { m_stickWorkerCount++; }
+		void RemoveSrickWorkerCount() { m_stickWorkerCount--; }
 	private:
 		void IncreaseVibration();
 		void DecreaseVibration();
@@ -62,7 +67,6 @@ namespace ButiEngine {
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
 		void CalculateVibrationIncrease();
 		std::uint8_t GetStickWorkerCount();
-		void RemoveAllPocket();
 		void AddDeadCount();
 		void StopVibrationEffect();
 
@@ -98,6 +102,7 @@ namespace ButiEngine {
 		float m_vibrationIncrease;
 		float m_vibrationCapacity;
 		float m_vibrationResistance;
+		bool m_isCapaOver;
 
 		static float m_playerVibrationCoefficient;
 

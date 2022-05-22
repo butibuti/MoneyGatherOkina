@@ -29,6 +29,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		JumpPhase GetJumpPhase() { return m_phase; }
+
+		void Dead();
 	private:
 		void Wait();
 		void WaitStart();

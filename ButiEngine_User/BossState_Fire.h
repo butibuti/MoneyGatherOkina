@@ -21,10 +21,13 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void Dead();
 	private:
 		void CreateFireBall();
 
 		Value_ptr<Timer> m_vlp_stateTimer;
+
+		std::vector<Value_weak_ptr<GameObject>> m_vec_fireBalls;
 
 		bool m_isStrengthened;
 	};

@@ -10,14 +10,23 @@
 
 void ButiEngine::Enemy_Boss::OnUpdate()
 {
-	if (!m_isStrengthened)
+	if (m_isDead)
 	{
-		CheckStrengthen();
+		return;
+	}
+
+	if (m_state != BossState::Flirting && !IsInAir() && m_vwp_enemyComponent.lock()->IsCapaOver())
+	{
+		FlirtingStart();
 	}
 
 	if (m_state == BossState::Wait)
 	{
 		Wait();
+	}
+	else if (m_state == BossState::Flirting)
+	{
+		Flirting();
 	}
 	else if (m_state == BossState::StrenghenWait)
 	{
@@ -56,6 +65,7 @@ void ButiEngine::Enemy_Boss::Start()
 	m_maxLife = m_life;
 	m_strengthenBorder = m_maxLife * 0.5f;
 	m_isStrengthened = false;
+	m_isDead = false;
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 }
@@ -65,8 +75,22 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Boss::Clone()
 	return ObjectFactory::Create<Enemy_Boss>();
 }
 
+bool ButiEngine::Enemy_Boss::IsInAir()
+{
+	if (m_state != BossState::Jump) { return false; }
+
+	auto jump = gameObject.lock()->GetGameComponent<BossState_Jump>();
+	if (!jump) { return false; }
+
+	if (jump->GetJumpPhase() != JumpPhase::Wait) { return true; }
+
+	return false;
+}
+
 void ButiEngine::Enemy_Boss::Dead()
 {
+	m_isDead = true;
+	m_vwp_enemyComponent.lock()->Dead();
 }
 
 void ButiEngine::Enemy_Boss::Wait()
@@ -82,6 +106,48 @@ void ButiEngine::Enemy_Boss::WaitStart()
 {
 	m_state = BossState::Wait;
 	m_vlp_waitTimer->Start();
+}
+
+void ButiEngine::Enemy_Boss::Flirting()
+{
+	if (m_vlp_flirtingTimer->Update())
+	{
+		m_vlp_flirtingTimer->Stop();
+
+		//ポケット再生成
+		m_vwp_enemyComponent.lock()->CreatePocket(m_pocketCount);
+
+		//ライフが一定以下で覚醒
+		if (!m_isStrengthened)
+		{
+			CheckStrengthen();
+		}
+
+		m_vwp_enemyComponent.lock()->SetIsCapaOver(false);
+
+		if (m_state == BossState::StrenghenWait) { return; }
+		WaitStart();
+	}
+}
+
+void ButiEngine::Enemy_Boss::FlirtingStart()
+{
+	RemoveAttackComponent();
+
+	m_state = BossState::Flirting;
+	m_vlp_flirtingTimer->Start();
+
+	m_life -= 30;
+	if (m_life <= 0)
+	{
+		m_life = 0;
+		Dead();
+		return;
+	}
+
+	//モブハチ振り払う
+	m_vwp_enemyComponent.lock()->RemoveAllPocket();
+	m_vwp_enemyComponent.lock()->SetVibration(0.0f);
 }
 
 void ButiEngine::Enemy_Boss::StrengthenWait()
@@ -149,10 +215,40 @@ void ButiEngine::Enemy_Boss::DecreaseStatePercent(float& arg_percent, float& arg
 	}
 }
 
+void ButiEngine::Enemy_Boss::RemoveAttackComponent()
+{
+	if (m_state == BossState::Fire)
+	{
+		auto fire = gameObject.lock()->GetGameComponent<BossState_Fire>();
+		if (fire)
+		{
+			fire->Dead();
+		}
+	}
+	else if (m_state == BossState::Crystal)
+	{
+		auto crystal = gameObject.lock()->GetGameComponent<BossState_Crystal>();
+		if (crystal)
+		{
+			crystal->Dead();
+		}
+	}
+	else if (m_state == BossState::Jump)
+	{
+		auto jump = gameObject.lock()->GetGameComponent<BossState_Jump>();
+		if (jump)
+		{
+			jump->Dead();
+		}
+	}
+}
+
 void ButiEngine::Enemy_Boss::SetEnemyParameter()
 {
+	m_pocketCount = 16;
+
 	m_vwp_enemyComponent = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vwp_enemyComponent.lock()->CreatePocket(16);
+	m_vwp_enemyComponent.lock()->CreatePocket(m_pocketCount);
 	m_vwp_enemyComponent.lock()->SetVibrationCapacity(10000.0f);
 	m_vwp_enemyComponent.lock()->SetVibrationResistance(5.0f);
 	m_vwp_enemyComponent.lock()->SetExplosionScale(8.0f);
@@ -162,6 +258,7 @@ void ButiEngine::Enemy_Boss::SetEnemyParameter()
 void ButiEngine::Enemy_Boss::SetStateParameter()
 {
 	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>(30);
+	m_vlp_flirtingTimer = ObjectFactory::Create<RelativeTimer>(60);
 	m_vlp_strengthenWaitTimer = ObjectFactory::Create<RelativeTimer>(90);
 
 	m_crystalPercent = 30.0f;

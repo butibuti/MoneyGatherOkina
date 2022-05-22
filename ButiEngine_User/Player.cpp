@@ -163,8 +163,8 @@ void ButiEngine::Player::Start()
 
 	CreateSensorObject();
 
-	m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
-	m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	//m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
+	//m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
 	CreateBombObject();
 
@@ -419,7 +419,7 @@ void ButiEngine::Player::DecreaseVibration()
 	if (m_vibration <= 0.0f)
 	{
 		m_vibration = 0.0f;
-		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
+		//m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
 		m_isVibrate = false;
 	}
 }
@@ -445,7 +445,7 @@ void ButiEngine::Player::VibrationEffect()
 			float vibrationRate = m_vibration / m_maxVibration;
 			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, true);
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
-			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
+			//m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
 		}
 	}
 	else

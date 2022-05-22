@@ -21,6 +21,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void Dead();
 	private:
 		Value_ptr<Timer> m_vlp_waitTimer;
 

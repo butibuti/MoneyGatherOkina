@@ -135,6 +135,7 @@ void ButiEngine::Enemy::OnSet()
 	m_vibrationCapacity = 100.0f;
 	m_vibrationResistance = 10.0f;
 	m_weight = 100.0f;
+	m_isCapaOver = false;
 
 	m_explosionScale = 1.0f;
 }
@@ -258,10 +259,11 @@ void ButiEngine::Enemy::Dead()
 	AddDeadCount();
 	StopVibrationEffect();
 
+	m_vlp_playerComponent->SetIsIncrease(false);
+
 	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
 	if (boss)
 	{
-		boss->Dead();
 		gameObject.lock()->SetIsRemove(true);
 		return;
 	}
@@ -270,8 +272,6 @@ void ButiEngine::Enemy::Dead()
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
-
-	m_vlp_playerComponent->SetIsIncrease(false);
 
 	gameObject.lock()->SetIsRemove(true);
 
@@ -336,20 +336,39 @@ void ButiEngine::Enemy::RemovePocket(const std::uint8_t arg_pocketNum)
 	m_vec_pockets.erase(m_vec_pockets.begin() + arg_pocketNum);
 }
 
+void ButiEngine::Enemy::RemoveAllPocket()
+{
+	auto end = m_vec_pockets.end();
+	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->GetGameComponent<Pocket>()->Dead();
+	}
+	m_vec_pockets.clear();
+}
+
 void ButiEngine::Enemy::IncreaseVibration()
 {
+	if (m_isCapaOver) { return; }
+
 	CalculateVibrationIncrease();
 	m_vibration += m_vibrationIncrease * GameDevice::WorldSpeed;
 
 	//U“®—Ê‚ªãŒÀ‚ð’´‚¦‚½‚çŽ€‚Ê
 	if (m_vibration > m_vibrationCapacity)
 	{
-		Dead();
+		//ƒ{ƒX‚¶‚á‚È‚©‚Á‚½‚ç‘¦Ž€
+		if (!gameObject.lock()->HasGameObjectTag(GameObjectTag("Boss")))
+		{
+			Dead();
+		}
+		m_isCapaOver = true;
 	}
 }
 
 void ButiEngine::Enemy::DecreaseVibration()
 {
+	if (m_isCapaOver) { return; }
+
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 	m_vibration = max(m_vibration, 0.0f);
 }
@@ -406,10 +425,10 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
 
-	float playerVibration = m_vlp_playerComponent->GetVibration();
-	float size = MathHelper::Lerp(1.0f, 6.0f, playerVibration) * 10.0f;
+	float playerVibrationRate = m_vlp_playerComponent->GetVibrationRate();
+	float size = MathHelper::Lerp(1.0f, 6.0f, playerVibrationRate) * 10.0f;
 
-	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(4, 1, playerVibration);
+	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(4, 1, playerVibrationRate);
 	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
 
 	if (m_vlp_attackFlashTimer->Update())
@@ -450,16 +469,6 @@ std::uint8_t ButiEngine::Enemy::GetStickWorkerCount()
 	}
 
 	return stickWorkerCount;
-}
-
-void ButiEngine::Enemy::RemoveAllPocket()
-{
-	auto end = m_vec_pockets.end();
-	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
-	{
-		(*itr).lock()->GetGameComponent<Pocket>()->Dead();
-	}
-	m_vec_pockets.clear();
 }
 
 void ButiEngine::Enemy::AddDeadCount()

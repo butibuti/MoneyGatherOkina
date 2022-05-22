@@ -21,7 +21,6 @@ void ButiEngine::PredictedPoint::OnShowUI()
 void ButiEngine::PredictedPoint::Start()
 {
 	m_vlp_lifeTimer->Start();
-	m_vlp_lifeTimer->ChangeCountFrame(105);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::PredictedPoint::Clone()

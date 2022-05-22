@@ -20,6 +20,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetLife(const std::int32_t arg_life) { m_vlp_lifeTimer->ChangeCountFrame(arg_life); }
 	private:
 		Value_ptr<Timer> m_vlp_lifeTimer;
 

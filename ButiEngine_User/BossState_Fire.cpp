@@ -42,6 +42,21 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BossState_Fire::Clo
 	return ObjectFactory::Create<BossState_Fire>();
 }
 
+void ButiEngine::BossState_Fire::Dead()
+{
+	auto end = m_vec_fireBalls.end();
+	for (auto itr = m_vec_fireBalls.begin(); itr != end; ++itr)
+	{
+		auto fireBall = (*itr).lock()->GetGameComponent<FireBall>();
+		if (fireBall)
+		{
+			fireBall->DisappeaerStart();
+		}
+	}
+
+	SetIsRemove(true);
+}
+
 void ButiEngine::BossState_Fire::CreateFireBall()
 {
 	std::uint8_t fireBallCount = 2;
@@ -76,6 +91,8 @@ void ButiEngine::BossState_Fire::CreateFireBall()
 
 		vlp_fireBallComponent->SetIsStrengthened(m_isStrengthened);
 		vlp_fireBallComponent->SetDefaultScale(2.5f);
+
+		m_vec_fireBalls.push_back(fireBall);
 
 		fireBallCenter->RollLocalRotationY_Degrees(rollAngle);
 	}

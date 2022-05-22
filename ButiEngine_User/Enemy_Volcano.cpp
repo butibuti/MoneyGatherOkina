@@ -2,10 +2,10 @@
 #include "Enemy_Volcano.h"
 #include "VolcanoRock.h"
 #include "Enemy.h"
-#include "Loiter.h"
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
 #include "EnemyScaleAnimationComponent.h"
+#include "PredictedPoint.h"
 
 #include "InputManager.h"
 
@@ -117,6 +117,7 @@ void ButiEngine::Enemy_Volcano::AddPredictedPoint()
 	position.y -= 1.0f;
 	auto predictedPoint = GetManager().lock()->AddObjectFromCereal("PredictedPoint");
 	predictedPoint.lock()->transform->SetWorldPosition(position);
+	predictedPoint.lock()->GetGameComponent<PredictedPoint>()->SetLife(105);
 }
 
 void ButiEngine::Enemy_Volcano::ScaleAnimation()

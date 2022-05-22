@@ -8,6 +8,7 @@ namespace ButiEngine {
 	enum class BossState
 	{
 		Wait,
+		Flirting,
 		StrenghenWait,
 		Fire,
 		Crystal,
@@ -32,16 +33,20 @@ namespace ButiEngine {
 		}
 
 		bool IsStrengthened() { return m_isStrengthened; }
+		bool IsInAir();
 
 		void Dead();
 	private:
 		void Wait();
 		void WaitStart();
+		void Flirting();
+		void FlirtingStart();
 		void StrengthenWait();
 		void StrengthenWaitStart();
 
 		void SetState();
 		void DecreaseStatePercent(float& arg_percent, float& arg_otherPercent1, float& arg_otherPercent2);
+		void RemoveAttackComponent();
 
 		void SetEnemyParameter();
 		void SetStateParameter();
@@ -49,8 +54,11 @@ namespace ButiEngine {
 
 		Value_weak_ptr<Enemy> m_vwp_enemyComponent;
 
+		std::uint8_t m_pocketCount;
+
 		//行動パターン
 		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_ptr<Timer> m_vlp_flirtingTimer;
 		Value_ptr<Timer> m_vlp_strengthenWaitTimer;
 		BossState m_state;
 		//パターンが出る確率
@@ -58,11 +66,13 @@ namespace ButiEngine {
 		float m_crystalPercent;
 		float m_jumpPercent;
 
-		std::uint8_t m_life;
-		std::uint8_t m_maxLife;
-		std::uint8_t m_strengthenBorder;
+		std::int16_t m_life;
+		std::int16_t m_maxLife;
+		std::int16_t m_strengthenBorder;
 
 		bool m_isStrengthened;
+
+		bool m_isDead;
 	};
 }
 
