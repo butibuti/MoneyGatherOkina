@@ -2,8 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class SpriteAnimationComponent;
-
 	class BeeSoulPodUIComponent :public GameComponent
 	{
 	public:
@@ -26,10 +24,10 @@ namespace ButiEngine {
 	private:
 		void Animation();
 
-		Value_weak_ptr<SpriteAnimationComponent> m_vwp_spriteAnimationComponent;
+		Value_weak_ptr<MeshDrawComponent> m_vwp_meshDrawComponent;
 
-		std::int8_t m_animationCount;
-		std::int8_t m_maxAnimationCount;
+		float m_previousRate;
+		float m_rate;
 	};
 
 }

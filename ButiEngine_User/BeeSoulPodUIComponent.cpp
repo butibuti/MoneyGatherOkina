@@ -1,6 +1,5 @@
 #include "stdafx_u.h"
 #include "BeeSoulPodUIComponent.h"
-#include "Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
 
 void ButiEngine::BeeSoulPodUIComponent::OnUpdate()
 {
@@ -9,6 +8,8 @@ void ButiEngine::BeeSoulPodUIComponent::OnUpdate()
 
 void ButiEngine::BeeSoulPodUIComponent::OnSet()
 {
+	m_rate = 0.0f;
+	m_previousRate = 0.0f;
 }
 
 void ButiEngine::BeeSoulPodUIComponent::OnShowUI()
@@ -17,9 +18,7 @@ void ButiEngine::BeeSoulPodUIComponent::OnShowUI()
 
 void ButiEngine::BeeSoulPodUIComponent::Start()
 {
-	m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
-	m_animationCount = 0;
-	m_maxAnimationCount = 5;
+	m_vwp_meshDrawComponent = gameObject.lock()->GetGameComponent<MeshDrawComponent>(1);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulPodUIComponent::Clone()
@@ -29,17 +28,13 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulPodUICompone
 
 void ButiEngine::BeeSoulPodUIComponent::SetExpRate(const float arg_expRate)
 {
-	float expRate = 1.0f / (float)m_maxAnimationCount;
-	for (std::int8_t i = 0; i < m_maxAnimationCount; i++)
-	{
-		if (arg_expRate >= expRate * i)
-		{
-			m_animationCount = i;
-		}
-	}
+	m_rate = arg_expRate;
 }
 
 void ButiEngine::BeeSoulPodUIComponent::Animation()
 {
-	m_vwp_spriteAnimationComponent.lock()->SetHorizontalAnim(m_animationCount);	
+	auto lerpScale = 0.05f * GameDevice::WorldSpeed;
+	m_previousRate = MathHelper::Lerp(m_previousRate, m_rate, lerpScale);
+
+	m_vwp_meshDrawComponent.lock()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().ExInfo.y = 1.0 - m_previousRate;
 }

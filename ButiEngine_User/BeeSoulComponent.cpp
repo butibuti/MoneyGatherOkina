@@ -74,7 +74,7 @@ void ButiEngine::BeeSoulComponent::Move()
     {
         anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
         anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-        anim->GetTargetTransform()->SetWorldPosition(Vector3(-850, 300, 0));
+        anim->GetTargetTransform()->SetWorldPosition(Vector3(-730, 275, 0));
         anim->SetSpeed(speed);
         anim->SetEaseType(Easing::EasingType::EaseInQuad);
     }
