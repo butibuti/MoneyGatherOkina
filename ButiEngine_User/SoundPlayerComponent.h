@@ -23,7 +23,7 @@ public:
 		archive(isActive);
 	}
 private:
-	std::map<SoundTag, float> m_map_soundVolume;
+	std::unordered_map<std::string, float> m_umap_soundVolume;
 };
 }
 
