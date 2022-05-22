@@ -23,7 +23,8 @@ namespace ButiEngine {
 		bool IsAnimation() { return m_isAnimation; }
 		void SetNumber(const std::int8_t arg_myNumber) { m_myNumber = arg_myNumber; }
 		void StartAnimation(const bool arg_isChange);
-
+		void Hide();
+		void Apparent();
 	private:
 		void ScaleAnimation();
 		void AnimationTime();

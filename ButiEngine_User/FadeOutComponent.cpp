@@ -3,7 +3,7 @@
 
 void ButiEngine::FadeOutComponent::OnUpdate()
 {
-	if (!m_isFade)
+	if (!m_isFadeIn)
 	{
 		if (m_alpha < 1.0f)
 		{		
@@ -25,7 +25,7 @@ void ButiEngine::FadeOutComponent::OnUpdate()
 void ButiEngine::FadeOutComponent::OnSet()
 {
 	m_moveAlpha = 1.0f / 60.0f;
-	m_isFade = false;
+	m_isFadeIn = false;
 }
 
 void ButiEngine::FadeOutComponent::OnShowUI()
@@ -34,7 +34,7 @@ void ButiEngine::FadeOutComponent::OnShowUI()
 
 void ButiEngine::FadeOutComponent::Start()
 {
-	m_alpha = 0.0f;
+	m_alpha = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FadeOutComponent::Clone()
@@ -45,4 +45,10 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FadeOutComponent::C
 void ButiEngine::FadeOutComponent::SetPositionZ(const float arg_positionZ)
 {
 	gameObject.lock()->transform->SetLocalPositionZ(arg_positionZ);
+}
+
+bool ButiEngine::FadeOutComponent::IsFadeAnimation() const
+{
+	return m_isFadeIn ? gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w > 0.0f
+		:gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w < 1.0f;
 }

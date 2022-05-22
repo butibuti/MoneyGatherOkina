@@ -51,6 +51,26 @@ void ButiEngine::SceneChangeAnimationComponent::SceneEnd()
 	}
 }
 
+void ButiEngine::SceneChangeAnimationComponent::HidePanel()
+{
+	if (m_vec_vwp_hexagons[m_panelCount - 1].lock()->GetGameComponent<HexagonAnimationComponent>()->IsAnimation()) { return; }
+	auto end = m_vec_vwp_hexagons.end();
+	for (auto itr = m_vec_vwp_hexagons.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->GetGameComponent<HexagonAnimationComponent>()->Hide();
+	}
+}
+
+void ButiEngine::SceneChangeAnimationComponent::ApparentPanel()
+{
+	if (m_vec_vwp_hexagons[m_panelCount - 1].lock()->GetGameComponent<HexagonAnimationComponent>()->IsAnimation()) { return; }
+	auto end = m_vec_vwp_hexagons.end();
+	for (auto itr = m_vec_vwp_hexagons.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->GetGameComponent<HexagonAnimationComponent>()->Apparent();
+	}
+}
+
 bool ButiEngine::SceneChangeAnimationComponent::IsAnimation()
 {
 	return m_vec_vwp_hexagons[m_panelCount - 1].lock()->GetGameComponent<HexagonAnimationComponent>()->IsAnimation();

@@ -1,14 +1,38 @@
 #include "stdafx_u.h"
 #include "TitleManagerComponent.h"
-
+#include"StageSelectManagerComponent.h"
+#include"FadeOutComponent.h"
 #include "InputManager.h"
+
+bool isInit = false;
 
 void ButiEngine::TitleManagerComponent::OnUpdate()
 {
-	if (InputManager::IsTriggerDecideKey())
+	if (!m_isTitle) {
+		return;
+	}
+
+	if ( !m_vlp_timer->IsOn()&&!m_vlp_selectUIApperTimer->IsOn() && !m_vwp_fadeComponent.lock()->IsFadeAnimation()&& InputManager::IsTriggerDecideKey())
 	{
-		//ŽŸ‚ÌƒV[ƒ“‚Ö
-		NextScene();
+		m_vlp_timer->Start();
+	}
+	if (m_vlp_timer->IsOn()) {
+		GetManager().lock()->GetGameObject("TitleLogo").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w = Easing::EaseInSin(1.0f - m_vlp_timer->GetPercent());
+	}
+
+	if (m_vlp_timer->Update()) {
+		m_vlp_timer->Stop();
+		m_vlp_selectUIApperTimer->Start();
+	}
+
+
+	if (m_vlp_selectUIApperTimer->IsOn()) {
+		GetManager().lock()->GetGameObject("RemainUI").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w = Easing::EaseInSin(m_vlp_selectUIApperTimer->GetPercent());
+		GetManager().lock()->GetGameObject("StartButtonUI").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w = Easing::EaseInSin(m_vlp_selectUIApperTimer->GetPercent());
+	}
+	if (m_vlp_selectUIApperTimer->Update()) {
+		m_vlp_selectUIApperTimer->Stop();
+		m_isTitle = false;
 	}
 }
 
@@ -22,16 +46,16 @@ void ButiEngine::TitleManagerComponent::OnShowUI()
 
 void ButiEngine::TitleManagerComponent::Start()
 {
+	if (!m_vwp_fadeComponent.lock()) {
+		m_vwp_fadeComponent = GetManager().lock()->GetGameObject("FadeOutUI").lock()->GetGameComponent<FadeOutComponent>();
+		m_vwp_fadeComponent.lock()->SetIsFade(true);
+	}
+	if (!m_vlp_timer) {
+		m_vlp_timer = ObjectFactory::Create<RelativeTimer>(60);
+		m_vlp_selectUIApperTimer = ObjectFactory::Create<RelativeTimer>(60);
+	}
 }
 
-void ButiEngine::TitleManagerComponent::NextScene()
-{
-	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-	std::string sceneName = "StageSelect";
-	sceneManager->RemoveScene(sceneName);
-	sceneManager->LoadScene(sceneName);
-	sceneManager->ChangeScene(sceneName);
-}
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::TitleManagerComponent::Clone()
 {
