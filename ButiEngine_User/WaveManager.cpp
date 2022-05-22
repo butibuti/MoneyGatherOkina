@@ -62,8 +62,13 @@ void ButiEngine::WaveManager::Start()
 	m_maxEnemyCount = 30;
 	m_enemySpawnCount = 0;
 
-	//エネミースポナーをスポーンさせる
-	SpawnEnemySpawner();
+	std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+
+	if (sceneName != "Stage_4")
+	{
+		//エネミースポナーをスポーンさせる
+		SpawnEnemySpawner();
+	}
 }
 
 void ButiEngine::WaveManager::OnShowUI()
@@ -166,7 +171,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 		if (m_vwp_gameOverManagerComponent.lock()->IsRetry())
 		{
 			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-			std::string sceneName = "GamePlay";
+			std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
 			sceneManager->RemoveScene(sceneName);
 			sceneManager->LoadScene(sceneName);
 			sceneManager->ChangeScene(sceneName);
@@ -174,7 +179,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 		else
 		{
 			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-			std::string sceneName = "Title";
+			std::string sceneName = "StageSelect";
 			sceneManager->RemoveScene(sceneName);
 			sceneManager->LoadScene(sceneName);
 			sceneManager->ChangeScene(sceneName);
