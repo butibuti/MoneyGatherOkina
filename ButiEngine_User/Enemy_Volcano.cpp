@@ -111,7 +111,7 @@ void ButiEngine::Enemy_Volcano::AddPredictedPoint()
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 
 	//—\‘ª’n“_‚ğo‚·
-	randomVelocity *= 5.0f;
+	randomVelocity *= 6.5f;
 	randomVelocity.y = 0;
 	position += randomVelocity;
 	position.y -= 1.0f;

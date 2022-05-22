@@ -8,9 +8,9 @@ void ButiEngine::VolcanoRock::OnUpdate()
 	m_velocity.y -= (m_gravity * GameDevice::WorldSpeed);
 	Vector3 velocity = m_velocity;
 	velocity.Normalize();
-	velocity.x *= (0.075f * GameDevice::WorldSpeed);
+	velocity.x *= (0.1f * GameDevice::WorldSpeed);
 	velocity.y *= (0.2f * GameDevice::WorldSpeed);
-	velocity.z *= (0.075f * GameDevice::WorldSpeed);
+	velocity.z *= (0.1f * GameDevice::WorldSpeed);
 
 	m_rotateSpeed *= GameDevice::WorldSpeed;
 
