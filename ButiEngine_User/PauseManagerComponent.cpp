@@ -137,6 +137,9 @@ void ButiEngine::PauseManagerComponent::InputSelect()
 		m_isNext = false;
 		if (m_isBack)
 		{
+			m_vlp_waitTimer->Reset();
+			m_vlp_appearTimer->Reset();
+			m_isPause = !m_isPause;
 			DeadPauseSelectUI();
 			m_vlp_deadTimer->Start();
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);

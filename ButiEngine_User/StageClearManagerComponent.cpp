@@ -19,7 +19,7 @@ void ButiEngine::StageClearManagerComponent::OnUpdate()
 void ButiEngine::StageClearManagerComponent::OnSet()
 {
 	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(180);
-	m_vlp_addTimer = ObjectFactory::Create<AbsoluteTimer>(8);
+	m_vlp_addTimer = ObjectFactory::Create<AbsoluteTimer>(7);
 }
 
 void ButiEngine::StageClearManagerComponent::OnShowUI()
@@ -56,7 +56,7 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 		auto clearUI = GetManager().lock()->AddObjectFromCereal(objectName);
 		auto position = clearUI.lock()->transform->GetLocalPosition();
 		auto moveAnimationComponent = clearUI.lock()->GetGameComponent<MoveAnimationComponent>();
-		auto endPosition = Vector3(-750 + 250 * m_uiCount, 100 + 60 * m_uiCount, position.z);
+		auto endPosition = Vector3(-750 + 250 * m_uiCount, 100 + 50 * m_uiCount, position.z);
 		moveAnimationComponent->SetEndPosition(endPosition);
 		moveAnimationComponent->SetSpeed(0.9f);
 		moveAnimationComponent->SetIsShake(true);

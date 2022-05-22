@@ -86,7 +86,7 @@ void ButiEngine::WaveManager::Start()
 	m_isSceneStart = false;
 
 	m_enemyDeadCount = 0;
-	m_maxEnemyCount = 1;
+	m_maxEnemyCount = 10;
 	m_enemySpawnCount = 0;
 }
 
@@ -282,6 +282,9 @@ void ButiEngine::WaveManager::GameOverAnimation()
 
 void ButiEngine::WaveManager::PauseAnimation()
 {
+	//ƒ|[ƒY’†‚Ì‚Ý’Ê‚é‚æ‚¤‚É‚·‚é
+	if (!m_vwp_pauseManagerComponent.lock()->IsPause()) { return; }
+
 	if (InputManager::IsTriggerDecideKey() && m_vwp_pauseManagerComponent.lock()->IsNext())
 	{
 		if (!m_vwp_pauseManagerComponent.lock()->IsBack())
