@@ -54,6 +54,9 @@ namespace ButiEngine {
 		void AddNearEnemyCount() { m_nearEnemyCount++; }
 		void KnockBack(const Vector3& arg_velocity);
 		void SetShockWaveScale(const Vector3& arg_scale);
+
+		std::uint16_t CalculateRequestExp();
+
 	private:
 		void Move();
 		void LevelUp();
@@ -71,8 +74,6 @@ namespace ButiEngine {
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
-
-		std::uint16_t CalculateRequestExp();
 
 		void CreateDrawObject();
 		void CreateSensorObject();

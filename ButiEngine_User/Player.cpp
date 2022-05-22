@@ -238,9 +238,9 @@ void ButiEngine::Player::AddExp()
 
 	std::uint16_t requestExp = CalculateRequestExp();
 	
-	auto beeSoulPodUIComponent = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
-	float expRate = 1.0f - ((float)requestExp - (float)m_exp) * 0.1f;
-	beeSoulPodUIComponent->SetExpRate(expRate);
+	//auto beeSoulPodUIComponent = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
+	//float expRate = 1.0f - ((float)requestExp - (float)m_exp) * 0.1f;
+	//beeSoulPodUIComponent->SetExpRate(expRate);
 
 	if (m_exp == requestExp)
 	{
