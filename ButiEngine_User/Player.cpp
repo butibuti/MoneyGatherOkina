@@ -586,7 +586,7 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_maxVibration = 1.0f;
 	m_nearEnemyCount = 0;
 	m_vibrationIncrease = 0.024f;
-	m_vibrationDecrease = 0.0006f;
+	m_vibrationDecrease = 0.003f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isCapaOver = false;
 }

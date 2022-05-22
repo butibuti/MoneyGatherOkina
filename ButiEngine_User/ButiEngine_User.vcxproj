@@ -526,6 +526,7 @@ cd ..\</Command>
     <ClCompile Include="Bomb_Player.cpp" />
     <ClCompile Include="CameraAxis.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="Crystal.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -611,6 +612,7 @@ cd ..\</Command>
     <ClInclude Include="Bomb_Player.h" />
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="Crystal.h" />
     <ClInclude Include="DrawObject.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyScaleAnimationComponent.h" />
