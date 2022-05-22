@@ -37,7 +37,7 @@ namespace ButiEngine {
 		std::int32_t GetMaxEnemyCount() { return m_maxEnemyCount; }
 
 	private:
-		void SpawnEnemy();
+		void SpawnEnemySpawner();
 		void StageClearAnimation();
 		void GameOverAnimation();
 		void PauseAnimation();
