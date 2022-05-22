@@ -146,11 +146,6 @@ void ButiEngine::Worker::Dead()
 	m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
 	m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
 
-	if (m_vlp_player)
-	{
-		m_vlp_player->AddSoul();
-	}
-
 	auto workerSpawner = GetManager().lock()->GetGameObject(GameObjectTag("WorkerSpawner")).lock()->GetGameComponent<WorkerSpawner>();
 	if (workerSpawner)
 	{

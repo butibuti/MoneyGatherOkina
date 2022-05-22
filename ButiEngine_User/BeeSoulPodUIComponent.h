@@ -21,14 +21,15 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		float GetSoulRate() { return (float)m_soulCount / (float)m_maxSoulCount; }
+
 		void AddSoulCount();
+		void ResetSoulCount() { m_soulCount = 0; }
 
 	private:
 		void Animation();
 
 		Value_weak_ptr<MeshDrawComponent> m_vwp_meshDrawComponent;
-		Value_weak_ptr<Player> m_vwp_playerComponent;
-		Value_weak_ptr<GameObject> m_vwp_player;
 
 		float m_previousRate;
 		float m_rate;

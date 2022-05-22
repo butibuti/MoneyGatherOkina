@@ -22,9 +22,7 @@ void ButiEngine::BeeSoulPodUIComponent::OnShowUI()
 void ButiEngine::BeeSoulPodUIComponent::Start()
 {
 	m_vwp_meshDrawComponent = gameObject.lock()->GetGameComponent<MeshDrawComponent>(1);
-	m_vwp_player = GetManager().lock()->GetGameObject("Player");
-	m_vwp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
-	m_maxSoulCount = m_vwp_playerComponent.lock()->GetMaxSoulCount();
+	m_maxSoulCount = 100;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulPodUIComponent::Clone()

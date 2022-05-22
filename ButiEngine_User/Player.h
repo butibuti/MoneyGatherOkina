@@ -7,6 +7,7 @@ namespace ButiEngine {
 	class VibrationEffectComponent;
 	class ShakeComponent;
 	class NumberManagerComponent;
+	class BeeSoulPodUIComponent;
 
 	class Player :public GameComponent
 	{
@@ -55,12 +56,9 @@ namespace ButiEngine {
 
 		void Dead();
 		void Revival();
-		void AddSoul();
 		void AddNearEnemyCount() { m_nearEnemyCount++; }
 		void KnockBack(const Vector3& arg_velocity);
 		void SetShockWaveScale(const Vector3& arg_scale);
-
-		std::uint16_t GetMaxSoulCount() { return m_maxSoulCount; }
 
 	private:
 		void Move();
@@ -92,11 +90,7 @@ namespace ButiEngine {
 		//パラメータ
 		Vector3 m_defaultScale;
 		std::int8_t m_life;
-
-		//レベル
 		std::uint8_t m_maxWorkerCount;
-		std::uint16_t m_soulCount;
-		std::uint16_t m_maxSoulCount;
 
 		//移動
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
@@ -138,6 +132,9 @@ namespace ButiEngine {
 		float m_vibrationDecrease;
 		float m_nearEnemyVibrationRate;
 		bool m_isCapaOver;
+
+		//魂
+		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;
 
 		//センサー
 		Value_weak_ptr<GameObject> m_vwp_sensor;

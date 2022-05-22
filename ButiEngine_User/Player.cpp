@@ -23,7 +23,7 @@ void ButiEngine::Player::OnUpdate()
 		Damage();
 	}
 
-	if (!m_isBomb && GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
+	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
 	{
 		BombStart();
 	}
@@ -48,6 +48,10 @@ void ButiEngine::Player::OnUpdate()
 		OnInvincible();
 	}
 
+	if (m_isBomb)
+	{
+		Bomb();
+	}
 	VibrationPowerDrawUpdate();
 	VibrationController();
 	ShakeDrawObject();
@@ -84,7 +88,6 @@ void ButiEngine::Player::OnRemove()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::Text("Exp:%d", m_soulCount);
 	GUI::Text("MaxWorker:%d", m_maxWorkerCount);
 	GUI::Text("Life:%d", m_life);
 
@@ -122,8 +125,8 @@ void ButiEngine::Player::Start()
 	m_life = 3;
 
 	m_maxWorkerCount = 20;
-	m_soulCount = 0;
-	m_maxSoulCount = 100;
+
+	m_vwp_beeSoulPod = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
 
 	m_knockBackVelocity = Vector3(0, 0, 0);
 	m_knockBackFrame = 0;
@@ -211,13 +214,6 @@ void ButiEngine::Player::Revival()
 {
 	m_life = 3;
 	m_isDead = false;
-}
-
-void ButiEngine::Player::AddSoul()
-{
-	if (m_soulCount == m_maxSoulCount) { return; }
-	m_soulCount++;
-	
 }
 
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
@@ -468,11 +464,14 @@ void ButiEngine::Player::ShakeDrawObject()
 
 void ButiEngine::Player::BombStart()
 {
+	if (m_isBomb) { return; }
+	if (m_vwp_beeSoulPod.lock()->GetSoulRate() < 1.0f) { return; }
+
 	auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
 	bomb->Appear();
 	m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
 
-	m_soulCount = 0;
+	m_vwp_beeSoulPod.lock()->ResetSoulCount();
 	m_vlp_bombTimer->Start();
 
 	m_isBomb = true;
