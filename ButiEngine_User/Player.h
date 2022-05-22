@@ -40,9 +40,11 @@ namespace ButiEngine {
 		float GetVibrationRate() { return m_vibration / m_maxVibration; }
 		std::int8_t GetLife() { return m_life; }
 		float GetNearEnemyVibrationRate() { return m_nearEnemyVibrationRate; }
+		Vector3 GetVelocity() { return m_velocity; }
 
 		void SetIsIncrease(const bool arg_isIncrease) { m_isIncrease = arg_isIncrease; }
 		void SetNearEnemyVibrationRate(const float arg_vibrationRate) { m_nearEnemyVibrationRate = arg_vibrationRate; }
+		void SetVelocity(const Vector3& arg_velocity) { m_velocity = arg_velocity; }
 
 		bool IsDead() { return m_isDead; }
 

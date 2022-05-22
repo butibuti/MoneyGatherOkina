@@ -87,12 +87,13 @@ void ButiEngine::Worker::OnSet()
 			{
 				OnCollisionEnemy(arg_vwp_other);
 			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("WorlerDamageArea")))
+			{
+				OnCollisionDamageArea(arg_vwp_other);
+			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
-				//Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
-				//Vector3 damageAreaPos = arg_vwp_other.lock()->transform->GetWorldPosition();
-				//Vector3 dir = (pos - damageAreaPos).GetNormalize();
-				//Rupture(dir);
+				OnCollisionDamageArea(arg_vwp_other);
 			}
 		});
 
@@ -176,6 +177,7 @@ void ButiEngine::Worker::Rupture(const Vector3& arg_dir)
 {
 	if (m_isRupture) { return; }
 	gameObject.lock()->transform->SetBaseTransform(nullptr);
+	gameObject.lock()->transform->SetLocalScale(m_defaultScale);
 
 	auto stick = gameObject.lock()->GetGameComponent<Stick>();
 	if (stick)
@@ -204,10 +206,11 @@ void ButiEngine::Worker::Rupture(const Vector3& arg_dir)
 	Vector3 dir = arg_dir;
 	dir.y = 2.0f;
 	dir.Normalize();
-	gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.9f, true, frame);
+	gameObject.lock()->AddGameComponent<KnockBack>(dir, 1.0f, true, frame);
 	m_vlp_ruptureTimer = ObjectFactory::Create<RelativeTimer>(frame);
 	m_vlp_ruptureTimer->Start();
 
+	m_isAttack = false;
 	m_isRupture = true;
 }
 
@@ -370,6 +373,14 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
 	}
+}
+
+void ButiEngine::Worker::OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 damageAreaPos = arg_vwp_other.lock()->transform->GetWorldPosition();
+	Vector3 dir = (pos - damageAreaPos).GetNormalize();
+	Rupture(dir);
 }
 
 void ButiEngine::Worker::OnNearPlayer()

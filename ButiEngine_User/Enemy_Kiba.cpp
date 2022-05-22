@@ -41,7 +41,7 @@ void ButiEngine::Enemy_Kiba::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Kiba");
 
-	CreateDamageArea();
+	CreateFang();
 	SetEnemyParameter();
 	//SetLoiterParameter();
 	//SetLookAtParameter();
@@ -61,9 +61,9 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Kiba::Clone()
 
 void ButiEngine::Enemy_Kiba::Dead()
 {
-	if (m_vwp_damageArea.lock())
+	if (m_vwp_fang.lock())
 	{
-		m_vwp_damageArea.lock()->SetIsRemove(true);
+		m_vwp_fang.lock()->SetIsRemove(true);
 	}
 
 	if (m_vlp_enemy)
@@ -104,17 +104,17 @@ void ButiEngine::Enemy_Kiba::LookAtPlayer()
 	gameObject.lock()->transform->RollLocalRotationY_Degrees(m_rotationAngle * GameDevice::WorldSpeed);
 }
 
-void ButiEngine::Enemy_Kiba::CreateDamageArea()
+void ButiEngine::Enemy_Kiba::CreateFang()
 {
-	m_vwp_damageArea = GetManager().lock()->AddObjectFromCereal("DamageArea");
-	m_vwp_damageArea.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+	m_vwp_fang = GetManager().lock()->AddObjectFromCereal("Kiba_Fang");
+	m_vwp_fang.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 
 	//子になってもスケールは変わらないようにする
-	Vector3 scale = m_vwp_damageArea.lock()->transform->GetLocalScale() / gameObject.lock()->transform->GetLocalScale();
-	m_vwp_damageArea.lock()->transform->SetLocalScale(scale);
+	Vector3 scale = m_vwp_fang.lock()->transform->GetLocalScale() / gameObject.lock()->transform->GetLocalScale();
+	m_vwp_fang.lock()->transform->SetLocalScale(scale);
 
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	m_vwp_damageArea.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * radius);
+	m_vwp_fang.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * radius);
 }
 
 void ButiEngine::Enemy_Kiba::SetEnemyParameter()

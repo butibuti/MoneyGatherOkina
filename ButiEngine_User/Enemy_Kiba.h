@@ -27,7 +27,7 @@ namespace ButiEngine {
 		void Dead();
 	private:
 		void LookAtPlayer();
-		void CreateDamageArea();
+		void CreateFang();
 		void SetEnemyParameter();
 		void SetLoiterParameter();
 		void SetLookAtParameter();
@@ -37,7 +37,7 @@ namespace ButiEngine {
 
 		Value_ptr<Enemy> m_vlp_enemy;
 		Value_ptr<Loiter> m_vlp_loiter;
-		Value_weak_ptr<GameObject> m_vwp_damageArea;
+		Value_weak_ptr<GameObject> m_vwp_fang;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 
 		float m_detectionRange;

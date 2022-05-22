@@ -1,6 +1,6 @@
 #include "stdafx_u.h"
 #include "SphereExclusion.h"
-#include "ButiBulletWrap/ButiBulletWrap/Common.h"
+#include "Player.h"
 
 void ButiEngine::SphereExclusion::OnUpdate()
 {
@@ -57,4 +57,12 @@ void ButiEngine::SphereExclusion::Exclusion(Value_weak_ptr<GameObject> arg_vwp_o
 	Vector3 newPos = otherPos + dir * (radius + otherRadius + 0.001f);
 
 	transform->SetWorldPosition(newPos);
+
+	auto vlp_playerComponent = gameObject.lock()->GetGameComponent<Player>();
+	if (vlp_playerComponent)
+	{
+		Vector3 velocity = vlp_playerComponent->GetVelocity();
+		velocity = velocity - velocity.Dot(dir) * dir;
+		vlp_playerComponent->SetVelocity(velocity);
+	}
 }

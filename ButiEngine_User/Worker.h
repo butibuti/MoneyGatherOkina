@@ -39,6 +39,7 @@ namespace ButiEngine {
 		void OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_enemy);
+		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		void OnNearPlayer();
 		void OnRupture();

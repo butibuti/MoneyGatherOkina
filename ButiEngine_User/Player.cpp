@@ -69,7 +69,12 @@ void ButiEngine::Player::OnSet()
 	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
+
+			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("PlayerDamageArea")))
+			{
+				OnCollisionDamageArea(arg_vwp_other);
+			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
 			{
 				OnCollisionDamageArea(arg_vwp_other);
 			}
@@ -581,7 +586,7 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_maxVibration = 1.0f;
 	m_nearEnemyCount = 0;
 	m_vibrationIncrease = 0.024f;
-	m_vibrationDecrease = 0.0006f;
+	m_vibrationDecrease = 0.003f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isCapaOver = false;
 }
