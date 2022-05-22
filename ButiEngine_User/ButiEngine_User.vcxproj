@@ -545,6 +545,7 @@ cd ..\</Command>
     <ClCompile Include="Enemy_Volcano.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="FadeOutComponent.cpp" />
+    <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FloatMotionComponent.cpp" />
     <ClCompile Include="FloatMotionParent.cpp" />
     <ClCompile Include="Flocking.cpp" />
@@ -634,6 +635,7 @@ cd ..\</Command>
     <ClInclude Include="Enemy_Volcano.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FadeOutComponent.h" />
+    <ClInclude Include="FireBall.h" />
     <ClInclude Include="FloatMotionComponent.h" />
     <ClInclude Include="FloatMotionParent.h" />
     <ClInclude Include="Flocking.h" />

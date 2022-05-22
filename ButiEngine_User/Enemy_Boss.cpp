@@ -125,7 +125,7 @@ void ButiEngine::Enemy_Boss::SetState()
 
 void ButiEngine::Enemy_Boss::DecreaseStatePercent(float& arg_percent, float& arg_otherPercent1, float& arg_otherPercent2)
 {
-	float decreasePercent = 18.0f;
+	float decreasePercent = 15.0f;
 	arg_percent -= decreasePercent;
 	if (arg_percent < 0.0f)
 	{

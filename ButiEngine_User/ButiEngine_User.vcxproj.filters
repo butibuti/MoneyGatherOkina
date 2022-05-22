@@ -86,6 +86,7 @@
     <ClCompile Include="BossState_Fire.cpp" />
     <ClCompile Include="BossState_Crystal.cpp" />
     <ClCompile Include="BossState_Jump.cpp" />
+    <ClCompile Include="FireBall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="BossState_Fire.h" />
     <ClInclude Include="BossState_Crystal.h" />
     <ClInclude Include="BossState_Jump.h" />
+    <ClInclude Include="FireBall.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

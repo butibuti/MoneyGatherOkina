@@ -22,7 +22,9 @@ namespace ButiEngine {
 		}
 
 	private:
-		Value_ptr<Timer> m_vlp_waitTimer;
+		void CreateFireBall();
+
+		Value_ptr<Timer> m_vlp_stateTimer;
 
 		bool m_isStrengthened;
 	};
