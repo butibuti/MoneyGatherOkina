@@ -174,7 +174,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 		else
 		{
 			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-			std::string sceneName = "Title";
+			std::string sceneName = "StageSelect";
 			sceneManager->RemoveScene(sceneName);
 			sceneManager->LoadScene(sceneName);
 			sceneManager->ChangeScene(sceneName);

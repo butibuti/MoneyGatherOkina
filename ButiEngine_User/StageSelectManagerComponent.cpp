@@ -96,7 +96,7 @@ void ButiEngine::StageSelectManagerComponent::NextScene()
 void ButiEngine::StageSelectManagerComponent::BackScene()
 {
 	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-	std::string sceneName = "Title";
+	std::string sceneName = "StageSelect";
 	sceneManager->RemoveScene(sceneName);
 	sceneManager->LoadScene(sceneName);
 	sceneManager->ChangeScene(sceneName);
