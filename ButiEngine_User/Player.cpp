@@ -154,20 +154,26 @@ void ButiEngine::Player::Start()
 
 	CreateBombObject();
 
-	auto hzUIParent = GetManager().lock()->AddObjectFromCereal("HzUIParent");
-	hzUIParent.lock()->transform->SetLocalPosition(Vector3(-800, -400, 50));
-	auto numberManager = GetManager().lock()->AddObjectFromCereal("NumberManager");
-	numberManager.lock()->transform->SetBaseTransform(hzUIParent.lock()->transform);
-	numberManager.lock()->transform->SetLocalPosition(Vector3(0, 0, 0));
-	m_vwp_numberManagerComponent = numberManager.lock()->GetGameComponent<NumberManagerComponent>();
+	m_vwp_hzUIParent = GetManager().lock()->AddObjectFromCereal("HzUIParent");
+	m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-700, -400, 50));
+	m_vwp_numberManager = GetManager().lock()->AddObjectFromCereal("NumberManager");
+	m_vwp_numberManager.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
+	m_vwp_numberManager.lock()->transform->SetLocalPosition(Vector3(0, 0, 0));
+	m_defaultNumberUIScale = m_vwp_numberManager.lock()->transform->GetLocalScale();
+	m_vwp_numberManagerComponent = m_vwp_numberManager.lock()->GetGameComponent<NumberManagerComponent>();
 	m_vwp_numberManagerComponent.lock()->SetDigit(2);
 	m_vwp_numberManagerComponent.lock()->SetColor(Vector4(1.0f, 0.714f, 0.0f, 1.0f));
 	auto hzUI = GetManager().lock()->AddObjectFromCereal("HzUI"); //Hz‚ÌUI¶¬
-	hzUI.lock()->transform->SetBaseTransform(hzUIParent.lock()->transform);
+	hzUI.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
 	hzUI.lock()->transform->SetLocalPosition(Vector3(250, -30, 0));
+	m_vwp_maxUI = GetManager().lock()->AddObjectFromCereal("MaxUI"); //Max‚ÌUI¶¬
+	m_vwp_maxUI.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
+	m_vwp_maxUI.lock()->transform->SetLocalPosition(Vector3(10, 10, 0));
+	m_defaultMaxUIScale = m_vwp_maxUI.lock()->transform->GetLocalScale();
+	m_vwp_maxUI.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 
-	hzUIParent.lock()->transform->SetLocalRotationX_Degrees(20);
-	hzUIParent.lock()->transform->SetLocalRotationY_Degrees(-15);
+	m_vwp_hzUIParent.lock()->transform->SetLocalRotationX_Degrees(20);
+	m_vwp_hzUIParent.lock()->transform->SetLocalRotationY_Degrees(-15);
 
 	SetVibrationParameter();
 
@@ -437,6 +443,15 @@ void ButiEngine::Player::VibrationPowerDrawUpdate()
 	else if (vibParcent >= 100)
 	{
 		vibParcent = 99;
+		m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-700, -400, 50));
+		m_vwp_numberManager.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
+		m_vwp_maxUI.lock()->transform->SetLocalScale(m_defaultMaxUIScale);
+	}
+	else
+	{
+		m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-825, -390, 50));
+		m_vwp_numberManager.lock()->transform->SetLocalScale(m_defaultNumberUIScale);
+		m_vwp_maxUI.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 	}
 
 	m_vwp_numberManagerComponent.lock()->SetNumber(vibParcent);
