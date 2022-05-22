@@ -9,7 +9,7 @@ void ButiEngine::BeeSoulPodUIComponent::OnUpdate()
 
 void ButiEngine::BeeSoulPodUIComponent::OnSet()
 {
-	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>(90);
+	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>(60);
 	m_rate = 0.0f;
 	m_previousRate = 0.0f;
 	m_soulCount = 0;
@@ -23,7 +23,8 @@ void ButiEngine::BeeSoulPodUIComponent::OnShowUI()
 void ButiEngine::BeeSoulPodUIComponent::Start()
 {
 	m_vwp_meshDrawComponent = gameObject.lock()->GetGameComponent<MeshDrawComponent>(1);
-	m_vwp_playerComponent = GetManager().lock()->GetGameObject("Player").lock()->GetGameComponent<Player>();
+	m_vwp_player = GetManager().lock()->GetGameObject("Player");
+	m_vwp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
 	m_vlp_waitTimer->Start();
 }
 
@@ -42,6 +43,12 @@ void ButiEngine::BeeSoulPodUIComponent::AddSoulCount()
 		if (m_vwp_playerComponent.lock())
 		{
 			m_maxSoulCount = m_vwp_playerComponent.lock()->CalculateRequestExp();
+
+			auto levelUpUI = GetManager().lock()->AddObjectFromCereal("LevelUpUI");
+			Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_vwp_player.lock()->transform->GetWorldPosition());
+			screenPosition.y += 100;
+			screenPosition.z = 0;
+			levelUpUI.lock()->transform->SetLocalPosition(screenPosition);
 		}
 	}
 }

@@ -329,12 +329,6 @@ void ButiEngine::Player::Move()
 
 void ButiEngine::Player::LevelUp()
 {
-	auto levelUpUI = GetManager().lock()->AddObjectFromCereal("LevelUpUI");
-	Vector3 screenPosition = GetCamera("main")->WorldToScreen(gameObject.lock()->transform->GetWorldPosition());
-	screenPosition.y += 100;
-	screenPosition.z = 0;
-	levelUpUI.lock()->transform->SetLocalPosition(screenPosition);
-
 	m_level++;
 	m_maxWorkerCount += 1;
 }

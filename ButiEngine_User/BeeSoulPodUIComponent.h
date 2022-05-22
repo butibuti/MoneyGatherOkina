@@ -29,6 +29,7 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_waitTimer;
 		Value_weak_ptr<MeshDrawComponent> m_vwp_meshDrawComponent;
 		Value_weak_ptr<Player> m_vwp_playerComponent;
+		Value_weak_ptr<GameObject> m_vwp_player;
 
 		float m_previousRate;
 		float m_rate;
