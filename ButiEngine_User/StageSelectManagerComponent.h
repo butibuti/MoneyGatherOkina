@@ -3,33 +3,39 @@
 
 namespace ButiEngine {
 
-	class StageSelectManagerComponent : public GameComponent
+class SceneChangeAnimationComponent;
+class TitleManagerComponent;
+class StageSelectManagerComponent : public GameComponent
+{
+public:
+	std::string GetGameComponentName()const override {
+		return "StageSelectManagerComponent";
+	}
+	void OnUpdate()override;
+	void OnSet()override;
+	void OnShowUI()override;
+	void Start()override;
+	void End()override;
+	Value_ptr<GameComponent> Clone()override;
+	template<class Archive>
+	void serialize(Archive& archive)
 	{
-	public:
-		std::string GetGameComponentName()const override {
-			return "StageSelectManagerComponent";
-		}
-		void OnUpdate()override;
-		void OnSet()override;
-		void OnShowUI()override;
-		void Start()override;
-		Value_ptr<GameComponent> Clone()override;
-		template<class Archive>
-		void serialize(Archive& archive)
-		{
-			archive(isActive);
-		}
+		archive(isActive);
+	}
 
-		void NextScene();
-		void BackScene();
-		std::int16_t GetStageNum();
+	void NextScene();
+	void BackScene();
+	std::int16_t GetStageNum();
 
-	private:
-		void FixStageNum();
+private:
+	void FixStageNum();
 
-		std::int16_t m_stageNum;
-		std::int16_t m_maxStageNum;
-	};
+	std::int16_t m_stageNum;
+	std::int16_t m_maxStageNum;
+	Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_gamePlayChangeAnimation;
+	Value_weak_ptr<TitleManagerComponent> m_vwp_title;
+	bool isSceneChange = false;
+};
 }
 
 BUTI_REGIST_GAMECOMPONENT(StageSelectManagerComponent, true);

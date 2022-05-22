@@ -37,6 +37,17 @@ void ButiEngine::HexagonAnimationComponent::StartAnimation(const bool arg_isChan
 	m_isAnimation = true;
 }
 
+void ButiEngine::HexagonAnimationComponent::Hide()
+{
+	gameObject.lock()->transform->SetLocalScale(Vector3(0,0,0));
+	m_isShow = false;
+}
+
+void ButiEngine::HexagonAnimationComponent::Apparent()
+{
+	gameObject.lock()->transform->SetLocalScale(m_defaultScale);
+}
+
 void ButiEngine::HexagonAnimationComponent::ScaleAnimation()
 {
 	if (m_isShow)

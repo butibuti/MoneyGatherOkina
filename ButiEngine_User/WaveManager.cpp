@@ -140,8 +140,6 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	{
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 		std::string sceneName = "StageSelect";
-		sceneManager->RemoveScene(sceneName);
-		sceneManager->LoadScene(sceneName);
 		sceneManager->ChangeScene(sceneName);
 	}
 }
@@ -207,8 +205,6 @@ void ButiEngine::WaveManager::PauseAnimation()
 	{
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 		std::string sceneName = "StageSelect";
-		sceneManager->RemoveScene(sceneName);
-		sceneManager->LoadScene(sceneName);
 		sceneManager->ChangeScene(sceneName);
 
 		GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>()->SetSpeed(1.0f);

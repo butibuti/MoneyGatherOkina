@@ -19,13 +19,16 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
-		void SetIsFade(const bool arg_isFade) { m_isFade = arg_isFade; }
+		/// <summary>
+		/// true‚ÅFadeIn
+		/// </summary>
+		/// <param name="arg_isFadeIn"></param>
+		void SetIsFade(const bool arg_isFadeIn) { m_isFadeIn = arg_isFadeIn; }
 		void SetMoveAlpha(const float arg_moveAlpha) { m_moveAlpha = arg_moveAlpha; }
 		void SetPositionZ(const float arg_positionZ);
-
+		bool IsFadeAnimation()const;
 	private:
-		bool m_isFade;
+		bool m_isFadeIn;
 		float m_alpha;
 		float m_moveAlpha;
 	};
