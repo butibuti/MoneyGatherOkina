@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "EnemySpawner.h"
+#include "EnemySpawnManager.h"
 #include "WaveManager.h"
 
 void ButiEngine::EnemySpawner::OnUpdate()
@@ -12,7 +13,7 @@ void ButiEngine::EnemySpawner::OnUpdate()
 	}
 
 	//出現開始まで待機
-	if (!m_vlp_waitTimer->Update_continue())
+	if (!m_vlp_waitTimer->Update_continue() || m_startWaitFrame < 0)
 	{
 		return;
 	}
@@ -47,6 +48,8 @@ void ButiEngine::EnemySpawner::OnSet()
 {
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
+	m_stageNumber = "0";
+	m_spawnType = 0;
 }
 
 void ButiEngine::EnemySpawner::Start()
@@ -54,13 +57,13 @@ void ButiEngine::EnemySpawner::Start()
 	m_vlp_spawnTimer->Start();
 	m_vlp_waitTimer->Start();
 	m_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
-	m_startMaxSpawnFrame = 0;
-	m_endMaxSpawnFrame = 0;
 	m_currentMaxSpawnFrame = 0;
-	m_startMinSpawnFrame = 0;
-	m_endMinSpawnFrame = 0;
 	m_currentMinSpawnFrame = 0;
-	m_startWaitFrame = 0;
+	m_startMaxSpawnFrame = 400;
+	m_endMaxSpawnFrame = 300;
+	m_startMinSpawnFrame = 300;
+	m_endMinSpawnFrame = 200;
+	m_startWaitFrame = 200;
 	m_lastIntervalReachFrame = 3000;
 	m_reachShorteningMaxFrame = 0;
 	m_reachShorteningMinFrame = 0;
@@ -94,9 +97,12 @@ void ButiEngine::EnemySpawner::OnShowUI()
 	GUI::BulletText(m_currentMinSpawnFrame);
 
 	GUI::BulletText("StartWaitFrame");
-	if (GUI::DragFloat("##StartWaitFrame", m_startWaitFrame, 10,0, 12000))
+	if (GUI::DragFloat("##StartWaitFrame", m_startWaitFrame, 10,-10, 12000))
 	{
-		m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
+		if (m_startWaitFrame > 0)
+		{
+			m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
+		}
 		FixShorteningFrame();
 	}
 
@@ -131,6 +137,23 @@ void ButiEngine::EnemySpawner::OnShowUI()
 	{
 		FixShorteningFrame();
 	}
+
+	GUI::BulletText("StageNum(1-3)");
+	GUI::InputInt("##StageData", m_inputStageNumber);
+
+	if (GUI::Button("OutputData"))
+	{
+		EnemySpawnData outputDatas;
+		outputDatas.m_startWaitFrame = m_startWaitFrame;
+		outputDatas.m_startMaxSpawnFrame = m_startMaxSpawnFrame;
+		outputDatas.m_endMaxSpawnFrame = m_endMaxSpawnFrame;
+		outputDatas.m_startMinSpawnFrame = m_startMinSpawnFrame;
+		outputDatas.m_endMinSpawnFrame = m_endMinSpawnFrame;
+		outputDatas.m_lastIntervalReachFrame = m_lastIntervalReachFrame;
+
+		std::string outputFileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + std::to_string(m_inputStageNumber) + ".enemyData";
+		OutputCereal(outputDatas, outputFileName);
+	}
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::EnemySpawner::Clone()
@@ -138,58 +161,21 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::EnemySpawner::Clone
 	return ObjectFactory::Create<EnemySpawner>();
 }
 
-void ButiEngine::EnemySpawner::SetType(const std::int8_t arg_num)
-{
-	m_spawnType = arg_num;
-}
-
 void ButiEngine::EnemySpawner::OnceUpdate()
 {
-	//出現し始めるまでにどのくらい待つか
-	m_startWaitFrame = 0;
+	std::string filePath = "Resources/";
+	std::string fileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + m_stageNumber + ".enemyData";
+	EnemySpawnData vec_enemySpawnDatas;
 
-	switch (m_spawnType)
+	if (Util::ExistFile(filePath + fileName))
 	{
-	case 0: //ハエ
-		m_startMaxSpawnFrame = 300;
-		m_endMaxSpawnFrame = 200;
-		m_startMinSpawnFrame = 200;
-		m_endMinSpawnFrame = 100;
-		m_startWaitFrame = 100;
-		m_lastIntervalReachFrame = 3000;
-		break;
-	case 1: //ストーカー
-		m_startMaxSpawnFrame = 400;
-		m_endMaxSpawnFrame = 300;
-		m_startMinSpawnFrame = 300;
-		m_endMinSpawnFrame = 200;
-		m_startWaitFrame = 200;
-		m_lastIntervalReachFrame = 3000;
-		break;
-	case 2: //キバ
-		m_startMaxSpawnFrame = 500;
-		m_endMaxSpawnFrame = 400;
-		m_startMinSpawnFrame = 400;
-		m_endMinSpawnFrame = 300;
-		m_startWaitFrame = 300;
-		m_lastIntervalReachFrame = 3000;
-		break;
-	case 3: //カザン
-		m_startMaxSpawnFrame = 600;
-		m_endMaxSpawnFrame = 500;
-		m_startMinSpawnFrame = 500;
-		m_endMinSpawnFrame = 400;
-		m_startWaitFrame = 400;
-		m_lastIntervalReachFrame = 3000;
-		break;
-	default:
-		m_startMaxSpawnFrame = 300;
-		m_endMaxSpawnFrame = 200;
-		m_startMinSpawnFrame = 200;
-		m_endMinSpawnFrame = 100;
-		m_startWaitFrame = 100;
-		m_lastIntervalReachFrame = 3000;
-		break;
+		InputCereal(vec_enemySpawnDatas, fileName);	
+		m_startWaitFrame = vec_enemySpawnDatas.m_startWaitFrame;
+		m_startMaxSpawnFrame = vec_enemySpawnDatas.m_startMaxSpawnFrame;
+		m_endMaxSpawnFrame = vec_enemySpawnDatas.m_endMaxSpawnFrame;
+		m_startMinSpawnFrame = vec_enemySpawnDatas.m_startMinSpawnFrame;
+		m_endMinSpawnFrame = vec_enemySpawnDatas.m_endMinSpawnFrame;
+		m_lastIntervalReachFrame = vec_enemySpawnDatas.m_lastIntervalReachFrame;
 	}
 
 	FixShorteningFrame();

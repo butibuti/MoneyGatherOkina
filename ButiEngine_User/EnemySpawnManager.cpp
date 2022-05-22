@@ -8,6 +8,12 @@ void ButiEngine::EnemySpawnManager::OnUpdate()
 
 void ButiEngine::EnemySpawnManager::OnSet()
 {
+    m_startMaxSpawnFrame = 0;
+    m_endMaxSpawnFrame = 0;
+    m_startMinSpawnFrame = 0;
+    m_endMinSpawnFrame = 0;
+    m_startWaitFrame = 0;
+    m_lastIntervalReachFrame = 0;
 }
 
 void ButiEngine::EnemySpawnManager::Start()
@@ -16,66 +22,42 @@ void ButiEngine::EnemySpawnManager::Start()
 
 void ButiEngine::EnemySpawnManager::OnShowUI()
 {
-    if (GUI::Button("Add_Enemy_Fly"))
-    {
-        auto fly = GetManager().lock()->AddObjectFromCereal("Enemy_Fly");
-        //auto drawFly = GetManager().lock()->AddObjectFromCereal("DrawObject_Fly");
-        //drawFly.lock()->transform->SetBaseTransform(fly.lock()->transform, true);
-    }
-    if (GUI::Button("Add_Enemy_Kiba"))
-    {
-        auto kiba = GetManager().lock()->AddObjectFromCereal("Enemy_Kiba");
-        //auto drawKiba = GetManager().lock()->AddObjectFromCereal("DrawObject_Kiba");
-        //drawKiba.lock()->transform->SetBaseTransform(kiba.lock()->transform, true);
-    }
-    if (GUI::Button("Add_Enemy_Stalker"))
-    {
-        auto stalker = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
-        //auto drawStalker = GetManager().lock()->AddObjectFromCereal("DrawObject_Stalker");
-        //drawStalker.lock()->transform->SetBaseTransform(stalker.lock()->transform, true);
-    }
-    if (GUI::Button("Add_Enemy_Volcano"))
-    {
-        auto volcano = GetManager().lock()->AddObjectFromCereal("Enemy_Volcano");
-        //auto drawVolcano = GetManager().lock()->AddObjectFromCereal("DrawObject_Volcano");
-        //drawVolcano.lock()->transform->SetBaseTransform(volcano.lock()->transform, true);
-    }
-    if (GUI::Button("Add_Enemy_Tutorial"))
-    {
-        auto tutorial = GetManager().lock()->AddObjectFromCereal("Enemy_Tutorial");
-        //auto drawTutorial = GetManager().lock()->AddObjectFromCereal("DrawObject_Tutorial");
-        //drawTutorial.lock()->transform->SetBaseTransform(tutorial.lock()->transform, true);
-    }
-    GUI::BulletText("StageNum : WaveNum");
-    GUI::InputInt2("##StageData", m_stageAndWaveNum);
+    GUI::BulletText("EnemyType(0-3), StageNum(1-3)");
+    GUI::Text("EnemyType(fly:0,stalker:1,kiba:2,volcano:3)");
+    GUI::InputInt2("##StageData", m_volAndStageNum);
+
+    GUI::BulletText("StartWaitFrame");
+    GUI::DragFloat("##StartWaitFrame", m_startWaitFrame, 10, -10, 12000);
+
+    GUI::BulletText("StartMaxSpawnFrame");
+    GUI::DragFloat("##StartMaxSpawnFrame", m_startMaxSpawnFrame, 10, 0, 12000);
+
+    GUI::BulletText("EndMaxSpawnFrame");
+    GUI::DragFloat("##EndMaxSpawnFrame", m_endMaxSpawnFrame, 10, 0, 12000);
+
+    GUI::BulletText("StartMinSpawnFrame");
+    GUI::DragFloat("##StartMinSpawnFrame", m_startMinSpawnFrame, 10, 0, 12000);
+
+    GUI::BulletText("EndMinSpawnFrame");
+    GUI::DragFloat("##EndMinSpawnFrame", m_endMinSpawnFrame, 10, 0, 12000);
+
+    GUI::BulletText("LastIntervalReachFrame");
+    GUI::DragFloat("##LastIntervalReachFrame", m_lastIntervalReachFrame, 10, 0, 12000);
+
 
     if (GUI::Button("Output"))
     {
-        auto vec_enemyGameObject = GetManager().lock()->GetGameObjects(GameObjectTag("Enemy"));
+        EnemySpawnData outputDatas;
+        outputDatas.m_startWaitFrame = m_startWaitFrame;
+        outputDatas.m_startMaxSpawnFrame = m_startMaxSpawnFrame;
+        outputDatas.m_endMaxSpawnFrame = m_endMaxSpawnFrame;
+        outputDatas.m_startMinSpawnFrame = m_startMinSpawnFrame;
+        outputDatas.m_endMinSpawnFrame = m_endMinSpawnFrame;
+        outputDatas.m_lastIntervalReachFrame = m_lastIntervalReachFrame;
 
-        std::vector<EnemySpawnData> vec_outputDatas;
-
-        for (auto vlp_gameObject : vec_enemyGameObject)
-        {
-            //‚±‚±‚Å–¼‘O®—
-            std::string gameObjectFullName = vlp_gameObject->GetGameObjectName();
-            std::string gameObjectName;
-            auto secondUnderScoreIndex = gameObjectFullName.rfind("_");
-            if (gameObjectFullName.find("_") != secondUnderScoreIndex)
-            {
-                gameObjectName = gameObjectFullName.substr(0, secondUnderScoreIndex);
-            }
-            else
-            {
-                gameObjectName = gameObjectFullName;
-            }
-
-            vec_outputDatas.push_back({ gameObjectName, vlp_gameObject->transform->Clone() });
-        }
-        std::string outputFileName = "EnemyData/" + std::to_string(m_stageAndWaveNum[0]) + "_" + std::to_string(m_stageAndWaveNum[1]) + ".enemyData";
-        OutputCereal(vec_outputDatas, outputFileName);
+        std::string outputFileName = "EnemyData/" + std::to_string(m_volAndStageNum[0]) + "_" + std::to_string(m_volAndStageNum[1]) + ".enemyData";
+        OutputCereal(outputDatas, outputFileName);
     }
-
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::EnemySpawnManager::Clone()
@@ -83,7 +65,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::EnemySpawnManager::
 	return ObjectFactory::Create<EnemySpawnManager>();
 }
 
-void ButiEngine::OutputCereal(const std::vector<EnemySpawnData>& arg_vec_data, const std::string& arg_fileName)
+void ButiEngine::OutputCereal(const EnemySpawnData& arg_vec_data, const std::string& arg_fileName)
 {
     std::stringstream stream;
 
@@ -98,7 +80,7 @@ void ButiEngine::OutputCereal(const std::vector<EnemySpawnData>& arg_vec_data, c
     stream.clear();
 }
 
-void ButiEngine::InputCereal(std::vector<EnemySpawnData>& arg_ref_output_vec_data, const std::string& arg_fileName)
+void ButiEngine::InputCereal(EnemySpawnData& arg_ref_output_vec_data, const std::string& arg_fileName)
 {
     std::stringstream stream;
 
