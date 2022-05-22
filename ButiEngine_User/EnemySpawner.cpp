@@ -18,18 +18,27 @@ void ButiEngine::EnemySpawner::OnUpdate()
 	}
 
 	//出現間隔を時間経過に応じて短くしていく
-	if(m_vlp_subWaitTimer->Update())
+	if (m_currentMaxSpawnFrame > m_endMaxSpawnFrame)
 	{
-		if (m_spawnRate > m_maxSpawnRate)
-		{
-			m_spawnRate--;
-			m_vlp_spawnTimer->ChangeCountFrame(m_spawnRate);
-		}	
+		m_currentMaxSpawnFrame -= m_reachShorteningMaxFrame * GameDevice::WorldSpeed;
+	}
+	else
+	{
+		m_currentMaxSpawnFrame = m_endMaxSpawnFrame;
+	}
+	if (m_currentMinSpawnFrame > m_endMinSpawnFrame)
+	{
+		m_currentMinSpawnFrame -= m_reachShorteningMinFrame * GameDevice::WorldSpeed;
+	}
+	else
+	{
+		m_currentMinSpawnFrame = m_endMinSpawnFrame;
 	}
 
 	//一定時間たったら敵をスポーンさせる
 	if (m_vlp_spawnTimer->Update())
 	{
+		SetRandomSpawnFrame();
 		SpawnEnemy();
 	}
 }
@@ -38,18 +47,24 @@ void ButiEngine::EnemySpawner::OnSet()
 {
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
-	m_vlp_subWaitTimer = ObjectFactory::Create<RelativeTimer>();
 }
 
 void ButiEngine::EnemySpawner::Start()
 {
 	m_vlp_spawnTimer->Start();
 	m_vlp_waitTimer->Start();
-	m_vlp_subWaitTimer->Start();
-	m_vlp_subWaitTimer->ChangeCountFrame(10);
 	m_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
-	m_spawnRate = 0;
-	m_maxSpawnRate = 0;
+	m_startMaxSpawnFrame = 0;
+	m_endMaxSpawnFrame = 0;
+	m_currentMaxSpawnFrame = 0;
+	m_startMinSpawnFrame = 0;
+	m_endMinSpawnFrame = 0;
+	m_currentMinSpawnFrame = 0;
+	m_startWaitFrame = 0;
+	m_lastIntervalReachFrame = 3000;
+	m_reachShorteningMaxFrame = 0;
+	m_reachShorteningMinFrame = 0;
+	m_randomSpawnFrame = 0;
 	m_isOnce = false;
 }
 
@@ -73,6 +88,49 @@ void ButiEngine::EnemySpawner::OnShowUI()
 		break;
 	}
 	
+	GUI::BulletText("CurrentMaxSpawnFrame");
+	GUI::BulletText(m_currentMaxSpawnFrame);
+	GUI::BulletText("CurrentMinSpawnFrame");
+	GUI::BulletText(m_currentMinSpawnFrame);
+
+	GUI::BulletText("StartWaitFrame");
+	if (GUI::DragFloat("##StartWaitFrame", m_startWaitFrame, 10,0, 12000))
+	{
+		m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
+		FixShorteningFrame();
+	}
+
+	GUI::BulletText("StartMaxSpawnFrame");
+	if (GUI::DragFloat("##StartMaxSpawnFrame", m_startMaxSpawnFrame, 10,0, 12000))
+	{
+		m_vlp_waitTimer->ChangeCountFrame(m_startMaxSpawnFrame);
+		FixShorteningFrame();
+	}
+	GUI::BulletText("EndMaxSpawnFrame");
+	if (GUI::DragFloat("##EndMaxSpawnFrame", m_endMaxSpawnFrame, 10,0, 12000))
+	{
+		m_vlp_waitTimer->ChangeCountFrame(m_endMaxSpawnFrame);
+		FixShorteningFrame();
+	}
+
+	GUI::BulletText("StartMinSpawnFrame");
+	if (GUI::DragFloat("##StartMinSpawnFrame", m_startMinSpawnFrame, 10,0, 12000))
+	{
+		m_vlp_waitTimer->ChangeCountFrame(m_startMinSpawnFrame);
+		FixShorteningFrame();
+	}
+	GUI::BulletText("EndMinSpawnFrame");
+	if (GUI::DragFloat("##EndMinSpawnFrame", m_endMinSpawnFrame, 10,0, 12000))
+	{
+		m_vlp_waitTimer->ChangeCountFrame(m_endMinSpawnFrame);
+		FixShorteningFrame();
+	}
+
+	GUI::BulletText("LastIntervalReachFrame");
+	if (GUI::DragFloat("##LastIntervalReachFrame", m_lastIntervalReachFrame, 10,0, 12000))
+	{
+		FixShorteningFrame();
+	}
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::EnemySpawner::Clone()
@@ -88,39 +146,60 @@ void ButiEngine::EnemySpawner::SetType(const std::int8_t arg_num)
 void ButiEngine::EnemySpawner::OnceUpdate()
 {
 	//出現し始めるまでにどのくらい待つか
-	std::int32_t waitFrame = 1;
+	m_startWaitFrame = 0;
 
 	switch (m_spawnType)
 	{
 	case 0: //ハエ
-		m_spawnRate = 180;
-		m_maxSpawnRate = 120;
-		waitFrame = 30;
+		m_startMaxSpawnFrame = 300;
+		m_endMaxSpawnFrame = 200;
+		m_startMinSpawnFrame = 200;
+		m_endMinSpawnFrame = 100;
+		m_startWaitFrame = 100;
+		m_lastIntervalReachFrame = 3000;
 		break;
 	case 1: //ストーカー
-		m_spawnRate = 1200;
-		m_maxSpawnRate = 960;
-		waitFrame = 1020;
+		m_startMaxSpawnFrame = 400;
+		m_endMaxSpawnFrame = 300;
+		m_startMinSpawnFrame = 300;
+		m_endMinSpawnFrame = 200;
+		m_startWaitFrame = 200;
+		m_lastIntervalReachFrame = 3000;
 		break;
 	case 2: //キバ
-		m_spawnRate = 600;
-		m_maxSpawnRate = 300;
-		waitFrame = 1800;
+		m_startMaxSpawnFrame = 500;
+		m_endMaxSpawnFrame = 400;
+		m_startMinSpawnFrame = 400;
+		m_endMinSpawnFrame = 300;
+		m_startWaitFrame = 300;
+		m_lastIntervalReachFrame = 3000;
 		break;
 	case 3: //カザン
-		m_spawnRate = 1200;
-		m_maxSpawnRate = 1020;
-		waitFrame = 3000;
+		m_startMaxSpawnFrame = 600;
+		m_endMaxSpawnFrame = 500;
+		m_startMinSpawnFrame = 500;
+		m_endMinSpawnFrame = 400;
+		m_startWaitFrame = 400;
+		m_lastIntervalReachFrame = 3000;
 		break;
 	default:
-		m_spawnRate = 360;
-		m_maxSpawnRate = 360;
-		waitFrame = 1;
+		m_startMaxSpawnFrame = 300;
+		m_endMaxSpawnFrame = 200;
+		m_startMinSpawnFrame = 200;
+		m_endMinSpawnFrame = 100;
+		m_startWaitFrame = 100;
+		m_lastIntervalReachFrame = 3000;
 		break;
 	}
 
-	m_vlp_spawnTimer->ChangeCountFrame(m_spawnRate);
-	m_vlp_waitTimer->ChangeCountFrame(waitFrame);
+	FixShorteningFrame();
+
+	m_currentMaxSpawnFrame = m_startMaxSpawnFrame;
+	m_currentMinSpawnFrame = m_startMinSpawnFrame;
+
+	SetRandomSpawnFrame();
+
+	m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
 }
 
 void ButiEngine::EnemySpawner::SpawnEnemy()
@@ -164,4 +243,16 @@ void ButiEngine::EnemySpawner::SpawnEnemy()
 
 	enemy.lock()->transform->SetLocalPosition(randomPosition);
 	enemy.lock()->transform->SetLocalRotationY_Degrees(randomRotateY);
+}
+
+void ButiEngine::EnemySpawner::FixShorteningFrame()
+{
+	m_reachShorteningMaxFrame = (m_startMaxSpawnFrame - m_endMaxSpawnFrame) / m_lastIntervalReachFrame;
+	m_reachShorteningMinFrame = (m_startMinSpawnFrame - m_endMinSpawnFrame) / m_lastIntervalReachFrame;
+}
+
+void ButiEngine::EnemySpawner::SetRandomSpawnFrame()
+{
+	m_randomSpawnFrame = ButiRandom::GetInt(m_currentMinSpawnFrame, m_currentMaxSpawnFrame);
+	m_vlp_spawnTimer->ChangeCountFrame(m_randomSpawnFrame);
 }

@@ -27,15 +27,27 @@ namespace ButiEngine {
 	private:
 		void OnceUpdate();
 		void SpawnEnemy();
+		void FixShorteningFrame();
+		void SetRandomSpawnFrame();
 
 		Value_weak_ptr<WaveManager> m_waveManagerComponent;
 		Value_ptr<Timer> m_vlp_spawnTimer;
 		Value_ptr<Timer> m_vlp_waitTimer;
-		Value_ptr<Timer> m_vlp_subWaitTimer;
 		
 		std::int8_t m_spawnType;
-		std::int32_t m_spawnRate;
-		std::int32_t m_maxSpawnRate;
+
+		float m_startMaxSpawnFrame;
+		float m_endMaxSpawnFrame;
+		float m_currentMaxSpawnFrame;
+		float m_startMinSpawnFrame;
+		float m_endMinSpawnFrame;
+		float m_currentMinSpawnFrame;
+		float m_startWaitFrame;
+		float m_lastIntervalReachFrame;
+		float m_randomSpawnFrame;
+
+		float m_reachShorteningMaxFrame;
+		float m_reachShorteningMinFrame;
 
 		bool m_isOnce;
 	};
