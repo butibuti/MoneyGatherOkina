@@ -524,6 +524,9 @@ cd ..\</Command>
     <ClCompile Include="BeeSoulComponent.cpp" />
     <ClCompile Include="BeeSoulPodUIComponent.cpp" />
     <ClCompile Include="Bomb_Player.cpp" />
+    <ClCompile Include="BossState_Crystal.cpp" />
+    <ClCompile Include="BossState_Fire.cpp" />
+    <ClCompile Include="BossState_Jump.cpp" />
     <ClCompile Include="CameraAxis.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="Crystal.cpp" />
@@ -603,6 +606,7 @@ cd ..\</Command>
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="WorldSpeedManager.cpp" />
     <ClCompile Include="ExpansionAnimationComponent.cpp" />
+    <ClCompile Include="WorningMark.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationRemoverComponent.h" />
@@ -610,6 +614,9 @@ cd ..\</Command>
     <ClInclude Include="BeeSoulComponent.h" />
     <ClInclude Include="BeeSoulPodUIComponent.h" />
     <ClInclude Include="Bomb_Player.h" />
+    <ClInclude Include="BossState_Crystal.h" />
+    <ClInclude Include="BossState_Fire.h" />
+    <ClInclude Include="BossState_Jump.h" />
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Crystal.h" />
@@ -677,6 +684,7 @@ cd ..\</Command>
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="WorldSpeedManager.h" />
     <ClInclude Include="ExpansionAnimationComponent.h" />
+    <ClInclude Include="WorningMark.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

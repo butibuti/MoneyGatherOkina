@@ -2,12 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Crystal :public GameComponent
+	class BossState_Crystal :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Crystal";
+			return "BossState_Crystal";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -22,11 +22,11 @@ namespace ButiEngine {
 		}
 
 	private:
-		void SetEnemyParameter();
-		
-		Value_ptr<Timer> m_vlp_removeTagTimer;
+		Value_ptr<Timer> m_vlp_waitTimer;
+
+		bool m_isStrengthened;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Crystal, true);
+BUTI_REGIST_GAMECOMPONENT(BossState_Crystal, true);

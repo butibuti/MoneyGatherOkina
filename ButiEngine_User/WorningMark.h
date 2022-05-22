@@ -2,12 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Crystal :public GameComponent
+	class WorningMark :public GameComponent
 	{
 	public:
-
 		std::string GetGameComponentName()const override {
-			return "Crystal";
+			return "WorningMark";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -21,12 +20,15 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetWaitFrame(const std::uint32_t arg_waitFrame) { m_vlp_waitTimer->ChangeCountFrame(arg_waitFrame); }
+		void SetAddObjectName(const std::string& arg_addObjectName) { m_addObjectName = arg_addObjectName; }
 	private:
-		void SetEnemyParameter();
-		
-		Value_ptr<Timer> m_vlp_removeTagTimer;
+		void AddScaleAnimation();
+
+		Value_ptr<Timer> m_vlp_waitTimer;
+		std::string m_addObjectName;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Crystal, true);
+BUTI_REGIST_GAMECOMPONENT(WorningMark, true);

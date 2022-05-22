@@ -6,6 +6,12 @@
 
 void ButiEngine::Crystal::OnUpdate()
 {
+	//ƒ_ƒ[ƒW”»’èŽæ‚èÁ‚µ
+	if (m_vlp_removeTagTimer->Update())
+	{
+		gameObject.lock()->RemoveGameObjectTag(GameObjectTag("PlayerDamageArea"));
+		m_vlp_removeTagTimer->Stop();
+	}
 }
 
 void ButiEngine::Crystal::OnSet()
@@ -27,6 +33,9 @@ void ButiEngine::Crystal::Start()
 	SetEnemyParameter();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
+
+	m_vlp_removeTagTimer = ObjectFactory::Create<RelativeTimer>(2);
+	m_vlp_removeTagTimer->Start();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Crystal::Clone()
