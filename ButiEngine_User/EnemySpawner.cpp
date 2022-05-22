@@ -197,11 +197,44 @@ void ButiEngine::EnemySpawner::SpawnEnemy()
 	m_waveManagerComponent.lock()->AddSpawnCount();
 
 	//oŒ»ˆÊ’u“™‚ðŒˆ‚ß‚é(ƒ‰ƒ“ƒ_ƒ€)
+	auto vec_enemyGameObject = GetManager().lock()->GetGameObjects(GameObjectTag("Enemy"));
+
 	Vector3 randomPosition = Vector3(0, 0, 0);
-	randomPosition.x = (float)ButiRandom::GetInt(-100, 100);
-	randomPosition.z = (float)ButiRandom::GetInt(-100, 100);
-	randomPosition.Normalize();
-	randomPosition *= (float)ButiRandom::GetInt(1, 20);
+	float radius = 8;
+	auto player = GetManager().lock()->GetGameObject("Player");
+	Vector3 playerPosition = player.lock()->transform->GetLocalPosition();
+
+	//5‰ñ‚Ü‚Å”äŠr‚·‚é
+	for (std::int8_t i = 0; i < 5; i++)
+	{
+		bool isSucsess = true;
+		randomPosition.x = (float)ButiRandom::GetInt(-100, 100);
+		randomPosition.z = (float)ButiRandom::GetInt(-100, 100);
+		randomPosition.Normalize();
+		randomPosition *= (float)ButiRandom::GetInt(1, 20);
+		float distance;
+		auto end = vec_enemyGameObject.end();
+		for (auto itr = vec_enemyGameObject.begin(); itr != end; ++itr)
+		{
+			auto enemyPosition = (*itr)->transform->GetLocalPosition();
+			distance = randomPosition.Distance(enemyPosition);
+			if (distance < radius)
+			{
+				isSucsess = false;
+			}
+		}
+		distance = randomPosition.Distance(playerPosition);
+		if (distance < radius)
+		{
+			isSucsess = false;
+		}
+
+		if (isSucsess)
+		{
+			break;
+		}
+	}
+
 
 	float randomRotateY = 0;
 	randomRotateY = (float)ButiRandom::GetInt(-180, 180);
