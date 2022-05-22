@@ -275,8 +275,8 @@ void ButiEngine::ParticleGenerater::ExplosionPolygonParticles(const Vector3& arg
 
 		if (i % 3 == 2)
 		{
-			//ÉIÉåÉìÉW
-			particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_8);
+			//éá
+			particle.color = Vector4(0.5f, 0.1f, 0.7f, 1.0f);
 			speed = 0.3f;
 			particle.size = 7.0f;
 			accel = 1.15f;
@@ -284,8 +284,8 @@ void ButiEngine::ParticleGenerater::ExplosionPolygonParticles(const Vector3& arg
 		}
 		else if (i % 3 == 1)
 		{
-			//â©êF
-			particle.color = ButiColor::Yellow(ButiColor::ShadeIndex::Shade_4);
+			//ñæÇÈÇ¢éá
+			particle.color = Vector4(0.56f, 0.4f, 0.74f, 1.0f);
 			speed = 0.45f;
 			particle.size = 5.0f;
 			accel = 1.0925f;

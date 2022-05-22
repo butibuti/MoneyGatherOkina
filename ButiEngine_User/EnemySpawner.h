@@ -22,7 +22,8 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetType(const std::int8_t arg_num);
+		void SetType(const std::int8_t arg_num) { m_spawnType = arg_num; }
+		void SetStageNum(const std::string arg_num) { m_stageNumber = arg_num; }
 
 	private:
 		void OnceUpdate();
@@ -34,7 +35,9 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_spawnTimer;
 		Value_ptr<Timer> m_vlp_waitTimer;
 		
+		std::int32_t m_inputStageNumber;
 		std::int8_t m_spawnType;
+		std::string m_stageNumber;
 
 		float m_startMaxSpawnFrame;
 		float m_endMaxSpawnFrame;

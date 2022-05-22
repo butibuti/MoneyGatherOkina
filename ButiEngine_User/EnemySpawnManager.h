@@ -21,22 +21,37 @@ namespace ButiEngine {
 		}
 
 	private:
-		std::int32_t m_stageAndWaveNum[2];
+		std::int32_t m_volAndStageNum[2];
+		float m_startMaxSpawnFrame;
+		float m_endMaxSpawnFrame;
+		float m_startMinSpawnFrame;
+		float m_endMinSpawnFrame;
+		float m_startWaitFrame;
+		float m_lastIntervalReachFrame;
 	};
 
 	struct EnemySpawnData {
-		std::string m_enemyName;
-		Value_ptr<Transform> m_vlp_enemyTransform;
+		float m_startMaxSpawnFrame;
+		float m_endMaxSpawnFrame;
+		float m_startMinSpawnFrame;
+		float m_endMinSpawnFrame;
+		float m_startWaitFrame;
+		float m_lastIntervalReachFrame;
+
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
-			archive(m_enemyName);
-			archive(m_vlp_enemyTransform);
+			archive(m_startMaxSpawnFrame);
+			archive(m_endMaxSpawnFrame);
+			archive(m_startMinSpawnFrame);
+			archive(m_endMinSpawnFrame);
+			archive(m_startWaitFrame);
+			archive(m_lastIntervalReachFrame);
 		}
 	};
 
-	void OutputCereal(const std::vector<EnemySpawnData>& arg_vec_data, const std::string& arg_fileName);
-	void InputCereal(std::vector<EnemySpawnData>& arg_ref_output_vec_data, const std::string& arg_fileName);
+	void OutputCereal(const EnemySpawnData& arg_vec_data, const std::string& arg_fileName);
+	void InputCereal(EnemySpawnData& arg_ref_output_vec_data, const std::string& arg_fileName);
 
 }
 

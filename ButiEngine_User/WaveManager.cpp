@@ -92,10 +92,10 @@ void ButiEngine::WaveManager::SpawnEnemySpawner()
 	////ウェーブ番号に応じて出現させる敵のパターンや配置を変える
 	////何ステージ目・何ウェーブ目・敵の名前・位置
 
-	//auto sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
-	//std::int16_t underScoreIndex = sceneName.find("_");
-	//auto size = sceneName.size();
-	//std::string stageNum = sceneName.substr(underScoreIndex + 1, size);
+	auto sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+	std::int16_t underScoreIndex = sceneName.find("_");
+	auto size = sceneName.size();
+	std::string stageNum = sceneName.substr(underScoreIndex + 1, size);
 
 	//std::string fileName = "EnemyData/0_" /*+ stageNum + "_"*/ + std::to_string(m_waveNum) + ".enemyData";
 
@@ -114,14 +114,18 @@ void ButiEngine::WaveManager::SpawnEnemySpawner()
 
 
 	//スポナーを生成
-	auto enemy0 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy0->SetType(0);
-	auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy1->SetType(1);
-	auto enemy2 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy2->SetType(2);
-	auto enemy3 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	enemy3->SetType(3);
+	auto flySpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	flySpawner->SetType(0);
+	flySpawner->SetStageNum(stageNum);
+	auto stalkerSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	stalkerSpawner->SetType(1);
+	stalkerSpawner->SetStageNum(stageNum);
+	auto kibaSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	kibaSpawner->SetType(2);
+	kibaSpawner->SetStageNum(stageNum);
+	auto volcanoSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	volcanoSpawner->SetType(3);
+	volcanoSpawner->SetStageNum(stageNum);
 }
 
 void ButiEngine::WaveManager::StageClearAnimation()

@@ -396,6 +396,7 @@ void ButiEngine::Worker::OnRupture()
 {
 	if (m_vlp_ruptureTimer->Update())
 	{
+		auto position = gameObject.lock()->transform->GetLocalPosition();
 		Dead();
 	}
 }
