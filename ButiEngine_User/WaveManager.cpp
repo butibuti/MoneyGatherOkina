@@ -1,6 +1,5 @@
 #include "stdafx_u.h"
 #include "WaveManager.h"
-#include "StartPopUpComponent.h"
 #include "EnemySpawnManager.h"
 #include "Player.h"
 #include "InputManager.h"
@@ -20,34 +19,14 @@ void ButiEngine::WaveManager::OnUpdate()
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneStart();
 	}
 
-	MoveWave();
-
-	if (m_isWaveTime)
+	if (m_vwp_playerComponent.lock()->IsDead())
 	{
-		//ウェーブ中
-
-		if (m_vwp_playerComponent.lock()->IsDead())
-		{
-			m_isGameOver = true;
-		}
-
+		m_isGameOver = true;
 	}
-	else
+	//クリアしているか
+	if (m_enemyDeadCount >= m_maxEnemyCount)
 	{
-		//ウェーブ外
-
-		//最終ウェーブをクリアしていたら
-		if (m_waveNum >= m_maxWaveNum)
-		{
-			m_isLastWaveClear = true;
-		}
-
-		if (m_isPopupSpawn && !m_isLastWaveClear)
-		{
-			m_isPopupSpawn = false;
-			//ポップをスポーンさせる
-			m_vwp_startPopUpObject.lock()->AppearPopUp();
-		}
+		m_isClear = true;
 	}
 
 	StageClearAnimation();
@@ -67,18 +46,12 @@ void ButiEngine::WaveManager::OnSet()
 
 void ButiEngine::WaveManager::Start()
 {
-	m_vwp_startPopUpObject = GetManager().lock()->GetGameObject("StartPopUpObject").lock()->GetGameComponent<StartPopUpComponent>();
 	m_vwp_playerComponent = GetManager().lock()->GetGameObject("Player").lock()->GetGameComponent<Player>();
 	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
 	m_vwp_sceneChangeAnimationComponent = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
 	m_vwp_stageProgressUIComponent = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline").lock()->GetGameComponent<StageProgressUIComponent>();
 	m_vwp_pauseManagerComponent = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
-	m_waveNum = 0;
-	m_maxWaveNum = 1;
-	m_clearAnimationTime = 0;
-	m_isWaveTime = false;
-	m_isPopupSpawn = false;
-	m_isLastWaveClear = false;
+	m_isClear = false;
 	m_isGameOver = false;
 	m_isNextSceneButton = false;
 	m_isGameOverButton = false;
@@ -86,23 +59,17 @@ void ButiEngine::WaveManager::Start()
 	m_isSceneStart = false;
 
 	m_enemyDeadCount = 0;
-	m_maxEnemyCount = 10;
+	m_maxEnemyCount = 30;
 	m_enemySpawnCount = 0;
+
+	//エネミースポナーをスポーンさせる
+	SpawnEnemySpawner();
 }
 
 void ButiEngine::WaveManager::OnShowUI()
 {
-	GUI::BulletText("WaveNum");
-	GUI::InputInt("##waveNum", m_waveNum);
-	GUI::BulletText("MaxWaveNum");
-	GUI::InputInt("##maxWaveNum", m_maxWaveNum);
 	GUI::BulletText("MaxEnemyCount");
 	GUI::InputInt("##maxEnemyCount", m_maxEnemyCount);
-}
-
-void ButiEngine::WaveManager::WaveStart()
-{
-	m_isWaveTime = true;
 }
 
 void ButiEngine::WaveManager::AddEnemyDeadCount()
@@ -115,55 +82,7 @@ void ButiEngine::WaveManager::AddSpawnCount()
 	m_enemySpawnCount++;
 }
 
-void ButiEngine::WaveManager::FixWaveNum()
-{
-	//Wave番号を範囲内に修正
-	if (m_waveNum < 0)
-	{
-		m_waveNum = 0;
-	}
-	else if (m_waveNum > m_maxWaveNum)
-	{
-		m_waveNum = m_maxWaveNum;
-	}
-}
-
-void ButiEngine::WaveManager::MoveWave()
-{
-	//最終ウェーブをクリアしていたら通らないようにする
-	if (m_isLastWaveClear) return;
-
-	//プレイヤーがポップに触れたらウェーブ開始
-	if (m_vwp_startPopUpObject.lock()->IsHitPlayerFlag() && !m_isWaveTime)
-	{
-		//ウェーブ番号を進める
-		m_waveNum++;
-		FixWaveNum();
-
-		//ウェーブ開始
-		m_isWaveTime = true;
-
-		//ポップを引っ込める
-		m_vwp_startPopUpObject.lock()->DisappearPopUp();
-
-		//敵をスポーンさせる
-		//SpawnEnemy();
-	}
-
-	
-	////仮でボタンを5回押したらウェーブをクリアできるようにしている
-	//if (InputManager::IsTriggerCancelKey() && m_isWaveTime)
-	//{
-	//	m_enemyCount++;
-	//}
-	//フィールド内の敵をすべて倒していたら
-	if (m_enemyDeadCount >= m_maxEnemyCount && m_isWaveTime)
-	{
-		WaveFinish();
-	}
-}
-
-void ButiEngine::WaveManager::SpawnEnemy()
+void ButiEngine::WaveManager::SpawnEnemySpawner()
 {
 	////ウェーブ番号に応じて出現させる敵のパターンや配置を変える
 	////何ステージ目・何ウェーブ目・敵の名前・位置
@@ -192,27 +111,18 @@ void ButiEngine::WaveManager::SpawnEnemy()
 	//スポナーを生成
 	auto enemy0 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
 	enemy0->SetType(0);
-	//auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	//enemy1->SetType(1);
+	auto enemy1 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	enemy1->SetType(1);
 	auto enemy2 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
 	enemy2->SetType(2);
-	//auto enemy3 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	//enemy3->SetType(3);
-
-}
-
-void ButiEngine::WaveManager::WaveFinish()
-{
-	//ウェーブ終了
-	m_isWaveTime = false;
-	m_isPopupSpawn = true;
-	m_enemyDeadCount = 0;
+	auto enemy3 = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+	enemy3->SetType(3);
 }
 
 void ButiEngine::WaveManager::StageClearAnimation()
 {
-	//最終ウェーブクリア後に通るようにする
-	if (!m_isLastWaveClear) return;
+	//クリア時に通るようにする
+	if (!m_isClear) return;
 
 	if (!m_vwp_stageClearManagerComponent.lock())
 	{

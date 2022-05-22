@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "BeeSoulComponent.h"
+#include "BeeSoulPodUIComponent.h"
 #include "Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
 
 void ButiEngine::BeeSoulComponent::OnUpdate()
@@ -28,6 +29,7 @@ void ButiEngine::BeeSoulComponent::OnUpdate()
     }
     if (m_vlp_lifeTimer->Update())
     {
+        GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>()->AddSoulCount();
         gameObject.lock()->SetIsRemove(true);
     }
 }
@@ -52,13 +54,13 @@ void ButiEngine::BeeSoulComponent::Start()
     m_vlp_timer->Start();
     m_vlp_timer->ChangeCountFrame(4);
     m_vlp_waitTimer->Start();
-    m_vlp_waitTimer->ChangeCountFrame(60);
+    m_vlp_waitTimer->ChangeCountFrame(30);
     m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
     m_speed = 0.02f;
     m_animationCount = 0;
     m_maxAnimationCount = 2;
     m_vlp_lifeTimer->Start();
-    m_vlp_lifeTimer->ChangeCountFrame((std::int16_t)(1.0f / m_speed) + 60);
+    m_vlp_lifeTimer->ChangeCountFrame((std::int16_t)(1.0f / m_speed) + 30);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulComponent::Clone()
@@ -74,9 +76,9 @@ void ButiEngine::BeeSoulComponent::Move()
     {
         anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
         anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-        anim->GetTargetTransform()->SetWorldPosition(Vector3(-730, 275, 0));
+        anim->GetTargetTransform()->SetLocalPosition(Vector3(-730, 275, 0.01f));
         anim->SetSpeed(speed);
-        anim->SetEaseType(Easing::EasingType::EaseInQuad);
+        anim->SetEaseType(Easing::EasingType::EaseInExpo);
     }
     else
     {

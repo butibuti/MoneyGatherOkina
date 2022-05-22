@@ -28,26 +28,21 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void WaveStart();
 		void AddEnemyDeadCount();
 		void AddSpawnCount();
 
-		bool IsClearAnimation() { return m_isLastWaveClear; }
+		bool IsClearAnimation() { return m_isClear; }
 		bool IsGameOver() { return m_isGameOver; }
 		std::int32_t GetSpawnCount() { return m_enemySpawnCount; }
 		std::int32_t GetMaxEnemyCount() { return m_maxEnemyCount; }
 
 	private:
-		void FixWaveNum();
-		void MoveWave();
-		void SpawnEnemy();
-		void WaveFinish();
+		void SpawnEnemySpawner();
 		void StageClearAnimation();
 		void GameOverAnimation();
 		void PauseAnimation();
 		void StageProgressAnimation();
 
-		Value_weak_ptr<StartPopUpComponent> m_vwp_startPopUpObject;
 		Value_weak_ptr<Player> m_vwp_playerComponent;
 		Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimationComponent;
 		Value_weak_ptr<GameOverManagerComponent> m_vwp_gameOverManagerComponent;
@@ -55,18 +50,8 @@ namespace ButiEngine {
 		Value_weak_ptr<StageProgressUIComponent> m_vwp_stageProgressUIComponent;
 		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 
-		//ウェーブ番号
-		std::int32_t m_waveNum;
-		std::int32_t m_maxWaveNum;
-
-		std::int32_t m_clearAnimationTime;
-
-		//Wave中かどうか
-		bool m_isWaveTime; 
-		//ポップを出現させるためのフラグ
-		bool m_isPopupSpawn;
-		//最終ウェーブをクリアしているかどうか
-		bool m_isLastWaveClear;
+		//クリアしているかどうか
+		bool m_isClear;
 		//ゲームオーバーかどうか
 		bool m_isGameOver;
 		//次のシーンにいくためのボタンが押せる状態かどうか

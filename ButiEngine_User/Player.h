@@ -59,6 +59,9 @@ namespace ButiEngine {
 		void AddNearEnemyCount() { m_nearEnemyCount++; }
 		void KnockBack(const Vector3& arg_velocity);
 		void SetShockWaveScale(const Vector3& arg_scale);
+
+		std::uint16_t GetMaxSoulCount() { return m_maxSoulCount; }
+
 	private:
 		void Move();
 		void MoveKnockBack();

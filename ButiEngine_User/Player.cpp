@@ -218,9 +218,6 @@ void ButiEngine::Player::AddSoul()
 	if (m_soulCount == m_maxSoulCount) { return; }
 	m_soulCount++;
 	
-	auto beeSoulPodUIComponent = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
-	float soulRate = 1.0f - ((float)m_maxSoulCount - (float)m_soulCount) * 0.1f;
-	beeSoulPodUIComponent->SetSoulRate(soulRate);
 }
 
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)

@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Player;
+
 	class BeeSoulPodUIComponent :public GameComponent
 	{
 	public:
@@ -19,15 +21,20 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetSoulRate(const float arg_expRate);
+		void AddSoulCount();
 
 	private:
 		void Animation();
 
 		Value_weak_ptr<MeshDrawComponent> m_vwp_meshDrawComponent;
+		Value_weak_ptr<Player> m_vwp_playerComponent;
+		Value_weak_ptr<GameObject> m_vwp_player;
 
 		float m_previousRate;
 		float m_rate;
+
+		std::int16_t m_soulCount;
+		std::int16_t m_maxSoulCount;
 	};
 
 }
