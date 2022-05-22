@@ -196,13 +196,13 @@ void ButiEngine::Worker::Rupture(const Vector3& arg_dir)
 	m_isVibrate = false;
 	StopVibrationEffect();
 
-	std::int8_t frame = 30;
+	std::int8_t frame = 60;
 
 	Vector3 dir = arg_dir;
-	dir.y = 2.0f;
+	dir.y = 4.0f;
 	dir.Normalize();
-	gameObject.lock()->AddGameComponent<KnockBack>(dir, 1.0f, true, frame);
-	m_vlp_ruptureTimer = ObjectFactory::Create<RelativeTimer>(frame);
+	gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.5f, true, frame);
+	m_vlp_ruptureTimer = ObjectFactory::Create<RelativeTimer>(frame + 30);
 	m_vlp_ruptureTimer->Start();
 
 	m_isAttack = false;
@@ -265,7 +265,7 @@ void ButiEngine::Worker::CreateAttackFlashEffect()
 
 	if (m_vlp_attackFlashTimer->Update())
 	{
-		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 0.5f, 10.0f, Vector4(0.35, 1.0f, 1.0f, 1.0f));
+		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 0.5f, 20.0f, Vector4(0.35, 1.0f, 1.0f, 1.0f));
 	}
 }
 

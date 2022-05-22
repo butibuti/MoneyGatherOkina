@@ -610,7 +610,7 @@ cd ..\</Command>
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="WorldSpeedManager.cpp" />
     <ClCompile Include="ExpansionAnimationComponent.cpp" />
-    <ClCompile Include="WorningMark.cpp" />
+    <ClCompile Include="WarningMark.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationRemoverComponent.h" />
@@ -692,7 +692,7 @@ cd ..\</Command>
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="WorldSpeedManager.h" />
     <ClInclude Include="ExpansionAnimationComponent.h" />
-    <ClInclude Include="WorningMark.h" />
+    <ClInclude Include="WarningMark.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

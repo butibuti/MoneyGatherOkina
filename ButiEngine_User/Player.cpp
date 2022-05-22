@@ -30,10 +30,13 @@ void ButiEngine::Player::OnUpdate()
 
 	if (m_isIncrease)
 	{
+		constexpr float maxControllerVibration = 1.0f;
+		m_controllerVibration = MathHelper::Lerp(m_controllerVibration, maxControllerVibration, 0.025f);
 		IncreaseVibration();
 	}
 	else
 	{
+		m_controllerVibration = 0.0f;
 		DecreaseVibration();
 	}
 	VibrationEffect();
@@ -337,7 +340,7 @@ void ButiEngine::Player::VibrationController()
 	if (!m_isVibrate) { return; }
 
 	//float vibrationPower = m_vibration / m_maxVibration;
-	InputManager::VibrationStart(m_vibration * 0.3f);
+	InputManager::VibrationStart(m_controllerVibration);
 	//InputManager::VibrationStart(m_nearEnemyVibrationRate);
 }
 
@@ -570,4 +573,5 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_vibrationDecrease = 0.003f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isCapaOver = false;
+	m_controllerVibration = 0.0f;
 }

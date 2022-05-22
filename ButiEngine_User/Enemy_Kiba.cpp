@@ -4,17 +4,20 @@
 #include "Loiter.h"
 #include "SeparateDrawObject.h"
 #include "SphereExclusion.h"
+#include "WarningMark.h"
 
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
 	if (IsDetectionPlayer())
 	{
+		m_vwp_warningMark.lock()->Appear();
 		//m_vlp_loiter->MoveStop();
 		//m_vlp_lookAt->SetIsActive(false);
 		LookAtPlayer();
 	}
 	else
 	{
+		m_vwp_warningMark.lock()->Disappear();
 		m_rotationAngle = 0.0f;
 		//m_vlp_lookAt->SetIsActive(true);
 		//m_vlp_loiter->MoveStart();
@@ -48,6 +51,9 @@ void ButiEngine::Enemy_Kiba::Start()
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 
+	m_vwp_warningMark = GetManager().lock()->AddObjectFromCereal("WarningMark").lock()->GetGameComponent<WarningMark>();
+	m_vwp_warningMark.lock()->SetParent(gameObject);
+
 	m_detectionRange = 10.0f;
 	m_rotationAngle = 0.0f;
 	m_rotationAcceleration = 0.03f;
@@ -69,6 +75,11 @@ void ButiEngine::Enemy_Kiba::Dead()
 	if (m_vlp_enemy)
 	{
 		m_vlp_enemy->Explosion();
+	}
+
+	if (m_vwp_warningMark.lock())
+	{
+		m_vwp_warningMark.lock()->Dead();
 	}
 }
 

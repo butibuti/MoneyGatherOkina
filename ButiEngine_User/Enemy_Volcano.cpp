@@ -6,6 +6,7 @@
 #include "SeparateDrawObject.h"
 #include "EnemyScaleAnimationComponent.h"
 #include "PredictedPoint.h"
+#include "WarningMark.h"
 
 #include "InputManager.h"
 
@@ -16,13 +17,15 @@ void ButiEngine::Enemy_Volcano::OnUpdate()
 	//	ShotVolcanoRock();
 	//}
 
-	if (m_vlp_enemy->IsVibrate())
+	if (IsDetectionPlayer())
 	{
+		m_vwp_warningMark.lock()->Appear();
 		//Œƒ‰»Žž
 		m_rockShotRate = 30;
 	}
 	else
 	{
+		m_vwp_warningMark.lock()->Disappear();
 		//’ÊíŽž
 		m_rockShotRate = 90;
 	}
@@ -55,6 +58,9 @@ void ButiEngine::Enemy_Volcano::OnShowUI()
 void ButiEngine::Enemy_Volcano::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Volcano");
+
+	m_vwp_warningMark = GetManager().lock()->AddObjectFromCereal("WarningMark").lock()->GetGameComponent<WarningMark>();
+	m_vwp_warningMark.lock()->SetParent(gameObject);
 	
 	m_vlp_rockShotTimer->Start();
 
@@ -65,6 +71,7 @@ void ButiEngine::Enemy_Volcano::Start()
 	m_defaultScale = Vector3(1, 1, 1);
 	m_currentScale = m_defaultScale;
 	m_previousScale = m_currentScale;
+	m_detectionRange = 5.0f;
 
 	m_rockShotRate = 90;
 
@@ -81,6 +88,11 @@ void ButiEngine::Enemy_Volcano::Dead()
 	if (m_vlp_enemy)
 	{
 		m_vlp_enemy->Explosion();
+	}
+
+	if (m_vwp_warningMark.lock())
+	{
+		m_vwp_warningMark.lock()->Dead();
 	}
 }
 
@@ -144,4 +156,15 @@ void ButiEngine::Enemy_Volcano::SetEnemyParameter()
 	m_vlp_enemy->SetVibrationResistance(3.0f);
 	m_vlp_enemy->SetExplosionScale(10.0f);
 	m_vlp_enemy->SetWeight(1000.0f);
+}
+
+bool ButiEngine::Enemy_Volcano::IsDetectionPlayer()
+{
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 playerPos = m_vlp_enemy->GetPlayer().lock()->transform->GetLocalPosition();
+
+	float rangeSqr = m_detectionRange * m_detectionRange;
+	float distanceSqr = (pos - playerPos).GetLengthSqr();
+
+	return distanceSqr <= rangeSqr;
 }

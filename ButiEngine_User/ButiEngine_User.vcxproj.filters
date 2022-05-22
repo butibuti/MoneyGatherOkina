@@ -82,7 +82,7 @@
     <ClCompile Include="SpriteParticleGenerator.cpp" />
     <ClCompile Include="Enemy_Boss.cpp" />
     <ClCompile Include="Crystal.cpp" />
-    <ClCompile Include="WorningMark.cpp" />
+    <ClCompile Include="WarningMark.cpp" />
     <ClCompile Include="BossState_Fire.cpp" />
     <ClCompile Include="BossState_Crystal.cpp" />
     <ClCompile Include="BossState_Jump.cpp" />
@@ -171,7 +171,7 @@
     <ClInclude Include="SpriteParticleGenerator.h" />
     <ClInclude Include="Enemy_Boss.h" />
     <ClInclude Include="Crystal.h" />
-    <ClInclude Include="WorningMark.h" />
+    <ClInclude Include="WarningMark.h" />
     <ClInclude Include="BossState_Fire.h" />
     <ClInclude Include="BossState_Crystal.h" />
     <ClInclude Include="BossState_Jump.h" />

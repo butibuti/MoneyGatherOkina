@@ -19,7 +19,7 @@ void ButiEngine::KnockBack::OnUpdate()
 
 	if (m_isGravity)
 	{
-		constexpr float gravity = 0.04f;
+		constexpr float gravity = 0.015f;
 		m_velocityY -= gravity * GameDevice::WorldSpeed;
 		m_velocity.y = m_velocityY;
 	}

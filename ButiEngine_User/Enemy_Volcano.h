@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class Enemy;
 	class EnemyScaleAnimationComponent;
+	class WarningMark;
 
 	class Enemy_Volcano :public GameComponent
 	{
@@ -32,9 +33,12 @@ namespace ButiEngine {
 
 		void SetEnemyParameter();
 
+		bool IsDetectionPlayer();
+
 		Value_ptr<Enemy> m_vlp_enemy;
 		Value_ptr<Timer> m_vlp_rockShotTimer;
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
+		Value_weak_ptr<WarningMark> m_vwp_warningMark;
 
 		Vector3 m_randomVelocity;
 		Vector3 m_defaultScale;
@@ -42,6 +46,8 @@ namespace ButiEngine {
 		Vector3 m_previousScale;
 
 		std::int32_t m_rockShotRate;
+
+		float m_detectionRange;
 	};
 
 }

@@ -132,6 +132,7 @@ namespace ButiEngine {
 		float m_vibrationDecrease;
 		float m_nearEnemyVibrationRate;
 		bool m_isCapaOver;
+		float m_controllerVibration;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;

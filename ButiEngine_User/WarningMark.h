@@ -2,11 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class WorningMark :public GameComponent
+	class WarningMark :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()const override {
-			return "WorningMark";
+			return "WarningMark";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -20,15 +20,18 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetWaitFrame(const std::uint32_t arg_waitFrame) { m_vlp_waitTimer->ChangeCountFrame(arg_waitFrame); }
-		void SetAddObjectName(const std::string& arg_addObjectName) { m_addObjectName = arg_addObjectName; }
-	private:
-		void AddScaleAnimation();
+		void SetParent(Value_weak_ptr<GameObject> arg_parent) { m_parent = arg_parent; }
 
-		Value_ptr<Timer> m_vlp_waitTimer;
-		std::string m_addObjectName;
+		void Dead();
+		void Appear();
+		void Disappear();
+	private:
+		void AddScaleAnimation(const Vector3& arg_targetScale);
+
+		Value_weak_ptr<GameObject> m_parent;
+		bool m_isAppear;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(WorningMark, true);
+BUTI_REGIST_GAMECOMPONENT(WarningMark, true);

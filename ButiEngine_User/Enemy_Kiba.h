@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class Enemy;
 	class Loiter;
+	class WarningMark;
 
 	class Enemy_Kiba :public GameComponent
 	{
@@ -39,6 +40,7 @@ namespace ButiEngine {
 		Value_ptr<Loiter> m_vlp_loiter;
 		Value_weak_ptr<GameObject> m_vwp_fang;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
+		Value_weak_ptr<WarningMark> m_vwp_warningMark;
 
 		float m_detectionRange;
 

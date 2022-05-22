@@ -20,7 +20,7 @@ float ButiEngine::Flocking::m_leaderNearBorder = 1.7f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
-	SetViewRadius();
+	//SetViewRadius();
 	CalculateAveragePos();
 	CalculateMoveSpeed();
 	CalculateGatherVec();
