@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "FlockingLeader.h"
+#include "Flocking.h"
 
 void ButiEngine::FlockingLeader::OnUpdate()
 {
@@ -11,6 +12,8 @@ void ButiEngine::FlockingLeader::OnSet()
 {
 	auto tag = GameObjectTag("Leader");
 	gameObject.lock()->SetGameObjectTag(tag);
+
+	Flocking::ResetWorkers();
 }
 
 void ButiEngine::FlockingLeader::OnRemove()

@@ -4,6 +4,7 @@
 #include"TitleManagerComponent.h"
 #include "InputManager.h"
 #include"FloatMotionComponent.h"
+#include "Flocking.h"
 #include"ButiEngineHeader/Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
 void ButiEngine::StageSelectManagerComponent::OnUpdate()
 {

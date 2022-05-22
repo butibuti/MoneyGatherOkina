@@ -22,6 +22,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		static void ResetWorkers() { m_vec_workers.clear(); }
 	private:
 		void SetViewRadius();
 		void CalculateAveragePos();
