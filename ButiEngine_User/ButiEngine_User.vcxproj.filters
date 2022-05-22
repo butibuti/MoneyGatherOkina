@@ -89,6 +89,7 @@
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="StageClearManagerComponent.cpp" />
     <ClCompile Include="MoveAnimationComponent.cpp" />
+    <ClCompile Include="SoundPlayerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="StageClearManagerComponent.h" />
     <ClInclude Include="MoveAnimationComponent.h" />
+    <ClInclude Include="SoundPlayerComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

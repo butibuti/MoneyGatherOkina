@@ -581,6 +581,7 @@ cd ..\</Command>
     <ClCompile Include="SeparateDrawObject.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="ShockWave.cpp" />
+    <ClCompile Include="SoundPlayerComponent.cpp" />
     <ClCompile Include="SphereExclusion.cpp" />
     <ClCompile Include="SplashEffectComponent.cpp" />
     <ClCompile Include="SpriteParticleGenerator.cpp" />
@@ -669,6 +670,7 @@ cd ..\</Command>
     <ClInclude Include="SeparateDrawObject.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="ShockWave.h" />
+    <ClInclude Include="SoundPlayerComponent.h" />
     <ClInclude Include="SphereExclusion.h" />
     <ClInclude Include="SplashEffectComponent.h" />
     <ClInclude Include="SpriteParticleGenerator.h" />
