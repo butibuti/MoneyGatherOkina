@@ -18,14 +18,14 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (!m_isBomb && GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
-	{
-		BombStart();
-	}
-
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		Damage();
+	}
+
+	if (!m_isBomb && GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
+	{
+		BombStart();
 	}
 
 	if (m_isIncrease)
