@@ -14,6 +14,7 @@
 #include "ShakeComponent.h"
 #include "CameraShakeComponent.h"
 #include "NumberManagerComponent.h"
+#include "VignetteUIComponent.h"
 #include "Bomb_Player.h"
 
 void ButiEngine::Player::OnUpdate()
@@ -183,6 +184,8 @@ void ButiEngine::Player::Start()
 	m_vlp_particleTimer->Start();
 	m_vlp_particleTimer->ChangeCountFrame(4);
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
+
+	m_vwp_vignetteUI = GetManager().lock()->AddObjectFromCereal("VignetteUI");
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -326,6 +329,7 @@ void ButiEngine::Player::Damage()
 	if (m_isDead) { return; }
 	m_life--;
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
+	m_vwp_vignetteUI.lock()->GetGameComponent<VignetteUIComponent>()->StartAlphaAnimation();
 
 	if (m_life == 0)
 	{

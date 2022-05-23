@@ -603,6 +603,7 @@ cd ..\</Command>
     <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="VibrationSensor.cpp" />
+    <ClCompile Include="VignetteUIComponent.cpp" />
     <ClCompile Include="VolcanoRock.cpp" />
     <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="Worker.cpp" />
@@ -685,6 +686,7 @@ cd ..\</Command>
     <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="VibrationSensor.h" />
+    <ClInclude Include="VignetteUIComponent.h" />
     <ClInclude Include="VolcanoRock.h" />
     <ClInclude Include="WaveManager.h" />
     <ClInclude Include="Worker.h" />

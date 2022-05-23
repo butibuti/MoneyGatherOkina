@@ -155,6 +155,8 @@ namespace ButiEngine {
 		//パーティクル
 		Value_ptr<Timer> m_vlp_particleTimer;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
+
+		Value_weak_ptr<GameObject> m_vwp_vignetteUI;
 	};
 
 }

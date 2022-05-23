@@ -90,6 +90,7 @@
     <ClCompile Include="StageClearManagerComponent.cpp" />
     <ClCompile Include="MoveAnimationComponent.cpp" />
     <ClCompile Include="SoundPlayerComponent.cpp" />
+    <ClCompile Include="VignetteUIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="StageClearManagerComponent.h" />
     <ClInclude Include="MoveAnimationComponent.h" />
     <ClInclude Include="SoundPlayerComponent.h" />
+    <ClInclude Include="VignetteUIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
