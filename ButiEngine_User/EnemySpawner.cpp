@@ -57,6 +57,7 @@ void ButiEngine::EnemySpawner::Start()
 	m_vlp_spawnTimer->Start();
 	m_vlp_waitTimer->Start();
 	m_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	m_maxEnemyFieldCount = 7;
 	m_currentMaxSpawnFrame = 0;
 	m_currentMinSpawnFrame = 0;
 	m_startMaxSpawnFrame = 400;
@@ -90,6 +91,9 @@ void ButiEngine::EnemySpawner::OnShowUI()
 	default:
 		break;
 	}
+
+	GUI::BulletText("MaxFieldSpawnCount");
+	GUI::InputInt("##maxFieldCount", m_maxEnemyFieldCount);
 	
 	GUI::BulletText("CurrentMaxSpawnFrame");
 	GUI::BulletText(m_currentMaxSpawnFrame);
@@ -190,8 +194,10 @@ void ButiEngine::EnemySpawner::OnceUpdate()
 
 void ButiEngine::EnemySpawner::SpawnEnemy()
 {
-	//〇体出現していたらスポーンさせない
+	//ステージクリア上限数出現していたらスポーンさせない
 	if (m_waveManagerComponent.lock()->GetSpawnCount() >= m_waveManagerComponent.lock()->GetMaxEnemyCount()) { return; }
+	//〇体以上フィールドにいる場合は出現させない
+	if (m_waveManagerComponent.lock()->GetNowEnemyCount() >= m_maxEnemyFieldCount) { return; }
 
 	//敵を追加したらカウントを増やす
 	m_waveManagerComponent.lock()->AddSpawnCount();
@@ -204,8 +210,8 @@ void ButiEngine::EnemySpawner::SpawnEnemy()
 	auto player = GetManager().lock()->GetGameObject("Player");
 	Vector3 playerPosition = player.lock()->transform->GetLocalPosition();
 
-	//5回まで比較する
-	for (std::int8_t i = 0; i < 5; i++)
+	//8回まで比較する
+	for (std::int8_t i = 0; i < 8; i++)
 	{
 		bool isSucsess = true;
 		randomPosition.x = (float)ButiRandom::GetInt(-100, 100);

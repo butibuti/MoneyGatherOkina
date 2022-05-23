@@ -35,6 +35,7 @@ namespace ButiEngine {
 		bool IsGameOver() { return m_isGameOver; }
 		std::int32_t GetSpawnCount() { return m_enemySpawnCount; }
 		std::int32_t GetMaxEnemyCount() { return m_maxEnemyCount; }
+		std::int32_t GetNowEnemyCount() { return m_enemySpawnCount - m_enemyDeadCount; }
 
 	private:
 		void SpawnEnemySpawner();
@@ -67,6 +68,8 @@ namespace ButiEngine {
 		std::int32_t m_maxEnemyCount;
 		//〇体まで出現させるためのカウント
 		std::int32_t m_enemySpawnCount;
+		////現在フィールドにどれだけいるかのカウント
+		//std::int32_t m_nowEnemyCount;
 	};
 
 }

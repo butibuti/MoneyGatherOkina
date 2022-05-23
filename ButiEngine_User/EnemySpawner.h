@@ -35,6 +35,7 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_spawnTimer;
 		Value_ptr<Timer> m_vlp_waitTimer;
 		
+		std::int32_t m_maxEnemyFieldCount;
 		std::int32_t m_inputStageNumber;
 		std::int8_t m_spawnType;
 		std::string m_stageNumber;
