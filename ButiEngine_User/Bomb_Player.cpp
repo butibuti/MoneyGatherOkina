@@ -13,7 +13,9 @@ void ButiEngine::Bomb_Player::OnSet()
 void ButiEngine::Bomb_Player::Start()
 {
 	auto playerDrawObject = GetManager().lock()->GetGameObject("DrawObject_Player");
-	m_maxScale = playerDrawObject.lock()->transform->GetWorldScale() * 5.0f;
+	m_maxScale = playerDrawObject.lock()->transform->GetWorldScale() * 7.5f;
+
+	m_isAppear = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Bomb_Player::Clone()
