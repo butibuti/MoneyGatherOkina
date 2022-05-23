@@ -48,6 +48,10 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_chargeTimer;
 		Value_ptr<Timer> m_vlp_appearTimer;
 		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_weak_ptr<MeshDrawComponent> m_vwp_screenMeshDraw;
+
+		Vector4 m_defaultBloomPower;
+		Vector4 m_maxBloomPower;
 
 		bool m_isStrengthened;
 
