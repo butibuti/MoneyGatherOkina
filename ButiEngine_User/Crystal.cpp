@@ -36,11 +36,22 @@ void ButiEngine::Crystal::Start()
 
 	m_vlp_removeTagTimer = ObjectFactory::Create<RelativeTimer>(2);
 	m_vlp_removeTagTimer->Start();
+
+	m_defaultScale = Vector3(5.0f, 5.0f, 5.0f);
+	m_beforeDisappearScale = m_defaultScale;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Crystal::Clone()
 {
 	return ObjectFactory::Create<Crystal>();
+}
+
+void ButiEngine::Crystal::Appear()
+{
+}
+
+void ButiEngine::Crystal::Disappear()
+{
 }
 
 void ButiEngine::Crystal::SetEnemyParameter()

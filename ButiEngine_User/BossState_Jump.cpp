@@ -37,7 +37,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BossState_Jump::Clo
 	return ObjectFactory::Create<BossState_Jump>();
 }
 
-void ButiEngine::BossState_Jump::Dead()
+void ButiEngine::BossState_Jump::EndState()
 {
 	SetIsRemove(true);
 }

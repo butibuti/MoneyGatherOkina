@@ -31,7 +31,7 @@ namespace ButiEngine {
 
 		JumpPhase GetJumpPhase() { return m_phase; }
 
-		void Dead();
+		void EndState();
 	private:
 		void Wait();
 		void WaitStart();

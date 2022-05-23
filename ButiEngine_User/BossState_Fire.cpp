@@ -42,7 +42,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BossState_Fire::Clo
 	return ObjectFactory::Create<BossState_Fire>();
 }
 
-void ButiEngine::BossState_Fire::Dead()
+void ButiEngine::BossState_Fire::EndState()
 {
 	auto end = m_vec_fireBalls.end();
 	for (auto itr = m_vec_fireBalls.begin(); itr != end; ++itr)

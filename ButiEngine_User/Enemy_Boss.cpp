@@ -221,7 +221,7 @@ void ButiEngine::Enemy_Boss::RemoveAttackComponent()
 		auto fire = gameObject.lock()->GetGameComponent<BossState_Fire>();
 		if (fire)
 		{
-			fire->Dead();
+			fire->EndState();
 		}
 	}
 	else if (m_state == BossState::Crystal)
@@ -229,7 +229,7 @@ void ButiEngine::Enemy_Boss::RemoveAttackComponent()
 		auto crystal = gameObject.lock()->GetGameComponent<BossState_Crystal>();
 		if (crystal)
 		{
-			crystal->Dead();
+			crystal->EndState();
 		}
 	}
 	else if (m_state == BossState::Jump)
@@ -237,7 +237,7 @@ void ButiEngine::Enemy_Boss::RemoveAttackComponent()
 		auto jump = gameObject.lock()->GetGameComponent<BossState_Jump>();
 		if (jump)
 		{
-			jump->Dead();
+			jump->EndState();
 		}
 	}
 }

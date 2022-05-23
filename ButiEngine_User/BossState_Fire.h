@@ -21,7 +21,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void Dead();
+		void EndState();
 	private:
 		void CreateFireBall();
 

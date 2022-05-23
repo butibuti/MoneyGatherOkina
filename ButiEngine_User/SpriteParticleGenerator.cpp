@@ -44,7 +44,7 @@ void ButiEngine::SpriteParticleGenerator::AttackFlashParticles(const Vector3& ar
 	m_vwp_spriteParticleController.lock()->AddParticle(particle);
 }
 
-void ButiEngine::SpriteParticleGenerator::ChargeParticles(const Vector3& arg_position, const Vector4& arg_color)
+void ButiEngine::SpriteParticleGenerator::ChargeParticles(const Vector3& arg_position, const float arg_radius, const Vector4& arg_color)
 {
 	Particle2D particle;
 
@@ -57,7 +57,7 @@ void ButiEngine::SpriteParticleGenerator::ChargeParticles(const Vector3& arg_pos
 		dir.z = ButiRandom::GetInt(-100, 100);
 		dir.Normalize();
 
-		float spawnRadius = 5.0f * ButiRandom::GetRandom(0.3f, 1.0f);
+		float spawnRadius = arg_radius * ButiRandom::GetRandom(0.3f, 1.0f);
 
 		particle.position = arg_position + dir * spawnRadius;
 		particle.velocity = -dir * 0.1f;

@@ -19,22 +19,6 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (GetVibrationRate() >= 1.0f)
-	{
-		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 1.0f);
-
-		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 0.8f);
-	}
-	else
-	{
-		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.745f, 0.0f, 1.0f);
-
-		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.137f, 1.0f, 1.0f, 0.8f);
-	}
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		Damage();
@@ -381,6 +365,11 @@ void ButiEngine::Player::IncreaseVibration()
 	{
 		m_isCapaOver = true;
 		m_vibration = m_maxVibration + m_vibrationDecrease * 600;
+		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 1.0f);
+
+		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 0.8f);
 	}
 
 	if (!m_isVibrate)
@@ -399,6 +388,12 @@ void ButiEngine::Player::DecreaseVibration()
 	if (GetVibrationRate() < 1.0f)
 	{
 		m_isCapaOver = false;
+
+		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.745f, 0.0f, 1.0f);
+
+		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.137f, 1.0f, 1.0f, 0.8f);
 	}
 
 	if (m_vibration <= 0.0f)

@@ -2,6 +2,14 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class SpriteParticleGenerator;
+
+	enum class CrystalPhase
+	{
+		Charge,
+		Appear
+	};
+
 	class BossState_Crystal :public GameComponent
 	{
 	public:
@@ -21,11 +29,24 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void Dead();
+		void EndState();
 	private:
-		Value_ptr<Timer> m_vlp_waitTimer;
+		void Charge();
+		void ChargeStart();
+		void Appear();
+		void AppearStart();
+
+		void CreateObjectAround(const std::string& arg_objectName);
+
+		void SetPhaseParameter();
+
+		CrystalPhase m_phase;
+
+		Value_ptr<Timer> m_vlp_chargeTimer;
 
 		bool m_isStrengthened;
+
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerator;
 	};
 
 }
