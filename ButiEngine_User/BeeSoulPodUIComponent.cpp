@@ -5,6 +5,7 @@
 void ButiEngine::BeeSoulPodUIComponent::OnUpdate()
 {
 	Animation();
+	ScaleAnimation();
 }
 
 void ButiEngine::BeeSoulPodUIComponent::OnSet()
@@ -22,6 +23,9 @@ void ButiEngine::BeeSoulPodUIComponent::Start()
 {
 	m_vwp_meshDrawComponent = gameObject.lock()->GetGameComponent<MeshDrawComponent>(1);
 	m_maxSoulCount = 100;
+
+	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
+	m_currentScale = m_defaultScale;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulPodUIComponent::Clone()
@@ -32,6 +36,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulPodUICompone
 void ButiEngine::BeeSoulPodUIComponent::AddSoulCount()
 {
 	m_soulCount++;
+	m_currentScale = Vector3(100, 100, 1);
 	if (m_soulCount > m_maxSoulCount)
 	{
 		m_soulCount = m_maxSoulCount;
@@ -46,4 +51,11 @@ void ButiEngine::BeeSoulPodUIComponent::Animation()
 	m_previousRate = MathHelper::Lerp(m_previousRate, m_rate, lerpScale);
 
 	m_vwp_meshDrawComponent.lock()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().ExInfo.y = 1.0f - m_previousRate;
+}
+
+void ButiEngine::BeeSoulPodUIComponent::ScaleAnimation()
+{
+	m_currentScale.x = MathHelper::Lerp(m_currentScale.x, m_defaultScale.x, 0.2f);
+	m_currentScale.y = MathHelper::Lerp(m_currentScale.y, m_defaultScale.y, 0.2f);
+	gameObject.lock()->transform->SetLocalScale(m_currentScale);
 }

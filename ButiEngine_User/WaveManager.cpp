@@ -62,12 +62,16 @@ void ButiEngine::WaveManager::Start()
 	m_maxEnemyCount = 30;
 	m_enemySpawnCount = 0;
 
-	std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
 
-	if (sceneName != "Stage_4")
+	if (m_sceneName != "Stage_4")
 	{
 		//エネミースポナーをスポーンさせる
 		SpawnEnemySpawner();
+	}
+	else
+	{
+		m_maxEnemyCount = 1;
 	}
 }
 

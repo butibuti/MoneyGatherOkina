@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "HeartUIManagerComponent.h"
+#include "ShakeComponent.h"
 #include "Player.h"
 
 void ButiEngine::HeartUIManagerComponent::OnUpdate()
@@ -10,6 +11,14 @@ void ButiEngine::HeartUIManagerComponent::OnUpdate()
 		m_vec_vlp_heartUI[m_lifeCount - 1]->SetIsRemove(true);
 		m_vec_vlp_heartUI[m_lifeCount - 1] = Value_ptr<GameObject>();
 		m_lifeCount = playerLife;
+
+		for (std::int8_t i = 0; i < m_lifeCount; i++)
+		{
+			auto shakeComponent = m_vec_vlp_heartUI[i]->GetGameComponent<ShakeComponent>();
+			shakeComponent->Shake(3.0f, 20);
+			shakeComponent->SetShakeAxis(Vector3(0, 0, 1));
+		}
+
 	}
 	//else/* if (m_lifeCount < playerLife)*/
 	//{

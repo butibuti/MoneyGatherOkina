@@ -51,6 +51,8 @@ namespace ButiEngine {
 		Value_weak_ptr<StageProgressUIComponent> m_vwp_stageProgressUIComponent;
 		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 
+		std::string m_sceneName;
+
 		//クリアしているかどうか
 		bool m_isClear;
 		//ゲームオーバーかどうか

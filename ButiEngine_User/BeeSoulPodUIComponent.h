@@ -28,8 +28,12 @@ namespace ButiEngine {
 
 	private:
 		void Animation();
+		void ScaleAnimation();
 
 		Value_weak_ptr<MeshDrawComponent> m_vwp_meshDrawComponent;
+
+		Vector3 m_currentScale;
+		Vector3 m_defaultScale;
 
 		float m_previousRate;
 		float m_rate;
