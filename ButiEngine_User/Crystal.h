@@ -2,6 +2,15 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class SeparateDrawObject;
+
+	enum class CrystalPhase
+	{
+		Appear,
+		Wait,
+		Disappear
+	};
+
 	class Crystal :public GameComponent
 	{
 	public:
@@ -20,11 +29,28 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
+		void Dead();
 	private:
+		void Appear();
+		void AppearStart();
+		void Wait();
+		void WaitStart();
+		void Disappeaer();
+		void DisappeaerStart();
+
 		void SetEnemyParameter();
+		void SetPhaseParameter();
 		
+		Value_ptr<Timer> m_vlp_lifeTimer;
 		Value_ptr<Timer> m_vlp_removeTagTimer;
+
+		CrystalPhase m_phase;
+
+		Value_ptr<Timer> m_vlp_appearTimer;
+		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_ptr<Timer> m_vlp_disappearTimer;
+
+		Vector3 m_defaultScale;
 	};
 
 }

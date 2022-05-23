@@ -20,6 +20,7 @@
 #include "SpriteParticleGenerator.h"
 #include "CameraShakeComponent.h"
 #include "KnockBack.h"
+#include "Crystal.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = false;
@@ -252,11 +253,11 @@ void ButiEngine::Enemy::Dead()
 		volcano->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
+	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
 	RemoveAllPocket();
-	AddDeadCount();
 	StopVibrationEffect();
 
 	m_vlp_playerComponent->SetIsIncrease(false);
@@ -265,6 +266,11 @@ void ButiEngine::Enemy::Dead()
 	if (boss)
 	{
 		gameObject.lock()->SetIsRemove(true);
+		return;
+	}
+	if (crystal)
+	{
+		crystal->Dead();
 		return;
 	}
 
@@ -279,6 +285,8 @@ void ButiEngine::Enemy::Dead()
 
 	//Ž€‚ñ‚¾‚ç‰æ–Ê—h‚ç‚·
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
+
+	AddDeadCount();
 }
 
 void ButiEngine::Enemy::Explosion()

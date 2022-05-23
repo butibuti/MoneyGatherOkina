@@ -4,10 +4,11 @@ namespace ButiEngine {
 
 	class SpriteParticleGenerator;
 
-	enum class CrystalPhase
+	enum class CrystalStatePhase
 	{
 		Charge,
-		Appear
+		Appear,
+		Wait
 	};
 
 	class BossState_Crystal :public GameComponent
@@ -35,14 +36,18 @@ namespace ButiEngine {
 		void ChargeStart();
 		void Appear();
 		void AppearStart();
+		void Wait();
+		void WaitStart();
 
 		void CreateObjectAround(const std::string& arg_objectName);
 
 		void SetPhaseParameter();
 
-		CrystalPhase m_phase;
+		CrystalStatePhase m_phase;
 
 		Value_ptr<Timer> m_vlp_chargeTimer;
+		Value_ptr<Timer> m_vlp_appearTimer;
+		Value_ptr<Timer> m_vlp_waitTimer;
 
 		bool m_isStrengthened;
 

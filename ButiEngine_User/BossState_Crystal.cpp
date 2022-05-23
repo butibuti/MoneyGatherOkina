@@ -8,10 +8,10 @@ void ButiEngine::BossState_Crystal::OnUpdate()
 {
 	switch (m_phase)
 	{
-	case ButiEngine::CrystalPhase::Charge:
+	case ButiEngine::CrystalStatePhase::Charge:
 		Charge();
 		break;
-	case ButiEngine::CrystalPhase::Appear:
+	case ButiEngine::CrystalStatePhase::Appear:
 		Appear();
 		break;
 	default:
@@ -66,20 +66,39 @@ void ButiEngine::BossState_Crystal::Charge()
 
 void ButiEngine::BossState_Crystal::ChargeStart()
 {
-	m_phase = CrystalPhase::Charge;
+	m_phase = CrystalStatePhase::Charge;
 	m_vlp_chargeTimer->Start();
 }
 
 void ButiEngine::BossState_Crystal::Appear()
 {
-	CreateObjectAround("Crystal");
-	EndState();
+	if (m_vlp_appearTimer->Update())
+	{
+		CreateObjectAround("Crystal");
+		WaitStart();
+		EndState();
+	}
 }
 
 void ButiEngine::BossState_Crystal::AppearStart()
 {
-	m_phase = CrystalPhase::Appear;
+	m_phase = CrystalStatePhase::Appear;
 	CreateObjectAround("PredictedPoint");
+	m_vlp_appearTimer->Start();
+}
+
+void ButiEngine::BossState_Crystal::Wait()
+{
+	if (m_vlp_waitTimer->Update())
+	{
+		EndState();
+	}
+}
+
+void ButiEngine::BossState_Crystal::WaitStart()
+{
+	m_phase = CrystalStatePhase::Wait;
+	m_vlp_waitTimer->Start();
 }
 
 void ButiEngine::BossState_Crystal::CreateObjectAround(const std::string& arg_objectName)
@@ -100,7 +119,7 @@ void ButiEngine::BossState_Crystal::CreateObjectAround(const std::string& arg_ob
 		auto objectCenter = gameObject.lock()->transform->Clone();
 		auto objectTransform = ObjectFactory::Create<Transform>();
 		objectTransform->SetBaseTransform(objectCenter);
-		objectTransform->SetLocalPosition(Vector3(-(radius + 4.0f + (i * 5.0f)) / gameObject.lock()->transform->GetLocalScale().x, 0.0f, 0.0f));
+		objectTransform->SetLocalPosition(Vector3(-(radius + 6.0f + (i * 7.0f)) / gameObject.lock()->transform->GetLocalScale().x, 0.0f, 0.0f));
 
 		float rollAngle = 360.0f / objectCount;
 
@@ -114,7 +133,7 @@ void ButiEngine::BossState_Crystal::CreateObjectAround(const std::string& arg_ob
 			auto predictedPoint = object.lock()->GetGameComponent<PredictedPoint>();
 			if (predictedPoint)
 			{
-				predictedPoint->SetLife(180);
+				predictedPoint->SetLife(60);
 			}
 
 			objectCenter->RollLocalRotationY_Degrees(rollAngle);
@@ -125,6 +144,8 @@ void ButiEngine::BossState_Crystal::CreateObjectAround(const std::string& arg_ob
 void ButiEngine::BossState_Crystal::SetPhaseParameter()
 {
 	m_vlp_chargeTimer = ObjectFactory::Create<RelativeTimer>(180);
+	m_vlp_appearTimer = ObjectFactory::Create<RelativeTimer>(60);
+	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>(240);
 	
 	ChargeStart();
 }
