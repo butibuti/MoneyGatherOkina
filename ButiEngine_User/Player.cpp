@@ -19,6 +19,22 @@
 
 void ButiEngine::Player::OnUpdate()
 {
+	if (GetVibrationRate() >= 1.0f)
+	{
+		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 1.0f);
+
+		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 0.8f);
+	}
+	else
+	{
+		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.745f, 0.0f, 1.0f);
+
+		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.137f, 1.0f, 1.0f, 0.8f);
+	}
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		Damage();
@@ -148,8 +164,8 @@ void ButiEngine::Player::Start()
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
 	m_maxMoveSpeed = 0.25f;
-	m_acceleration = 0.01f;
-	m_deceleration = 0.01f;
+	m_acceleration = 0.1f;
+	m_deceleration = 0.1f;
 
 	CreateSensorObject();
 
@@ -565,7 +581,7 @@ void ButiEngine::Player::CreateSensorObject()
 
 void ButiEngine::Player::CreateBombObject()
 {
-	m_vlp_bombTimer = ObjectFactory::Create<RelativeTimer>(300);
+	m_vlp_bombTimer = ObjectFactory::Create<RelativeTimer>(600);
 
 	m_vwp_bomb = GetManager().lock()->AddObjectFromCereal("Bomb_Player");
 	m_vwp_bomb.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -588,8 +604,8 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_vibration = 0.0f;
 	m_maxVibration = 1.0f;
 	m_nearEnemyCount = 0;
-	m_vibrationIncrease = 0.024f;
-	m_vibrationDecrease = 0.003f;
+	m_vibrationIncrease = 0.005f;
+	m_vibrationDecrease = 0.002f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isCapaOver = false;
 	m_controllerVibration = 0.0f;

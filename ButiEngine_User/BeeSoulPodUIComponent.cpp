@@ -33,7 +33,7 @@ void ButiEngine::BeeSoulPodUIComponent::Start()
 	m_vwp_appealRBUI = GetManager().lock()->GetGameObject("AppealRBUI").lock()->GetGameComponent<AppealRBUI>();
 
 	m_vwp_meshDrawComponent = gameObject.lock()->GetGameComponent<MeshDrawComponent>(1);
-	m_maxSoulCount = 50;
+	m_maxSoulCount = 33;
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_currentScale = m_defaultScale;
