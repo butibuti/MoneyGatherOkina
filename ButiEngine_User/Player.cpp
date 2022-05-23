@@ -497,6 +497,7 @@ void ButiEngine::Player::ShakeDrawObject()
 
 void ButiEngine::Player::BombStart()
 {
+	if (!m_vwp_bomb.lock()) { return; }
 	if (m_isBomb) { return; }
 	if (m_vwp_beeSoulPod.lock()->GetSoulRate() < 1.0f) { return; }
 
@@ -512,6 +513,7 @@ void ButiEngine::Player::BombStart()
 
 void ButiEngine::Player::Bomb()
 {
+	if (!m_vwp_bomb.lock()) { return; }
 	if (m_vlp_bombTimer->Update())
 	{
 		m_vlp_bombTimer->Stop();
