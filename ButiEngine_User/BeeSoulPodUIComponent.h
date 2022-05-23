@@ -2,7 +2,7 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Player;
+	class AppealRBUI;
 
 	class BeeSoulPodUIComponent :public GameComponent
 	{
@@ -31,6 +31,7 @@ namespace ButiEngine {
 		void ScaleAnimation();
 
 		Value_weak_ptr<MeshDrawComponent> m_vwp_meshDrawComponent;
+		Value_weak_ptr<AppealRBUI> m_vwp_appealRBUI;
 
 		Vector3 m_currentScale;
 		Vector3 m_defaultScale;

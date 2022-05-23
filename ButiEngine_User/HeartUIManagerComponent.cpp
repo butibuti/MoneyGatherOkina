@@ -54,7 +54,7 @@ void ButiEngine::HeartUIManagerComponent::OnShowUI()
 
 void ButiEngine::HeartUIManagerComponent::Start()
 {
-	m_heartUIPosition = Vector3(-870, 440, 0);
+	m_heartUIPosition = Vector3(-815, 440, 0);
 	m_heartUIScale = Vector3(160, 160, 1);
 	m_space = -20.0f;
 

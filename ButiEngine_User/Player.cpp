@@ -560,7 +560,7 @@ void ButiEngine::Player::CreateSensorObject()
 	m_vwp_sensor = GetManager().lock()->AddObjectFromCereal("Sensor");
 	m_vwp_sensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	m_minSensorScale = Vector3(2.0f, 2.0f, 2.0f);
-	m_maxSensorScale = Vector3(8.0f, 8.0f, 8.0f);
+	m_maxSensorScale = Vector3(10.0f, 10.0f, 10.0f);
 }
 
 void ButiEngine::Player::CreateBombObject()

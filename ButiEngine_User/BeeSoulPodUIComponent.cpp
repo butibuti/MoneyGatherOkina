@@ -1,9 +1,18 @@
 #include "stdafx_u.h"
 #include "BeeSoulPodUIComponent.h"
-#include "Player.h"
+#include "AppealRBUI.h"
 
 void ButiEngine::BeeSoulPodUIComponent::OnUpdate()
 {
+	if (m_soulCount == m_maxSoulCount)
+	{
+		m_vwp_appealRBUI.lock()->Appear();
+	}
+	else
+	{
+		m_vwp_appealRBUI.lock()->Disappear();
+	}
+
 	Animation();
 	ScaleAnimation();
 }
@@ -21,8 +30,10 @@ void ButiEngine::BeeSoulPodUIComponent::OnShowUI()
 
 void ButiEngine::BeeSoulPodUIComponent::Start()
 {
+	m_vwp_appealRBUI = GetManager().lock()->GetGameObject("AppealRBUI").lock()->GetGameComponent<AppealRBUI>();
+
 	m_vwp_meshDrawComponent = gameObject.lock()->GetGameComponent<MeshDrawComponent>(1);
-	m_maxSoulCount = 100;
+	m_maxSoulCount = 50;
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_currentScale = m_defaultScale;

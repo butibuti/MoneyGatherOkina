@@ -90,6 +90,7 @@
     <ClCompile Include="StageClearManagerComponent.cpp" />
     <ClCompile Include="MoveAnimationComponent.cpp" />
     <ClCompile Include="SoundPlayerComponent.cpp" />
+    <ClCompile Include="AppealRBUI.cpp" />
     <ClCompile Include="VignetteUIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="MoveAnimationComponent.h" />
     <ClInclude Include="SoundPlayerComponent.h" />
     <ClInclude Include="VignetteUIComponent.h" />
+    <ClInclude Include="AppealRBUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
