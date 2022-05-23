@@ -66,6 +66,19 @@ void ButiEngine::WaveManager::Start()
 
 	if (m_sceneName != "Stage_4")
 	{
+		if (m_sceneName == "Stage_1")
+		{
+			m_maxEnemyCount = 100;
+		}
+		else if (m_sceneName == "Stage_2")
+		{
+			m_maxEnemyCount = 200;
+		}
+		else if (m_sceneName == "Stage_3")
+		{
+			m_maxEnemyCount = 300;
+		}
+
 		//エネミースポナーをスポーンさせる
 		SpawnEnemySpawner();
 	}
