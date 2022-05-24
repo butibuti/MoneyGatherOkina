@@ -12,6 +12,7 @@ void ButiEngine::NumberManagerComponent::OnUpdate()
 		UpdateNumbers();
 	}
 	UpdateParams();
+	ScaleAnimation();
 }
 
 void ButiEngine::NumberManagerComponent::OnSet()
@@ -40,11 +41,25 @@ void ButiEngine::NumberManagerComponent::Start()
 		drawNumber.lock()->transform->SetLocalPosition(position);
 		drawNumber.lock()->GetGameComponent<NumberComponent>()->SetScale(m_scale);
 	}
+
+	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
+	m_currentScale = m_defaultScale;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::NumberManagerComponent::Clone()
 {
 	return ObjectFactory::Create<NumberManagerComponent>();
+}
+
+void ButiEngine::NumberManagerComponent::SetScaleAnimationActive(const bool arg_isScaleAnimationActive)
+{
+	m_isScaleAnimationActive = arg_isScaleAnimationActive;
+}
+
+void ButiEngine::NumberManagerComponent::ScaleAnimationStart(const Vector3& arg_scale)
+{
+	m_isScaleAnimationActive = true;
+	m_currentScale = arg_scale;
 }
 
 void ButiEngine::NumberManagerComponent::FixNumber()
@@ -91,6 +106,16 @@ void ButiEngine::NumberManagerComponent::UpdateParams()
 		numberComponent->SetScale(m_scale);
 		numberComponent->SetRotate(m_rotate);
 	}
+}
+
+void ButiEngine::NumberManagerComponent::ScaleAnimation()
+{
+	if (!m_isScaleAnimationActive) { return; }
+
+	m_currentScale.x = MathHelper::Lerp(m_currentScale.x, m_defaultScale.x, 0.2f);
+	m_currentScale.y = MathHelper::Lerp(m_currentScale.y, m_defaultScale.y, 0.2f);
+	m_currentScale.z = MathHelper::Lerp(m_currentScale.z, m_defaultScale.z, 0.2f);
+	gameObject.lock()->transform->SetLocalScale(m_currentScale);
 }
 
 //“n‚³‚ê‚½’l‚ÌŒ…”‚ğ•Ô‚·ŠÖ”

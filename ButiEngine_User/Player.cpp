@@ -453,6 +453,13 @@ void ButiEngine::Player::VibrationPowerDrawUpdate()
 	auto vibPower = m_vibration / m_maxVibration; //0～1
 	std::int32_t vibParcent = vibPower * 100;
 
+	if (m_previousVibrationPower < vibPower)
+	{
+		m_vibUpCount++;
+	}
+
+	m_previousVibrationPower = vibPower;
+
 	//0～99に補正
 	if (vibParcent < 0)
 	{
@@ -460,15 +467,29 @@ void ButiEngine::Player::VibrationPowerDrawUpdate()
 	}
 	else if (vibParcent >= 100)
 	{
+		//Max
 		vibParcent = 99;
 		m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-700, -400, 50));
 		m_vwp_numberManager.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
+		m_vwp_numberManagerComponent.lock()->SetScaleAnimationActive(false);
 		m_vwp_maxUI.lock()->transform->SetLocalScale(m_defaultMaxUIScale);
+		m_isFixNumberUIScale = true;
 	}
 	else
 	{
+		if (m_vibUpCount > 15)
+		{
+			m_vibUpCount = 0;
+			//ここでアニメーション開始する関数呼ぶ
+			auto upScale = Vector3(m_defaultNumberUIScale.x, m_defaultNumberUIScale.y * 1.5f, m_defaultNumberUIScale.z);
+			m_vwp_numberManagerComponent.lock()->ScaleAnimationStart(upScale);
+		}
+		else if (m_isFixNumberUIScale)
+		{
+			m_isFixNumberUIScale = false;
+			m_vwp_numberManager.lock()->transform->SetLocalScale(m_defaultNumberUIScale);
+		}
 		m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-825, -390, 50));
-		m_vwp_numberManager.lock()->transform->SetLocalScale(m_defaultNumberUIScale);
 		m_vwp_maxUI.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 	}
 
@@ -606,4 +627,6 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isCapaOver = false;
 	m_controllerVibration = 0.0f;
+	m_previousVibrationPower = 0;
+	m_isFixNumberUIScale = false;
 }

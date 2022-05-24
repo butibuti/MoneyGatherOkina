@@ -26,14 +26,20 @@ namespace ButiEngine {
 		void SetColor(const Vector4& arg_color) { m_color = arg_color; }
 		void SetRotate(const Vector4& arg_rotate) { m_rotate = arg_rotate; }
 
+		void SetScaleAnimationActive(const bool arg_isScaleAnimationActive);
+		void ScaleAnimationStart(const Vector3& arg_scale);
+
 	private:
 		void FixNumber();
 		void UpdateNumbers();
 		void UpdateParams();
+		void ScaleAnimation();
 		std::int32_t GetDigit(const std::int32_t arg_number);
 
 		std::vector<Value_ptr<GameObject>> m_vec_vlp_numbers;
 
+		Vector3 m_defaultScale;
+		Vector3 m_currentScale;
 		Vector3 m_scale;
 		Vector3 m_rotate;
 		Vector4 m_color;
@@ -43,6 +49,8 @@ namespace ButiEngine {
 		std::int32_t m_number;
 		std::int32_t m_previousNumber;
 		std::int32_t m_maxDigit;
+
+		bool m_isScaleAnimationActive;
 
 	};
 }
