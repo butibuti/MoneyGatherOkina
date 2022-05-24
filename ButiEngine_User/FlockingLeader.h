@@ -2,10 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class SpriteParticleGenerator;
+
 	class FlockingLeader :public GameComponent
 	{
 	public:
-
 		std::string GetGameComponentName()const override {
 			return "FlockingLeader";
 		}
@@ -25,6 +26,8 @@ namespace ButiEngine {
 	private:
 		Vector3 m_prevPos;
 		Vector3 m_pos;
+
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerator;
 	};
 
 }

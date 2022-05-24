@@ -69,7 +69,7 @@ void ButiEngine::BossState_Crystal::Charge()
 	bloomPower.w = 1.0f;
 	m_vwp_screenMeshDraw.lock()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = bloomPower;
 
-	m_vwp_spriteParticleGenerator.lock()->ChargeParticles(gameObject.lock()->transform->GetLocalPosition(), 15.0f, ButiColor::White());
+	m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 15.0f, ButiColor::White());
 	if (m_vlp_chargeTimer->Update())
 	{
 		m_vlp_chargeTimer->Stop();

@@ -76,7 +76,7 @@ void ButiEngine::FireBall::Dead()
 
 void ButiEngine::FireBall::Charge()
 {
-	m_vwp_spriteParticleGenerator.lock()->ChargeParticles(gameObject.lock()->transform->GetLocalPosition(), 5.0f, Vector4(1.0f, 0.0f, 0.86f, 1.0f));
+	m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 5.0f, Vector4(1.0f, 0.0f, 0.86f, 1.0f));
 
 	if (m_vlp_chargeTimer->Update())
 	{
