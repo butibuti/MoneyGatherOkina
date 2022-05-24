@@ -25,6 +25,7 @@ namespace ButiEngine {
 
 		static void ResetWorkers() { m_vec_workers.clear(); }
 	private:
+		void SetCohesionWeight();
 		void SetViewRadius();
 		void CalculateAveragePos();
 		void CalculateMoveSpeed();
@@ -42,6 +43,8 @@ namespace ButiEngine {
 
 		static float m_gatherWeight;
 		static float m_cohesionWeight;
+		static float m_minCohesionWeight;
+		static float m_maxCohesionWeight;
 		static float m_alignmentWeight;
 		static float m_separationWeight;
 		static float m_avoidPlayerWeight;

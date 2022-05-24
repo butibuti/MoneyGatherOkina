@@ -24,7 +24,7 @@ void ButiEngine::Player::OnUpdate()
 		Damage();
 	}
 
-	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
+	if (InputManager::IsTriggerBombKey())
 	{
 		BombStart();
 	}

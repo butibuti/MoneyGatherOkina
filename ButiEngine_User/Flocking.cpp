@@ -2,24 +2,27 @@
 #include "Flocking.h"
 #include "Player.h"
 #include "FlockingLeader.h"
-#include "SeparateDrawObject.h"
+#include "InputManager.h"
 
 std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking::m_vec_workers;
 float ButiEngine::Flocking::m_gatherWeight = 0.0f;
 float ButiEngine::Flocking::m_cohesionWeight = 0.1f;
-float ButiEngine::Flocking::m_alignmentWeight = 0.0f;
-float ButiEngine::Flocking::m_separationWeight = 0.3f;
+float ButiEngine::Flocking::m_minCohesionWeight = 0.1f;
+float ButiEngine::Flocking::m_maxCohesionWeight = 1.0f;
+float ButiEngine::Flocking::m_alignmentWeight = 1.0f;
+float ButiEngine::Flocking::m_separationWeight = 1.0f;
 float ButiEngine::Flocking::m_avoidPlayerWeight = 0.3f;
-float ButiEngine::Flocking::m_surroundWeight = 1.0f;
-float ButiEngine::Flocking::m_viewRadius = 7.0f;
-float ButiEngine::Flocking::m_minViewRadius = 7.0f;
-float ButiEngine::Flocking::m_maxViewRadius = 10.0f;
+float ButiEngine::Flocking::m_surroundWeight = 0.5f;
+float ButiEngine::Flocking::m_viewRadius = 0.1f;
+float ButiEngine::Flocking::m_minViewRadius = 0.1f;
+float ButiEngine::Flocking::m_maxViewRadius = 0.1f;
 float ButiEngine::Flocking::m_nearBorder = 1.2f;
 float ButiEngine::Flocking::m_playerNearBorder = 1.7f;
 float ButiEngine::Flocking::m_leaderNearBorder = 1.7f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
+	SetCohesionWeight();
 	//SetViewRadius();
 	CalculateAveragePos();
 	CalculateMoveSpeed();
@@ -97,6 +100,18 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Flocking::Clone()
 	return ObjectFactory::Create<Flocking>();
 }
 
+void ButiEngine::Flocking::SetCohesionWeight()
+{
+	if (InputManager::IsPushGatherKey())
+	{
+		m_cohesionWeight = m_maxCohesionWeight;
+	}
+	else
+	{
+		m_cohesionWeight = m_minCohesionWeight;
+	}
+}
+
 void ButiEngine::Flocking::SetViewRadius()
 {
 	if (m_vec_workers.size() < 25)
@@ -145,11 +160,11 @@ void ButiEngine::Flocking::CalculateMoveSpeed()
 	float leaderSpeed = m_vlp_flockingLeader->GetMoveSpeed();
 	if (IsNearLeader(m_averagePos))
 	{
-		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed, 0.5f * GameDevice::WorldSpeed);
+		//m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed, 0.05f * GameDevice::WorldSpeed);
 	}
 	else
 	{
-		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed * 1.3f, 0.5f * GameDevice::WorldSpeed);
+		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed * 1.1f, 0.05f * GameDevice::WorldSpeed);
 		m_moveSpeed = max(m_moveSpeed, m_playerMaxMoveSpeed);
 	}
 }
