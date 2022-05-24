@@ -7,14 +7,14 @@ void ButiEngine::VignetteUIComponent::OnUpdate()
 	{
 		if (m_isChange)
 		{
-			m_alpha += m_moveAlpha * 2.0f * GameDevice::WorldSpeed;
+			m_alpha += m_moveAlpha * 2.0f;
 		}
 		else
 		{
-			m_alpha -= m_moveAlpha * GameDevice::WorldSpeed;
+			m_alpha -= m_moveAlpha;
 		}
 	}
-	else
+	else if(!m_isKeepAlpha)
 	{
 		if (m_isChange)
 		{

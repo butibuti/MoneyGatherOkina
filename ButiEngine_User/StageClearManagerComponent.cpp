@@ -18,7 +18,7 @@ void ButiEngine::StageClearManagerComponent::OnUpdate()
 
 void ButiEngine::StageClearManagerComponent::OnSet()
 {
-	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(180);
+	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(120);
 	m_vlp_addTimer = ObjectFactory::Create<AbsoluteTimer>(7);
 }
 
@@ -33,7 +33,7 @@ void ButiEngine::StageClearManagerComponent::Start()
 
 	//このコンポーネントが生成された瞬間にスロー効果をつける
 	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
-	m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.2f, 180);
+	m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.2f, 120);
 
 	m_uiCount = 0;
 }
