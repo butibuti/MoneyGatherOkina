@@ -5,6 +5,9 @@
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
 
+std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 5;
+float ButiEngine::Enemy_Stalker::m_createPocketRadius = 1.0f;
+
 void ButiEngine::Enemy_Stalker::OnUpdate()
 {
 	if (m_isPrey)
@@ -45,6 +48,11 @@ void ButiEngine::Enemy_Stalker::OnRemove()
 
 void ButiEngine::Enemy_Stalker::OnShowUI()
 {
+	GUI::BulletText("PocketCount");
+	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
+	GUI::BulletText("PocketRadius");
+	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
+
 	GUI::BulletText("MaxMoveSpeed");
 	GUI::DragFloat("##moveSpeed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
@@ -62,7 +70,7 @@ void ButiEngine::Enemy_Stalker::Start()
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 
 	m_velocity = Vector3Const::Zero;
-	m_maxMoveSpeed = 0.15f;
+	m_maxMoveSpeed = 0.125f;
 	m_acceleration = 0.01f;
 
 	m_vlp_preyTimer = ObjectFactory::Create<RelativeTimer>(300);
@@ -192,8 +200,7 @@ void ButiEngine::Enemy_Stalker::PreyAnimation()
 void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vlp_enemy->CreatePocket(5);
-	m_vlp_enemy->RemovePocket(0);
+	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(30.0f);
 	m_vlp_enemy->SetVibrationResistance(0.0f);
 	m_vlp_enemy->SetExplosionScale(3.0f);

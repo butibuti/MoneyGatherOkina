@@ -54,7 +54,8 @@ namespace ButiEngine {
 
 		Value_weak_ptr<Enemy> m_vwp_enemyComponent;
 
-		std::uint8_t m_pocketCount;
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
 
 		//行動パターン
 		Value_ptr<Timer> m_vlp_waitTimer;

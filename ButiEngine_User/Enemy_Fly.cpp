@@ -6,6 +6,9 @@
 #include "SphereExclusion.h"
 #include "ShakeComponent.h"
 
+std::int32_t ButiEngine::Enemy_Fly::m_pocketCount = 3;
+float ButiEngine::Enemy_Fly::m_createPocketRadius = 1.0f;
+
 void ButiEngine::Enemy_Fly::OnUpdate()
 {
 }
@@ -20,6 +23,10 @@ void ButiEngine::Enemy_Fly::OnRemove()
 
 void ButiEngine::Enemy_Fly::OnShowUI()
 {
+	GUI::BulletText("PocketCount");
+	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
+	GUI::BulletText("PocketRadius");
+	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
 }
 
 void ButiEngine::Enemy_Fly::Start()
@@ -49,7 +56,7 @@ void ButiEngine::Enemy_Fly::Dead()
 void ButiEngine::Enemy_Fly::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vlp_enemy->CreatePocket(3);
+	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(10.0f);
 	m_vlp_enemy->SetVibrationResistance(0.0f);
 	m_vlp_enemy->SetExplosionScale(2.0f);

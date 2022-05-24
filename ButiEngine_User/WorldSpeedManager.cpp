@@ -22,6 +22,8 @@ void ButiEngine::WorldSpeedManager::OnSet()
 
 void ButiEngine::WorldSpeedManager::OnShowUI()
 {
+	GUI::BulletText("WorldSpeed");
+	GUI::DragFloat("##speed", &GameDevice::WorldSpeed, 0.01f, 0.0f, 1.0f);
 }
 
 void ButiEngine::WorldSpeedManager::Start()

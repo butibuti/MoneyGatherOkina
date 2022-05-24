@@ -96,7 +96,10 @@ void ButiEngine::Player::OnShowUI()
 	GUI::Text("Life:%d", m_life);
 
 	GUI::BulletText("Speed");
-	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
+	GUI::DragFloat("##speed", &m_defaultMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
+
+	GUI::BulletText("BombSpeed");
+	GUI::DragFloat("##bspeed", &m_bombMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
 	GUI::BulletText("Acceleration");
 	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
@@ -147,7 +150,9 @@ void ButiEngine::Player::Start()
 	
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
-	m_maxMoveSpeed = 0.25f;
+	m_defaultMaxMoveSpeed = 0.25f;
+	m_bombMaxMoveSpeed = 0.4f;
+	m_maxMoveSpeed = m_defaultMaxMoveSpeed;
 	m_acceleration = 0.1f;
 	m_deceleration = 0.1f;
 
@@ -501,6 +506,8 @@ void ButiEngine::Player::BombStart()
 	if (m_isBomb) { return; }
 	if (m_vwp_beeSoulPod.lock()->GetSoulRate() < 1.0f) { return; }
 
+	m_maxMoveSpeed = m_bombMaxMoveSpeed;
+
 	auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
 	bomb->Appear();
 	m_vwp_sensor.lock()->transform->SetLocalScale(m_maxSensorScale);
@@ -517,6 +524,9 @@ void ButiEngine::Player::Bomb()
 	if (m_vlp_bombTimer->Update())
 	{
 		m_vlp_bombTimer->Stop();
+
+		m_maxMoveSpeed = m_defaultMaxMoveSpeed;
+
 		auto bomb = m_vwp_bomb.lock()->GetGameComponent<Bomb_Player>();
 		bomb->Disappear();
 		m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
@@ -537,6 +547,7 @@ void ButiEngine::Player::OnInvincible()
 void ButiEngine::Player::OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other)
 {
 	if (m_isInvincible) { return; }
+	if (m_isBomb) { return; }
 	if (m_isDead) { return; }
 
 	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();

@@ -51,7 +51,7 @@ namespace ButiEngine {
 
 		void Dead();
 		void Explosion();
-		void CreatePocket(const std::uint8_t arg_pocketCount);
+		void CreatePocket(const std::uint8_t arg_pocketCount, const float arg_radius);
 		void RemovePocket(const std::uint8_t arg_pocketNum);
 		void RemoveAllPocket();
 		void AddStickWorkerCount() { m_stickWorkerCount++; }
@@ -89,7 +89,6 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_attackFlashTimer;
 
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
-		std::int32_t m_testPocketCount;
 
 		bool m_isNearPlayer;
 		bool m_isHitShockWave;

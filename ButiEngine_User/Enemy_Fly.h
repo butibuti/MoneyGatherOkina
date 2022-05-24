@@ -30,6 +30,9 @@ namespace ButiEngine {
 		void SetLoiterParameter();
 		void SetLookAtParameter();
 
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
+
 		Value_ptr<Enemy> m_vlp_enemy;
 	};
 

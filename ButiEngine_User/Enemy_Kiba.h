@@ -42,6 +42,9 @@ namespace ButiEngine {
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_weak_ptr<WarningMark> m_vwp_warningMark;
 
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
+
 		float m_detectionRange;
 
 		//ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚½‚Æ‚«‚Ì‰ñ‚éˆ—

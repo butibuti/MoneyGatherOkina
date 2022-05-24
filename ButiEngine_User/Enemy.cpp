@@ -157,11 +157,6 @@ void ButiEngine::Enemy::OnShowUI()
 	GUI::DragFloat("##coefficient", &m_playerVibrationCoefficient, 0.1f, 0.0f, 10.0f);
 	GUI::BulletText("Vibration:%f / %f", m_vibration, m_vibrationCapacity);
 	GUI::BulletText("PocketCount");
-	GUI::DragInt("##p", m_testPocketCount, 1.0f, 0, 20);
-	if (GUI::Button("Create"))
-	{
-		CreatePocket(m_testPocketCount);
-	}
 	GUI::BulletText("StickWorkerCount:%d", GetStickWorkerCount());
 
 	GUI::BulletText("ExplosionScale");
@@ -297,7 +292,7 @@ void ButiEngine::Enemy::Explosion()
 	GetManager().lock()->AddObjectFromCereal("Explosion", transform);
 }
 
-void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
+void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount, const float arg_radius)
 {
 	RemoveAllPocket();
 
@@ -307,13 +302,13 @@ void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount)
 	//auto tmpWorker = GetManager().lock()->AddObjectFromCereal("Target");
 
 	//自身の周りに等間隔でポケットを作成する
-	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	float workerRadius = /*tmpWorker.lock()->transform->GetLocalScale().x*/0.5f * 0.5f;
+	//float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
+	//float workerRadius = /*tmpWorker.lock()->transform->GetLocalScale().x*/0.5f * 0.5f;
 
 	auto pocketCenter = gameObject.lock()->transform->Clone();
 	auto pocketTransform = ObjectFactory::Create<Transform>();
 	pocketTransform->SetBaseTransform(pocketCenter);
-	pocketTransform->SetLocalPosition(Vector3(0.0f, 0.0f, (radius + workerRadius) / gameObject.lock()->transform->GetLocalScale().x));
+	pocketTransform->SetLocalPosition(Vector3(0.0f, 0.0f, arg_radius / gameObject.lock()->transform->GetLocalScale().x));
 
 	float rollAngle = 360.0f / arg_pocketCount;
 

@@ -4,6 +4,9 @@
 #include "SeparateDrawObject.h"
 #include "SphereExclusion.h"
 
+std::int32_t ButiEngine::Crystal::m_pocketCount = 6;
+float ButiEngine::Crystal::m_createPocketRadius = 2.5f;
+
 void ButiEngine::Crystal::OnUpdate()
 {
 	//ƒ_ƒ[ƒW”»’èŽæ‚èÁ‚µ
@@ -135,7 +138,7 @@ void ButiEngine::Crystal::DisappeaerStart()
 void ButiEngine::Crystal::SetEnemyParameter()
 {
 	auto vlp_enemyComponent = gameObject.lock()->GetGameComponent<Enemy>();
-	vlp_enemyComponent->CreatePocket(6);
+	vlp_enemyComponent->CreatePocket(m_pocketCount, m_createPocketRadius);
 	vlp_enemyComponent->SetVibrationCapacity(1000.0f);
 	vlp_enemyComponent->SetVibrationResistance(1.0f);
 	vlp_enemyComponent->SetExplosionScale(2.0f);

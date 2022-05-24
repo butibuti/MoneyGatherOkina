@@ -18,6 +18,7 @@
 #include "TiltMotion.h"
 #include "FloatMotionComponent.h"
 #include "KnockBack.h"
+#include "InputManager.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
@@ -25,6 +26,7 @@ float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
+	SetLookSpeed();
 	if (m_isNearPlayer)
 	{
 		OnNearPlayer();
@@ -444,5 +446,17 @@ void ButiEngine::Worker::SetLookAtParameter()
 {
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
-	m_vlp_lookAt->SetSpeed(0.1f);
+	m_vlp_lookAt->SetSpeed(0.5f);
+}
+
+void ButiEngine::Worker::SetLookSpeed()
+{
+	if (InputManager::IsPushGatherKey())
+	{
+		m_vlp_lookAt->SetSpeed(0.5f);
+	}
+	else
+	{
+		m_vlp_lookAt->SetSpeed(0.1f);
+	}
 }

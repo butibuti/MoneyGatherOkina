@@ -44,6 +44,9 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_lifeTimer;
 		Value_ptr<Timer> m_vlp_removeTagTimer;
 
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
+
 		CrystalPhase m_phase;
 
 		Value_ptr<Timer> m_vlp_appearTimer;

@@ -8,7 +8,7 @@ std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking:
 float ButiEngine::Flocking::m_gatherWeight = 0.0f;
 float ButiEngine::Flocking::m_cohesionWeight = 0.1f;
 float ButiEngine::Flocking::m_minCohesionWeight = 0.1f;
-float ButiEngine::Flocking::m_maxCohesionWeight = 1.0f;
+float ButiEngine::Flocking::m_maxCohesionWeight = 0.1f;
 float ButiEngine::Flocking::m_alignmentWeight = 1.0f;
 float ButiEngine::Flocking::m_separationWeight = 1.0f;
 float ButiEngine::Flocking::m_avoidPlayerWeight = 0.3f;
@@ -22,7 +22,7 @@ float ButiEngine::Flocking::m_leaderNearBorder = 1.7f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
-	SetCohesionWeight();
+	//SetCohesionWeight();
 	//SetViewRadius();
 	CalculateAveragePos();
 	CalculateMoveSpeed();
@@ -104,10 +104,12 @@ void ButiEngine::Flocking::SetCohesionWeight()
 {
 	if (InputManager::IsPushGatherKey())
 	{
+		//m_gatherWeight = m_maxCohesionWeight;
 		m_cohesionWeight = m_maxCohesionWeight;
 	}
 	else
 	{
+		//m_gatherWeight = m_minCohesionWeight;
 		m_cohesionWeight = m_minCohesionWeight;
 	}
 }
@@ -310,18 +312,19 @@ void ButiEngine::Flocking::Move()
 	m_velocity.y = 0.0f;
 	m_velocity.Normalize();
 	
-	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity * 100.0f);
-	gameObject.lock()->transform->Translate(gameObject.lock()->transform->GetFront() * m_moveSpeed * GameDevice::WorldSpeed);
-	//gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
+	//m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity * 100.0f);
+	//gameObject.lock()->transform->Translate(gameObject.lock()->transform->GetFront() * m_moveSpeed * GameDevice::WorldSpeed);
 
-	/*if (abs(m_moveSpeed) > m_playerMaxMoveSpeed * 0.3f)
+	if (!GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_LEFT))
 	{
-		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity * 100.0f);
+		gameObject.lock()->transform->Translate(gameObject.lock()->transform->GetFront() * m_moveSpeed * GameDevice::WorldSpeed);
 	}
 	else
 	{
-		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront());
-	}*/
+		gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
+	}
 }
 
 bool ButiEngine::Flocking::IsNearLeader(const Vector3& arg_pos)

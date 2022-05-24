@@ -6,6 +6,9 @@
 #include "SphereExclusion.h"
 #include "WarningMark.h"
 
+std::int32_t ButiEngine::Enemy_Kiba::m_pocketCount = 8;
+float ButiEngine::Enemy_Kiba::m_createPocketRadius = 3.0f;
+
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
 	if (IsDetectionPlayer())
@@ -34,6 +37,11 @@ void ButiEngine::Enemy_Kiba::OnRemove()
 
 void ButiEngine::Enemy_Kiba::OnShowUI()
 {
+	GUI::BulletText("PocketCount");
+	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
+	GUI::BulletText("PocketRadius");
+	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
+
 	GUI::BulletText("MaxRotationAngle");
 	GUI::DragFloat("##maxRAngle", &m_maxRotationAngle, 0.01f, 0.0f, 10.0f);
 	GUI::BulletText("RotationAcceleration");
@@ -131,8 +139,7 @@ void ButiEngine::Enemy_Kiba::CreateFang()
 void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vlp_enemy->CreatePocket(8);
-	m_vlp_enemy->RemovePocket(0);
+	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(0.5f);
 	m_vlp_enemy->SetExplosionScale(8.0f);

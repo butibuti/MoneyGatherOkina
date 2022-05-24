@@ -72,9 +72,10 @@ void ButiEngine::Stick::KeepDistance()
 	//if (!m_vwp_pocket.lock()) { return; }
 	auto enemy = m_vwp_pocket.lock()->GetGameComponent<Pocket>()->GetEnemy();
 	//if (!enemy.lock()) { return; }
-	auto drawObjectEnemy = enemy.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
+	auto enemyDrawObject = enemy.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
 	float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
-	float enemyRadius = drawObjectEnemy.lock()->transform->GetWorldScale().x;
+	//atodenaosu
+	float enemyRadius = enemyDrawObject.lock()->transform->GetWorldScale().x;
 
 	Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
 	Vector3 enemyPos = enemy.lock()->transform->GetLocalPosition();
@@ -97,6 +98,7 @@ void ButiEngine::Stick::CheckMoveFinish()
 
 	if (angle < 1.0f)
 	{
+		KeepDistance();
 		gameObject.lock()->transform->SetBaseTransform(m_vwp_pocket.lock()->GetGameComponent<Pocket>()->GetEnemy().lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->transform);
 		m_vwp_center.lock()->SetIsRemove(true);
 		m_vwp_center = Value_weak_ptr<GameObject>();

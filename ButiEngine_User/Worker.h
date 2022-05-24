@@ -50,6 +50,7 @@ namespace ButiEngine {
 
 		void CreateDrawObject();
 		void SetLookAtParameter();
+		void SetLookSpeed();
 
 		static float m_nearBorder;
 		static float m_vibrationForce;

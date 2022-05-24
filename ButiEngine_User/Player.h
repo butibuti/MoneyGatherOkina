@@ -98,6 +98,8 @@ namespace ButiEngine {
 		Vector3 m_prevPos;
 		Vector3 m_velocity;
 		float m_maxMoveSpeed;
+		float m_defaultMaxMoveSpeed;
+		float m_bombMaxMoveSpeed;
 		float m_acceleration;
 		float m_deceleration;
 

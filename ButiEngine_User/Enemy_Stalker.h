@@ -43,6 +43,9 @@ namespace ButiEngine {
 
 		Value_ptr<Enemy> m_vlp_enemy;
 
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
+
 		Vector3 m_velocity;
 		float m_maxMoveSpeed;
 		float m_acceleration;

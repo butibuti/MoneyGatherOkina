@@ -10,6 +10,9 @@
 
 #include "InputManager.h"
 
+std::int32_t ButiEngine::Enemy_Volcano::m_pocketCount = 8;
+float ButiEngine::Enemy_Volcano::m_createPocketRadius = 4.0f;
+
 void ButiEngine::Enemy_Volcano::OnUpdate()
 {
 	//if (InputManager::IsTriggerDecideKey())
@@ -53,6 +56,10 @@ void ButiEngine::Enemy_Volcano::OnRemove()
 
 void ButiEngine::Enemy_Volcano::OnShowUI()
 {
+	GUI::BulletText("PocketCount");
+	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
+	GUI::BulletText("PocketRadius");
+	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
 }
 
 void ButiEngine::Enemy_Volcano::Start()
@@ -151,7 +158,7 @@ void ButiEngine::Enemy_Volcano::ScaleAnimation()
 void ButiEngine::Enemy_Volcano::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vlp_enemy->CreatePocket(8);
+	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(1000.0f);
 	m_vlp_enemy->SetVibrationResistance(3.0f);
 	m_vlp_enemy->SetExplosionScale(10.0f);

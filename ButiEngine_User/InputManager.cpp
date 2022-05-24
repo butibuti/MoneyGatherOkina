@@ -159,7 +159,7 @@ bool ButiEngine::InputManager::IsPushConveneKey()
 
 bool ButiEngine::InputManager::IsPushGatherKey()
 {
-	return GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_LEFT);
+	return GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_A);
 }
 
 bool ButiEngine::InputManager::IsTriggerPauseKey()

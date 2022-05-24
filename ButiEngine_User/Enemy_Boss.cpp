@@ -7,6 +7,9 @@
 #include "BossState_Crystal.h"
 #include "BossState_Jump.h"
 
+std::int32_t ButiEngine::Enemy_Boss::m_pocketCount = 16;
+float ButiEngine::Enemy_Boss::m_createPocketRadius = 6.0f;
+
 void ButiEngine::Enemy_Boss::OnUpdate()
 {
 	if (m_isDead)
@@ -43,6 +46,11 @@ void ButiEngine::Enemy_Boss::OnSet()
 
 void ButiEngine::Enemy_Boss::OnShowUI()
 {
+	GUI::BulletText("PocketCount");
+	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
+	GUI::BulletText("PocketRadius");
+	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
+
 	std::string stateName = "Wait";
 	if (m_state == BossState::StrenghenWait) { stateName = "StrengthenWait"; }
 	else if (m_state == BossState::Fire) { stateName = "Fire"; }
@@ -114,7 +122,7 @@ void ButiEngine::Enemy_Boss::Flirting()
 		m_vlp_flirtingTimer->Stop();
 
 		//ポケット再生成
-		m_vwp_enemyComponent.lock()->CreatePocket(m_pocketCount);
+		m_vwp_enemyComponent.lock()->CreatePocket(m_pocketCount, m_createPocketRadius);
 
 		//ライフが一定以下で覚醒
 		if (!m_isStrengthened)
@@ -244,10 +252,8 @@ void ButiEngine::Enemy_Boss::RemoveAttackComponent()
 
 void ButiEngine::Enemy_Boss::SetEnemyParameter()
 {
-	m_pocketCount = 16;
-
 	m_vwp_enemyComponent = gameObject.lock()->GetGameComponent<Enemy>();
-	m_vwp_enemyComponent.lock()->CreatePocket(m_pocketCount);
+	m_vwp_enemyComponent.lock()->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vwp_enemyComponent.lock()->SetVibrationCapacity(10000.0f);
 	m_vwp_enemyComponent.lock()->SetVibrationResistance(5.0f);
 	m_vwp_enemyComponent.lock()->SetExplosionScale(8.0f);

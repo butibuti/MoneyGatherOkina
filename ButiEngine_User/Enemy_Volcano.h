@@ -40,6 +40,9 @@ namespace ButiEngine {
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_weak_ptr<WarningMark> m_vwp_warningMark;
 
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
+
 		Vector3 m_randomVelocity;
 		Vector3 m_defaultScale;
 		Vector3 m_currentScale;
