@@ -24,7 +24,7 @@ void ButiEngine::WaveManager::OnUpdate()
 	{
 		if (!m_isAdvanceGameOver)
 		{
-			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.2f, 120);
+			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.3f, 120);
 		}
 		m_isAdvanceGameOver = true;
 		if (m_vlp_advanceGameOverTimer->Update())
