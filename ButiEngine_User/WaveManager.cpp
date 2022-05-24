@@ -10,6 +10,7 @@
 #include "StageProgressUIComponent.h"
 #include "PauseManagerComponent.h"
 #include "WorldSpeedManager.h"
+#include "CameraComponent.h"
 
 void ButiEngine::WaveManager::OnUpdate()
 {
@@ -19,12 +20,37 @@ void ButiEngine::WaveManager::OnUpdate()
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneStart();
 	}
 
-	if (m_vwp_playerComponent.lock()->IsDead())
+	if (m_vwp_playerComponent.lock()->IsDead() && !m_isClear)
 	{
-		m_isGameOver = true;
+		if (!m_isAdvanceGameOver)
+		{
+			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.3f, 120);
+		}
+		m_isAdvanceGameOver = true;
+		if (m_vlp_advanceGameOverTimer->Update())
+		{
+			if (!m_isAdvanceNextGameOver)
+			{
+				auto cameraComponent = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraComponent>();
+				cameraComponent->SetZoomOperationNum(0);
+				m_isAdvanceNextGameOver = true;
+
+				m_vlp_advanceGameOverTimer->Reset();
+				m_vlp_advanceGameOverTimer->ChangeCountFrame(30);
+			}
+			else
+			{
+				if (!m_isGameOver)
+				{
+					m_vwp_playerComponent.lock()->Dead();
+				}
+				m_isGameOver = true;
+			}
+		}
+		
 	}
 	//ƒNƒŠƒA‚µ‚Ä‚¢‚é‚©
-	if (m_enemyDeadCount >= m_maxEnemyCount)
+	if (m_enemyDeadCount >= m_maxEnemyCount && !m_isAdvanceGameOver)
 	{
 		m_isClear = true;
 	}
@@ -42,17 +68,22 @@ void ButiEngine::WaveManager::OnSet()
 	{
 		oneFrameObject = GetManager().lock()->AddObjectFromCereal("DrawObject_OneFrame");
 	}
+	m_vlp_advanceGameOverTimer = ObjectFactory::Create<AbsoluteTimer>(120);
 }
 
 void ButiEngine::WaveManager::Start()
 {
+	m_vlp_advanceGameOverTimer->Start();
 	m_vwp_playerComponent = GetManager().lock()->GetGameObject("Player").lock()->GetGameComponent<Player>();
 	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
 	m_vwp_sceneChangeAnimationComponent = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
 	m_vwp_stageProgressUIComponent = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline").lock()->GetGameComponent<StageProgressUIComponent>();
 	m_vwp_pauseManagerComponent = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
+	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
 	m_isClear = false;
 	m_isGameOver = false;
+	m_isAdvanceGameOver = false;
+	m_isAdvanceNextGameOver = false;
 	m_isNextSceneButton = false;
 	m_isGameOverButton = false;
 	m_isNextScene = false;

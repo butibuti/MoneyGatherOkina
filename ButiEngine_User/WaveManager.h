@@ -10,6 +10,7 @@ namespace ButiEngine {
 	class StageClearManagerComponent;
 	class StageProgressUIComponent;
 	class PauseManagerComponent;
+	class WorldSpeedManager;
 
 	class WaveManager :public GameComponent
 	{
@@ -44,12 +45,15 @@ namespace ButiEngine {
 		void PauseAnimation();
 		void StageProgressAnimation();
 
+		Value_ptr<Timer> m_vlp_advanceGameOverTimer;
+
 		Value_weak_ptr<Player> m_vwp_playerComponent;
 		Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimationComponent;
 		Value_weak_ptr<GameOverManagerComponent> m_vwp_gameOverManagerComponent;
 		Value_weak_ptr<StageClearManagerComponent> m_vwp_stageClearManagerComponent;
 		Value_weak_ptr<StageProgressUIComponent> m_vwp_stageProgressUIComponent;
 		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
+		Value_weak_ptr<WorldSpeedManager> m_vwp_worldSpeedManagerComponent;
 
 		std::string m_sceneName;
 
@@ -57,6 +61,8 @@ namespace ButiEngine {
 		bool m_isClear;
 		//ゲームオーバーかどうか
 		bool m_isGameOver;
+		bool m_isAdvanceGameOver;
+		bool m_isAdvanceNextGameOver;
 		//次のシーンにいくためのボタンが押せる状態かどうか
 		bool m_isNextSceneButton;
 		//ゲームオーバー時のリトライボタン用

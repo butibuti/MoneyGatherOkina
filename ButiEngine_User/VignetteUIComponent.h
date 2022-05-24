@@ -20,6 +20,7 @@ namespace ButiEngine {
 		}
 
 		void StartAlphaAnimation();
+		void SetIsKeepAlpha(const bool arg_isKeepAlpha) { m_isKeepAlpha = arg_isKeepAlpha; }
 
 	private:
 		Value_ptr<Timer> m_vlp_timer;
@@ -28,6 +29,7 @@ namespace ButiEngine {
 		float m_moveAlpha;
 
 		bool m_isChange;
+		bool m_isKeepAlpha;
 	};
 
 }

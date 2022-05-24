@@ -74,8 +74,7 @@ void ButiEngine::Stick::KeepDistance()
 	//if (!enemy.lock()) { return; }
 	auto enemyDrawObject = enemy.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
 	float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
-	//atodenaosu
-	float enemyRadius = enemyDrawObject.lock()->transform->GetWorldScale().x;
+	float enemyRadius = enemyDrawObject.lock()->transform->GetWorldScale().x * 0.5f;
 
 	Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
 	Vector3 enemyPos = enemy.lock()->transform->GetLocalPosition();

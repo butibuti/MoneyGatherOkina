@@ -16,6 +16,18 @@ void ButiEngine::SpriteParticleGenerator::OnShowUI()
 void ButiEngine::SpriteParticleGenerator::Start()
 {
 	m_vwp_spriteParticleController = gameObject.lock()->GetGameComponent<SpriteParticleController>();
+
+	m_vwp_spriteParticleController.lock()->AddParticleControlFunction("GatherControl", std::function<void(Particle2D&)>([](Particle2D& arg_particle) {
+		//float progress = 1.0f - arg_particle.life / arg_particle.angle;
+		//arg_particle.position = MathHelper::LerpPosition(arg_particle.force, arg_particle.m_targetTransform->GetWorldPosition(), progress);
+		arg_particle.position = MathHelper::LerpPosition(arg_particle.position, Vector3Const::Zero, arg_particle.velocity.x);
+		//arg_particle.life -= 1.0f * GameDevice::WorldSpeed;
+		arg_particle.size = MathHelper::Lerp(arg_particle.size, 0.0f, arg_particle.velocity.x);
+		arg_particle.frame += 1.0f;
+		if ((arg_particle.position).GetLength() < 0.5f) {
+			arg_particle.life = 0;
+		}
+		}));
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SpriteParticleGenerator::Clone()
@@ -48,16 +60,16 @@ void ButiEngine::SpriteParticleGenerator::AttackFlashParticles(const Vector3& ar
 	m_vwp_spriteParticleController.lock()->AddParticle(particle);
 }
 
-void ButiEngine::SpriteParticleGenerator::ChargeParticles(const Vector3& arg_position, const float arg_radius, const Vector4& arg_color)
+void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transform> arg_vwp_transform, const float arg_radius, const Vector4& arg_color)
 {
 	Particle2D particle;
 
-	std::int8_t maxParticleCount = 1;
+	std::int8_t maxParticleCount = 4;
 	for (std::int8_t i = 0; i < maxParticleCount; i++)
 	{
 		Vector3 dir;
 		dir.x = ButiRandom::GetInt(-100, 100);
-		dir.y = ButiRandom::GetInt(-100, 100);
+		dir.y = 0.0f;
 		dir.z = ButiRandom::GetInt(-100, 100);
 		if (dir == Vector3Const::Zero)
 		{
@@ -65,15 +77,20 @@ void ButiEngine::SpriteParticleGenerator::ChargeParticles(const Vector3& arg_pos
 		}
 		dir.Normalize();
 
-		float spawnRadius = arg_radius * ButiRandom::GetRandom(0.3f, 1.0f, 10);
+		//Vector3 pos = arg_vwp_transform.lock()->GetWorldPosition();
+		float spawnRadius = arg_radius * ButiRandom::GetRandom(0.5f, 1.5f, 10);
 
-		particle.position = arg_position + dir * spawnRadius;
-		particle.velocity = -dir * 0.1f;
-		particle.force = dir * 0.02f;
-		particle.size = 10.0f;
-		particle.sizePase = -0.1f;
-		particle.life = 30;
+		particle.position = dir * spawnRadius;
+		particle.force = particle.position;
+		//particle.m_targetTransform = arg_vwp_transform.lock();
+		particle.m_parentTransform = arg_vwp_transform.lock();
+		particle.velocity = 0.1f * GameDevice::WorldSpeed;
+		particle.size = 6.0f;
+		particle.life = 60;
+		particle.angle = particle.life;
+		//particle.sizePase = -0.1f;
 		particle.color = arg_color;
+		particle.controlIndex = m_vwp_spriteParticleController.lock()->GetControlFunctionIndex("GatherControl");
 
 		m_vwp_spriteParticleController.lock()->AddParticle(particle);
 	}

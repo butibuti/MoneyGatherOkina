@@ -44,52 +44,62 @@ void ButiEngine::ParticleGenerater::ExplosionParticles(const Vector3& arg_positi
 {
 	Particle3D particle;
 
-	for (std::int8_t i = 0; i < 25; i++)
-	{
-		particle.position = arg_position;
-		
-		float speed = 0.0f;
+	float explosionScale = 0.75f;
 
-		particle.life = 20;
-		particle.axis = Vector3(ButiRandom::GetInt(1, 10) * 0.1f, 
+	for (std::int8_t i = 0; i < 60; i++)
+	{
+		Vector3 randomPos = Vector3(ButiRandom::GetInt(-10, 10), ButiRandom::GetInt(-10, 10),
+			ButiRandom::GetInt(-10, 10)) * 0.1f;
+		particle.position = arg_position + randomPos;
+
+		float speed = 0.0f;
+		float accel = 0;
+
+		particle.axis = Vector3(ButiRandom::GetInt(1, 10) * 0.1f,
 			ButiRandom::GetInt(1, 10) * 0.1f, ButiRandom::GetInt(1, 10) * 0.1f);
 		particle.angle = ButiRandom::GetInt(0, 90);
 		particle.anglePase = ButiRandom::GetInt(1, 5) * 0.01f;
 		particle.sizePase = 0;
-		
-		if (i == 0)
+
+		if (i % 3 == 2)
 		{
-			//明滅するやつ
-			particle.color = ButiColor::Yellow(ButiColor::ShadeIndex::Shade_9);
-			particle.size = 20.0f;
-			particle.sizePase = -1.0f;
-		}
-		else if (i % 2)
-		{
-			//オレンジ
 			particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_8);
-			particle.life = ButiRandom::GetInt(40, 50);
-			speed = 0.05f;
+			speed = 0.3f;
+			particle.size = 7.0f;
+			accel = 1.15f;
+			particle.life = 60;
+		}
+		else if (i % 3 == 1)
+		{
+			particle.color = ButiColor::Yellow(ButiColor::ShadeIndex::Shade_4);
+			speed = 0.45f;
 			particle.size = 5.0f;
+			accel = 1.0925f;
+			particle.life = 120;
 		}
 		else
 		{
-			//黄色
-			particle.color = ButiColor::Yellow(ButiColor::ShadeIndex::Shade_4);
-			particle.life = ButiRandom::GetInt(20, 30);
-			speed = 0.15f;
-			particle.size = 3.0f;
+			//白色
+			particle.color = Vector4(1, 1, 1, 1);
+			speed = 0.9f;
+			particle.size = 2.5f;
+			accel = 1.0925f;
+			particle.life = 180;
 		}
+
+		particle.size *= explosionScale;
 
 		Vector3 velocity;
 		velocity.x = (float)ButiRandom::GetRandom(-50, 50, 100);
 		velocity.y = (float)ButiRandom::GetRandom(-50, 50, 100);
 		velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
-		particle.velocity = velocity.Normalize() * speed;
+		particle.velocity = velocity.Normalize() * speed * explosionScale;
+
+		particle.force = Vector3(0, -0.05, 0);
+		particle.accelation = accel;
 
 		m_vwp_immediateParticleController.lock()->AddParticle(particle);
 	}
-
 }
 
 void ButiEngine::ParticleGenerater::SparkParticle(const Vector3& arg_position)

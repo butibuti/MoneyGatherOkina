@@ -133,7 +133,8 @@ void ButiEngine::Enemy_Kiba::CreateFang()
 	m_vwp_fang.lock()->transform->SetLocalScale(scale);
 
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	m_vwp_fang.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * radius);
+	float fangRadius = m_vwp_fang.lock()->transform->GetWorldScale().x * 0.5f;
+	m_vwp_fang.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * (radius + fangRadius));
 }
 
 void ButiEngine::Enemy_Kiba::SetEnemyParameter()

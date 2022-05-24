@@ -58,12 +58,6 @@ void ButiEngine::Enemy::OnUpdate()
 		//StopVibrationEffect();
 	}
 
-	if (GameDevice::GetInput()->TriggerKey(Keys::P))
-	{
-		CreateAttackFlashEffect();
-	}
-
-
 	if (IsVibrate())
 	{
 		IncreaseVibration();
