@@ -30,10 +30,12 @@ namespace ButiEngine {
 		void SpawnEnemy();
 		void FixShorteningFrame();
 		void SetRandomSpawnFrame();
+		void SpawnAnimation();
 
 		Value_weak_ptr<WaveManager> m_waveManagerComponent;
 		Value_ptr<Timer> m_vlp_spawnTimer;
 		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_ptr<Timer> m_vlp_spawnAnimationTimer;
 		
 		std::int32_t m_maxEnemyFieldCount;
 		std::int32_t m_inputStageNumber;
@@ -54,6 +56,7 @@ namespace ButiEngine {
 		float m_reachShorteningMinFrame;
 
 		bool m_isOnce;
+		bool m_isAddEnemy;
 	};
 }
 

@@ -48,6 +48,7 @@ void ButiEngine::EnemySpawner::OnSet()
 {
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_spawnAnimationTimer = ObjectFactory::Create<RelativeTimer>();
 	m_stageNumber = "0";
 	m_spawnType = 0;
 }
@@ -56,6 +57,7 @@ void ButiEngine::EnemySpawner::Start()
 {
 	m_vlp_spawnTimer->Start();
 	m_vlp_waitTimer->Start();
+	m_vlp_spawnAnimationTimer->Start();
 	m_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	m_maxEnemyFieldCount = 7;
 	m_currentMaxSpawnFrame = 0;
@@ -70,6 +72,7 @@ void ButiEngine::EnemySpawner::Start()
 	m_reachShorteningMinFrame = 0;
 	m_randomSpawnFrame = 0;
 	m_isOnce = false;
+	m_isAddEnemy = false;
 }
 
 void ButiEngine::EnemySpawner::OnShowUI()
@@ -280,4 +283,8 @@ void ButiEngine::EnemySpawner::SetRandomSpawnFrame()
 {
 	m_randomSpawnFrame = ButiRandom::GetInt(m_currentMinSpawnFrame, m_currentMaxSpawnFrame);
 	m_vlp_spawnTimer->ChangeCountFrame(m_randomSpawnFrame);
+}
+
+void ButiEngine::EnemySpawner::SpawnAnimation()
+{
 }
