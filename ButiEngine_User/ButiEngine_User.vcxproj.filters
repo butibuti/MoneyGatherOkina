@@ -93,6 +93,7 @@
     <ClCompile Include="AppealRBUI.cpp" />
     <ClCompile Include="VignetteUIComponent.cpp" />
     <ClCompile Include="GameSettings.cpp" />
+    <ClCompile Include="FieldParticleEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="VignetteUIComponent.h" />
     <ClInclude Include="AppealRBUI.h" />
     <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="FieldParticleEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

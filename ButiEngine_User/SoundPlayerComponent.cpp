@@ -52,10 +52,13 @@ void ButiEngine::SoundPlayerComponent::OnShowUI()
     for (auto& soundTagAndVolume : m_umap_soundVolume) {
         GUI::Text(soundTagAndVolume.first+":");
         GUI::SameLine();
-        isEdited|=GUI::DragFloat("##"+ soundTagAndVolume.first, soundTagAndVolume.second,0.01f,0,10.0);
+        isEdited|=GUI::DragFloat("##"+ soundTagAndVolume.first, soundTagAndVolume.second,0.01f,0,10.0); 
+        GUI::SameLine();
+        if (GUI::ArrowButton("##play" + soundTagAndVolume.first, GUI::GuiDir_Left)) {
+            gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(soundTagAndVolume.first, soundTagAndVolume.second);
+        }
     }
     if (isEdited) {
-
         OutputCereal(m_umap_soundVolume, "SoundVolume.bin");
     }
 }

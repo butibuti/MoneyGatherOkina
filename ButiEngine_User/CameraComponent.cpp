@@ -4,7 +4,10 @@
 
 void ButiEngine::CameraComponent::OnUpdate()
 {
-    //InputOperationNum();
+#ifdef DEBUG
+    InputOperationNum();
+#endif // DEBUG
+
     FixOperationNum();
     ZoomOperation(m_zoomOperationNum);
 }
