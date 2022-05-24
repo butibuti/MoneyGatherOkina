@@ -133,6 +133,7 @@ namespace ButiEngine {
 		float m_vibrationForce;
 		bool m_isVibrate;
 		bool m_isIncrease;
+		float m_previousVibrationPower;
 		float m_vibration;
 		float m_maxVibration;
 		std::uint8_t m_nearEnemyCount;
@@ -141,6 +142,8 @@ namespace ButiEngine {
 		float m_nearEnemyVibrationRate;
 		bool m_isCapaOver;
 		float m_controllerVibration;
+		std::int32_t m_vibUpCount;
+		bool m_isFixNumberUIScale;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;

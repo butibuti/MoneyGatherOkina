@@ -2,6 +2,7 @@
 #include "EnemySpawner.h"
 #include "EnemySpawnManager.h"
 #include "WaveManager.h"
+#include "EnemySpawnPointComponent.h"
 
 void ButiEngine::EnemySpawner::OnUpdate()
 {
@@ -48,7 +49,6 @@ void ButiEngine::EnemySpawner::OnSet()
 {
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
-	m_vlp_spawnAnimationTimer = ObjectFactory::Create<RelativeTimer>();
 	m_stageNumber = "0";
 	m_spawnType = 0;
 }
@@ -57,9 +57,7 @@ void ButiEngine::EnemySpawner::Start()
 {
 	m_vlp_spawnTimer->Start();
 	m_vlp_waitTimer->Start();
-	m_vlp_spawnAnimationTimer->Start();
 	m_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
-	m_maxEnemyFieldCount = 7;
 	m_currentMaxSpawnFrame = 0;
 	m_currentMinSpawnFrame = 0;
 	m_startMaxSpawnFrame = 400;
@@ -72,7 +70,26 @@ void ButiEngine::EnemySpawner::Start()
 	m_reachShorteningMinFrame = 0;
 	m_randomSpawnFrame = 0;
 	m_isOnce = false;
-	m_isAddEnemy = false;
+
+	switch (m_spawnType)
+	{
+	case 0: //ハエ
+		m_maxEnemyFieldCount = 7;
+		m_tag = "Fly";
+		break;
+	case 1: //ストーカー
+		m_maxEnemyFieldCount = 4;
+		m_tag = "Stalker";
+		break;
+	case 2: //キバ
+		m_maxEnemyFieldCount = 3;
+		m_tag = "Kiba";
+		break;
+	case 3: //カザン
+		m_maxEnemyFieldCount = 2;
+		m_tag = "Volcano";
+		break;
+	}
 }
 
 void ButiEngine::EnemySpawner::OnShowUI()
@@ -199,8 +216,12 @@ void ButiEngine::EnemySpawner::SpawnEnemy()
 {
 	//ステージクリア上限数出現していたらスポーンさせない
 	if (m_waveManagerComponent.lock()->GetSpawnCount() >= m_waveManagerComponent.lock()->GetMaxEnemyCount()) { return; }
+	
+	auto objects = GetManager().lock()->GetGameObjects(GameObjectTag(m_tag));
+	std::int32_t objectsCount = objects.size();
+	
 	//〇体以上フィールドにいる場合は出現させない
-	if (m_waveManagerComponent.lock()->GetNowEnemyCount() >= m_maxEnemyFieldCount) { return; }
+	if (objectsCount >= m_maxEnemyFieldCount) { return; }
 
 	//敵を追加したらカウントを増やす
 	m_waveManagerComponent.lock()->AddSpawnCount();
@@ -244,33 +265,10 @@ void ButiEngine::EnemySpawner::SpawnEnemy()
 		}
 	}
 
-
-	float randomRotateY = 0;
-	randomRotateY = (float)ButiRandom::GetInt(-180, 180);
-
-	Value_weak_ptr<GameObject> enemy;
-
-	//スポーンさせる
-	switch (m_spawnType)
-	{
-	case 0: //ハエ
-		enemy = GetManager().lock()->AddObjectFromCereal("Enemy_Fly");
-		break;
-	case 1: //ストーカー
-		enemy = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
-		break;
-	case 2: //キバ
-		enemy = GetManager().lock()->AddObjectFromCereal("Enemy_Kiba");
-		break;
-	case 3: //カザン
-		enemy = GetManager().lock()->AddObjectFromCereal("Enemy_Volcano");
-		break;
-	default:
-		break;
-	}
-
-	enemy.lock()->transform->SetLocalPosition(randomPosition);
-	enemy.lock()->transform->SetLocalRotationY_Degrees(randomRotateY);
+	auto spawnPoint = GetManager().lock()->AddObjectFromCereal("EnemySpawnPoint");
+	auto spawnPointComponent = spawnPoint.lock()->GetGameComponent<EnemySpawnPointComponent>();
+	spawnPointComponent->SetType(m_spawnType);
+	spawnPointComponent->SetPosition(randomPosition);
 }
 
 void ButiEngine::EnemySpawner::FixShorteningFrame()

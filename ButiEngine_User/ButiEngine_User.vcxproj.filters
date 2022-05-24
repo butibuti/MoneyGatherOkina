@@ -92,6 +92,7 @@
     <ClCompile Include="SoundPlayerComponent.cpp" />
     <ClCompile Include="AppealRBUI.cpp" />
     <ClCompile Include="VignetteUIComponent.cpp" />
+    <ClCompile Include="EnemySpawnPointComponent.cpp" />
     <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="FieldParticleEmitter.cpp" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClInclude Include="SoundPlayerComponent.h" />
     <ClInclude Include="VignetteUIComponent.h" />
     <ClInclude Include="AppealRBUI.h" />
+    <ClInclude Include="EnemySpawnPointComponent.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="FieldParticleEmitter.h" />
   </ItemGroup>
