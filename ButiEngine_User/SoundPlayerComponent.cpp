@@ -54,7 +54,7 @@ void ButiEngine::SoundPlayerComponent::OnShowUI()
         GUI::SameLine();
         isEdited|=GUI::DragFloat("##"+ soundTagAndVolume.first, soundTagAndVolume.second,0.01f,0,10.0); 
         GUI::SameLine();
-        if (GUI::ArrowButton("##play" + soundTagAndVolume.first, GUI::GuiDir_Left)) {
+        if (GUI::ArrowButton("##play" + soundTagAndVolume.first, GUI::GuiDir_Right)) {
             gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(soundTagAndVolume.first, soundTagAndVolume.second);
         }
     }

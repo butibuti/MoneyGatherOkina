@@ -18,7 +18,7 @@ void ButiEngine::ParticleGenerater::OnUpdate()
 	//	CatchParticles(Vector3(0, 0, 0));
 	//}
 
-	Flickering();
+	//Flickering();
 }
 
 void ButiEngine::ParticleGenerater::OnSet()
