@@ -536,6 +536,7 @@ cd ..\</Command>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
+    <ClCompile Include="EnemySpawnPointComponent.cpp" />
     <ClCompile Include="Enemy_Boss.cpp" />
     <ClCompile Include="Enemy_Fly.cpp" />
     <ClCompile Include="EnemySpawnManager.cpp" />
@@ -631,6 +632,7 @@ cd ..\</Command>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyScaleAnimationComponent.h" />
     <ClInclude Include="EnemySpawner.h" />
+    <ClInclude Include="EnemySpawnPointComponent.h" />
     <ClInclude Include="Enemy_Boss.h" />
     <ClInclude Include="Enemy_Fly.h" />
     <ClInclude Include="EnemySpawnManager.h" />

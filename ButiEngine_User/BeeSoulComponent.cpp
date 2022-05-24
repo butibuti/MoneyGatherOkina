@@ -9,7 +9,7 @@ void ButiEngine::BeeSoulComponent::OnUpdate()
     {
         //スクリーン座標に変換
         Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_residualPosition);
-        screenPosition.z = 0;
+        screenPosition.z = 2;
 
         gameObject.lock()->transform->SetLocalPosition(screenPosition);
     }

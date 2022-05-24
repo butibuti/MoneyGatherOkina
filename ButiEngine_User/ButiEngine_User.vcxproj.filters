@@ -92,6 +92,7 @@
     <ClCompile Include="SoundPlayerComponent.cpp" />
     <ClCompile Include="AppealRBUI.cpp" />
     <ClCompile Include="VignetteUIComponent.cpp" />
+    <ClCompile Include="EnemySpawnPointComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="SoundPlayerComponent.h" />
     <ClInclude Include="VignetteUIComponent.h" />
     <ClInclude Include="AppealRBUI.h" />
+    <ClInclude Include="EnemySpawnPointComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
