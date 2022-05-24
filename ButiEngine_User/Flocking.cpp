@@ -310,16 +310,18 @@ void ButiEngine::Flocking::Move()
 	m_velocity.y = 0.0f;
 	m_velocity.Normalize();
 	
-	gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity * 100.0f);
+	gameObject.lock()->transform->Translate(gameObject.lock()->transform->GetFront() * m_moveSpeed * GameDevice::WorldSpeed);
+	//gameObject.lock()->transform->Translate(m_velocity * m_moveSpeed * GameDevice::WorldSpeed);
 
-	if (abs(m_moveSpeed) > m_playerMaxMoveSpeed * 0.3f)
+	/*if (abs(m_moveSpeed) > m_playerMaxMoveSpeed * 0.3f)
 	{
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + m_velocity);
 	}
 	else
 	{
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront());
-	}
+	}*/
 }
 
 bool ButiEngine::Flocking::IsNearLeader(const Vector3& arg_pos)
