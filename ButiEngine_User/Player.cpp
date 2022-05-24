@@ -346,9 +346,10 @@ void ButiEngine::Player::Damage()
 	if (m_life == 0)
 	{
 		m_isDead = true;
-		//Dead();
+		m_vwp_vignetteUI.lock()->GetGameComponent<VignetteUIComponent>()->SetIsKeepAlpha(true);
 		return;
 	}
+
 
 	m_isInvincible = true;
 	m_vlp_invincibleTimer->Start();
