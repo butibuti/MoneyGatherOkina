@@ -9,7 +9,7 @@ void ButiEngine::BeeSoulComponent::OnUpdate()
     {
         //スクリーン座標に変換
         Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_residualPosition);
-        screenPosition.z = 2;
+        screenPosition.z = m_zShift;
 
         gameObject.lock()->transform->SetLocalPosition(screenPosition);
     }
@@ -58,9 +58,12 @@ void ButiEngine::BeeSoulComponent::Start()
     m_vwp_spriteAnimationComponent = gameObject.lock()->GetGameComponent<SpriteAnimationComponent>();
     m_speed = 0.02f;
     m_animationCount = 0;
-    m_maxAnimationCount = 2;
+    m_maxAnimationCount = 3;
     m_vlp_lifeTimer->Start();
     m_vlp_lifeTimer->ChangeCountFrame((std::int16_t)(1.0f / m_speed) + 30);
+    static float currentBeeSoulIndex = 0.0f;
+    m_zShift = currentBeeSoulIndex;
+    currentBeeSoulIndex += 0.001f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::BeeSoulComponent::Clone()

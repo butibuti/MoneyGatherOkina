@@ -37,6 +37,7 @@ namespace ButiEngine {
 		Vector3 m_residualPosition;
 
 		float m_speed;
+		float m_zShift;
 
 		std::int16_t m_life;
 
