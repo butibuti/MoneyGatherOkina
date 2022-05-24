@@ -56,21 +56,29 @@ void ButiEngine::EnemySpawnPointComponent::Start()
 	m_vlp_diamond = GetManager().lock()->AddObjectFromCereal("EnemySpawnDiamond");
 	m_vlp_diamond.lock()->transform->SetLocalPosition(m_position);
 
+	auto objectTag = GameObjectTag("");
+
 	switch (m_spawnType)
 	{
 	case 0: //ハエ
 		m_moveScale = 1.0f / 120.0f;
+		objectTag = GameObjectTag("Fly");
 		break;
 	case 1: //ストーカー
 		m_moveScale = 1.0f / 120.0f;
+		objectTag = GameObjectTag("Stalker");
 		break;
 	case 2: //キバ
 		m_moveScale = 4.0f / 120.0f;
+		objectTag = GameObjectTag("Kiba");
 		break;
 	case 3: //カザン
 		m_moveScale = 5.0f / 120.0f;
+		objectTag = GameObjectTag("Volcano");
 		break;
 	}
+
+	m_vlp_diamond.lock()->SetGameObjectTag(objectTag);
 }
 
 void ButiEngine::EnemySpawnPointComponent::OnShowUI()
