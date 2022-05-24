@@ -53,6 +53,7 @@ namespace ButiEngine {
 		void SetVelocity(const Vector3& arg_velocity) { m_velocity = arg_velocity; }
 
 		bool IsDead() { return m_isDead; }
+		bool IsBomb() { return m_isBomb; }
 
 		void Dead();
 		void Revival();

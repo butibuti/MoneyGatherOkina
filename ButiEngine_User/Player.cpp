@@ -16,6 +16,7 @@
 #include "NumberManagerComponent.h"
 #include "VignetteUIComponent.h"
 #include "Bomb_Player.h"
+#include "GameSettings.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -371,10 +372,10 @@ void ButiEngine::Player::IncreaseVibration()
 		m_isCapaOver = true;
 		m_vibration = m_maxVibration + m_vibrationDecrease * 600;
 		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 1.0f);
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
 
 		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 0.8f);
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
 	}
 
 	if (!m_isVibrate)
@@ -395,10 +396,10 @@ void ButiEngine::Player::DecreaseVibration()
 		m_isCapaOver = false;
 
 		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.745f, 0.0f, 1.0f);
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
 
 		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.137f, 1.0f, 1.0f, 0.8f);
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::SOUL_COLOR;
 	}
 
 	if (m_vibration <= 0.0f)

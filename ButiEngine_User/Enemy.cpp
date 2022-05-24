@@ -21,6 +21,7 @@
 #include "CameraShakeComponent.h"
 #include "KnockBack.h"
 #include "Crystal.h"
+#include "GameSettings.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = false;
@@ -439,7 +440,13 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	float playerVibrationRate = m_vlp_playerComponent->GetVibrationRate();
 	float size = MathHelper::Lerp(6.0f, 9.0f, playerVibrationRate) * 10.0f;
 
-	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, Vector4(1.0f, 0.745, 0.0f, 1.0f));
+	Color color = GameSettings::PLAYER_COLOR;
+	if (m_vlp_playerComponent->IsBomb())
+	{
+		color = GameSettings::SOUL_COLOR;
+	}
+
+	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, color);
 
 	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(6, 1, playerVibrationRate);
 	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
