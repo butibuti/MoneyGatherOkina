@@ -57,6 +57,12 @@ void ButiEngine::Enemy::OnUpdate()
 		//StopVibrationEffect();
 	}
 
+	if (GameDevice::GetInput()->TriggerKey(Keys::P))
+	{
+		CreateAttackFlashEffect();
+	}
+
+
 	if (IsVibrate())
 	{
 		IncreaseVibration();
@@ -68,7 +74,7 @@ void ButiEngine::Enemy::OnUpdate()
 
 	if (m_isNearPlayer || m_isHitShockWave)
 	{
-		CreateAttackFlashEffect();
+		AttackFlashUpdate();
 	}
 	else
 	{
@@ -89,14 +95,11 @@ void ButiEngine::Enemy::OnSet()
 			{
 				OnCollisionEnemy(arg_vwp_other);
 			}
-		});
-
-	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
-		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
 				m_isNearPlayer = true;
+				m_vlp_attackFlashTimer->Start();
+				CreateAttackFlashEffect();
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
@@ -118,7 +121,6 @@ void ButiEngine::Enemy::OnSet()
 		});
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionEnterLambda);
-	gameObject.lock()->AddCollisionStayReaction(collisionStayLambda);
 	gameObject.lock()->AddCollisionLeaveReaction(collisionLeaveLambda);
 
 
@@ -420,24 +422,29 @@ void ButiEngine::Enemy::ScaleAnimation()
 	m_vwp_scaleAnimationComponent.lock()->SetScaleRate(lerpScale);
 }
 
+void ButiEngine::Enemy::AttackFlashUpdate()
+{
+	if (m_vlp_attackFlashTimer->Update())
+	{
+		CreateAttackFlashEffect();
+	}
+}
+
 void ButiEngine::Enemy::CreateAttackFlashEffect()
 {
-	m_vlp_attackFlashTimer->Start();
-
 	Vector3 dir = (m_vwp_player.lock()->transform->GetLocalPosition() - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
 
 	float playerVibrationRate = m_vlp_playerComponent->GetVibrationRate();
-	float size = MathHelper::Lerp(1.0f, 6.0f, playerVibrationRate) * 10.0f;
+	float size = MathHelper::Lerp(6.0f, 9.0f, playerVibrationRate) * 10.0f;
 
-	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(4, 1, playerVibrationRate);
+	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, Vector4(1.0f, 0.745, 0.0f, 1.0f));
+
+	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(6, 1, playerVibrationRate);
 	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
 
-	if (m_vlp_attackFlashTimer->Update())
-	{
-		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, Vector4(1.0f, 0.745, 0.0f, 1.0f));
-	}
+	m_vlp_attackFlashTimer->Reset();
 }
 
 

@@ -62,8 +62,9 @@ namespace ButiEngine {
 		void VibrationStickWoker();
 		void ShakeDrawObject();
 		void ScaleAnimation();
+		void AttackFlashUpdate();
 		void CreateAttackFlashEffect();
-
+		bool pushP;
 		//U“®—Ê‚Ìã¸’l‚ğŒvZ‚·‚é
 		void CalculateVibrationIncrease();
 		std::uint8_t GetStickWorkerCount();

@@ -31,13 +31,17 @@ void ButiEngine::SpriteParticleGenerator::AttackFlashParticles(const Vector3& ar
 	dir.x = ButiRandom::GetInt(-100, 100);
 	dir.y = ButiRandom::GetInt(-100, 100);
 	dir.z = ButiRandom::GetInt(-100, 100);
+	if (dir == Vector3Const::Zero)
+	{
+		dir.x = 1;
+	}
 	dir.Normalize();
 
-	float spawnRadius = arg_spawnRadius * ButiRandom::GetRandom(0.3f, 1.0f);
+	float spawnRadius = arg_spawnRadius * ButiRandom::GetRandom(0.3f, 1.0f, 10);
 
 	particle.position = arg_position + dir * spawnRadius;
 	particle.angle = ButiRandom::GetRandom(0.0f, 1.0f, 100);
-	particle.size = arg_size * ButiRandom::GetRandom(0.3f, 1.0f);
+	particle.size = arg_size * ButiRandom::GetRandom(0.7f, 1.0f, 10);
 	particle.color = arg_color;
 	particle.life = 12;
 
@@ -55,9 +59,13 @@ void ButiEngine::SpriteParticleGenerator::ChargeParticles(const Vector3& arg_pos
 		dir.x = ButiRandom::GetInt(-100, 100);
 		dir.y = ButiRandom::GetInt(-100, 100);
 		dir.z = ButiRandom::GetInt(-100, 100);
+		if (dir == Vector3Const::Zero)
+		{
+			dir.x = 1;
+		}
 		dir.Normalize();
 
-		float spawnRadius = arg_radius * ButiRandom::GetRandom(0.3f, 1.0f);
+		float spawnRadius = arg_radius * ButiRandom::GetRandom(0.3f, 1.0f, 10);
 
 		particle.position = arg_position + dir * spawnRadius;
 		particle.velocity = -dir * 0.1f;
