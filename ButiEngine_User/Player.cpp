@@ -190,6 +190,7 @@ void ButiEngine::Player::Start()
 	m_vlp_particleTimer->Start();
 	m_vlp_particleTimer->ChangeCountFrame(4);
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	m_vwp_vignetteUI = GetManager().lock()->AddObjectFromCereal("VignetteUI");
 }
@@ -205,6 +206,11 @@ void ButiEngine::Player::Dead()
 	//{
 	//	m_vwp_shockWave.lock()->SetIsRemove(true);
 	//}
+
+	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
+
+	auto position = gameObject.lock()->transform->GetWorldPosition();
+	m_vwp_polygonParticleGenerater.lock()->ExplosionParticles(position);
 
 	if (m_vwp_sensor.lock())
 	{
@@ -340,7 +346,7 @@ void ButiEngine::Player::Damage()
 	if (m_life == 0)
 	{
 		m_isDead = true;
-		Dead();
+		//Dead();
 		return;
 	}
 
