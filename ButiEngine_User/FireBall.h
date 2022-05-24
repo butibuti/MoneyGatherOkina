@@ -6,7 +6,7 @@ namespace ButiEngine {
 
 	enum class FireBallPhase
 	{
-		Wait,
+		Charge,
 		Appear,
 		Rotate,
 		Disappear
@@ -38,8 +38,8 @@ namespace ButiEngine {
 		void DisappeaerStart();
 		void Dead();
 	private:
-		void Wait();
-		void WaitStart();
+		void Charge();
+		void ChargeStart();
 		void Appear();
 		void AppearStart();
 		void Rotate();
@@ -51,7 +51,7 @@ namespace ButiEngine {
 		void SetPhaseParameter();
 		void SetRotationParameter();
 
-		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_ptr<Timer> m_vlp_chargeTimer;
 		Value_ptr<Timer> m_vlp_appearTimer;
 		Value_ptr<Timer> m_vlp_rotationTimer;
 		Value_ptr<Timer> m_vlp_disappearTimer;

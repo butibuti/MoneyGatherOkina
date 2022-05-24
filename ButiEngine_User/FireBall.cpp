@@ -6,8 +6,8 @@ void ButiEngine::FireBall::OnUpdate()
 {
 	switch (m_phase)
 	{
-	case ButiEngine::FireBallPhase::Wait:
-		Wait();
+	case ButiEngine::FireBallPhase::Charge:
+		Charge();
 		break;
 	case ButiEngine::FireBallPhase::Appear:
 		Appear();
@@ -53,7 +53,7 @@ void ButiEngine::FireBall::OnShowUI()
 
 void ButiEngine::FireBall::Start()
 {
-	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SphereParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
 
 	if (m_isStrengthened)
 	{
@@ -74,20 +74,20 @@ void ButiEngine::FireBall::Dead()
 	gameObject.lock()->SetIsRemove(true);
 }
 
-void ButiEngine::FireBall::Wait()
+void ButiEngine::FireBall::Charge()
 {
-	m_vwp_spriteParticleGenerator.lock()->ChargeParticles(gameObject.lock()->transform->GetLocalPosition(), ButiColor::Purple());
+	m_vwp_spriteParticleGenerator.lock()->ChargeParticles(gameObject.lock()->transform->GetLocalPosition(), 5.0f, Vector4(1.0f, 0.0f, 0.86f, 1.0f));
 
-	if (m_vlp_waitTimer->Update())
+	if (m_vlp_chargeTimer->Update())
 	{
 		AppearStart();
 	}
 }
 
-void ButiEngine::FireBall::WaitStart()
+void ButiEngine::FireBall::ChargeStart()
 {
-	m_phase = FireBallPhase::Wait;
-	m_vlp_waitTimer->Start();
+	m_phase = FireBallPhase::Charge;
+	m_vlp_chargeTimer->Start();
 }
 
 void ButiEngine::FireBall::Appear()
@@ -183,17 +183,24 @@ void ButiEngine::FireBall::DisappeaerStart()
 	m_phase = FireBallPhase::Disappear;
 	m_vlp_disappearTimer->Start();
 
+	//“–‚½‚è”»’èíœ
+	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
+	if (collider)
+	{
+		collider->SetIsRemove(true);
+	}
+
 	m_beforeDisappearScale = gameObject.lock()->transform->GetLocalScale();
 }
 
 void ButiEngine::FireBall::SetPhaseParameter()
 {
-	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>(120);
+	m_vlp_chargeTimer = ObjectFactory::Create<RelativeTimer>(120);
 	m_vlp_appearTimer = ObjectFactory::Create<RelativeTimer>(30);
 	m_vlp_rotationTimer = ObjectFactory::Create<RelativeTimer>(500);
 	m_vlp_disappearTimer = ObjectFactory::Create<RelativeTimer>(30);
 
-	WaitStart();
+	ChargeStart();
 }
 
 void ButiEngine::FireBall::SetRotationParameter()

@@ -157,10 +157,20 @@ bool ButiEngine::InputManager::IsPushConveneKey()
 		GameDevice::GetInput()->GetLeftTrigger() >= XINPUT_GAMEPAD_TRIGGER_THRESHOLD);
 }
 
+bool ButiEngine::InputManager::IsPushGatherKey()
+{
+	return GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_LEFT);
+}
+
 bool ButiEngine::InputManager::IsTriggerPauseKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::Esc) ||
 		GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_START));
+}
+
+bool ButiEngine::InputManager::IsTriggerBombKey()
+{
+	return GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT);
 }
 
 ButiEngine::Vector2 ButiEngine::InputManager::GetRightStick()

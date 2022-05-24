@@ -19,28 +19,12 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (GetVibrationRate() >= 1.0f)
-	{
-		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 1.0f);
-
-		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 0.8f);
-	}
-	else
-	{
-		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.745f, 0.0f, 1.0f);
-
-		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.137f, 1.0f, 1.0f, 0.8f);
-	}
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		Damage();
 	}
 
-	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_BUTTON_RIGHT))
+	if (InputManager::IsTriggerBombKey())
 	{
 		BombStart();
 	}
@@ -381,6 +365,11 @@ void ButiEngine::Player::IncreaseVibration()
 	{
 		m_isCapaOver = true;
 		m_vibration = m_maxVibration + m_vibrationDecrease * 600;
+		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 1.0f);
+
+		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.0f, 0.86f, 0.8f);
 	}
 
 	if (!m_isVibrate)
@@ -399,6 +388,12 @@ void ButiEngine::Player::DecreaseVibration()
 	if (GetVibrationRate() < 1.0f)
 	{
 		m_isCapaOver = false;
+
+		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(1.0f, 0.745f, 0.0f, 1.0f);
+
+		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.137f, 1.0f, 1.0f, 0.8f);
 	}
 
 	if (m_vibration <= 0.0f)
@@ -502,6 +497,7 @@ void ButiEngine::Player::ShakeDrawObject()
 
 void ButiEngine::Player::BombStart()
 {
+	if (!m_vwp_bomb.lock()) { return; }
 	if (m_isBomb) { return; }
 	if (m_vwp_beeSoulPod.lock()->GetSoulRate() < 1.0f) { return; }
 
@@ -517,6 +513,7 @@ void ButiEngine::Player::BombStart()
 
 void ButiEngine::Player::Bomb()
 {
+	if (!m_vwp_bomb.lock()) { return; }
 	if (m_vlp_bombTimer->Update())
 	{
 		m_vlp_bombTimer->Stop();

@@ -20,7 +20,7 @@
 #include "KnockBack.h"
 #include "ButiBulletWrap/ButiBulletWrap/Common.h"
 
-float ButiEngine::Worker::m_nearBorder = 1.0f;
+float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
 
 void ButiEngine::Worker::OnUpdate()
