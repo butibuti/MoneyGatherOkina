@@ -2,6 +2,7 @@
 #include "HeartUIManagerComponent.h"
 #include "ShakeComponent.h"
 #include "Player.h"
+#include "GameSettings.h"
 
 void ButiEngine::HeartUIManagerComponent::OnUpdate()
 {
@@ -68,6 +69,7 @@ void ButiEngine::HeartUIManagerComponent::Start()
 		position.x += (m_heartUIScale.x + m_space) * i;
 		m_vec_vlp_heartUI[i]->transform->SetLocalPosition(position);
 		m_vec_vlp_heartUI[i]->transform->SetLocalScale(m_heartUIScale);
+		m_vec_vlp_heartUI[i]->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = ButiColor::White();
 	}
 }
 

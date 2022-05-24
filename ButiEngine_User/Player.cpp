@@ -176,6 +176,7 @@ void ButiEngine::Player::Start()
 	auto hzUI = GetManager().lock()->AddObjectFromCereal("HzUI"); //Hz‚ÌUI¶¬
 	hzUI.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
 	hzUI.lock()->transform->SetLocalPosition(Vector3(250, -30, 0));
+	hzUI.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::SOUL_COLOR;
 	m_vwp_maxUI = GetManager().lock()->AddObjectFromCereal("MaxUI"); //Max‚ÌUI¶¬
 	m_vwp_maxUI.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
 	m_vwp_maxUI.lock()->transform->SetLocalPosition(Vector3(10, 10, 0));
