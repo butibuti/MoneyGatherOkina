@@ -49,7 +49,9 @@ void ButiEngine::SphereExclusion::Exclusion(Value_weak_ptr<GameObject> arg_vwp_o
 	Vector3 pos = transform->GetWorldPosition();
 	Vector3 otherPos = otherTransform->GetWorldPosition();
 
-	Vector3 dir = (pos - otherPos).GetNormalize();
+	Vector3 dir = pos - otherPos;
+	dir.y = 0.0f;
+	dir.Normalize();
 
 	float radius = transform->GetWorldScale().x * 0.5f;
 	float otherRadius = otherTransform->GetWorldScale().x * 0.5f;

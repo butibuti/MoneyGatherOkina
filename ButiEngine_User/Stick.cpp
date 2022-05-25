@@ -52,7 +52,17 @@ void ButiEngine::Stick::Dead()
 	if (m_vwp_center.lock())
 	{
 		m_vwp_center.lock()->SetIsRemove(true);
+		m_vwp_center = Value_weak_ptr<GameObject>();
 	}
+
+	if (m_vwp_pocket.lock())
+	{
+		m_vwp_pocket = Value_weak_ptr<GameObject>();
+	}
+
+	gameObject.lock()->transform->SetBaseTransform(nullptr);
+	gameObject.lock()->transform->SetLocalScale(0.5f);
+	SetIsRemove(true);
 }
 
 void ButiEngine::Stick::KeepWorldScale()
@@ -69,9 +79,7 @@ void ButiEngine::Stick::KeepWorldScale()
 
 void ButiEngine::Stick::KeepDistance()
 {
-	//if (!m_vwp_pocket.lock()) { return; }
 	auto enemy = m_vwp_pocket.lock()->GetGameComponent<Pocket>()->GetEnemy();
-	//if (!enemy.lock()) { return; }
 	auto enemyDrawObject = enemy.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
 	float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
 	float enemyRadius = enemyDrawObject.lock()->transform->GetWorldScale().x * 0.5f;

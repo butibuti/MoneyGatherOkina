@@ -24,6 +24,9 @@ namespace ButiEngine {
 		}
 
 		static void ResetWorkers() { m_vec_workers.clear(); }
+
+		void AddFlocking();
+		void RemoveFlocking();
 	private:
 		void SetCohesionWeight();
 		void SetViewRadius();

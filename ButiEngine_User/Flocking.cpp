@@ -38,21 +38,12 @@ void ButiEngine::Flocking::OnUpdate()
 
 void ButiEngine::Flocking::OnSet()
 {
-	auto tag = GameObjectTag("Flocking");
-	gameObject.lock()->SetGameObjectTag(tag);
-
-	m_vec_workers.push_back(gameObject);
+	AddFlocking();
 }
 
 void ButiEngine::Flocking::OnRemove()
 {
-	gameObject.lock()->RemoveGameObjectTag(GameObjectTag("Flocking"));
-
-	auto find = std::find(m_vec_workers.begin(), m_vec_workers.end(), gameObject.lock());
-	if (find != m_vec_workers.end())
-	{
-		m_vec_workers.erase(find);
-	}
+	RemoveFlocking();
 }
 
 void ButiEngine::Flocking::OnShowUI()
@@ -98,6 +89,29 @@ void ButiEngine::Flocking::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Flocking::Clone()
 {
 	return ObjectFactory::Create<Flocking>();
+}
+
+void ButiEngine::Flocking::AddFlocking()
+{
+	auto tag = GameObjectTag("Flocking");
+	gameObject.lock()->SetGameObjectTag(tag);
+
+	m_vec_workers.push_back(gameObject);
+
+	SetIsActive(true);
+}
+
+void ButiEngine::Flocking::RemoveFlocking()
+{
+	gameObject.lock()->RemoveGameObjectTag(GameObjectTag("Flocking"));
+
+	auto find = std::find(m_vec_workers.begin(), m_vec_workers.end(), gameObject.lock());
+	if (find != m_vec_workers.end())
+	{
+		m_vec_workers.erase(find);
+	}
+
+	SetIsActive(false);
 }
 
 void ButiEngine::Flocking::SetCohesionWeight()

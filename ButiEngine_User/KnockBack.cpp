@@ -22,14 +22,23 @@ void ButiEngine::KnockBack::OnUpdate()
 		constexpr float gravity = 0.015f;
 		m_velocityY -= gravity * GameDevice::WorldSpeed;
 		m_velocity.y = m_velocityY;
+
+		Vector3 pos = gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
+
+		if (pos.y < 0.0f || m_vlp_timer->Update())
+		{
+			gameObject.lock()->transform->SetWorldPostionY(0.0f);
+			SetIsRemove(true);
+		}
 	}
-
-	gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
-
-
-	if (m_vlp_timer->Update())
+	else
 	{
-		SetIsRemove(true);
+		gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
+
+		if (m_vlp_timer->Update())
+		{
+			SetIsRemove(true);
+		}
 	}
 }
 

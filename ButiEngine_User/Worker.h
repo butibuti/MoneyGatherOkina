@@ -44,6 +44,8 @@ namespace ButiEngine {
 		void OnNearPlayer();
 		void OnRupture();
 
+		void ReturnFlock();
+
 		void StopVibrationEffect();
 		void ShakeDrawObject();
 		void StopShakeDrawObject();

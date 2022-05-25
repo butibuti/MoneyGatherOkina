@@ -2,6 +2,7 @@
 #include "Pocket.h"
 #include "Worker.h"
 #include "Enemy.h"
+#include "Stick.h"
 
 void ButiEngine::Pocket::OnUpdate()
 {
@@ -34,6 +35,11 @@ void ButiEngine::Pocket::Dead()
 			Vector3 enemyPos = m_vwp_enemy.lock()->transform->GetLocalPosition();
 			Vector3 workerPos = m_vwp_worker.lock()->transform->GetWorldPosition();
 			Vector3 dir = (workerPos - enemyPos).GetNormalize();
+			auto stick = m_vwp_worker.lock()->GetGameComponent<Stick>();
+			if (stick)
+			{
+				stick->Dead();
+			}
 			worker->Rupture(dir);
 
 			m_vwp_enemy.lock()->GetGameComponent<Enemy>()->RemoveSrickWorkerCount();

@@ -158,7 +158,6 @@ void ButiEngine::Worker::Dead()
 	if (stick)
 	{
 		stick->Dead();
-		stick->SetIsRemove(true);
 	}
 
 	if (m_vwp_tiltFloatObject.lock())
@@ -173,39 +172,36 @@ void ButiEngine::Worker::Dead()
 void ButiEngine::Worker::Rupture(const Vector3& arg_dir)
 {
 	if (m_isRupture) { return; }
-	gameObject.lock()->transform->SetBaseTransform(nullptr);
-	gameObject.lock()->transform->SetLocalScale(m_defaultScale);
 
 	auto stick = gameObject.lock()->GetGameComponent<Stick>();
 	if (stick)
 	{
 		stick->Dead();
-		stick->SetIsRemove(true);
 	}
 
 	auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
 	if (tiltMotion)
 	{
-		tiltMotion->SetIsRemove(true);
+		tiltMotion->SetIsActive(false);
 	}
 
 	auto floatMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<FloatMotionComponent>();
 	if (floatMotion)
 	{
-		floatMotion->SetIsRemove(true);
+		floatMotion->SetIsActive(false);
 	}
 
 	m_isVibrate = false;
 	StopVibrationEffect();
 
-	std::int8_t frame = 60;
+	std::int8_t frame = 120;
 
 	Vector3 dir = arg_dir;
 	dir.y = 4.0f;
 	dir.Normalize();
 	gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.5f, true, frame);
-	m_vlp_ruptureTimer = ObjectFactory::Create<RelativeTimer>(frame + 30);
-	m_vlp_ruptureTimer->Start();
+	//m_vlp_ruptureTimer = ObjectFactory::Create<RelativeTimer>(frame + 60);
+	//m_vlp_ruptureTimer->Start();
 
 	m_isAttack = false;
 	m_isRupture = true;
@@ -219,30 +215,30 @@ void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 	auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
 	if (flocking)
 	{
-		flocking->SetIsRemove(true);
+		flocking->RemoveFlocking();
 	}
 
 	if (m_vlp_lookAt)
 	{
-		m_vlp_lookAt->SetIsRemove(true);
+		m_vlp_lookAt->SetIsActive(false);
 	}
 
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
 	if (collider)
 	{
-		collider->SetIsRemove(true);
+		collider->SetIsActive(false);
 	}
 
 	auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
 	if (tiltMotion)
 	{
-		tiltMotion->SetIsRemove(true);
+		tiltMotion->SetIsActive(false);
 	}
 
 	auto floatMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<FloatMotionComponent>();
 	if (floatMotion)
 	{
-		floatMotion->SetIsRemove(true);
+		floatMotion->SetIsActive(false);
 	}
 
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
@@ -273,6 +269,7 @@ void ButiEngine::Worker::CreateAttackFlashEffect()
 
 void ButiEngine::Worker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other)
 {
+	return;
 	if (m_isNearPlayer) { return; }
 
 	float playerVibrationRate = m_vlp_player->GetVibrationRate();
@@ -281,13 +278,13 @@ void ButiEngine::Worker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_ot
 		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
 		if (flocking)
 		{
-			flocking->SetIsRemove(true);
+			flocking->RemoveFlocking();
 		}
 
 		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
 		if (collider)
 		{
-			collider->SetIsRemove(true);
+			collider->SetIsActive(false);
 		}
 
 		m_vlp_nearPlayerTimer = ObjectFactory::Create<RelativeTimer>(30);
@@ -337,32 +334,26 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
 		if (flocking)
 		{
-			flocking->SetIsRemove(true);
+			flocking->RemoveFlocking();
 		}
 
 		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
 		if (collider)
 		{
-			collider->SetIsRemove(true);
+			collider->SetIsActive(false);
 		}
 
 		auto lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 		if (lookAt)
 		{
-			lookAt->SetIsRemove(true);
+			lookAt->SetIsActive(false);
 		}
 
 		auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
 		if (tiltMotion)
 		{
-			tiltMotion->SetIsRemove(true);
+			tiltMotion->SetIsActive(false);
 		}
-
-		//auto floatMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<FloatMotionComponent>();
-		//if (floatMotion)
-		//{
-		//	//floatMotion->SetIsRemove(true);
-		//}
 
 		m_isAttack = true;
 		m_vlp_attackFlashTimer->Start();
@@ -396,11 +387,53 @@ void ButiEngine::Worker::OnNearPlayer()
 
 void ButiEngine::Worker::OnRupture()
 {
-	if (m_vlp_ruptureTimer->Update())
+	auto knockBack = gameObject.lock()->GetGameComponent<KnockBack>();
+	if (/*m_vlp_ruptureTimer->Update()*/ !knockBack)
 	{
-		auto position = gameObject.lock()->transform->GetLocalPosition();
-		Dead();
+		//m_vlp_ruptureTimer->Stop();
+		//m_vlp_ruptureTimer->Reset();
+		m_isRupture = false;
+		ReturnFlock();
 	}
+}
+
+void ButiEngine::Worker::ReturnFlock()
+{
+	auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
+	if (flocking)
+	{
+		flocking->AddFlocking();
+	}
+
+	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
+	if (collider)
+	{
+		collider->SetIsActive(true);
+	}
+
+	auto lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
+	if (lookAt)
+	{
+		lookAt->SetIsActive(true);
+		Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+		Vector3 front = gameObject.lock()->transform->GetFront();
+		front.y = 0.0f;
+		gameObject.lock()->transform->SetLookAtRotation(pos + front * 100.0f);
+		lookAt->GetLookTarget()->SetLocalPosition(pos + front * 100.0f);
+	}
+
+	auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
+	if (tiltMotion)
+	{
+		tiltMotion->SetIsActive(true);
+	}
+
+	auto a = gameObject.lock()->transform->GetLocalPosition().y;
+	gameObject.lock()->transform->SetLocalPositionY(0.0f);
+
+	m_isAttack = false;
+	m_vlp_attackFlashTimer->Stop();
+	m_vlp_attackFlashTimer->Reset();
 }
 
 void ButiEngine::Worker::StopVibrationEffect()

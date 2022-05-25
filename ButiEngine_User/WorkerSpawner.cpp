@@ -36,7 +36,12 @@ void ButiEngine::WorkerSpawner::Start()
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(m_spawnIntervalFrame);
 	m_vlp_spawnTimer->Start();
 
-	for (std::uint8_t i = 0; i < 20; i++)
+	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
+	auto playerComponent = player.lock()->GetGameComponent<Player>();
+
+	std::uint8_t maxWorkerCount = playerComponent->GetMaxWorkerCount();
+
+	for (std::uint8_t i = 0; i < maxWorkerCount; i++)
 	{
 		SpawnWorker();
 	}
