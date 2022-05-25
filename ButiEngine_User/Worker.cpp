@@ -21,6 +21,8 @@
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
+float ButiEngine::Worker::m_vibrationIncrease = 1.0f;
+float ButiEngine::Worker::m_vibrationDecrease = 0.02f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -110,8 +112,12 @@ void ButiEngine::Worker::OnShowUI()
 {
 	GUI::BulletText("NearBorder");
 	GUI::DragFloat("##nearBorder", &m_nearBorder, 0.1f, 0.0f, 10.0f);
+
+	GUI::Text("Vibration:%f", GetVibrationRate() * 100.0f);
+
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
+
 	GUI::BulletText("VibrationIncrease");
 	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
 
@@ -502,7 +508,5 @@ void ButiEngine::Worker::SetLookAtParameter()
 void ButiEngine::Worker::SetVibrationParameter()
 {
 	m_vibration = 0.0f;
-	m_maxVibration = 1.0f;
-	m_vibrationIncrease = 0.050f;
-	m_vibrationDecrease = 0.00002f;
+	m_maxVibration = 100.0f;
 }

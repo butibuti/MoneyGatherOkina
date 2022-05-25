@@ -114,7 +114,7 @@ void ButiEngine::Player::OnShowUI()
 	GUI::DragFloat("##decel", &m_deceleration, 0.001f, 0.0f, 1.0f);
 
 
-	GUI::Text("Vibration:%f", m_vibration);
+	GUI::Text("Vibration:%f", GetVibrationRate() * 100.0f);
 
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
@@ -643,11 +643,11 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_isVibrate = false;
 	m_vibrationForce = 5.0f;
 	m_vibration = 0.0f;
-	m_maxVibration = 1.0f;
+	m_maxVibration = 100.0f;
 	m_nearEnemyCount = 0;
 	m_nearWorkerCount = 0;
-	m_vibrationIncrease = 0.005f;
-	m_vibrationDecrease = 0.0002f;
+	m_vibrationIncrease = 0.5f;
+	m_vibrationDecrease = 0.02f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isCapaOver = false;
 	m_controllerVibration = 0.0f;

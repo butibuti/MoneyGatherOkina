@@ -38,7 +38,6 @@ namespace ButiEngine {
 		}
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
-		float GetVibration() { return m_vibration; }
 		float GetVibrationRate()
 		{
 			float rate = m_vibration / m_maxVibration;

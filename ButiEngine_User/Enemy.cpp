@@ -460,8 +460,8 @@ void ButiEngine::Enemy::CalculateVibrationIncrease()
 
 	if (m_isNearPlayer || m_isHitShockWave)
 	{
-		float playerVibration = m_vlp_playerComponent->GetVibration();
-		m_vibrationIncrease += playerVibrationForce * (1 + playerVibration * m_playerVibrationCoefficient);
+		float playerVibrationRate = m_vlp_playerComponent->GetVibrationRate();
+		m_vibrationIncrease += playerVibrationForce * (1 + playerVibrationRate * m_playerVibrationCoefficient);
 	}
 
 	m_vibrationIncrease += workerVibrationForce * m_stickWorkerCount - m_vibrationResistance;

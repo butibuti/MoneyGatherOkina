@@ -66,6 +66,8 @@ namespace ButiEngine {
 
 		static float m_nearBorder;
 		static float m_vibrationForce;
+		static float m_vibrationIncrease;
+		static float m_vibrationDecrease;
 
 		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
 
@@ -91,8 +93,6 @@ namespace ButiEngine {
 		
 		float m_vibration;
 		float m_maxVibration;
-		float m_vibrationIncrease;
-		float m_vibrationDecrease;
 	};
 
 }
