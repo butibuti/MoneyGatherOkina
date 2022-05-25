@@ -32,6 +32,8 @@ namespace ButiEngine {
 		void SetEnemyParameter();
 		void SetLoiterParameter();
 		void SetLookAtParameter();
+		void HaneAnimation(const bool arg_isDetectionPlayer);
+		void FangAnimation(const bool arg_isDetectionPlayer);
 		float CalculateRotationDirection();
 
 		bool IsDetectionPlayer();
@@ -44,6 +46,23 @@ namespace ButiEngine {
 
 		static std::int32_t m_pocketCount;
 		static float m_createPocketRadius;
+
+		//羽アニメーション
+		Value_weak_ptr<MeshDrawComponent> m_vwp_hane_L;
+		Value_weak_ptr<MeshDrawComponent> m_vwp_hane_R;
+		float m_defaultHaneRotateY;
+		float m_currentHaneRotateY_L;
+		float m_currentHaneRotateY_R;
+
+		//ファングアニメーション
+		Value_ptr<Timer> m_fangAnimationTimer;
+		Value_weak_ptr<MeshDrawComponent> m_vwp_fang_L;
+		Value_weak_ptr<MeshDrawComponent> m_vwp_fang_R;
+		float m_defaultFangRotateY;
+		float m_currentFangRotateY_L;
+		float m_currentFangRotateY_R;
+		float m_endFangRotateY_L;
+		float m_endFangRotateY_R;
 
 		float m_detectionRange;
 

@@ -66,7 +66,7 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 		auto backToSelectUI = GetManager().lock()->AddObjectFromCereal("BackToSelectUI");
 		auto position = backToSelectUI.lock()->transform->GetLocalPosition();
 		auto moveAnimationComponent = backToSelectUI.lock()->GetGameComponent<MoveAnimationComponent>();
-		auto endPosition = Vector3(350, -180, position.z);
+		auto endPosition = Vector3(500, -180, position.z);
 		moveAnimationComponent->SetEndPosition(endPosition);
 		moveAnimationComponent->SetSpeed(0.9f);
 		moveAnimationComponent->SetIsShake(true);
