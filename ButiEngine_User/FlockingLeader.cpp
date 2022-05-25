@@ -10,9 +10,9 @@ void ButiEngine::FlockingLeader::OnUpdate()
 	m_prevPos = m_pos;
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 
-	if (InputManager::IsPushGatherKey())
+	if (InputManager::IsTriggetGatherKey())
 	{
-		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 10.0f, GameSettings::SOUL_COLOR);
+		m_isGather = !m_isGather;
 	}
 }
 
@@ -38,6 +38,8 @@ void ButiEngine::FlockingLeader::Start()
 	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SphereParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 	m_prevPos = m_pos;
+
+	m_isGather = true;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FlockingLeader::Clone()

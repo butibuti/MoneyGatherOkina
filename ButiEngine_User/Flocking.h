@@ -28,6 +28,7 @@ namespace ButiEngine {
 		void AddFlocking();
 		void RemoveFlocking();
 	private:
+		void SetLookSpeed();
 		void SetCohesionWeight();
 		void SetViewRadius();
 		void CalculateAveragePos();

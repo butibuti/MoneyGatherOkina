@@ -39,8 +39,8 @@ namespace ButiEngine {
 		static void VibrationStop();
 
 		//ゲームプレイシーンのみ
-		static bool IsPushConveneKey();
 		static bool IsPushGatherKey();
+		static bool IsTriggetGatherKey();
 		static bool IsTriggerPauseKey();
 		static bool IsTriggerBombKey();
 

@@ -135,7 +135,7 @@ bool ButiEngine::InputManager::IsPushAnyGameKey()
 		IsPushLeftKey() ||
 		IsPushUpKey() ||
 		IsPushDownKey() ||
-		IsPushConveneKey());
+		IsPushGatherKey());
 }
 
 void ButiEngine::InputManager::VibrationStart(const float arg_vibPower)
@@ -150,16 +150,14 @@ void ButiEngine::InputManager::VibrationStop()
 	GameDevice::GetInput()->Vibration_R(0);
 }
 
-bool ButiEngine::InputManager::IsPushConveneKey()
-{
-	return (GameDevice::GetInput()->TriggerKey(Keys::Space) ||
-		GameDevice::GetInput()->GetRightTrigger() >= XINPUT_GAMEPAD_TRIGGER_THRESHOLD ||
-		GameDevice::GetInput()->GetLeftTrigger() >= XINPUT_GAMEPAD_TRIGGER_THRESHOLD);
-}
-
 bool ButiEngine::InputManager::IsPushGatherKey()
 {
 	return GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_A);
+}
+
+bool ButiEngine::InputManager::IsTriggetGatherKey()
+{
+	return GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_A);
 }
 
 bool ButiEngine::InputManager::IsTriggerPauseKey()

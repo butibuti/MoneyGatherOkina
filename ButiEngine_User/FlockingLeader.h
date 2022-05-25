@@ -23,10 +23,13 @@ namespace ButiEngine {
 		}
 
 		float GetMoveSpeed() { return (m_pos - m_prevPos).GetLength(); }
+		bool IsGather() { return m_isGather; }
 	private:
 		Vector3 m_prevPos;
 		Vector3 m_pos;
 
+		bool m_isGather;
+		
 		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerator;
 	};
 

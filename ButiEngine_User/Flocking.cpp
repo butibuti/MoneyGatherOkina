@@ -13,7 +13,7 @@ float ButiEngine::Flocking::m_alignmentWeight = 1.0f;
 float ButiEngine::Flocking::m_separationWeight = 1.0f;
 float ButiEngine::Flocking::m_avoidPlayerWeight = 0.3f;
 float ButiEngine::Flocking::m_surroundWeight = 0.5f;
-float ButiEngine::Flocking::m_viewRadius = 0.1f;
+float ButiEngine::Flocking::m_viewRadius = 2.0f;
 float ButiEngine::Flocking::m_minViewRadius = 0.1f;
 float ButiEngine::Flocking::m_maxViewRadius = 0.1f;
 float ButiEngine::Flocking::m_nearBorder = 1.2f;
@@ -22,6 +22,7 @@ float ButiEngine::Flocking::m_leaderNearBorder = 1.7f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
+	SetLookSpeed();
 	//SetCohesionWeight();
 	//SetViewRadius();
 	CalculateAveragePos();
@@ -112,6 +113,18 @@ void ButiEngine::Flocking::RemoveFlocking()
 	}
 
 	SetIsActive(false);
+}
+
+void ButiEngine::Flocking::SetLookSpeed()
+{
+	if (m_vlp_flockingLeader->IsGather())
+	{
+		m_vlp_lookAt->SetSpeed(0.5f);
+	}
+	else
+	{
+		m_vlp_lookAt->SetSpeed(0.1f);
+	}
 }
 
 void ButiEngine::Flocking::SetCohesionWeight()
