@@ -20,6 +20,9 @@ void OutputCereal(const std::unordered_map<std::string, float>& arg_v, const std
 
 void InputCereal(std::unordered_map<std::string, float>& arg_v, const std::string& arg_fileName)
 {
+    if (!Util::ExistFile(GlobalSettings::GetResourceDirectory() + "Sound/" + arg_fileName)) {
+        return;
+    }
     std::stringstream stream;
 
     std::ifstream inputFile(GlobalSettings::GetResourceDirectory()+"Sound/" + arg_fileName, std::ios::binary);
