@@ -183,19 +183,9 @@ void ButiEngine::Flocking::CalculateAveragePos()
 
 void ButiEngine::Flocking::CalculateMoveSpeed()
 {
-	//リーダーに近い時リーダーの速度に合わせる
-	//m_moveSpeed = m_vlp_flockingLeader->GetMoveSpeed();
-
 	float leaderSpeed = m_vlp_flockingLeader->GetMoveSpeed();
-	if (IsNearLeader(m_averagePos))
-	{
-		//m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed, 0.05f * GameDevice::WorldSpeed);
-	}
-	else
-	{
-		m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed * 1.1f, 0.05f * GameDevice::WorldSpeed);
-		m_moveSpeed = max(m_moveSpeed, m_playerMaxMoveSpeed);
-	}
+	m_moveSpeed = MathHelper::Lerp(m_moveSpeed, leaderSpeed * 1.1f, 0.05f * GameDevice::WorldSpeed);
+	m_moveSpeed = max(m_moveSpeed, m_playerMaxMoveSpeed);
 }
 
 void ButiEngine::Flocking::CalculateGatherVec()

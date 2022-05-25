@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "SpriteParticleGenerator.h"
+#include "GameSettings.h"
 
 void ButiEngine::SpriteParticleGenerator::OnUpdate()
 {
@@ -18,14 +19,14 @@ void ButiEngine::SpriteParticleGenerator::Start()
 	m_vwp_spriteParticleController = gameObject.lock()->GetGameComponent<SpriteParticleController>();
 
 	m_vwp_spriteParticleController.lock()->AddParticleControlFunction("GatherControl", std::function<void(Particle2D&)>([](Particle2D& arg_particle) {
-		float progress = 1.0f - arg_particle.life / arg_particle.angle;
+		float progress = arg_particle.frame / arg_particle.angle;
 		Vector3 p1 = MathHelper::LerpPosition(arg_particle.force, arg_particle.velocity, progress);
 		Vector3 p2 = MathHelper::LerpPosition(arg_particle.velocity, Vector3Const::Zero, progress);
 		arg_particle.position = MathHelper::LerpPosition(p1, p2, progress);
 		//arg_particle.position = MathHelper::LerpPosition(arg_particle.position, Vector3Const::Zero, arg_particle.velocity.x);
-		arg_particle.size = MathHelper::Lerp(0.0f, arg_particle.sizePase, progress);
+		arg_particle.size = MathHelper::Lerp(arg_particle.anglePase, arg_particle.sizePase, progress);
 		arg_particle.life -= 1.0f * GameDevice::WorldSpeed;
-		arg_particle.frame += 1.0f;
+		arg_particle.frame += 1.0f * GameDevice::WorldSpeed;
 		if ((arg_particle.position).GetLength() < 0.5f) {
 			//arg_particle.life = 0;
 		}
@@ -82,19 +83,41 @@ void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transfo
 		//Vector3 pos = arg_vwp_transform.lock()->GetWorldPosition();
 		float spawnRadius = arg_radius * ButiRandom::GetRandom(0.5f, 1.5f, 10);
 
+		//生成地点
 		particle.position = dir * spawnRadius;
 		particle.force = particle.position;
 		Vector3 verticalVec = Vector3(-dir.z, dir.y, dir.x);
+		//ベジェ曲線制御点
 		particle.velocity = particle.position * 0.5f + verticalVec * 5.0f;
-		//particle.m_targetTransform = arg_vwp_transform.lock();
+		//親
 		particle.m_parentTransform = arg_vwp_transform.lock();
-		//particle.velocity = 0.1f * GameDevice::WorldSpeed;
-		particle.size = 5.0f;
-		particle.sizePase = particle.size;
-		particle.life = 40;
-		particle.angle = particle.life;
-		//particle.sizePase = -0.1f;
+		//生成サイズ
+		particle.anglePase = 0.3f;
+		//最終サイズ
+		particle.sizePase = 5.0f;
+		//ライフ
+		particle.life = 35;
+		//補完フレーム
+		particle.angle = 30;
+		//色
 		particle.color = arg_color;
+
+		std::int8_t rand = ButiRandom::GetInt(1, 20);
+		if (rand <= 1)
+		{
+			//20分の1の確率で大きい白出す
+			particle.anglePase *= 1.5f;
+			particle.sizePase *= 1.5f;
+			particle.color = ButiColor::White();
+		}
+		else if (rand <= 3)
+		{
+			//20分の2の確率で青出す
+			particle.anglePase *= 1.5f;
+			particle.sizePase *= 1.2f;
+			particle.color = ButiColor::Blue();
+		}
+
 		particle.controlIndex = m_vwp_spriteParticleController.lock()->GetControlFunctionIndex("GatherControl");
 
 		m_vwp_spriteParticleController.lock()->AddParticle(particle);

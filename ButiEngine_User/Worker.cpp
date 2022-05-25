@@ -60,10 +60,12 @@ void ButiEngine::Worker::OnUpdate()
 
 	if (m_isAttack)
 	{
+		IncreaseVibration();
 		CreateAttackFlashEffect();
 	}
 	else
 	{
+		DecreaseVibration();
 		m_vlp_attackFlashTimer->Stop();
 		m_vlp_attackFlashTimer->Reset();
 	}
@@ -110,6 +112,11 @@ void ButiEngine::Worker::OnShowUI()
 	GUI::DragFloat("##nearBorder", &m_nearBorder, 0.1f, 0.0f, 10.0f);
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText("VibrationIncrease");
+	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText("VibrationDecrease");
+	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
 }
 
 void ButiEngine::Worker::Start()
@@ -119,6 +126,7 @@ void ButiEngine::Worker::Start()
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
 
 	SetLookAtParameter();
+	SetVibrationParameter();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_isPredated = false;
@@ -464,6 +472,18 @@ void ButiEngine::Worker::StopShakeDrawObject()
 	m_vwp_shakeComponent.lock()->SetShakePower(0.0f);
 }
 
+void ButiEngine::Worker::IncreaseVibration()
+{
+	m_vibration += m_vibrationIncrease * GameDevice::WorldSpeed;
+	m_vibration = min(m_vibration, m_maxVibration);
+}
+
+void ButiEngine::Worker::DecreaseVibration()
+{
+	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
+	m_vibration = max(m_vibration, 0.0f);
+}
+
 void ButiEngine::Worker::CreateDrawObject()
 {
 	m_vwp_tiltFloatObject = GetManager().lock()->AddObjectFromCereal("TiltFloatObject");
@@ -477,4 +497,12 @@ void ButiEngine::Worker::SetLookAtParameter()
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->SetSpeed(0.5f);
+}
+
+void ButiEngine::Worker::SetVibrationParameter()
+{
+	m_vibration = 0.0f;
+	m_maxVibration = 1.0f;
+	m_vibrationIncrease = 0.050f;
+	m_vibrationDecrease = 0.00002f;
 }

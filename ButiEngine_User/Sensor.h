@@ -21,7 +21,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		Value_ptr<Player> m_vlp_player;
+		void OnCollisionFlocking(Value_weak_ptr<GameObject> arg_vwp_other);
+
+		Value_weak_ptr<Player> m_vwp_player;
 	};
 
 }

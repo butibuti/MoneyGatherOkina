@@ -67,7 +67,7 @@ void ButiEngine::Enemy::OnUpdate()
 		DecreaseVibration();
 	}
 
-	if (m_isNearPlayer || m_isHitShockWave)
+	if (m_isHitShockWave)
 	{
 		AttackFlashUpdate();
 	}
@@ -92,13 +92,15 @@ void ButiEngine::Enemy::OnSet()
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
-				m_isNearPlayer = true;
-				m_vlp_attackFlashTimer->Start();
-				CreateAttackFlashEffect();
+				//m_isNearPlayer = true;
+				//m_vlp_attackFlashTimer->Start();
+				//CreateAttackFlashEffect();
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
 				m_isHitShockWave = true;
+				m_vlp_attackFlashTimer->Start();
+				CreateAttackFlashEffect();
 			}
 		});
 
@@ -107,7 +109,7 @@ void ButiEngine::Enemy::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
-				m_isNearPlayer = false;
+				//m_isNearPlayer = false;
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
@@ -209,7 +211,7 @@ std::vector<ButiEngine::Value_weak_ptr<ButiEngine::GameObject>> ButiEngine::Enem
 
 bool ButiEngine::Enemy::IsVibrate()
 {
-	return m_stickWorkerCount > 0 || m_isNearPlayer || m_isHitShockWave;
+	return m_stickWorkerCount > 0 || m_isHitShockWave;
 }
 
 void ButiEngine::Enemy::Dead()
@@ -252,7 +254,7 @@ void ButiEngine::Enemy::Dead()
 	RemoveAllPocket();
 	StopVibrationEffect();
 
-	m_vlp_playerComponent->SetIsIncrease(false);
+	//m_vlp_playerComponent->SetIsIncrease(false);
 
 	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
 	if (boss)
@@ -384,7 +386,7 @@ void ButiEngine::Enemy::VibrationStickWoker()
 			auto workerComponent = (*itr).lock()->GetGameComponent<Worker>();
 			if (workerComponent)
 			{
-				workerComponent->SetVibration(IsVibrate());
+				workerComponent->SetIsVibrate(IsVibrate());
 			}
 		}
 		

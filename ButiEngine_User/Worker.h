@@ -29,7 +29,14 @@ namespace ButiEngine {
 
 		static float GetVibrationForce() { return m_vibrationForce; }
 
-		void SetVibration(const bool arg_isVibration) { m_isVibrate = arg_isVibration; }
+		float GetVibrationRate()
+		{
+			float rate = m_vibration / m_maxVibration;
+			//rate = min(rate, 1.0f);
+			return rate;
+		}
+
+		void SetIsVibrate(const bool arg_isVibrate) { m_isVibrate = arg_isVibrate; }
 
 		void Dead();
 		void Rupture(const Vector3& arg_dir);
@@ -50,8 +57,12 @@ namespace ButiEngine {
 		void ShakeDrawObject();
 		void StopShakeDrawObject();
 
+		void IncreaseVibration();
+		void DecreaseVibration();
+
 		void CreateDrawObject();
 		void SetLookAtParameter();
+		void SetVibrationParameter();
 
 		static float m_nearBorder;
 		static float m_vibrationForce;
@@ -77,6 +88,11 @@ namespace ButiEngine {
 		bool m_isVibrate;
 		bool m_isAttack;
 		bool m_isPredated;
+		
+		float m_vibration;
+		float m_maxVibration;
+		float m_vibrationIncrease;
+		float m_vibrationDecrease;
 	};
 
 }

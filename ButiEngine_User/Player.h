@@ -8,6 +8,7 @@ namespace ButiEngine {
 	class ShakeComponent;
 	class NumberManagerComponent;
 	class BeeSoulPodUIComponent;
+	class FlockingLeader;
 
 	class Player :public GameComponent
 	{
@@ -58,6 +59,7 @@ namespace ButiEngine {
 		void Dead();
 		void Revival();
 		void AddNearEnemyCount() { m_nearEnemyCount++; }
+		void AddNearWorkerCount() { m_nearWorkerCount++; }
 		void KnockBack(const Vector3& arg_velocity);
 		void SetShockWaveScale(const Vector3& arg_scale);
 
@@ -126,6 +128,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_numberManager;
 		Value_weak_ptr<GameObject> m_vwp_maxUI;
 		Value_weak_ptr<GameObject> m_vwp_hzUIParent;
+		Value_weak_ptr<FlockingLeader> m_vwp_flockingLeader;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<NumberManagerComponent> m_vwp_numberManagerComponent;
 		Vector3 m_defaultNumberUIScale;
@@ -137,6 +140,7 @@ namespace ButiEngine {
 		float m_vibration;
 		float m_maxVibration;
 		std::uint8_t m_nearEnemyCount;
+		std::uint8_t m_nearWorkerCount;
 		float m_vibrationIncrease;
 		float m_vibrationDecrease;
 		float m_nearEnemyVibrationRate;

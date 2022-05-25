@@ -10,9 +10,10 @@ void ButiEngine::FlockingLeader::OnUpdate()
 	m_prevPos = m_pos;
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 
-	if (InputManager::IsTriggetGatherKey())
+	m_isGather = InputManager::IsPushGatherKey();
+	if (m_isGather)
 	{
-		m_isGather = !m_isGather;
+		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 10.0f, GameSettings::SOUL_COLOR);
 	}
 }
 

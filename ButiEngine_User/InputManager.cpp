@@ -155,7 +155,7 @@ bool ButiEngine::InputManager::IsPushGatherKey()
 	return GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_A);
 }
 
-bool ButiEngine::InputManager::IsTriggetGatherKey()
+bool ButiEngine::InputManager::IsTriggerGatherKey()
 {
 	return GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_A);
 }

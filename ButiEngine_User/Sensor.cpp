@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "Sensor.h"
 #include "Player.h"
+#include "Worker.h"
 
 void ButiEngine::Sensor::OnUpdate()
 {
@@ -13,8 +14,12 @@ void ButiEngine::Sensor::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
-				m_vlp_player->SetIsIncrease(true);
-				m_vlp_player->AddNearEnemyCount();
+				//m_vwp_player.lock()->SetIsIncrease(true);
+				//m_vwp_player.lock()->AddNearEnemyCount();
+			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Flocking")))
+			{
+				OnCollisionFlocking(arg_vwp_other);
 			}
 		});
 
@@ -23,7 +28,11 @@ void ButiEngine::Sensor::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
-				m_vlp_player->SetIsIncrease(false);
+				//m_vwp_player.lock()->SetIsIncrease(false);
+			}
+			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Flocking")))
+			{
+				m_vwp_player.lock()->SetIsIncrease(false);
 			}
 		});
 
@@ -33,10 +42,26 @@ void ButiEngine::Sensor::OnSet()
 
 void ButiEngine::Sensor::Start()
 {
-	m_vlp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
+	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Sensor::Clone()
 {
 	return ObjectFactory::Create<Sensor>();
+}
+
+void ButiEngine::Sensor::OnCollisionFlocking(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	auto worker = arg_vwp_other.lock()->GetGameComponent<Worker>();
+	if (!worker) { return; }
+
+	//プレイヤーの振動値がモブハチの振動値より小さかったら振動値を増やす
+	float playerVibrationRate = m_vwp_player.lock()->GetVibrationRate();
+	float workerVibrationRate = worker->GetVibrationRate();
+
+	if (playerVibrationRate < workerVibrationRate)
+	{
+		m_vwp_player.lock()->SetIsIncrease(true);
+		m_vwp_player.lock()->AddNearWorkerCount();
+	}
 }

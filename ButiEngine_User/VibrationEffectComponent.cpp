@@ -90,8 +90,8 @@ void ButiEngine::VibrationEffectComponent::Animation()
 		gameObject.lock()->transform->SetLocalScale(m_calcScale);
 	}
 
-	///////////////////////////////////////////////////
-	gameObject.lock()->transform->SetLocalScale(0.0f);
-	///////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
+	//gameObject.lock()->transform->SetLocalScale(0.0f);
+	/////////////////////////////////////////////////////
 	m_vwp_spriteAnimationComponent.lock()->UpdateHorizontalAnim(1);
 }

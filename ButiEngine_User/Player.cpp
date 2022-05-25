@@ -17,6 +17,7 @@
 #include "VignetteUIComponent.h"
 #include "Bomb_Player.h"
 #include "GameSettings.h"
+#include "FlockingLeader.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -25,25 +26,29 @@ void ButiEngine::Player::OnUpdate()
 		Damage();
 	}
 
-	if (InputManager::IsTriggerBombKey())
-	{
-		BombStart();
-	}
+	//if (InputManager::IsTriggerBombKey())
+	//{
+	//	BombStart();
+	//}
 
-	if (m_isIncrease)
+	//フロッキング招集モード時、近くに自分より振動値の大きいモブハチがいたら振動値を増やす
+	if (m_vwp_flockingLeader.lock()->IsGather() && m_isIncrease)
 	{
+		//コントローラーの振動値設定
 		constexpr float maxControllerVibration = 1.0f;
 		m_controllerVibration = MathHelper::Lerp(m_controllerVibration, maxControllerVibration, 0.025f);
+
 		IncreaseVibration();
 	}
 	else
 	{
-		m_controllerVibration = 0.0f;
+		//m_controllerVibration = 0.0f;
 		DecreaseVibration();
 	}
 	VibrationEffect();
 
-	m_nearEnemyCount = 0;
+	//m_nearEnemyCount = 0;
+	m_nearWorkerCount = 0;
 
 	MoveKnockBack();
 	Move();
@@ -53,12 +58,12 @@ void ButiEngine::Player::OnUpdate()
 		OnInvincible();
 	}
 
-	if (m_isBomb)
-	{
-		Bomb();
-	}
+	//if (m_isBomb)
+	//{
+	//	Bomb();
+	//}
 	VibrationPowerDrawUpdate();
-	VibrationController();
+	//VibrationController();
 	ShakeDrawObject();
 }
 
@@ -99,8 +104,8 @@ void ButiEngine::Player::OnShowUI()
 	GUI::BulletText("Speed");
 	GUI::DragFloat("##speed", &m_defaultMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
-	GUI::BulletText("BombSpeed");
-	GUI::DragFloat("##bspeed", &m_bombMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
+	//GUI::BulletText("BombSpeed");
+	//GUI::DragFloat("##bspeed", &m_bombMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
 	GUI::BulletText("Acceleration");
 	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
@@ -152,17 +157,19 @@ void ButiEngine::Player::Start()
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
 	m_defaultMaxMoveSpeed = 0.25f;
-	m_bombMaxMoveSpeed = 0.4f;
+	//m_bombMaxMoveSpeed = 0.4f;
 	m_maxMoveSpeed = m_defaultMaxMoveSpeed;
 	m_acceleration = 0.1f;
 	m_deceleration = 0.1f;
 
+	m_vwp_flockingLeader = GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>();
+
 	CreateSensorObject();
 
-	//m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
-	//m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
+	m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
-	CreateBombObject();
+	//CreateBombObject();
 
 	m_vwp_hzUIParent = GetManager().lock()->AddObjectFromCereal("HzUIParent");
 	m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-700, -400, 50));
@@ -203,10 +210,10 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 
 void ButiEngine::Player::Dead()
 {
-	//if (m_vwp_shockWave.lock())
-	//{
-	//	m_vwp_shockWave.lock()->SetIsRemove(true);
-	//}
+	if (m_vwp_shockWave.lock())
+	{
+		m_vwp_shockWave.lock()->SetIsRemove(true);
+	}
 
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 
@@ -218,15 +225,10 @@ void ButiEngine::Player::Dead()
 		m_vwp_sensor.lock()->SetIsRemove(true);
 	}
 
-	if (m_vwp_shockWave.lock())
-	{
-		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
-	}
-
-	if (m_vwp_bomb.lock())
-	{
-		m_vwp_bomb.lock()->SetIsRemove(true);
-	}
+	//if (m_vwp_bomb.lock())
+	//{
+	//	m_vwp_bomb.lock()->SetIsRemove(true);
+	//}
 
 	m_vibration = 0.0f;
 	m_isVibrate = false;
@@ -373,18 +375,19 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isDead) { return; }
 	if (m_isCapaOver) { return; }
 
-	m_vibration += m_vibrationIncrease * m_nearEnemyCount * GameDevice::WorldSpeed;
+	m_vibration += m_vibrationIncrease * m_nearWorkerCount /*m_nearEnemyCount*/ * GameDevice::WorldSpeed;
+	m_vibration = min(m_vibration, m_maxVibration);
 
-	if (GetVibrationRate() >= 1.0f)
-	{
-		m_isCapaOver = true;
-		m_vibration = m_maxVibration + m_vibrationDecrease * 600;
-		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+	//if (GetVibrationRate() >= 1.0f)
+	//{
+	//	m_isCapaOver = true;
+	//	m_vibration = m_maxVibration + m_vibrationDecrease * 600;
+	//	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+	//	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
 
-		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
-	}
+	//	meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+	//	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+	//}
 
 	if (!m_isVibrate)
 	{
@@ -399,7 +402,7 @@ void ButiEngine::Player::DecreaseVibration()
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 
-	if (GetVibrationRate() < 1.0f)
+	/*if (GetVibrationRate() < 1.0f)
 	{
 		m_isCapaOver = false;
 
@@ -408,12 +411,12 @@ void ButiEngine::Player::DecreaseVibration()
 
 		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
 		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.015f, 0.125f, 0.125f, 0.6f);
-	}
+	}*/
 
 	if (m_vibration <= 0.0f)
 	{
 		m_vibration = 0.0f;
-		//m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
+		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
 		m_isVibrate = false;
 	}
 }
@@ -439,7 +442,7 @@ void ButiEngine::Player::VibrationEffect()
 			float vibrationRate = m_vibration / m_maxVibration;
 			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, true);
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
-			//m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
+			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
 		}
 	}
 	else
@@ -464,15 +467,15 @@ void ButiEngine::Player::VibrationPowerDrawUpdate()
 	//インスタンスが無い場合通らないようにする
 	if (!m_vwp_numberManagerComponent.lock()) { return; }
 
-	auto vibPower = m_vibration / m_maxVibration; //0～1
-	std::int32_t vibParcent = vibPower * 100;
+	auto vibrationRate = m_vibration / m_maxVibration; //0～1
+	std::int32_t vibParcent = vibrationRate * 100;
 
-	if (m_previousVibrationPower < vibPower)
+	if (m_previousVibrationPower < vibrationRate)
 	{
 		m_vibUpCount++;
 	}
 
-	m_previousVibrationPower = vibPower;
+	m_previousVibrationPower = vibrationRate;
 
 	//0～99に補正
 	if (vibParcent < 0)
@@ -613,7 +616,7 @@ void ButiEngine::Player::CreateSensorObject()
 {
 	m_vwp_sensor = GetManager().lock()->AddObjectFromCereal("Sensor");
 	m_vwp_sensor.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
-	m_minSensorScale = Vector3(2.0f, 2.0f, 2.0f);
+	m_minSensorScale = m_vwp_sensor.lock()->transform->GetLocalScale();
 	m_maxSensorScale = Vector3(10.0f, 10.0f, 10.0f);
 }
 
@@ -642,8 +645,9 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_vibration = 0.0f;
 	m_maxVibration = 1.0f;
 	m_nearEnemyCount = 0;
+	m_nearWorkerCount = 0;
 	m_vibrationIncrease = 0.005f;
-	m_vibrationDecrease = 0.002f;
+	m_vibrationDecrease = 0.0002f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isCapaOver = false;
 	m_controllerVibration = 0.0f;

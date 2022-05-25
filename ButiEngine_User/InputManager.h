@@ -40,7 +40,7 @@ namespace ButiEngine {
 
 		//ゲームプレイシーンのみ
 		static bool IsPushGatherKey();
-		static bool IsTriggetGatherKey();
+		static bool IsTriggerGatherKey();
 		static bool IsTriggerPauseKey();
 		static bool IsTriggerBombKey();
 
