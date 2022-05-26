@@ -24,15 +24,10 @@
 #include "GameSettings.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
-bool ButiEngine::Enemy::m_test_isExplosion = false;
 float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::B))
-	{
-		m_test_isExplosion = !m_test_isExplosion;
-	}
 	//Player‚ª‹ß‚¢‚©ÕŒ‚”g‚ª“–‚½‚Á‚Ä‚¢‚½‚çU“®‚·‚é
 	if (m_vibration > 0)
 	{
@@ -136,8 +131,6 @@ void ButiEngine::Enemy::OnSet()
 	m_vibrationResistance = 10.0f;
 	m_weight = 100.0f;
 	m_isCapaOver = false;
-
-	m_explosionScale = 1.0f;
 }
 
 void ButiEngine::Enemy::OnRemove()
@@ -146,20 +139,15 @@ void ButiEngine::Enemy::OnRemove()
 
 void ButiEngine::Enemy::OnShowUI()
 {
-	GUI::BulletText("Decrease");
+	GUI::BulletText(u8"U“®’l‚ÌŒ¸­—Ê");
 	GUI::DragFloat("##decrease", &m_vibrationDecrease, 1.0f, 0.0f, 100.0f);
-	GUI::BulletText("Capacity");
-	GUI::DragFloat("##capacity", &m_vibrationCapacity, 1.0f, 0.0f, 1000.0f);
-	GUI::BulletText("Resistance");
-	GUI::DragFloat("##resistance", &m_vibrationResistance, 1.0f, 0.0f, 100.0f);
-	GUI::BulletText("Coefficient");
-	GUI::DragFloat("##coefficient", &m_playerVibrationCoefficient, 0.1f, 0.0f, 10.0f);
-	GUI::BulletText("Vibration:%f / %f", m_vibration, m_vibrationCapacity);
-	GUI::BulletText("PocketCount");
-	GUI::BulletText("StickWorkerCount:%d", GetStickWorkerCount());
 
-	GUI::BulletText("ExplosionScale");
-	GUI::DragFloat("##exScale", &m_explosionScale, 0.1f, 0.0f, 100.0f);
+	GUI::BulletText(u8"U“®’lã¸—Ê‚ÌŒvŽZ‚ÅŽg‚¤ŒW”");
+	GUI::DragFloat("##coefficient", &m_playerVibrationCoefficient, 0.1f, 0.0f, 10.0f);
+
+	GUI::BulletText(u8"U“®’l:%f / %f", m_vibration, m_vibrationCapacity);
+
+	GUI::BulletText(u8"‚Â‚¢‚Ä‚¢‚éƒ‚ƒuƒnƒ`‚Ì”:%d", GetStickWorkerCount());
 }
 
 void ButiEngine::Enemy::Start()
@@ -281,14 +269,6 @@ void ButiEngine::Enemy::Dead()
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
 
 	AddDeadCount();
-}
-
-void ButiEngine::Enemy::Explosion()
-{
-	if (!m_test_isExplosion) { return; }
-	auto transform = gameObject.lock()->transform->Clone();
-	transform->SetLocalScale(m_explosionScale);
-	GetManager().lock()->AddObjectFromCereal("Explosion", transform);
 }
 
 void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount, const float arg_radius)
@@ -441,7 +421,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	{
 		color = GameSettings::SOUL_COLOR;
 	}
-	else if (m_vlp_playerComponent->IsOverHeat())
+	else if (m_vlp_playerComponent->IsOverheat())
 	{
 		color = GameSettings::ATTACK_COLOR;
 	}

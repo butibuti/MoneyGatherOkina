@@ -38,14 +38,18 @@ namespace ButiEngine {
 
 		bool IsDetectionPlayer();
 
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
+		static float m_vibrationCapacity;
+		static float m_vibrationResistance;
+		static float m_maxRotationAngle;
+		static float m_rotationAcceleration;
+
 		Value_ptr<Enemy> m_vlp_enemy;
 		Value_ptr<Loiter> m_vlp_loiter;
 		Value_weak_ptr<GameObject> m_vwp_fang;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_weak_ptr<WarningMark> m_vwp_warningMark;
-
-		static std::int32_t m_pocketCount;
-		static float m_createPocketRadius;
 
 		//羽アニメーション
 		Value_weak_ptr<MeshDrawComponent> m_vwp_hane_L;
@@ -68,8 +72,6 @@ namespace ButiEngine {
 
 		//プレイヤーを見つけたときの回る処理
 		float m_rotationAngle;
-		float m_maxRotationAngle;
-		float m_rotationAcceleration;
 	};
 
 }

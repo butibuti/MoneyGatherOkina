@@ -256,7 +256,6 @@ void ButiEngine::Enemy_Boss::SetEnemyParameter()
 	m_vwp_enemyComponent.lock()->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vwp_enemyComponent.lock()->SetVibrationCapacity(10000.0f);
 	m_vwp_enemyComponent.lock()->SetVibrationResistance(5.0f);
-	m_vwp_enemyComponent.lock()->SetExplosionScale(8.0f);
 	m_vwp_enemyComponent.lock()->SetWeight(1000.0f);
 }
 

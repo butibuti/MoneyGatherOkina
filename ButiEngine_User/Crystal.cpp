@@ -141,7 +141,6 @@ void ButiEngine::Crystal::SetEnemyParameter()
 	vlp_enemyComponent->CreatePocket(m_pocketCount, m_createPocketRadius);
 	vlp_enemyComponent->SetVibrationCapacity(1000.0f);
 	vlp_enemyComponent->SetVibrationResistance(1.0f);
-	vlp_enemyComponent->SetExplosionScale(2.0f);
 	vlp_enemyComponent->SetWeight(100.0f);
 }
 

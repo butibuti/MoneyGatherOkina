@@ -8,6 +8,10 @@
 
 std::int32_t ButiEngine::Enemy_Kiba::m_pocketCount = 8;
 float ButiEngine::Enemy_Kiba::m_createPocketRadius = 3.0f;
+float ButiEngine::Enemy_Kiba::m_vibrationCapacity = 1000.0f;
+float ButiEngine::Enemy_Kiba::m_vibrationResistance = 0.5f;
+float ButiEngine::Enemy_Kiba::m_maxRotationAngle = 1.0f;
+float ButiEngine::Enemy_Kiba::m_rotationAcceleration = 0.03f;
 
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
@@ -42,14 +46,21 @@ void ButiEngine::Enemy_Kiba::OnRemove()
 
 void ButiEngine::Enemy_Kiba::OnShowUI()
 {
-	GUI::BulletText("PocketCount");
+	GUI::BulletText(u8"ポケットの数");
 	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
-	GUI::BulletText("PocketRadius");
+
+	GUI::BulletText(u8"ポケット生成時の半径");
 	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
 
-	GUI::BulletText("MaxRotationAngle");
+	GUI::BulletText(u8"振動値の上限");
+	GUI::DragFloat("##capacity", &m_vibrationCapacity, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"振動の抵抗");
+	GUI::DragFloat("##resistance", &m_vibrationResistance, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"プレイヤーの方を向く最大速度");
 	GUI::DragFloat("##maxRAngle", &m_maxRotationAngle, 0.01f, 0.0f, 10.0f);
-	GUI::BulletText("RotationAcceleration");
+	GUI::BulletText(u8"プレイヤーの方を向く加速度");
 	GUI::DragFloat("##rAccel", &m_rotationAcceleration, 0.001f, 0.0f, 1.0f);
 }
 
@@ -86,8 +97,6 @@ void ButiEngine::Enemy_Kiba::Start()
 
 	m_detectionRange = 10.0f;
 	m_rotationAngle = 0.0f;
-	m_rotationAcceleration = 0.03f;
-	m_maxRotationAngle = 1.0f;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Kiba::Clone()
@@ -100,11 +109,6 @@ void ButiEngine::Enemy_Kiba::Dead()
 	if (m_vwp_fang.lock())
 	{
 		m_vwp_fang.lock()->SetIsRemove(true);
-	}
-
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
 	}
 
 	if (m_vwp_warningMark.lock())
@@ -163,20 +167,19 @@ void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
-	m_vlp_enemy->SetVibrationCapacity(1000.0f);
-	m_vlp_enemy->SetVibrationResistance(0.5f);
-	m_vlp_enemy->SetExplosionScale(8.0f);
+	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
+	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);
 	m_vlp_enemy->SetWeight(1000.0f);
 }
 
 void ButiEngine::Enemy_Kiba::SetLoiterParameter()
 {
-	m_vlp_loiter = gameObject.lock()->GetGameComponent<Loiter>();
-	m_vlp_loiter->SetMoveRange(5.0f);
-	m_vlp_loiter->SetMaxMoveSpeed(0.1f);
-	m_vlp_loiter->SetWaitFrame(60);
-	m_vlp_loiter->SetAccelFrame(30);
-	m_vlp_loiter->SetBrakeFrame(30);
+	//m_vlp_loiter = gameObject.lock()->GetGameComponent<Loiter>();
+	//m_vlp_loiter->SetMoveRange(5.0f);
+	//m_vlp_loiter->SetMaxMoveSpeed(0.1f);
+	//m_vlp_loiter->SetWaitFrame(60);
+	//m_vlp_loiter->SetAccelFrame(30);
+	//m_vlp_loiter->SetBrakeFrame(30);
 }
 
 void ButiEngine::Enemy_Kiba::SetLookAtParameter()

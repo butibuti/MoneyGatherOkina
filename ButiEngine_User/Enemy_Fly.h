@@ -32,6 +32,8 @@ namespace ButiEngine {
 
 		static std::int32_t m_pocketCount;
 		static float m_createPocketRadius;
+		static float m_vibrationCapacity;
+		static float m_vibrationResistance;
 
 		Value_ptr<Enemy> m_vlp_enemy;
 	};

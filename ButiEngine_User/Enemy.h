@@ -32,7 +32,6 @@ namespace ButiEngine {
 
 		void SetVibrationCapacity(const float arg_capacity) { m_vibrationCapacity = arg_capacity; }
 		void SetVibrationResistance(const float arg_resistance) { m_vibrationResistance = arg_resistance; }
-		void SetExplosionScale(const float arg_scale) { m_explosionScale = arg_scale; }
 		void SetIsNearPlayer(const bool arg_isNearPlayer) { m_isNearPlayer = arg_isNearPlayer; }
 		void SetWeight(const float arg_weight) { m_weight = arg_weight; }
 		void SetIsCapaOver(const bool arg_isCapaOver) { m_isCapaOver = arg_isCapaOver; }
@@ -50,7 +49,6 @@ namespace ButiEngine {
 		bool IsCapaOver() { return m_isCapaOver; }
 
 		void Dead();
-		void Explosion();
 		void CreatePocket(const std::uint8_t arg_pocketCount, const float arg_radius);
 		void RemovePocket(const std::uint8_t arg_pocketNum);
 		void RemoveAllPocket();
@@ -64,7 +62,7 @@ namespace ButiEngine {
 		void ScaleAnimation();
 		void AttackFlashUpdate();
 		void CreateAttackFlashEffect();
-		bool pushP;
+
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
 		void CalculateVibrationIncrease();
 		std::uint8_t GetStickWorkerCount();
@@ -72,8 +70,6 @@ namespace ButiEngine {
 		void StopVibrationEffect();
 
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other);
-
-		static bool m_test_isExplosion;
 
 		//êUìÆÇÃå∏è≠ó 
 		static float m_vibrationDecrease;
@@ -105,8 +101,6 @@ namespace ButiEngine {
 		bool m_isCapaOver;
 
 		static float m_playerVibrationCoefficient;
-
-		float m_explosionScale;
 	};
 
 }
