@@ -13,7 +13,10 @@ public:
 	void OnShowUI()override;
 	void Start()override;
 	void PlayBGM(SoundTag arg_sound, const float arg_volume = 1.0f);
+	void StopBGM();
 	void PlaySE(SoundTag arg_sound, const float arg_volume = 1.0f);
+	void PlayControllableSE(SoundTag arg_sound, const std::int32_t arg_index,  const float arg_volume = 1.0f, const bool arg_isLoop=false);
+	void SetControllableSEVolume(const std::uint32_t arg_index, const float arg_volume) ;
 	float GetVolume(SoundTag arg_sound)const;
 	void SetVolume(SoundTag arg_sound,const float arg_volume);
 	Value_ptr<GameComponent> Clone()override;

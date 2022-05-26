@@ -86,6 +86,20 @@ void ButiEngine::SoundPlayerComponent::PlaySE(SoundTag arg_sound, const float ar
     gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(arg_sound,m_umap_soundVolume.at(arg_sound.GetID())*arg_volume);
 }
 
+void ButiEngine::SoundPlayerComponent::PlayControllableSE(SoundTag arg_sound, const std::int32_t arg_index,  const float arg_volume, const bool arg_isLoop)
+{
+    if (!m_umap_soundVolume.count(arg_sound.GetID())) {
+        return;
+    }
+    gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlayControllableSE(arg_sound, arg_index,m_umap_soundVolume.at(arg_sound.GetID()) * arg_volume,arg_isLoop);
+}
+
+void ButiEngine::SoundPlayerComponent::SetControllableSEVolume(const std::uint32_t arg_index, const float arg_volume)
+{
+    gameObject.lock()->GetApplication().lock()->GetSoundManager()->SetControllableSEVolume(arg_index, arg_volume);
+}
+
+
 float ButiEngine::SoundPlayerComponent::GetVolume(SoundTag arg_sound) const
 {
     if (!m_umap_soundVolume.count(arg_sound.GetID())) {
