@@ -9,6 +9,7 @@ namespace ButiEngine {
 	class NumberManagerComponent;
 	class BeeSoulPodUIComponent;
 	class FlockingLeader;
+	class SoundPlayerComponent;
 
 	class Player :public GameComponent
 	{
@@ -140,6 +141,7 @@ namespace ButiEngine {
 		float m_vibrationForce;
 		bool m_isVibrate;
 		bool m_isIncrease;
+		bool m_isIncreaseVibrationSE;
 		float m_previousVibrationPower;
 		float m_vibration;
 		float m_maxVibration;
@@ -174,6 +176,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ParticleGenerater> m_vwp_polygonParticleGenerater;
 
 		Value_weak_ptr<GameObject> m_vwp_vignetteUI;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 	};
 
 }

@@ -18,6 +18,7 @@
 #include "Bomb_Player.h"
 #include "GameSettings.h"
 #include "FlockingLeader.h"
+#include "SoundPlayerComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -211,6 +212,7 @@ void ButiEngine::Player::Start()
 	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	m_vwp_vignetteUI = GetManager().lock()->AddObjectFromCereal("VignetteUI");
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -356,6 +358,8 @@ void ButiEngine::Player::Damage()
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 	m_vwp_vignetteUI.lock()->GetGameComponent<VignetteUIComponent>()->StartAlphaAnimation();
 
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Damage.wav"));
+
 	if (m_life == 0)
 	{
 		m_isDead = true;
@@ -388,10 +392,19 @@ void ButiEngine::Player::IncreaseVibration()
 	m_vibration += m_vibrationIncrease * m_nearWorkerCount /*m_nearEnemyCount*/ * GameDevice::WorldSpeed;
 	m_vibration = min(m_vibration, m_maxVibration);
 
+	if (!m_isIncreaseVibrationSE)
+	{
+		m_isIncreaseVibrationSE = true;
+		//m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
+		//m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/VibrationMax_Start.wav"));
+		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
+	}
+
+
 	if (GetVibrationRate() >= 1.0f)
 	{
 		StartOverHeat();
-
+		m_isIncreaseVibrationSE = false;
 		//meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
 		//meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
 	}
@@ -409,6 +422,12 @@ void ButiEngine::Player::DecreaseVibration()
 	if (m_isOverHeat) { return; }
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
+
+	if (m_isIncreaseVibrationSE)
+	{
+		m_isIncreaseVibrationSE = false;
+	}
+
 
 	//if (GetVibrationRate() < 1.0f)
 	//{
@@ -590,6 +609,8 @@ void ButiEngine::Player::StartOverHeat()
 
 	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
 }
 
 void ButiEngine::Player::OverHeat()
@@ -606,6 +627,8 @@ void ButiEngine::Player::OverHeat()
 
 		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
 		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+	
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
 	}
 }
 

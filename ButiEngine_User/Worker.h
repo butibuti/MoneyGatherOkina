@@ -7,6 +7,7 @@ namespace ButiEngine {
 	class ParticleGenerater;
 	class SpriteParticleGenerator;
 	class Player;
+	class SoundPlayerComponent;
 
 	class Worker :public GameComponent
 	{
@@ -79,6 +80,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<Player> m_vlp_player;
 		Value_ptr<Timer> m_vlp_nearPlayerTimer;

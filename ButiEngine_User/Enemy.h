@@ -10,6 +10,7 @@ namespace ButiEngine {
 	class ParticleGenerater;
 	class SpriteParticleGenerator;
 	class AttackFlashSpawner;
+	class SoundPlayerComponent;
 
 	class Enemy :public GameComponent
 	{
@@ -86,6 +87,7 @@ namespace ButiEngine {
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_ptr<Timer> m_vlp_attackFlashTimer;
 

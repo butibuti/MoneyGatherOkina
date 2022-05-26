@@ -22,6 +22,7 @@
 #include "KnockBack.h"
 #include "Crystal.h"
 #include "GameSettings.h"
+#include "SoundPlayerComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 bool ButiEngine::Enemy::m_test_isExplosion = false;
@@ -166,6 +167,7 @@ void ButiEngine::Enemy::Start()
 {
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 
 	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
 }
@@ -222,18 +224,21 @@ void ButiEngine::Enemy::Dead()
 	{
 		fly->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
 	if (kiba)
 	{
 		kiba->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 	if (stalker)
 	{
 		stalker->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
 	}
 	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
 	if (tutorial)
@@ -246,8 +251,13 @@ void ButiEngine::Enemy::Dead()
 	{
 		volcano->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
 	}
 	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
+	if (volcano)
+	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Crystal.wav"));
+	}
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
@@ -424,6 +434,8 @@ void ButiEngine::Enemy::AttackFlashUpdate()
 	if (m_vlp_attackFlashTimer->Update())
 	{
 		CreateAttackFlashEffect();
+		auto soundTag = "Sound/Attack_OneShot_" + std::to_string(ButiRandom::GetInt(0, 3)) + ".wav";
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag(soundTag));
 	}
 }
 

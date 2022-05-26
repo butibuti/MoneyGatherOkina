@@ -23,10 +23,12 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 
 	FixStageNum();
 
-	if (InputManager::IsTriggerDecideKey())
+	if (InputManager::IsTriggerDecideKey() && !isSceneChange)
 	{
 		m_vwp_gamePlayChangeAnimation.lock()->SceneEnd();
 		isSceneChange = true;
+
+
 	}
 	else if (InputManager::IsTriggerCancelKey())
 	{

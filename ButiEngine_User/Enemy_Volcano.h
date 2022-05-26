@@ -5,6 +5,7 @@ namespace ButiEngine {
 	class Enemy;
 	class EnemyScaleAnimationComponent;
 	class WarningMark;
+	class SoundPlayerComponent;
 
 	class Enemy_Volcano :public GameComponent
 	{
@@ -39,6 +40,7 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_rockShotTimer;
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_weak_ptr<WarningMark> m_vwp_warningMark;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 
 		static std::int32_t m_pocketCount;
 		static float m_createPocketRadius;

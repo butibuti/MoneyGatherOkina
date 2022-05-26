@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class ParticleGenerater;
+	class SoundPlayerComponent;
 
 	class VolcanoRock :public GameComponent
 	{
@@ -28,6 +29,8 @@ namespace ButiEngine {
 	private:
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_ptr<Timer> m_vlp_lifeTimer;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
+
 		Vector3 m_velocity;
 		Vector3 m_rotateSpeed;
 		float m_gravity;
