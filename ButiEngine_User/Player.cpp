@@ -107,7 +107,7 @@ void ButiEngine::Player::OnShowUI()
 	GUI::Text("Life:%d", m_life);
 
 	GUI::BulletText("Speed");
-	GUI::DragFloat("##speed", &m_defaultMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
+	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
 	//GUI::BulletText("BombSpeed");
 	//GUI::DragFloat("##bspeed", &m_bombMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
@@ -449,6 +449,15 @@ void ButiEngine::Player::VibrationEffect()
 			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, true);
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
 			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
+
+			Vector4 color = GameSettings::PLAYER_COLOR;
+			if (m_isOverHeat)
+			{
+				color = GameSettings::ATTACK_COLOR;
+			}
+
+			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
+			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = color;
 		}
 	}
 	else
@@ -581,12 +590,6 @@ void ButiEngine::Player::StartOverHeat()
 
 	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
-
-	if (m_vwp_vibrationEffect.lock())
-	{
-		meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
-	}
 }
 
 void ButiEngine::Player::OverHeat()
@@ -688,7 +691,7 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_overHeatMaxVibration = m_maxVibration * 4;
 	m_nearEnemyCount = 0;
 	m_nearWorkerCount = 0;
-	m_vibrationIncrease = 0.5f;
+	m_vibrationIncrease = 0.10f;
 	m_vibrationDecrease = 0.02f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isOverHeat = false;
