@@ -58,6 +58,11 @@ void ButiEngine::Player::OnUpdate()
 		OnInvincible();
 	}
 
+	if (m_isOverHeat)
+	{
+		OverHeat();
+	}
+
 	//if (m_isBomb)
 	//{
 	//	Bomb();
@@ -113,8 +118,7 @@ void ButiEngine::Player::OnShowUI()
 	GUI::BulletText("Deceleration");
 	GUI::DragFloat("##decel", &m_deceleration, 0.001f, 0.0f, 1.0f);
 
-
-	GUI::Text("Vibration:%f", GetVibrationRate() * 100.0f);
+	GUI::Text("Vibration:%f", m_vibration);
 
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
@@ -124,6 +128,12 @@ void ButiEngine::Player::OnShowUI()
 
 	GUI::BulletText("VibrationDecrease");
 	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText("OverHeatFrame");
+	if (GUI::DragInt("##overheat", &m_overHeatFrame, 1, 1, 6000))
+	{
+		m_overHeatTimer->ChangeCountFrame(m_overHeatFrame);
+	}
 }
 
 void ButiEngine::Player::Start()
@@ -373,21 +383,18 @@ void ButiEngine::Player::VibrationController()
 void ButiEngine::Player::IncreaseVibration()
 {
 	if (m_isDead) { return; }
-	if (m_isCapaOver) { return; }
+	if (m_isOverHeat) { return; }
 
 	m_vibration += m_vibrationIncrease * m_nearWorkerCount /*m_nearEnemyCount*/ * GameDevice::WorldSpeed;
 	m_vibration = min(m_vibration, m_maxVibration);
 
-	//if (GetVibrationRate() >= 1.0f)
-	//{
-	//	m_isCapaOver = true;
-	//	m_vibration = m_maxVibration + m_vibrationDecrease * 600;
-	//	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-	//	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+	if (GetVibrationRate() >= 1.0f)
+	{
+		StartOverHeat();
 
-	//	meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-	//	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
-	//}
+		//meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+		//meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+	}
 
 	if (!m_isVibrate)
 	{
@@ -399,19 +406,15 @@ void ButiEngine::Player::DecreaseVibration()
 {
 	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
+	if (m_isOverHeat) { return; }
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 
-	/*if (GetVibrationRate() < 1.0f)
-	{
-		m_isCapaOver = false;
-
-		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
-
-		meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.015f, 0.125f, 0.125f, 0.6f);
-	}*/
+	//if (GetVibrationRate() < 1.0f)
+	//{
+	//	//meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
+	//	//meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = Vector4(0.015f, 0.125f, 0.125f, 0.6f);
+	//}
 
 	if (m_vibration <= 0.0f)
 	{
@@ -430,9 +433,12 @@ void ButiEngine::Player::VibrationEffect()
 		if (m_vwp_vibrationEffect.lock() == nullptr)
 		{
 			auto transform = gameObject.lock()->transform;
-			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_Player");
+			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
 			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
+
+			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
+			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
 
 			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
 		}
@@ -533,7 +539,7 @@ void ButiEngine::Player::ShakeDrawObject()
 	m_vwp_shakeComponent.lock()->SetShakePower(vibrationRate);
 }
 
-void ButiEngine::Player::BombStart()
+void ButiEngine::Player::StartBomb()
 {
 	if (!m_vwp_bomb.lock()) { return; }
 	if (m_isBomb) { return; }
@@ -565,6 +571,38 @@ void ButiEngine::Player::Bomb()
 		m_vwp_sensor.lock()->transform->SetLocalScale(m_minSensorScale);
 
 		m_isBomb = false;
+	}
+}
+
+void ButiEngine::Player::StartOverHeat()
+{
+	m_isOverHeat = true;
+	m_overHeatTimer->Start();
+
+	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+
+	if (m_vwp_vibrationEffect.lock())
+	{
+		meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+	}
+}
+
+void ButiEngine::Player::OverHeat()
+{
+	m_vibration = MathHelper::Lerp(m_vibration, m_overHeatMaxVibration, 0.1f);
+
+	if (m_overHeatTimer->Update())
+	{
+		m_overHeatTimer->Stop();
+		m_overHeatTimer->Reset();
+
+		m_isOverHeat = false;
+		m_vibration = 0.0f;
+
+		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
 	}
 }
 
@@ -639,17 +677,21 @@ void ButiEngine::Player::SetLookAtParameter()
 
 void ButiEngine::Player::SetVibrationParameter()
 {
+	m_overHeatFrame = 600;
+	m_overHeatTimer = ObjectFactory::Create<RelativeTimer>(m_overHeatFrame);
+
 	m_isIncrease = false;
 	m_isVibrate = false;
 	m_vibrationForce = 5.0f;
 	m_vibration = 0.0f;
 	m_maxVibration = 100.0f;
+	m_overHeatMaxVibration = m_maxVibration * 4;
 	m_nearEnemyCount = 0;
 	m_nearWorkerCount = 0;
 	m_vibrationIncrease = 0.5f;
 	m_vibrationDecrease = 0.02f;
 	m_nearEnemyVibrationRate = 0.0f;
-	m_isCapaOver = false;
+	m_isOverHeat = false;
 	m_controllerVibration = 0.0f;
 	m_previousVibrationPower = 0;
 	m_isFixNumberUIScale = false;

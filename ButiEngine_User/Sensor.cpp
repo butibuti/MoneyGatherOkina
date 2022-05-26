@@ -56,8 +56,8 @@ void ButiEngine::Sensor::OnCollisionFlocking(Value_weak_ptr<GameObject> arg_vwp_
 	if (!worker) { return; }
 
 	//プレイヤーの振動値がモブハチの振動値より小さかったら振動値を増やす
-	float playerVibrationRate = m_vwp_player.lock()->GetVibrationRate();
-	float workerVibrationRate = worker->GetVibrationRate();
+	float playerVibrationRate = m_vwp_player.lock()->GetVibration();
+	float workerVibrationRate = worker->GetVibration();
 
 	if (playerVibrationRate < workerVibrationRate)
 	{

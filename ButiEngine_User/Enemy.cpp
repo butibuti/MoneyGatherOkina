@@ -441,6 +441,10 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	{
 		color = GameSettings::SOUL_COLOR;
 	}
+	else if (m_vlp_playerComponent->IsOverHeat())
+	{
+		color = GameSettings::ATTACK_COLOR;
+	}
 
 	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, color);
 

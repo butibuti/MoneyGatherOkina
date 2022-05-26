@@ -29,10 +29,11 @@ namespace ButiEngine {
 
 		static float GetVibrationForce() { return m_vibrationForce; }
 
+		float GetVibration() { return m_vibration; }
 		float GetVibrationRate()
 		{
 			float rate = m_vibration / m_maxVibration;
-			//rate = min(rate, 1.0f);
+			rate = min(rate, 1.0f);
 			return rate;
 		}
 
@@ -66,6 +67,7 @@ namespace ButiEngine {
 
 		static float m_nearBorder;
 		static float m_vibrationForce;
+		static float m_maxVibration;
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
 
@@ -92,7 +94,6 @@ namespace ButiEngine {
 		bool m_isPredated;
 		
 		float m_vibration;
-		float m_maxVibration;
 	};
 
 }

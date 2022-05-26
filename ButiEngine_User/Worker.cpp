@@ -21,8 +21,9 @@
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
-float ButiEngine::Worker::m_vibrationIncrease = 1.0f;
-float ButiEngine::Worker::m_vibrationDecrease = 0.02f;
+float ButiEngine::Worker::m_maxVibration = 150.0f;
+float ButiEngine::Worker::m_vibrationIncrease = 0.5f;
+float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -113,7 +114,10 @@ void ButiEngine::Worker::OnShowUI()
 	GUI::BulletText("NearBorder");
 	GUI::DragFloat("##nearBorder", &m_nearBorder, 0.1f, 0.0f, 10.0f);
 
-	GUI::Text("Vibration:%f", GetVibrationRate() * 100.0f);
+	GUI::Text("Vibration:%f", m_vibration);
+
+	GUI::BulletText("MaxVibration");
+	GUI::DragFloat("##maxVibration", &m_maxVibration, 1.0f, 1.0f, 1000.0f);
 
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
@@ -502,11 +506,10 @@ void ButiEngine::Worker::SetLookAtParameter()
 {
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
-	m_vlp_lookAt->SetSpeed(0.5f);
+	m_vlp_lookAt->SetSpeed(0.1f);
 }
 
 void ButiEngine::Worker::SetVibrationParameter()
 {
 	m_vibration = 0.0f;
-	m_maxVibration = 100.0f;
 }

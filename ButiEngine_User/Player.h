@@ -38,6 +38,7 @@ namespace ButiEngine {
 		}
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce() { return m_vibrationForce; }
+		float GetVibration() { return m_vibration; }
 		float GetVibrationRate()
 		{
 			float rate = m_vibration / m_maxVibration;
@@ -54,6 +55,7 @@ namespace ButiEngine {
 
 		bool IsDead() { return m_isDead; }
 		bool IsBomb() { return m_isBomb; }
+		bool IsOverHeat() { return m_isOverHeat; }
 
 		void Dead();
 		void Revival();
@@ -74,8 +76,10 @@ namespace ButiEngine {
 		void StopVibrationEffect();
 		void VibrationPowerDrawUpdate();
 		void ShakeDrawObject();
-		void BombStart();
+		void StartBomb();
 		void Bomb();
+		void StartOverHeat();
+		void OverHeat();
 
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
@@ -130,6 +134,7 @@ namespace ButiEngine {
 		Value_weak_ptr<FlockingLeader> m_vwp_flockingLeader;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<NumberManagerComponent> m_vwp_numberManagerComponent;
+		Value_ptr<Timer> m_overHeatTimer;
 		Vector3 m_defaultNumberUIScale;
 		Vector3 m_defaultMaxUIScale;
 		float m_vibrationForce;
@@ -138,15 +143,17 @@ namespace ButiEngine {
 		float m_previousVibrationPower;
 		float m_vibration;
 		float m_maxVibration;
+		float m_overHeatMaxVibration;
 		std::uint8_t m_nearEnemyCount;
 		std::uint8_t m_nearWorkerCount;
 		float m_vibrationIncrease;
 		float m_vibrationDecrease;
 		float m_nearEnemyVibrationRate;
-		bool m_isCapaOver;
+		bool m_isOverHeat;
 		float m_controllerVibration;
 		std::int32_t m_vibUpCount;
 		bool m_isFixNumberUIScale;
+		std::int32_t m_overHeatFrame;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;
