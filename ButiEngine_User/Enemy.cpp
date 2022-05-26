@@ -241,8 +241,6 @@ void ButiEngine::Enemy::Dead()
 	RemoveAllPocket();
 	StopVibrationEffect();
 
-	//m_vlp_playerComponent->SetIsIncrease(false);
-
 	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
 	if (boss)
 	{
@@ -262,8 +260,6 @@ void ButiEngine::Enemy::Dead()
 	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
 
 	gameObject.lock()->SetIsRemove(true);
-
-	//GetManager().lock()->GetGameObject("Particle")
 
 	//死んだら画面揺らす
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
@@ -471,7 +467,7 @@ std::uint8_t ButiEngine::Enemy::GetStickWorkerCount()
 void ButiEngine::Enemy::AddDeadCount()
 {
 	//ウェーブマネージャーの討伐数カウント関数を呼ぶ
-	m_vwp_waveManager.lock()->AddEnemyDeadCount();
+	m_vwp_waveManager.lock()->AddProgressPoint(m_progressPoint);
 }
 
 void ButiEngine::Enemy::StopVibrationEffect()

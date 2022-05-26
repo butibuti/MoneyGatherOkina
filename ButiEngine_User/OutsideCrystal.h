@@ -20,15 +20,21 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		void Dead();
+
+		void Appeaer();
+		void Disappear();
 	private:
 		void SetEnemyParameter();
+
+		Value_ptr<Timer> m_appearIntervalTimer;
+		bool m_isAppear;
 
 		static std::int32_t m_progressPoint;
 		static std::int32_t m_pocketCount;
 		static float m_createPocketRadius;
 		static float m_vibrationCapacity;
 		static float m_vibrationResistance;
+		static std::int32_t m_appearIntervalFrame;
 	};
 
 }

@@ -572,6 +572,7 @@ cd ..\</Command>
     <ClCompile Include="NumberComponent.cpp" />
     <ClCompile Include="NumberManagerComponent.cpp" />
     <ClCompile Include="OutsideCrystal.cpp" />
+    <ClCompile Include="OutSideCrystalSpawner.cpp" />
     <ClCompile Include="ParticleGenerater.cpp" />
     <ClCompile Include="PauseManagerComponent.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -667,6 +668,7 @@ cd ..\</Command>
     <ClInclude Include="NumberComponent.h" />
     <ClInclude Include="NumberManagerComponent.h" />
     <ClInclude Include="OutsideCrystal.h" />
+    <ClInclude Include="OutSideCrystalSpawner.h" />
     <ClInclude Include="ParticleGenerater.h" />
     <ClInclude Include="PauseManagerComponent.h" />
     <ClInclude Include="Player.h" />
