@@ -147,7 +147,6 @@ void ButiEngine::Enemy_Volcano::AddPredictedPoint()
 	randomVelocity *= 6.5f;
 	randomVelocity.y = 0;
 	position += randomVelocity;
-	position.y -= 1.0f;
 	auto predictedPoint = GetManager().lock()->AddObjectFromCereal("PredictedPoint");
 	predictedPoint.lock()->transform->SetWorldPosition(position);
 	predictedPoint.lock()->GetGameComponent<PredictedPoint>()->SetLife(105);
