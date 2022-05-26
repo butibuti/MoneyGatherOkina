@@ -11,7 +11,8 @@ float ButiEngine::Enemy_Kiba::m_createPocketRadius = 3.0f;
 
 void ButiEngine::Enemy_Kiba::OnUpdate()
 {
-	if (IsDetectionPlayer())
+	bool isDetectionPlayer = IsDetectionPlayer();
+	if (isDetectionPlayer)
 	{
 		m_vwp_warningMark.lock()->Appear();
 		//m_vlp_loiter->MoveStop();
@@ -25,10 +26,14 @@ void ButiEngine::Enemy_Kiba::OnUpdate()
 		//m_vlp_lookAt->SetIsActive(true);
 		//m_vlp_loiter->MoveStart();
 	}
+
+	HaneAnimation(isDetectionPlayer);
+	FangAnimation(isDetectionPlayer);
 }
 
 void ButiEngine::Enemy_Kiba::OnSet()
 {
+	m_fangAnimationTimer = ObjectFactory::Create<RelativeTimer>(20);
 }
 
 void ButiEngine::Enemy_Kiba::OnRemove()
@@ -50,8 +55,25 @@ void ButiEngine::Enemy_Kiba::OnShowUI()
 
 void ButiEngine::Enemy_Kiba::Start()
 {
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Kiba");
+	auto drawObject = gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Kiba");
+	m_vwp_fang_R = drawObject.lock()->GetGameComponent<MeshDrawComponent>(1);
+	m_vwp_fang_L = drawObject.lock()->GetGameComponent<MeshDrawComponent>(2);
+	m_vwp_hane_L = drawObject.lock()->GetGameComponent<MeshDrawComponent>(3);
+	m_vwp_hane_R = drawObject.lock()->GetGameComponent<MeshDrawComponent>(4);
 
+	m_defaultHaneRotateY = 45.0f;
+	m_currentHaneRotateY_L = 0;
+	m_currentHaneRotateY_R = 0;
+	m_vwp_hane_L.lock()->GetTransform()->SetLocalRotationY_Degrees(m_currentHaneRotateY_L);
+	m_vwp_hane_R.lock()->GetTransform()->SetLocalRotationY_Degrees(m_currentHaneRotateY_R);
+
+	m_fangAnimationTimer->Start();
+	m_defaultFangRotateY = m_vwp_fang_R.lock()->GetTransform()->GetLocalRotation_Euler().GetDegrees().y;
+	m_currentFangRotateY_L = m_defaultFangRotateY;
+	m_currentFangRotateY_R = m_defaultFangRotateY;
+	m_endFangRotateY_L = m_defaultFangRotateY - 30;
+	m_endFangRotateY_R = m_defaultFangRotateY + 30;
+	
 	CreateFang();
 	SetEnemyParameter();
 	//SetLoiterParameter();
@@ -163,6 +185,48 @@ void ButiEngine::Enemy_Kiba::SetLookAtParameter()
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront());
 	m_vlp_lookAt->SetSpeed(0.1f);
+}
+
+void ButiEngine::Enemy_Kiba::HaneAnimation(const bool arg_isDetectionPlayer)
+{
+	if (arg_isDetectionPlayer)
+	{
+		m_currentHaneRotateY_L = MathHelper::Lerp(m_currentHaneRotateY_L, 0, 0.2f);
+		m_currentHaneRotateY_R = MathHelper::Lerp(m_currentHaneRotateY_R, 0, 0.2f);
+	}
+	else
+	{
+		m_currentHaneRotateY_L = MathHelper::Lerp(m_currentHaneRotateY_L, -m_defaultHaneRotateY, 0.05f);
+		m_currentHaneRotateY_R = MathHelper::Lerp(m_currentHaneRotateY_R, m_defaultHaneRotateY, 0.05f);
+	}
+
+	m_vwp_hane_L.lock()->GetTransform()->SetLocalRotationY_Degrees(m_currentHaneRotateY_L);
+	m_vwp_hane_R.lock()->GetTransform()->SetLocalRotationY_Degrees(m_currentHaneRotateY_R);
+}
+
+void ButiEngine::Enemy_Kiba::FangAnimation(const bool arg_isDetectionPlayer)
+{
+	if (arg_isDetectionPlayer)
+	{
+		if (m_fangAnimationTimer->Update())
+		{
+			m_currentFangRotateY_L = m_defaultFangRotateY;
+			m_currentFangRotateY_R = m_defaultFangRotateY;
+		}
+		else
+		{
+			m_currentFangRotateY_L = MathHelper::Lerp(m_currentFangRotateY_L, m_endFangRotateY_L, 0.15f);
+			m_currentFangRotateY_R = MathHelper::Lerp(m_currentFangRotateY_R, m_endFangRotateY_R, 0.15f);
+		}
+	}
+	else
+	{
+		m_currentFangRotateY_L = m_defaultFangRotateY;
+		m_currentFangRotateY_R = m_defaultFangRotateY;
+	}
+
+	m_vwp_fang_L.lock()->GetTransform()->SetLocalRotationY_Degrees(m_currentFangRotateY_L);
+	m_vwp_fang_R.lock()->GetTransform()->SetLocalRotationY_Degrees(m_currentFangRotateY_R);
 }
 
 float ButiEngine::Enemy_Kiba::CalculateRotationDirection()

@@ -33,7 +33,7 @@ namespace ButiEngine {
 		void AddSpawnCount();
 
 		bool IsClearAnimation() { return m_isClear; }
-		bool IsGameOver() { return m_isGameOver; }
+		bool IsGameOver() { return m_isAdvanceGameOver; }
 		std::int32_t GetSpawnCount() { return m_enemySpawnCount; }
 		std::int32_t GetMaxEnemyCount() { return m_maxEnemyCount; }
 		std::int32_t GetNowEnemyCount() { return m_enemySpawnCount - m_enemyDeadCount; }

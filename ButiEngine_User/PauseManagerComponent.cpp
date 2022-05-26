@@ -82,6 +82,7 @@ void ButiEngine::PauseManagerComponent::Start()
 	m_vwp_fadeOutComponent.lock()->SetIsFade(true);
 	m_vwp_fadeOutComponent.lock()->SetMoveAlpha(0.1f);
 	m_vwp_fadeOutComponent.lock()->SetPositionZ(-0.051f);
+	m_vwp_fadeOutComponent.lock()->SetMaxAlpha(0.5f);
 
 	m_vwp_pauseUI = GetManager().lock()->AddObjectFromCereal("PauseUI");
 	m_vwp_pauseWindowUI = GetManager().lock()->AddObjectFromCereal("PauseWindowUI");

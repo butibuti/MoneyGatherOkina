@@ -25,12 +25,14 @@ namespace ButiEngine {
 		/// <param name="arg_isFadeIn"></param>
 		void SetIsFade(const bool arg_isFadeIn) { m_isFadeIn = arg_isFadeIn; }
 		void SetMoveAlpha(const float arg_moveAlpha) { m_moveAlpha = arg_moveAlpha; }
+		void SetMaxAlpha(const float arg_maxAlpha) { m_maxAlpha = arg_maxAlpha; }
 		void SetPositionZ(const float arg_positionZ);
 		bool IsFadeAnimation()const;
 	private:
 		bool m_isFadeIn;
 		float m_alpha;
 		float m_moveAlpha;
+		float m_maxAlpha;
 	};
 }
 
