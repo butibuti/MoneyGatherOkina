@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class RigidBodyComponent;
 	class ParticleGenerater;
+	class SoundPlayerComponent;
 
 	class Stick :public GameComponent
 	{
@@ -39,6 +40,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_center;
 
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		bool m_isPocketCatch;
 		bool m_isMoveToPocket;
 	};

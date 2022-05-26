@@ -12,6 +12,9 @@
 #include "WorldSpeedManager.h"
 #include "CameraComponent.h"
 
+std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 10000;
+std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 10000;
+
 void ButiEngine::WaveManager::OnUpdate()
 {
 	if (!m_isSceneStart)
@@ -95,34 +98,26 @@ void ButiEngine::WaveManager::Start()
 
 	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
 
-	if (m_sceneName != "Stage_4")
-	{
-		if (m_sceneName == "Stage_1")
-		{
-			m_clearPoint = 10000;
-		}
-		else if (m_sceneName == "Stage_2")
-		{
-			m_clearPoint = 20000;
-		}
-		else if (m_sceneName == "Stage_3")
-		{
-			m_clearPoint = 30000;
-		}
 
-		//エネミースポナーをスポーンさせる
-		SpawnEnemySpawner();
-	}
-	else
+	if (m_sceneName == "Stage_0")
 	{
-		m_clearPoint = 10000;
+		m_clearPoint = m_tutorialClearPoint;
 	}
+	else if (m_sceneName == "Stage_1")
+	{
+		m_clearPoint = m_stageClearPoint;
+	}
+
+	//エネミースポナーをスポーンさせる
+	SpawnEnemySpawner();
 }
 
 void ButiEngine::WaveManager::OnShowUI()
 {
-	GUI::BulletText("MaxEnemyCount");
-	GUI::InputInt("##maxEnemyCount", m_clearPoint);
+	GUI::BulletText("TutorialClearPoint");
+	GUI::InputInt("##TutorialClearPoint", m_tutorialClearPoint);
+	GUI::BulletText("StageClearPoint");
+	GUI::InputInt("##StageClearPoint", m_stageClearPoint);
 }
 
 void ButiEngine::WaveManager::AddProgressPoint(const std::int32_t arg_progressPoint)

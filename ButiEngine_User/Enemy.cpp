@@ -22,6 +22,7 @@
 #include "KnockBack.h"
 #include "Crystal.h"
 #include "GameSettings.h"
+#include "SoundPlayerComponent.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
@@ -56,6 +57,7 @@ void ButiEngine::Enemy::OnUpdate()
 	if (IsVibrate())
 	{
 		IncreaseVibration();
+		MobDamegeSE();
 	}
 	else
 	{
@@ -131,6 +133,7 @@ void ButiEngine::Enemy::OnSet()
 	m_vibrationResistance = 10.0f;
 	m_weight = 100.0f;
 	m_isCapaOver = false;
+	m_isMobDamageSE = false;
 }
 
 void ButiEngine::Enemy::OnRemove()
@@ -154,8 +157,11 @@ void ButiEngine::Enemy::Start()
 {
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 
 	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
+
+	m_gameObjectName = gameObject.lock()->GetGameObjectName();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy::Clone()
@@ -210,18 +216,21 @@ void ButiEngine::Enemy::Dead()
 	{
 		fly->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
 	if (kiba)
 	{
 		kiba->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 	if (stalker)
 	{
 		stalker->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
 	}
 	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
 	if (tutorial)
@@ -234,6 +243,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		volcano->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
 	}
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
@@ -251,6 +261,7 @@ void ButiEngine::Enemy::Dead()
 	if (crystal)
 	{
 		crystal->Dead();
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Crystal.wav"));
 		return;
 	}
 
@@ -260,6 +271,15 @@ void ButiEngine::Enemy::Dead()
 	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
 
 	gameObject.lock()->SetIsRemove(true);
+
+	if (m_isMobDamageSE)
+	{
+		//再生中なら止める
+		m_isMobDamageSE = false;
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
+		m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
+	}
 
 	//死んだら画面揺らす
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
@@ -400,6 +420,8 @@ void ButiEngine::Enemy::AttackFlashUpdate()
 	if (m_vlp_attackFlashTimer->Update())
 	{
 		CreateAttackFlashEffect();
+		auto soundTag = "Sound/Attack_OneShot_" + std::to_string(ButiRandom::GetInt(0, 3)) + ".wav";
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag(soundTag));
 	}
 }
 
@@ -476,6 +498,33 @@ void ButiEngine::Enemy::StopVibrationEffect()
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
+	}
+}
+
+void ButiEngine::Enemy::MobDamegeSE()
+{
+	//モブがくっついてなければそもそも鳴らさない
+	if (m_stickWorkerCount <= 0) 
+	{
+		if (m_isMobDamageSE)
+		{
+			//再生中なら止める
+			m_isMobDamageSE = false;
+			auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
+			m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
+		}
+		return;
+	}
+
+
+	if (!m_isMobDamageSE)
+	{
+		//再生
+		m_isMobDamageSE = true;
+		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Attack_Loop.wav"), indexNum, 1, true);
 	}
 }
 

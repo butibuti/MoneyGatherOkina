@@ -23,10 +23,12 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 
 	FixStageNum();
 
-	if (InputManager::IsTriggerDecideKey())
+	if (InputManager::IsTriggerDecideKey() && !isSceneChange)
 	{
 		m_vwp_gamePlayChangeAnimation.lock()->SceneEnd();
 		isSceneChange = true;
+
+
 	}
 	else if (InputManager::IsTriggerCancelKey())
 	{
@@ -51,8 +53,8 @@ void ButiEngine::StageSelectManagerComponent::OnShowUI()
 
 void ButiEngine::StageSelectManagerComponent::Start()
 {
-	m_stageNum = 1;
-	m_maxStageNum = 4;
+	m_stageNum = 0;
+	m_maxStageNum = 1;
 	if (!m_vwp_gamePlayChangeAnimation.lock()) {
 		m_vwp_gamePlayChangeAnimation = gameObject.lock()->GetGameComponent<SceneChangeAnimationComponent>();
 		m_vwp_gamePlayChangeAnimation.lock()->HidePanel();
@@ -113,13 +115,13 @@ void ButiEngine::StageSelectManagerComponent::FixStageNum()
 	//ステージ番号を範囲内に修正
 	if (m_stageNum > m_maxStageNum)
 	{
-		m_stageNum = 1;
+		m_stageNum = 0;
 	}
-	else if(m_stageNum < 1)
+	else if(m_stageNum < 0)
 	{
 		m_stageNum = m_maxStageNum;
 	}
-	GetManager().lock()->GetGameObject("RemainUI").lock()->GetGameComponent<SpriteAnimationComponent>()->SetHorizontalAnim(m_stageNum - 1);
+	GetManager().lock()->GetGameObject("RemainUI").lock()->GetGameComponent<SpriteAnimationComponent>()->SetHorizontalAnim(m_stageNum);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::StageSelectManagerComponent::Clone()

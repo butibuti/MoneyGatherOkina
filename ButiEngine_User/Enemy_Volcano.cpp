@@ -7,6 +7,7 @@
 #include "EnemyScaleAnimationComponent.h"
 #include "PredictedPoint.h"
 #include "WarningMark.h"
+#include "SoundPlayerComponent.h"
 
 #include "InputManager.h"
 
@@ -81,6 +82,8 @@ void ButiEngine::Enemy_Volcano::Start()
 
 	m_vwp_warningMark = GetManager().lock()->AddObjectFromCereal("WarningMark").lock()->GetGameComponent<WarningMark>();
 	m_vwp_warningMark.lock()->SetParent(gameObject);
+
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	
 	m_vlp_rockShotTimer->Start();
 
@@ -130,6 +133,9 @@ void ButiEngine::Enemy_Volcano::ShotVolcanoRock()
 	auto volcanoRock = GetManager().lock()->AddObjectFromCereal("VolcanoRock");
 	volcanoRock.lock()->transform->SetWorldPosition(position);
 	volcanoRock.lock()->GetGameComponent<VolcanoRock>()->SetVelocity(m_randomVelocity);
+
+	//ƒVƒ‡ƒbƒg‰¹Ä¶
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Kazan_Fire.wav"));
 }
 
 void ButiEngine::Enemy_Volcano::AddPredictedPoint()

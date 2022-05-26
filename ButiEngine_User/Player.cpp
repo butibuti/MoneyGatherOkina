@@ -18,6 +18,7 @@
 #include "Bomb_Player.h"
 #include "GameSettings.h"
 #include "FlockingLeader.h"
+#include "SoundPlayerComponent.h"
 
 float ButiEngine::Player::m_maxMoveSpeed = 0.25f;
 float ButiEngine::Player::m_acceleration = 0.1f;
@@ -109,6 +110,7 @@ void ButiEngine::Player::OnSet()
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_vibUpSEResetTimer = ObjectFactory::Create<RelativeTimer>(5);
 }
 
 void ButiEngine::Player::OnRemove()
@@ -228,6 +230,9 @@ void ButiEngine::Player::Start()
 	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
 
 	m_vwp_vignetteUI = GetManager().lock()->AddObjectFromCereal("VignetteUI");
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+
+	m_vlp_vibUpSEResetTimer->Start();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -260,6 +265,15 @@ void ButiEngine::Player::Dead()
 	m_vibration = 0.0f;
 	m_isVibrate = false;
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+
+	if (m_isVibUpSE)
+	{
+		m_isVibUpSE = false;
+
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
+		m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
+	}
 
 	//gameObject.lock()->SetIsRemove(ture);
 }
@@ -373,6 +387,8 @@ void ButiEngine::Player::Damage()
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 	m_vwp_vignetteUI.lock()->GetGameComponent<VignetteUIComponent>()->StartAlphaAnimation();
 
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Damage.wav"));
+
 	if (m_life == 0)
 	{
 		m_isDead = true;
@@ -412,10 +428,19 @@ void ButiEngine::Player::IncreaseVibration()
 	}
 	m_vibration = min(m_vibration, m_maxVibration);
 
+	if (!m_isVibUpSE)
+	{
+		m_isVibUpSE = true;
+
+		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
+	}
+
 	if (GetVibrationRate() >= 1.0f)
 	{
 		StartOverheat();
-
+		StopVibUpSE();
 		//meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
 		//meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
 	}
@@ -433,6 +458,8 @@ void ButiEngine::Player::DecreaseVibration()
 	if (m_isOverheat) { return; }
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
+
+	StopVibUpSE();
 
 	//if (GetVibrationRate() < 1.0f)
 	//{
@@ -614,6 +641,8 @@ void ButiEngine::Player::StartOverheat()
 
 	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
 }
 
 void ButiEngine::Player::Overheat()
@@ -630,6 +659,8 @@ void ButiEngine::Player::Overheat()
 
 		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
 		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+	
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
 	}
 }
 
@@ -717,4 +748,16 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_controllerVibration = 0.0f;
 	m_previousVibrationPower = 0;
 	m_isFixNumberUIScale = false;
+}
+
+void ButiEngine::Player::StopVibUpSE()
+{
+	if (m_isVibUpSE)
+	{
+		m_isVibUpSE = false;
+
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
+		m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
+	}
 }

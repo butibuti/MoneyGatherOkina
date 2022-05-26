@@ -18,6 +18,7 @@
 #include "TiltMotion.h"
 #include "FloatMotionComponent.h"
 #include "KnockBack.h"
+#include "SoundPlayerComponent.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
@@ -153,6 +154,7 @@ void ButiEngine::Worker::Start()
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 
 	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
 }

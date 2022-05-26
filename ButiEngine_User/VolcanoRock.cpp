@@ -2,6 +2,7 @@
 #include "VolcanoRock.h"
 #include "ParticleGenerater.h"
 #include "SeparateDrawObject.h"
+#include "SoundPlayerComponent.h"
 
 void ButiEngine::VolcanoRock::OnUpdate()
 {
@@ -27,6 +28,7 @@ void ButiEngine::VolcanoRock::OnUpdate()
 		auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 		deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 		deadEffect.lock()->transform->SetLocalScale(transform->GetLocalScale() * 5.0f);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Kazan_Hit.wav"));
 		Dead(); //Ž€
 	}
 }
@@ -44,6 +46,8 @@ void ButiEngine::VolcanoRock::Start()
 {
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Rock");
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+	
 	m_vlp_lifeTimer->Start();
 	m_gravity = 0.05f;
 	float rotateSpeedRate = 5.0f;

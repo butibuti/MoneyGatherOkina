@@ -9,6 +9,7 @@ namespace ButiEngine {
 	class NumberManagerComponent;
 	class BeeSoulPodUIComponent;
 	class FlockingLeader;
+	class SoundPlayerComponent;
 
 	class Player :public GameComponent
 	{
@@ -94,6 +95,8 @@ namespace ButiEngine {
 		void SetLookAtParameter();
 		void SetVibrationParameter();
 
+		void StopVibUpSE();
+
 		//à⁄ìÆ
 		static float m_maxMoveSpeed;
 		static float m_acceleration;
@@ -153,6 +156,7 @@ namespace ButiEngine {
 		Vector3 m_defaultNumberUIScale;
 		Vector3 m_defaultMaxUIScale;
 		bool m_isVibrate;
+		bool m_isVibUpSE;
 		float m_previousVibrationPower;
 		float m_vibration;
 		float m_maxVibration;
@@ -164,7 +168,7 @@ namespace ButiEngine {
 		float m_controllerVibration;
 		std::int32_t m_vibUpCount;
 		bool m_isFixNumberUIScale;
-		
+		std::string m_gameObjectName;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;
@@ -185,6 +189,8 @@ namespace ButiEngine {
 		Value_weak_ptr<ParticleGenerater> m_vwp_polygonParticleGenerater;
 
 		Value_weak_ptr<GameObject> m_vwp_vignetteUI;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
+		Value_ptr<Timer> m_vlp_vibUpSEResetTimer;
 	};
 
 }

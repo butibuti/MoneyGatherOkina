@@ -78,6 +78,9 @@ namespace ButiEngine {
 		std::int32_t m_enemySpawnCount;
 		////現在フィールドにどれだけいるかのカウント
 		//std::int32_t m_nowEnemyCount;
+
+		static std::int32_t m_tutorialClearPoint;
+		static std::int32_t m_stageClearPoint;
 	};
 
 }
