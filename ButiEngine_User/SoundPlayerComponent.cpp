@@ -68,6 +68,7 @@ void ButiEngine::SoundPlayerComponent::OnShowUI()
 
 void ButiEngine::SoundPlayerComponent::Start()
 {
+    m_vec_loopIndices.push_back("_");
 }
 
 void ButiEngine::SoundPlayerComponent::PlayBGM(SoundTag arg_sound, const float arg_volume)
@@ -114,6 +115,50 @@ void ButiEngine::SoundPlayerComponent::SetVolume(SoundTag arg_sound, const float
         return;
     }
     m_umap_soundVolume.at(arg_sound.GetID()) = arg_volume;
+}
+
+void ButiEngine::SoundPlayerComponent::SetLoopIndex(const std::string& arg_indexName)
+{
+    auto end = m_vec_loopIndices.end();
+    for (auto itr = m_vec_loopIndices.begin(); itr != end; ++itr)
+    {
+        if ((*itr) == "_" || (*itr) == arg_indexName)
+        {
+            (*itr) = arg_indexName;
+            return;
+        }
+    }
+
+    m_vec_loopIndices.push_back(arg_indexName);
+}
+
+std::int32_t ButiEngine::SoundPlayerComponent::GetLoopIndex(const std::string& arg_indexName)
+{
+    std::int32_t index = 0;
+    auto end = m_vec_loopIndices.end();
+    for (auto itr = m_vec_loopIndices.begin(); itr != end; ++itr)
+    {
+        if ((*itr) == arg_indexName)
+        {
+            return index;
+        }
+        index++;
+    }
+
+    return 0;
+}
+
+void ButiEngine::SoundPlayerComponent::DestroyLoopIndex(const std::string& arg_indexName)
+{
+    auto end = m_vec_loopIndices.end();
+    for (auto itr = m_vec_loopIndices.begin(); itr != end; ++itr)
+    {
+        if ((*itr) == arg_indexName)
+        {
+            (*itr) = "_";
+            return;
+        }
+    }
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SoundPlayerComponent::Clone()

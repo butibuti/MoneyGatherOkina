@@ -71,6 +71,7 @@ namespace ButiEngine {
 		std::uint8_t GetStickWorkerCount();
 		void AddDeadCount();
 		void StopVibrationEffect();
+		void MobDamegeSE();
 
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other);
 
@@ -105,10 +106,12 @@ namespace ButiEngine {
 		float m_vibrationCapacity;
 		float m_vibrationResistance;
 		bool m_isCapaOver;
+		bool m_isMobDamageSE;
 
 		static float m_playerVibrationCoefficient;
 
 		float m_explosionScale;
+		std::string m_gameObjectName;
 	};
 
 }

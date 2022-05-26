@@ -94,6 +94,7 @@ namespace ButiEngine {
 		bool m_isVibrate;
 		bool m_isAttack;
 		bool m_isPredated;
+		bool m_isAttackSE;
 		
 		float m_vibration;
 	};

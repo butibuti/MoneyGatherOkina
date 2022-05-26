@@ -96,6 +96,7 @@ void ButiEngine::Player::OnSet()
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_vibUpSEResetTimer = ObjectFactory::Create<RelativeTimer>(5);
 }
 
 void ButiEngine::Player::OnRemove()
@@ -213,6 +214,8 @@ void ButiEngine::Player::Start()
 
 	m_vwp_vignetteUI = GetManager().lock()->AddObjectFromCereal("VignetteUI");
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+
+	m_vlp_vibUpSEResetTimer->Start();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -245,6 +248,15 @@ void ButiEngine::Player::Dead()
 	m_vibration = 0.0f;
 	m_isVibrate = false;
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+
+	if (m_isIncreaseVibrationSE)
+	{
+		m_isIncreaseVibrationSE = false;
+
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
+		m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
+	}
 
 	//gameObject.lock()->SetIsRemove(ture);
 }
@@ -395,11 +407,12 @@ void ButiEngine::Player::IncreaseVibration()
 	if (!m_isIncreaseVibrationSE)
 	{
 		m_isIncreaseVibrationSE = true;
-		//m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
-		//m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/VibrationMax_Start.wav"));
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
-	}
 
+		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
+	}
+	m_vlp_vibUpSEResetTimer->Reset();
 
 	if (GetVibrationRate() >= 1.0f)
 	{
@@ -423,11 +436,17 @@ void ButiEngine::Player::DecreaseVibration()
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 
-	if (m_isIncreaseVibrationSE)
+	if (m_vlp_vibUpSEResetTimer->Update())
 	{
-		m_isIncreaseVibrationSE = false;
-	}
+		if (m_isIncreaseVibrationSE)
+		{
+			m_isIncreaseVibrationSE = false;
 
+			auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
+			m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
+		}
+	}
 
 	//if (GetVibrationRate() < 1.0f)
 	//{

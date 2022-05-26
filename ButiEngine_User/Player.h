@@ -156,6 +156,7 @@ namespace ButiEngine {
 		std::int32_t m_vibUpCount;
 		bool m_isFixNumberUIScale;
 		std::int32_t m_overHeatFrame;
+		std::string m_gameObjectName;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;
@@ -177,6 +178,7 @@ namespace ButiEngine {
 
 		Value_weak_ptr<GameObject> m_vwp_vignetteUI;
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
+		Value_ptr<Timer> m_vlp_vibUpSEResetTimer;
 	};
 
 }
