@@ -35,6 +35,7 @@ namespace ButiEngine {
 
 		bool IsDetectionPlayer();
 
+		static std::int32_t m_progressPoint;
 		static std::int32_t m_pocketCount;
 		static float m_createPocketRadius;
 		static float m_vibrationCapacity;

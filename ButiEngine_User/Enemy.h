@@ -94,6 +94,8 @@ namespace ButiEngine {
 
 		float m_weight;
 
+		std::int32_t m_progressPoint;
+
 		float m_vibration;
 		float m_vibrationIncrease;
 		float m_vibrationCapacity;

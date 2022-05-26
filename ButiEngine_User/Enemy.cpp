@@ -235,7 +235,6 @@ void ButiEngine::Enemy::Dead()
 		volcano->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
-	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
@@ -250,6 +249,7 @@ void ButiEngine::Enemy::Dead()
 		gameObject.lock()->SetIsRemove(true);
 		return;
 	}
+	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
 	if (crystal)
 	{
 		crystal->Dead();

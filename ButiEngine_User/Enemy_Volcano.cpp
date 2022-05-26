@@ -10,6 +10,7 @@
 
 #include "InputManager.h"
 
+std::int32_t ButiEngine::Enemy_Volcano::m_progressPoint = 100;
 std::int32_t ButiEngine::Enemy_Volcano::m_pocketCount = 8;
 float ButiEngine::Enemy_Volcano::m_createPocketRadius = 4.0f;
 float ButiEngine::Enemy_Volcano::m_vibrationCapacity = 1000.0f;
@@ -58,6 +59,9 @@ void ButiEngine::Enemy_Volcano::OnRemove()
 
 void ButiEngine::Enemy_Volcano::OnShowUI()
 {
+	GUI::BulletText(u8"ポイント");
+	GUI::DragInt("##point", &m_progressPoint, 1, 0, 1000);
+
 	GUI::BulletText(u8"ポケットの数");
 	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
 
