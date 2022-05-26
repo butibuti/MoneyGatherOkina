@@ -36,11 +36,13 @@ namespace ButiEngine {
 		void SetWeight(const float arg_weight) { m_weight = arg_weight; }
 		void SetIsCapaOver(const bool arg_isCapaOver) { m_isCapaOver = arg_isCapaOver; }
 		void SetVibration(const float arg_vibration) { m_vibration = arg_vibration; }
+		void SetProgressPoint(const std::int32_t arg_progressPoint) { m_progressPoint = arg_progressPoint; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 		float GetVibrationRate() { return m_vibration / m_vibrationCapacity; }
 		float GetWeight() { return m_weight; }
+		std::int32_t GetProgressPoint() { return m_progressPoint; }
 
 		std::vector<Value_weak_ptr<GameObject>> GetStickWorkers();
 

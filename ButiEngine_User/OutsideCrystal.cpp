@@ -40,6 +40,7 @@ void ButiEngine::OutsideCrystal::OnShowUI()
 
 void ButiEngine::OutsideCrystal::Start()
 {
+	SetEnemyParameter();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::OutsideCrystal::Clone()
@@ -54,6 +55,7 @@ void ButiEngine::OutsideCrystal::Dead()
 void ButiEngine::OutsideCrystal::SetEnemyParameter()
 {
 	auto enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	enemy->SetProgressPoint(m_progressPoint);
 	enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	enemy->SetVibrationCapacity(m_vibrationCapacity);
 	enemy->SetVibrationResistance(m_vibrationResistance);

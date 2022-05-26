@@ -166,6 +166,7 @@ void ButiEngine::Enemy_Volcano::ScaleAnimation()
 void ButiEngine::Enemy_Volcano::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->SetProgressPoint(m_progressPoint);
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
 	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);

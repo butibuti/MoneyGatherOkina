@@ -5,6 +5,7 @@
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
 
+std::int32_t ButiEngine::Enemy_Stalker::m_progressPoint = 100;
 std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 5;
 float ButiEngine::Enemy_Stalker::m_createPocketRadius = 1.0f;
 float ButiEngine::Enemy_Stalker::m_vibrationCapacity = 30.0f;
@@ -52,6 +53,9 @@ void ButiEngine::Enemy_Stalker::OnRemove()
 
 void ButiEngine::Enemy_Stalker::OnShowUI()
 {
+	GUI::BulletText(u8"ポイント");
+	GUI::DragInt("##point", &m_progressPoint, 1, 0, 1000);
+
 	GUI::BulletText(u8"ポケットの数");
 	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
 
@@ -204,6 +208,7 @@ void ButiEngine::Enemy_Stalker::PreyAnimation()
 void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->SetProgressPoint(m_progressPoint);
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
 	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);

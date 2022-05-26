@@ -6,6 +6,7 @@
 #include "SphereExclusion.h"
 #include "WarningMark.h"
 
+std::int32_t ButiEngine::Enemy_Kiba::m_progressPoint = 100;
 std::int32_t ButiEngine::Enemy_Kiba::m_pocketCount = 8;
 float ButiEngine::Enemy_Kiba::m_createPocketRadius = 3.0f;
 float ButiEngine::Enemy_Kiba::m_vibrationCapacity = 1000.0f;
@@ -46,6 +47,9 @@ void ButiEngine::Enemy_Kiba::OnRemove()
 
 void ButiEngine::Enemy_Kiba::OnShowUI()
 {
+	GUI::BulletText(u8"ポイント");
+	GUI::DragInt("##point", &m_progressPoint, 1, 0, 1000);
+
 	GUI::BulletText(u8"ポケットの数");
 	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
 
@@ -166,6 +170,7 @@ void ButiEngine::Enemy_Kiba::CreateFang()
 void ButiEngine::Enemy_Kiba::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->SetProgressPoint(m_progressPoint);
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
 	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);
