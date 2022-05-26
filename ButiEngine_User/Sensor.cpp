@@ -14,7 +14,6 @@ void ButiEngine::Sensor::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
-				//m_vwp_player.lock()->SetIsIncrease(true);
 				//m_vwp_player.lock()->AddNearEnemyCount();
 			}
 			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Flocking")))
@@ -28,11 +27,6 @@ void ButiEngine::Sensor::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
-				//m_vwp_player.lock()->SetIsIncrease(false);
-			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Flocking")))
-			{
-				m_vwp_player.lock()->SetIsIncrease(false);
 			}
 		});
 
@@ -56,12 +50,13 @@ void ButiEngine::Sensor::OnCollisionFlocking(Value_weak_ptr<GameObject> arg_vwp_
 	if (!worker) { return; }
 
 	//プレイヤーの振動値がモブハチの振動値より小さかったら振動値を増やす
-	float playerVibrationRate = m_vwp_player.lock()->GetVibration();
-	float workerVibrationRate = worker->GetVibration();
+	float playerVibration = m_vwp_player.lock()->GetVibration();
+	float workerVibration = worker->GetVibration();
 
-	if (playerVibrationRate < workerVibrationRate)
+	if (playerVibration <= workerVibration)
 	{
-		m_vwp_player.lock()->SetIsIncrease(true);
 		m_vwp_player.lock()->AddNearWorkerCount();
 	}
+
+	m_vwp_player.lock()->SetStrongestNearWorkerVibration(workerVibration);
 }

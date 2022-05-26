@@ -49,9 +49,12 @@ namespace ButiEngine {
 		float GetNearEnemyVibrationRate() { return m_nearEnemyVibrationRate; }
 		Vector3 GetVelocity() { return m_velocity; }
 
-		void SetIsIncrease(const bool arg_isIncrease) { m_isIncrease = arg_isIncrease; }
 		void SetNearEnemyVibrationRate(const float arg_vibrationRate) { m_nearEnemyVibrationRate = arg_vibrationRate; }
 		void SetVelocity(const Vector3& arg_velocity) { m_velocity = arg_velocity; }
+		void SetStrongestNearWorkerVibration(const float arg_vibration)
+		{
+			m_strongestNearWorkerVibration = max(m_strongestNearWorkerVibration, arg_vibration);
+		}
 
 		bool IsDead() { return m_isDead; }
 		bool IsBomb() { return m_isBomb; }
@@ -139,13 +142,13 @@ namespace ButiEngine {
 		Vector3 m_defaultMaxUIScale;
 		float m_vibrationForce;
 		bool m_isVibrate;
-		bool m_isIncrease;
 		float m_previousVibrationPower;
 		float m_vibration;
 		float m_maxVibration;
 		float m_overHeatMaxVibration;
 		std::uint8_t m_nearEnemyCount;
 		std::uint8_t m_nearWorkerCount;
+		float m_strongestNearWorkerVibration;
 		float m_vibrationIncrease;
 		float m_vibrationDecrease;
 		float m_nearEnemyVibrationRate;

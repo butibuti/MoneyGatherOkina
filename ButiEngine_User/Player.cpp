@@ -32,7 +32,7 @@ void ButiEngine::Player::OnUpdate()
 	//}
 
 	//フロッキング招集モード時、近くに自分より振動値の大きいモブハチがいたら振動値を増やす
-	if (m_vwp_flockingLeader.lock()->IsGather() && m_isIncrease)
+	if (m_vwp_flockingLeader.lock()->IsGather() && m_nearWorkerCount != 0)
 	{
 		//コントローラーの振動値設定
 		constexpr float maxControllerVibration = 1.0f;
@@ -42,13 +42,14 @@ void ButiEngine::Player::OnUpdate()
 	}
 	else
 	{
-		//m_controllerVibration = 0.0f;
+		m_controllerVibration = 0.0f;
 		DecreaseVibration();
 	}
 	VibrationEffect();
 
 	//m_nearEnemyCount = 0;
 	m_nearWorkerCount = 0;
+	m_strongestNearWorkerVibration = 0.0f;
 
 	MoveKnockBack();
 	Move();
@@ -68,7 +69,7 @@ void ButiEngine::Player::OnUpdate()
 	//	Bomb();
 	//}
 	VibrationPowerDrawUpdate();
-	//VibrationController();
+	VibrationController();
 	ShakeDrawObject();
 }
 
@@ -386,6 +387,7 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isOverHeat) { return; }
 
 	m_vibration += m_vibrationIncrease * m_nearWorkerCount /*m_nearEnemyCount*/ * GameDevice::WorldSpeed;
+	m_vibration = min(m_vibration, m_strongestNearWorkerVibration);
 	m_vibration = min(m_vibration, m_maxVibration);
 
 	if (GetVibrationRate() >= 1.0f)
@@ -683,7 +685,6 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_overHeatFrame = 600;
 	m_overHeatTimer = ObjectFactory::Create<RelativeTimer>(m_overHeatFrame);
 
-	m_isIncrease = false;
 	m_isVibrate = false;
 	m_vibrationForce = 5.0f;
 	m_vibration = 0.0f;
@@ -691,6 +692,7 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_overHeatMaxVibration = m_maxVibration * 4;
 	m_nearEnemyCount = 0;
 	m_nearWorkerCount = 0;
+	m_strongestNearWorkerVibration = 0.0f;
 	m_vibrationIncrease = 0.10f;
 	m_vibrationDecrease = 0.02f;
 	m_nearEnemyVibrationRate = 0.0f;
