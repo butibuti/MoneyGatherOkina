@@ -10,8 +10,11 @@
 
 #include "InputManager.h"
 
+std::int32_t ButiEngine::Enemy_Volcano::m_progressPoint = 100;
 std::int32_t ButiEngine::Enemy_Volcano::m_pocketCount = 8;
 float ButiEngine::Enemy_Volcano::m_createPocketRadius = 4.0f;
+float ButiEngine::Enemy_Volcano::m_vibrationCapacity = 1000.0f;
+float ButiEngine::Enemy_Volcano::m_vibrationResistance = 3.0f;
 
 void ButiEngine::Enemy_Volcano::OnUpdate()
 {
@@ -56,10 +59,20 @@ void ButiEngine::Enemy_Volcano::OnRemove()
 
 void ButiEngine::Enemy_Volcano::OnShowUI()
 {
-	GUI::BulletText("PocketCount");
+	GUI::BulletText(u8"ポイント");
+	GUI::DragInt("##point", &m_progressPoint, 1, 0, 1000);
+
+	GUI::BulletText(u8"ポケットの数");
 	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
-	GUI::BulletText("PocketRadius");
+
+	GUI::BulletText(u8"ポケット生成時の半径");
 	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"振動値の上限");
+	GUI::DragFloat("##capacity", &m_vibrationCapacity, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"振動の抵抗");
+	GUI::DragFloat("##resistance", &m_vibrationResistance, 0.1f, 0.0f, 1000.0f);
 }
 
 void ButiEngine::Enemy_Volcano::Start()
@@ -92,11 +105,6 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Volcano::Clon
 
 void ButiEngine::Enemy_Volcano::Dead()
 {
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
-	}
-
 	if (m_vwp_warningMark.lock())
 	{
 		m_vwp_warningMark.lock()->Dead();
@@ -158,10 +166,10 @@ void ButiEngine::Enemy_Volcano::ScaleAnimation()
 void ButiEngine::Enemy_Volcano::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->SetProgressPoint(m_progressPoint);
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
-	m_vlp_enemy->SetVibrationCapacity(1000.0f);
-	m_vlp_enemy->SetVibrationResistance(3.0f);
-	m_vlp_enemy->SetExplosionScale(10.0f);
+	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
+	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);
 	m_vlp_enemy->SetWeight(1000.0f);
 }
 

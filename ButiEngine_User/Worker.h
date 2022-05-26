@@ -68,6 +68,7 @@ namespace ButiEngine {
 		static float m_nearBorder;
 		static float m_vibrationForce;
 		static float m_maxVibration;
+		static float m_minVibration;
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
 

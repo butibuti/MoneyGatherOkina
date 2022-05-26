@@ -6,8 +6,11 @@
 #include "SphereExclusion.h"
 #include "ShakeComponent.h"
 
+std::int32_t ButiEngine::Enemy_Fly::m_progressPoint = 10;
 std::int32_t ButiEngine::Enemy_Fly::m_pocketCount = 3;
 float ButiEngine::Enemy_Fly::m_createPocketRadius = 1.0f;
+float ButiEngine::Enemy_Fly::m_vibrationCapacity = 10.0f;
+float ButiEngine::Enemy_Fly::m_vibrationResistance = 0.0f;
 
 void ButiEngine::Enemy_Fly::OnUpdate()
 {
@@ -23,10 +26,20 @@ void ButiEngine::Enemy_Fly::OnRemove()
 
 void ButiEngine::Enemy_Fly::OnShowUI()
 {
-	GUI::BulletText("PocketCount");
+	GUI::BulletText(u8"ポイント");
+	GUI::DragInt("##point", &m_progressPoint, 1, 0, 1000);
+
+	GUI::BulletText(u8"ポケットの数");
 	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
-	GUI::BulletText("PocketRadius");
+
+	GUI::BulletText(u8"ポケット生成時の半径");
 	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"振動値の上限");
+	GUI::DragFloat("##capacity", &m_vibrationCapacity, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"振動の抵抗");
+	GUI::DragFloat("##resistance", &m_vibrationResistance, 0.1f, 0.0f, 1000.0f);
 }
 
 void ButiEngine::Enemy_Fly::Start()
@@ -47,19 +60,15 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Fly::Clone()
 
 void ButiEngine::Enemy_Fly::Dead()
 {
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
-	}
 }
 
 void ButiEngine::Enemy_Fly::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->SetProgressPoint(m_progressPoint);
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
-	m_vlp_enemy->SetVibrationCapacity(10.0f);
-	m_vlp_enemy->SetVibrationResistance(0.0f);
-	m_vlp_enemy->SetExplosionScale(2.0f);
+	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
+	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);
 	m_vlp_enemy->SetWeight(100.0f);
 }
 

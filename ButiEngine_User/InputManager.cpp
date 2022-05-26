@@ -140,13 +140,13 @@ bool ButiEngine::InputManager::IsPushAnyGameKey()
 
 void ButiEngine::InputManager::VibrationStart(const float arg_vibPower)
 {
-	GameDevice::GetInput()->Vibration_L(arg_vibPower);
+	//GameDevice::GetInput()->Vibration_L(arg_vibPower);
 	GameDevice::GetInput()->Vibration_R(arg_vibPower);
 }
 
 void ButiEngine::InputManager::VibrationStop()
 {
-	GameDevice::GetInput()->Vibration_L(0);
+	//GameDevice::GetInput()->Vibration_L(0);
 	GameDevice::GetInput()->Vibration_R(0);
 }
 

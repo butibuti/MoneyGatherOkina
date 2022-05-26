@@ -5,8 +5,13 @@
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
 
+std::int32_t ButiEngine::Enemy_Stalker::m_progressPoint = 100;
 std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 5;
 float ButiEngine::Enemy_Stalker::m_createPocketRadius = 1.0f;
+float ButiEngine::Enemy_Stalker::m_vibrationCapacity = 30.0f;
+float ButiEngine::Enemy_Stalker::m_vibrationResistance = 0.0f;
+float ButiEngine::Enemy_Stalker::m_maxMoveSpeed = 0.125f;
+float ButiEngine::Enemy_Stalker::m_acceleration = 0.01f;
 
 void ButiEngine::Enemy_Stalker::OnUpdate()
 {
@@ -48,15 +53,25 @@ void ButiEngine::Enemy_Stalker::OnRemove()
 
 void ButiEngine::Enemy_Stalker::OnShowUI()
 {
-	GUI::BulletText("PocketCount");
+	GUI::BulletText(u8"ポイント");
+	GUI::DragInt("##point", &m_progressPoint, 1, 0, 1000);
+
+	GUI::BulletText(u8"ポケットの数");
 	GUI::DragInt("##pocketCount", &m_pocketCount, 1, 0, 64);
-	GUI::BulletText("PocketRadius");
+
+	GUI::BulletText(u8"ポケット生成時の半径");
 	GUI::DragFloat("##radius", &m_createPocketRadius, 0.1f, 0.0f, 100.0f);
 
-	GUI::BulletText("MaxMoveSpeed");
+	GUI::BulletText(u8"振動値の上限");
+	GUI::DragFloat("##capacity", &m_vibrationCapacity, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"振動の抵抗");
+	GUI::DragFloat("##resistance", &m_vibrationResistance, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"最大速度");
 	GUI::DragFloat("##moveSpeed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
-	GUI::BulletText("Acceleration");
+	GUI::BulletText(u8"加速度");
 	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
 }
 
@@ -70,8 +85,6 @@ void ButiEngine::Enemy_Stalker::Start()
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(100.0f);
 
 	m_velocity = Vector3Const::Zero;
-	m_maxMoveSpeed = 0.125f;
-	m_acceleration = 0.01f;
 
 	m_vlp_preyTimer = ObjectFactory::Create<RelativeTimer>(300);
 	m_isPrey = false;
@@ -87,11 +100,6 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Enemy_Stalker::Clon
 
 void ButiEngine::Enemy_Stalker::Dead()
 {
-	if (m_vlp_enemy)
-	{
-		m_vlp_enemy->Explosion();
-	}
-
 	if (m_vwp_preyTarget.lock())
 	{
 		auto worker = m_vwp_preyTarget.lock()->GetGameComponent<Worker>();
@@ -200,10 +208,10 @@ void ButiEngine::Enemy_Stalker::PreyAnimation()
 void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 {
 	m_vlp_enemy = gameObject.lock()->GetGameComponent<Enemy>();
+	m_vlp_enemy->SetProgressPoint(m_progressPoint);
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
-	m_vlp_enemy->SetVibrationCapacity(30.0f);
-	m_vlp_enemy->SetVibrationResistance(0.0f);
-	m_vlp_enemy->SetExplosionScale(3.0f);
+	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
+	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);
 	m_vlp_enemy->SetWeight(100.0f);
 }
 

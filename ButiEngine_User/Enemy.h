@@ -32,16 +32,17 @@ namespace ButiEngine {
 
 		void SetVibrationCapacity(const float arg_capacity) { m_vibrationCapacity = arg_capacity; }
 		void SetVibrationResistance(const float arg_resistance) { m_vibrationResistance = arg_resistance; }
-		void SetExplosionScale(const float arg_scale) { m_explosionScale = arg_scale; }
 		void SetIsNearPlayer(const bool arg_isNearPlayer) { m_isNearPlayer = arg_isNearPlayer; }
 		void SetWeight(const float arg_weight) { m_weight = arg_weight; }
 		void SetIsCapaOver(const bool arg_isCapaOver) { m_isCapaOver = arg_isCapaOver; }
 		void SetVibration(const float arg_vibration) { m_vibration = arg_vibration; }
+		void SetProgressPoint(const std::int32_t arg_progressPoint) { m_progressPoint = arg_progressPoint; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
 		float GetVibrationRate() { return m_vibration / m_vibrationCapacity; }
 		float GetWeight() { return m_weight; }
+		std::int32_t GetProgressPoint() { return m_progressPoint; }
 
 		std::vector<Value_weak_ptr<GameObject>> GetStickWorkers();
 
@@ -50,7 +51,6 @@ namespace ButiEngine {
 		bool IsCapaOver() { return m_isCapaOver; }
 
 		void Dead();
-		void Explosion();
 		void CreatePocket(const std::uint8_t arg_pocketCount, const float arg_radius);
 		void RemovePocket(const std::uint8_t arg_pocketNum);
 		void RemoveAllPocket();
@@ -64,7 +64,7 @@ namespace ButiEngine {
 		void ScaleAnimation();
 		void AttackFlashUpdate();
 		void CreateAttackFlashEffect();
-		bool pushP;
+
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
 		void CalculateVibrationIncrease();
 		std::uint8_t GetStickWorkerCount();
@@ -72,8 +72,6 @@ namespace ButiEngine {
 		void StopVibrationEffect();
 
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other);
-
-		static bool m_test_isExplosion;
 
 		//êUìÆÇÃå∏è≠ó 
 		static float m_vibrationDecrease;
@@ -98,6 +96,8 @@ namespace ButiEngine {
 
 		float m_weight;
 
+		std::int32_t m_progressPoint;
+
 		float m_vibration;
 		float m_vibrationIncrease;
 		float m_vibrationCapacity;
@@ -105,8 +105,6 @@ namespace ButiEngine {
 		bool m_isCapaOver;
 
 		static float m_playerVibrationCoefficient;
-
-		float m_explosionScale;
 	};
 
 }

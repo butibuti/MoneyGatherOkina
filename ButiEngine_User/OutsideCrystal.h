@@ -2,15 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Enemy;
-	class ShakeComponent;
-
-	class Enemy_Fly :public GameComponent
+	class OutsideCrystal :public GameComponent
 	{
 	public:
 
 		std::string GetGameComponentName()const override {
-			return "Enemy_Fly";
+			return "OutsideCrystal";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -24,21 +21,22 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void Dead();
+		void Appeaer();
+		void Disappear();
 	private:
 		void SetEnemyParameter();
-		void SetLoiterParameter();
-		void SetLookAtParameter();
+
+		Value_ptr<Timer> m_appearIntervalTimer;
+		bool m_isAppear;
 
 		static std::int32_t m_progressPoint;
 		static std::int32_t m_pocketCount;
 		static float m_createPocketRadius;
 		static float m_vibrationCapacity;
 		static float m_vibrationResistance;
-
-		Value_ptr<Enemy> m_vlp_enemy;
+		static std::int32_t m_appearIntervalFrame;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Enemy_Fly, true);
+BUTI_REGIST_GAMECOMPONENT(OutsideCrystal, true);

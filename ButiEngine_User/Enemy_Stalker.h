@@ -41,14 +41,17 @@ namespace ButiEngine {
 		void SetEnemyParameter();
 		void SetLookAtParameter();
 
-		Value_ptr<Enemy> m_vlp_enemy;
-
+		static std::int32_t m_progressPoint;
 		static std::int32_t m_pocketCount;
 		static float m_createPocketRadius;
+		static float m_vibrationCapacity;
+		static float m_vibrationResistance;
+		static float m_maxMoveSpeed;
+		static float m_acceleration;
+
+		Value_ptr<Enemy> m_vlp_enemy;
 
 		Vector3 m_velocity;
-		float m_maxMoveSpeed;
-		float m_acceleration;
 
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_weak_ptr<GameObject> m_vwp_preyTarget;

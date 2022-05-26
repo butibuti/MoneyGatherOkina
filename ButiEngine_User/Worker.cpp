@@ -22,6 +22,7 @@
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
+float ButiEngine::Worker::m_minVibration = 50.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.5f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
 
@@ -118,6 +119,9 @@ void ButiEngine::Worker::OnShowUI()
 
 	GUI::BulletText("MaxVibration");
 	GUI::DragFloat("##maxVibration", &m_maxVibration, 1.0f, 1.0f, 1000.0f);
+
+	GUI::BulletText("MinVibration");
+	GUI::DragFloat("##minVibration", &m_minVibration, 1.0f, 0.0f, 1000.0f);
 
 	GUI::BulletText("VibrationForce");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
@@ -491,7 +495,7 @@ void ButiEngine::Worker::IncreaseVibration()
 void ButiEngine::Worker::DecreaseVibration()
 {
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
-	m_vibration = max(m_vibration, 0.0f);
+	m_vibration = max(m_vibration, m_minVibration);
 }
 
 void ButiEngine::Worker::CreateDrawObject()
@@ -511,5 +515,5 @@ void ButiEngine::Worker::SetLookAtParameter()
 
 void ButiEngine::Worker::SetVibrationParameter()
 {
-	m_vibration = 0.0f;
+	m_vibration = m_minVibration;
 }

@@ -50,7 +50,7 @@ void ButiEngine::WaveManager::OnUpdate()
 		
 	}
 	//クリアしているか
-	if (m_enemyDeadCount >= m_maxEnemyCount && !m_isAdvanceGameOver)
+	if (m_progressPoint >= m_clearPoint && !m_isAdvanceGameOver)
 	{
 		m_isClear = true;
 	}
@@ -89,8 +89,8 @@ void ButiEngine::WaveManager::Start()
 	m_isNextScene = false;
 	m_isSceneStart = false;
 
-	m_enemyDeadCount = 0;
-	m_maxEnemyCount = 30;
+	m_progressPoint = 0;
+	m_clearPoint = 30;
 	m_enemySpawnCount = 0;
 
 	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
@@ -99,15 +99,15 @@ void ButiEngine::WaveManager::Start()
 	{
 		if (m_sceneName == "Stage_1")
 		{
-			m_maxEnemyCount = 100;
+			m_clearPoint = 10000;
 		}
 		else if (m_sceneName == "Stage_2")
 		{
-			m_maxEnemyCount = 200;
+			m_clearPoint = 20000;
 		}
 		else if (m_sceneName == "Stage_3")
 		{
-			m_maxEnemyCount = 300;
+			m_clearPoint = 30000;
 		}
 
 		//エネミースポナーをスポーンさせる
@@ -115,19 +115,19 @@ void ButiEngine::WaveManager::Start()
 	}
 	else
 	{
-		m_maxEnemyCount = 1;
+		m_clearPoint = 10000;
 	}
 }
 
 void ButiEngine::WaveManager::OnShowUI()
 {
 	GUI::BulletText("MaxEnemyCount");
-	GUI::InputInt("##maxEnemyCount", m_maxEnemyCount);
+	GUI::InputInt("##maxEnemyCount", m_clearPoint);
 }
 
-void ButiEngine::WaveManager::AddEnemyDeadCount()
+void ButiEngine::WaveManager::AddProgressPoint(const std::int32_t arg_progressPoint)
 {
-	m_enemyDeadCount++;
+	m_progressPoint += arg_progressPoint;
 }
 
 void ButiEngine::WaveManager::AddSpawnCount()
@@ -272,7 +272,7 @@ void ButiEngine::WaveManager::StageProgressAnimation()
 {
 	if (!m_vwp_stageProgressUIComponent.lock()) { return; }
 
-	auto rate = (float)m_enemyDeadCount / (float)m_maxEnemyCount;
+	auto rate = (float)m_progressPoint / (float)m_clearPoint;
 	m_vwp_stageProgressUIComponent.lock()->SetRate(rate);
 }
 

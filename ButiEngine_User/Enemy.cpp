@@ -24,15 +24,10 @@
 #include "GameSettings.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
-bool ButiEngine::Enemy::m_test_isExplosion = false;
 float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::B))
-	{
-		m_test_isExplosion = !m_test_isExplosion;
-	}
 	//Playerが近いか衝撃波が当たっていたら振動する
 	if (m_vibration > 0)
 	{
@@ -136,8 +131,6 @@ void ButiEngine::Enemy::OnSet()
 	m_vibrationResistance = 10.0f;
 	m_weight = 100.0f;
 	m_isCapaOver = false;
-
-	m_explosionScale = 1.0f;
 }
 
 void ButiEngine::Enemy::OnRemove()
@@ -146,20 +139,15 @@ void ButiEngine::Enemy::OnRemove()
 
 void ButiEngine::Enemy::OnShowUI()
 {
-	GUI::BulletText("Decrease");
+	GUI::BulletText(u8"振動値の減少量");
 	GUI::DragFloat("##decrease", &m_vibrationDecrease, 1.0f, 0.0f, 100.0f);
-	GUI::BulletText("Capacity");
-	GUI::DragFloat("##capacity", &m_vibrationCapacity, 1.0f, 0.0f, 1000.0f);
-	GUI::BulletText("Resistance");
-	GUI::DragFloat("##resistance", &m_vibrationResistance, 1.0f, 0.0f, 100.0f);
-	GUI::BulletText("Coefficient");
-	GUI::DragFloat("##coefficient", &m_playerVibrationCoefficient, 0.1f, 0.0f, 10.0f);
-	GUI::BulletText("Vibration:%f / %f", m_vibration, m_vibrationCapacity);
-	GUI::BulletText("PocketCount");
-	GUI::BulletText("StickWorkerCount:%d", GetStickWorkerCount());
 
-	GUI::BulletText("ExplosionScale");
-	GUI::DragFloat("##exScale", &m_explosionScale, 0.1f, 0.0f, 100.0f);
+	GUI::BulletText(u8"振動値上昇量の計算で使う係数");
+	GUI::DragFloat("##coefficient", &m_playerVibrationCoefficient, 0.1f, 0.0f, 10.0f);
+
+	GUI::BulletText(u8"振動値:%f / %f", m_vibration, m_vibrationCapacity);
+
+	GUI::BulletText(u8"ついているモブハチの数:%d", GetStickWorkerCount());
 }
 
 void ButiEngine::Enemy::Start()
@@ -247,14 +235,11 @@ void ButiEngine::Enemy::Dead()
 		volcano->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 	}
-	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
 	RemoveAllPocket();
 	StopVibrationEffect();
-
-	//m_vlp_playerComponent->SetIsIncrease(false);
 
 	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
 	if (boss)
@@ -262,6 +247,7 @@ void ButiEngine::Enemy::Dead()
 		gameObject.lock()->SetIsRemove(true);
 		return;
 	}
+	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
 	if (crystal)
 	{
 		crystal->Dead();
@@ -275,20 +261,10 @@ void ButiEngine::Enemy::Dead()
 
 	gameObject.lock()->SetIsRemove(true);
 
-	//GetManager().lock()->GetGameObject("Particle")
-
 	//死んだら画面揺らす
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
 
 	AddDeadCount();
-}
-
-void ButiEngine::Enemy::Explosion()
-{
-	if (!m_test_isExplosion) { return; }
-	auto transform = gameObject.lock()->transform->Clone();
-	transform->SetLocalScale(m_explosionScale);
-	GetManager().lock()->AddObjectFromCereal("Explosion", transform);
 }
 
 void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount, const float arg_radius)
@@ -441,7 +417,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	{
 		color = GameSettings::SOUL_COLOR;
 	}
-	else if (m_vlp_playerComponent->IsOverHeat())
+	else if (m_vlp_playerComponent->IsOverheat())
 	{
 		color = GameSettings::ATTACK_COLOR;
 	}
@@ -491,7 +467,7 @@ std::uint8_t ButiEngine::Enemy::GetStickWorkerCount()
 void ButiEngine::Enemy::AddDeadCount()
 {
 	//ウェーブマネージャーの討伐数カウント関数を呼ぶ
-	m_vwp_waveManager.lock()->AddEnemyDeadCount();
+	m_vwp_waveManager.lock()->AddProgressPoint(m_progressPoint);
 }
 
 void ButiEngine::Enemy::StopVibrationEffect()

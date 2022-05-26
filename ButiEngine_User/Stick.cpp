@@ -10,9 +10,9 @@ void ButiEngine::Stick::OnUpdate()
 	if (!m_vwp_pocket.lock()) { return; }
 
 	KeepWorldScale();
+	KeepDistance();
 	if (m_vwp_center.lock())
 	{
-		KeepDistance();
 		CheckMoveFinish();
 	}
 }

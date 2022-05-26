@@ -29,14 +29,14 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void AddEnemyDeadCount();
+		void AddProgressPoint(const std::int32_t arg_progressPoint);
 		void AddSpawnCount();
 
 		bool IsClearAnimation() { return m_isClear; }
 		bool IsGameOver() { return m_isAdvanceGameOver; }
 		std::int32_t GetSpawnCount() { return m_enemySpawnCount; }
-		std::int32_t GetMaxEnemyCount() { return m_maxEnemyCount; }
-		std::int32_t GetNowEnemyCount() { return m_enemySpawnCount - m_enemyDeadCount; }
+		std::int32_t GetMaxEnemyCount() { return m_clearPoint; }
+		std::int32_t GetNowEnemyCount() { return m_enemySpawnCount - m_progressPoint; }
 
 	private:
 		void SpawnEnemySpawner();
@@ -71,9 +71,9 @@ namespace ButiEngine {
 		bool m_isSceneStart;
 
 		//ステージクリアまでの敵討伐カウント
-		std::int32_t m_enemyDeadCount;
+		std::int32_t m_progressPoint;
 		//ステージクリアまでの敵討伐カウント最大値
-		std::int32_t m_maxEnemyCount;
+		std::int32_t m_clearPoint;
 		//〇体まで出現させるためのカウント
 		std::int32_t m_enemySpawnCount;
 		////現在フィールドにどれだけいるかのカウント

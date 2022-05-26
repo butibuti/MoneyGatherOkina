@@ -19,6 +19,18 @@
 #include "GameSettings.h"
 #include "FlockingLeader.h"
 
+float ButiEngine::Player::m_maxMoveSpeed = 0.25f;
+float ButiEngine::Player::m_acceleration = 0.1f;
+float ButiEngine::Player::m_deceleration = 0.1f;
+
+std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
+
+float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
+std::int32_t ButiEngine::Player::m_overheatFrame = 600;
+float ButiEngine::Player::m_vibrationForce = 5.0f;
+float ButiEngine::Player::m_vibrationIncrease = 0.1f;
+float ButiEngine::Player::m_vibrationDecrease = 0.02f;
+
 void ButiEngine::Player::OnUpdate()
 {
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
@@ -32,23 +44,25 @@ void ButiEngine::Player::OnUpdate()
 	//}
 
 	//フロッキング招集モード時、近くに自分より振動値の大きいモブハチがいたら振動値を増やす
-	if (m_vwp_flockingLeader.lock()->IsGather() && m_isIncrease)
+	if (m_vwp_flockingLeader.lock()->IsGather() && m_nearWorkerCount != 0)
 	{
 		//コントローラーの振動値設定
-		constexpr float maxControllerVibration = 1.0f;
-		m_controllerVibration = MathHelper::Lerp(m_controllerVibration, maxControllerVibration, 0.025f);
+		//constexpr float maxControllerVibration = 1.0f;
+		//m_controllerVibration = MathHelper::Lerp(m_controllerVibration, maxControllerVibration, 0.025f);
+		m_controllerVibration = 1.0f;
 
 		IncreaseVibration();
 	}
 	else
 	{
-		//m_controllerVibration = 0.0f;
+		m_controllerVibration = 0.0f;
 		DecreaseVibration();
 	}
 	VibrationEffect();
 
 	//m_nearEnemyCount = 0;
 	m_nearWorkerCount = 0;
+	m_strongestNearWorkerVibration = 0.0f;
 
 	MoveKnockBack();
 	Move();
@@ -58,9 +72,9 @@ void ButiEngine::Player::OnUpdate()
 		OnInvincible();
 	}
 
-	if (m_isOverHeat)
+	if (m_isOverheat)
 	{
-		OverHeat();
+		Overheat();
 	}
 
 	//if (m_isBomb)
@@ -68,7 +82,7 @@ void ButiEngine::Player::OnUpdate()
 	//	Bomb();
 	//}
 	VibrationPowerDrawUpdate();
-	//VibrationController();
+	VibrationController();
 	ShakeDrawObject();
 }
 
@@ -103,37 +117,43 @@ void ButiEngine::Player::OnRemove()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::Text("MaxWorker:%d", m_maxWorkerCount);
-	GUI::Text("Life:%d", m_life);
+	GUI::Text(u8"モブハチ最大数:%d", m_maxWorkerCount);
+	GUI::Text(u8"体力:%d", m_life);
 
-	GUI::BulletText("Speed");
+	GUI::BulletText(u8"最大速度");
 	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
-	//GUI::BulletText("BombSpeed");
-	//GUI::DragFloat("##bspeed", &m_bombMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
-
-	GUI::BulletText("Acceleration");
+	GUI::BulletText(u8"加速度");
 	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
 
-	GUI::BulletText("Deceleration");
+	GUI::BulletText(u8"減速度");
 	GUI::DragFloat("##decel", &m_deceleration, 0.001f, 0.0f, 1.0f);
 
-	GUI::Text("Vibration:%f", m_vibration);
+	GUI::BulletText(u8"無敵時間");
+	if (GUI::DragInt("##invincibleFrame", &m_invincibleFrame, 1, 1, 600))
+	{
+		m_vlp_invincibleTimer->ChangeCountFrame(m_invincibleFrame);
+	}
 
-	GUI::BulletText("VibrationForce");
+	GUI::Text(u8"振動値:%f", m_vibration);
+
+	GUI::BulletText(u8"オーバーヒート時の最大振動値");
+	GUI::DragFloat("##overheatMaxVibration", &m_overheatMaxVibration, 1.0f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"オーバーヒートフレーム");
+	if (GUI::DragInt("##overheat", &m_overheatFrame, 1, 1, 6000))
+	{
+		m_overheatTimer->ChangeCountFrame(m_overheatFrame);
+	}
+
+	GUI::BulletText(u8"振動の強さ");
 	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
 
-	GUI::BulletText("VibrationIncrease");
+	GUI::BulletText(u8"振動値の上昇量");
 	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
 
-	GUI::BulletText("VibrationDecrease");
+	GUI::BulletText(u8"振動値の減少量");
 	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
-
-	GUI::BulletText("OverHeatFrame");
-	if (GUI::DragInt("##overheat", &m_overHeatFrame, 1, 1, 6000))
-	{
-		m_overHeatTimer->ChangeCountFrame(m_overHeatFrame);
-	}
 }
 
 void ButiEngine::Player::Start()
@@ -156,7 +176,7 @@ void ButiEngine::Player::Start()
 	m_maxKnockBackFrame = 15;
 	m_isKnockBack = false;
 
-	m_vlp_invincibleTimer = ObjectFactory::Create<RelativeTimer>(60);
+	m_vlp_invincibleTimer = ObjectFactory::Create<RelativeTimer>(m_invincibleFrame);
 	m_isInvincible = false;
 
 	m_isDead = false;
@@ -168,9 +188,6 @@ void ButiEngine::Player::Start()
 	m_velocity = Vector3Const::Zero;
 	m_defaultMaxMoveSpeed = 0.25f;
 	//m_bombMaxMoveSpeed = 0.4f;
-	m_maxMoveSpeed = m_defaultMaxMoveSpeed;
-	m_acceleration = 0.1f;
-	m_deceleration = 0.1f;
 
 	m_vwp_flockingLeader = GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>();
 
@@ -383,14 +400,21 @@ void ButiEngine::Player::VibrationController()
 void ButiEngine::Player::IncreaseVibration()
 {
 	if (m_isDead) { return; }
-	if (m_isOverHeat) { return; }
+	if (m_isOverheat) { return; }
 
 	m_vibration += m_vibrationIncrease * m_nearWorkerCount /*m_nearEnemyCount*/ * GameDevice::WorldSpeed;
+	//m_vibration = min(m_vibration, m_strongestNearWorkerVibration);
+
+	if (m_vibration >= m_strongestNearWorkerVibration)
+	{
+		m_vibration = m_strongestNearWorkerVibration;
+		m_controllerVibration = 0.0f;
+	}
 	m_vibration = min(m_vibration, m_maxVibration);
 
 	if (GetVibrationRate() >= 1.0f)
 	{
-		StartOverHeat();
+		StartOverheat();
 
 		//meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
 		//meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
@@ -406,7 +430,7 @@ void ButiEngine::Player::DecreaseVibration()
 {
 	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
-	if (m_isOverHeat) { return; }
+	if (m_isOverheat) { return; }
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 
@@ -451,7 +475,7 @@ void ButiEngine::Player::VibrationEffect()
 			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
 
 			Vector4 color = GameSettings::PLAYER_COLOR;
-			if (m_isOverHeat)
+			if (m_isOverheat)
 			{
 				color = GameSettings::ATTACK_COLOR;
 			}
@@ -583,25 +607,25 @@ void ButiEngine::Player::Bomb()
 	}
 }
 
-void ButiEngine::Player::StartOverHeat()
+void ButiEngine::Player::StartOverheat()
 {
-	m_isOverHeat = true;
-	m_overHeatTimer->Start();
+	m_isOverheat = true;
+	m_overheatTimer->Start();
 
 	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
 }
 
-void ButiEngine::Player::OverHeat()
+void ButiEngine::Player::Overheat()
 {
-	m_vibration = MathHelper::Lerp(m_vibration, m_overHeatMaxVibration, 0.1f);
+	m_vibration = MathHelper::Lerp(m_vibration, m_overheatMaxVibration, 0.1f);
 
-	if (m_overHeatTimer->Update())
+	if (m_overheatTimer->Update())
 	{
-		m_overHeatTimer->Stop();
-		m_overHeatTimer->Reset();
+		m_overheatTimer->Stop();
+		m_overheatTimer->Reset();
 
-		m_isOverHeat = false;
+		m_isOverheat = false;
 		m_vibration = 0.0f;
 
 		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
@@ -680,21 +704,16 @@ void ButiEngine::Player::SetLookAtParameter()
 
 void ButiEngine::Player::SetVibrationParameter()
 {
-	m_overHeatFrame = 600;
-	m_overHeatTimer = ObjectFactory::Create<RelativeTimer>(m_overHeatFrame);
+	m_overheatTimer = ObjectFactory::Create<RelativeTimer>(m_overheatFrame);
 
-	m_isIncrease = false;
 	m_isVibrate = false;
-	m_vibrationForce = 5.0f;
 	m_vibration = 0.0f;
 	m_maxVibration = 100.0f;
-	m_overHeatMaxVibration = m_maxVibration * 4;
 	m_nearEnemyCount = 0;
 	m_nearWorkerCount = 0;
-	m_vibrationIncrease = 0.10f;
-	m_vibrationDecrease = 0.02f;
+	m_strongestNearWorkerVibration = 0.0f;
 	m_nearEnemyVibrationRate = 0.0f;
-	m_isOverHeat = false;
+	m_isOverheat = false;
 	m_controllerVibration = 0.0f;
 	m_previousVibrationPower = 0;
 	m_isFixNumberUIScale = false;
