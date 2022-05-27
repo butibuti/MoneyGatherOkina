@@ -109,7 +109,8 @@ namespace ButiEngine {
 		void StopVibUpSE();
 
 		//移動
-		static float m_maxMoveSpeed;
+		static float m_defaultMaxMoveSpeed;
+		static float m_overheatMaxMoveSpeed;
 		static float m_acceleration;
 		static float m_deceleration;
 
@@ -136,7 +137,7 @@ namespace ButiEngine {
 		Value_ptr<ButiRendering::ICamera> m_vlp_camera;
 		Vector3 m_prevPos;
 		Vector3 m_velocity;
-		float m_defaultMaxMoveSpeed;
+		float m_maxMoveSpeed;
 		float m_bombMaxMoveSpeed;
 
 		//ノックバック

@@ -5,13 +5,14 @@
 #include "SpriteParticleGenerator.h"
 #include "InputManager.h"
 #include "WaveManager.h"
+#include "PauseManagerComponent.h"
 
 void ButiEngine::FlockingLeader::OnUpdate()
 {
 	m_prevPos = m_pos;
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 
-	if (m_vwp_waveManager.lock()->IsClearAnimation() || m_vwp_waveManager.lock()->IsGameOver())
+	if (IsStop())
 	{
 		return;
 	}
@@ -54,6 +55,7 @@ void ButiEngine::FlockingLeader::OnShowUI()
 void ButiEngine::FlockingLeader::Start()
 {
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	m_vwp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
 	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SphereParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 	m_prevPos = m_pos;
@@ -88,4 +90,13 @@ void ButiEngine::FlockingLeader::CreateStarFlash()
 	auto circleFlash = GetManager().lock()->AddObjectFromCereal("StarFlash");
 	circleFlash.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetWorldPosition());
 	circleFlash.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+}
+
+bool ButiEngine::FlockingLeader::IsStop()
+{
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return true; }
+	if (m_vwp_waveManager.lock()->IsGameOver()) { return true; }
+	if (m_vwp_pauseManager.lock()->IsPause()) { return true; }
+	
+	return false;
 }

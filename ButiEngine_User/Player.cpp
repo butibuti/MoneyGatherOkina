@@ -22,7 +22,8 @@
 #include "PauseManagerComponent.h"
 #include "SpriteParticleGenerator.h"
 
-float ButiEngine::Player::m_maxMoveSpeed = 0.15f;
+float ButiEngine::Player::m_defaultMaxMoveSpeed = 0.15f;
+float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.25f;
 float ButiEngine::Player::m_acceleration = 0.04f;
 float ButiEngine::Player::m_deceleration = 0.1f;
 
@@ -111,8 +112,11 @@ void ButiEngine::Player::OnShowUI()
 	GUI::Text(u8"モブハチ最大数:%d", m_maxWorkerCount);
 	GUI::Text(u8"体力:%d", m_life);
 
-	GUI::BulletText(u8"最大速度");
-	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
+	GUI::BulletText(u8"通常時最大速度");
+	GUI::DragFloat("##defaultMaxSpeed", &m_defaultMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
+
+	GUI::BulletText(u8"オーバーヒート時最大速度");
+	GUI::DragFloat("##overheatMaxSpeed", &m_overheatMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
 	GUI::BulletText(u8"加速度");
 	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
@@ -182,8 +186,7 @@ void ButiEngine::Player::Start()
 	
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
-	m_defaultMaxMoveSpeed = 0.25f;
-	//m_bombMaxMoveSpeed = 0.4f;
+	m_maxMoveSpeed = m_defaultMaxMoveSpeed;
 
 	m_vwp_flockingLeader = GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>();
 
@@ -650,13 +653,16 @@ void ButiEngine::Player::Bomb()
 
 void ButiEngine::Player::StartOverheat()
 {
-	m_isOverheat = true;
 	m_overheatTimer->Start();
+
+	m_maxMoveSpeed = m_overheatMaxMoveSpeed;
 
 	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
 
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
+
+	m_isOverheat = true;
 }
 
 void ButiEngine::Player::Overheat()
@@ -668,7 +674,8 @@ void ButiEngine::Player::Overheat()
 		m_overheatTimer->Stop();
 		m_overheatTimer->Reset();
 
-		m_isOverheat = false;
+		m_maxMoveSpeed = m_defaultMaxMoveSpeed;
+
 		m_vibration = 0.0f;
 		m_isVibrate = false;
 		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
@@ -682,6 +689,8 @@ void ButiEngine::Player::Overheat()
 		}
 	
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
+
+		m_isOverheat = false;
 	}
 }
 

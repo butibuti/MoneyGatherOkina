@@ -167,8 +167,8 @@ void ButiEngine::Worker::Start()
 
 	m_vlp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
 
-	auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
-	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	/*auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
+	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());*/
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();

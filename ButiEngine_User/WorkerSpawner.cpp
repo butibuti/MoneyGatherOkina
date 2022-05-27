@@ -8,11 +8,6 @@ void ButiEngine::WorkerSpawner::OnUpdate()
 	{
 		SpawnWorker();
 	}
-
-	if (GameDevice::GetInput()->TriggerKey(Keys::P))
-	{
-		SpawnWorker();
-	}
 }
 
 void ButiEngine::WorkerSpawner::OnSet()
