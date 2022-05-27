@@ -4,11 +4,28 @@
 #include "GameSettings.h"
 #include "SpriteParticleGenerator.h"
 #include "InputManager.h"
+#include "WaveManager.h"
 
 void ButiEngine::FlockingLeader::OnUpdate()
 {
 	m_prevPos = m_pos;
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
+
+	if (m_vwp_waveManager.lock()->IsGameOver())
+	{
+		return;
+	}
+
+	if (InputManager::IsTriggerGatherKey())
+	{
+		SetWorkerSpeed();
+		CreateStarFlash();
+	}
+	else if (InputManager::IsReleaseGatherKey())
+	{
+		SetWorkerSpeed();
+		CreateCircleFlash();
+	}
 
 	m_isGather = InputManager::IsPushGatherKey();
 	if (m_isGather)
@@ -36,6 +53,7 @@ void ButiEngine::FlockingLeader::OnShowUI()
 
 void ButiEngine::FlockingLeader::Start()
 {
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SphereParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 	m_prevPos = m_pos;
@@ -46,4 +64,28 @@ void ButiEngine::FlockingLeader::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FlockingLeader::Clone()
 {
 	return ObjectFactory::Create<FlockingLeader>();
+}
+
+void ButiEngine::FlockingLeader::SetWorkerSpeed()
+{
+	auto vec = Flocking::GetWorkers();
+	auto end = vec.end();
+	for (auto itr = vec.begin(); itr != end; ++itr)
+	{
+		(*itr)->GetGameComponent<Flocking>()->MaxSpeed();
+	}
+}
+
+void ButiEngine::FlockingLeader::CreateCircleFlash()
+{
+	auto circleFlash = GetManager().lock()->AddObjectFromCereal("CircleFlash");
+	circleFlash.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetWorldPosition());
+	circleFlash.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+}
+
+void ButiEngine::FlockingLeader::CreateStarFlash()
+{
+	auto circleFlash = GetManager().lock()->AddObjectFromCereal("StarFlash");
+	circleFlash.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetWorldPosition());
+	circleFlash.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 }

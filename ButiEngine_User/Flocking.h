@@ -23,8 +23,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		static std::vector<Value_ptr<GameObject>> GetWorkers() { return m_vec_workers; }
 		static void ResetWorkers() { m_vec_workers.clear(); }
-
+		
+		void MaxSpeed() { m_moveSpeed = m_maxMoveSpeed; }
 		void AddFlocking();
 		void RemoveFlocking();
 	private:
@@ -59,6 +61,7 @@ namespace ButiEngine {
 		static float m_nearBorder;
 		static float m_playerNearBorder;
 		static float m_leaderNearBorder;
+		static float m_maxMoveSpeed;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
 		Value_weak_ptr<GameObject> m_vwp_leader;

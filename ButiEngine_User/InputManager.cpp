@@ -160,6 +160,11 @@ bool ButiEngine::InputManager::IsTriggerGatherKey()
 	return GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_A);
 }
 
+bool ButiEngine::InputManager::IsReleaseGatherKey()
+{
+	return GameDevice::GetInput()->GetPadButtonRelease(PadButtons::XBOX_A);
+}
+
 bool ButiEngine::InputManager::IsTriggerPauseKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::Esc) ||

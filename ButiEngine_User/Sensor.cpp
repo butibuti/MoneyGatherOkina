@@ -24,10 +24,6 @@ void ButiEngine::Sensor::OnSet()
 
 	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
-			{
-			}
 		});
 
 	gameObject.lock()->AddCollisionStayReaction(collisionStayLambda);

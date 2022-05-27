@@ -95,6 +95,7 @@ void ButiEngine::Enemy::OnSet()
 {
 	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (gameObject.lock()->transform->GetWorldScale() == Vector3Const::Zero) { return; }
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
@@ -470,7 +471,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 
 	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, color);
 
-	std::uint8_t spawnIntervalFrame = MathHelper::Lerp(6, 1, playerVibrationRate);
+	std::uint8_t spawnIntervalFrame = 6;//MathHelper::Lerp(6, 4, playerVibrationRate);
 	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
 
 	m_vlp_attackFlashTimer->Reset();

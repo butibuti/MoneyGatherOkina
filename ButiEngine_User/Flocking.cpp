@@ -19,6 +19,7 @@ float ButiEngine::Flocking::m_maxViewRadius = 0.1f;
 float ButiEngine::Flocking::m_nearBorder = 1.2f;
 float ButiEngine::Flocking::m_playerNearBorder = 1.7f;
 float ButiEngine::Flocking::m_leaderNearBorder = 1.7f;
+float ButiEngine::Flocking::m_maxMoveSpeed = 1.0f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
@@ -69,6 +70,8 @@ void ButiEngine::Flocking::OnShowUI()
 	GUI::DragFloat("##playerNearBorder", &m_playerNearBorder, 0.01f, 0.0f, 100.0f);
 	GUI::BulletText("LeaderNearBorder");
 	GUI::DragFloat("##leaderNearBorder", &m_leaderNearBorder, 0.01f, 0.0f, 100.0f);
+	GUI::BulletText("MaxMoveSpeed");
+	GUI::DragFloat("##maxMoveSpeed", &m_maxMoveSpeed, 0.01f, 0.1f, 10.0f);
 }
 
 void ButiEngine::Flocking::Start()

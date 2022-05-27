@@ -320,7 +320,7 @@ void ButiEngine::ParticleGenerater::ExplosionPolygonParticles(const Vector3& arg
 		velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
 		particle.velocity = velocity.Normalize() * speed * explosionScale;
 
-		particle.force = Vector3(0, -0.05, 0);
+		//particle.force = Vector3(0, -0.05, 0);
 		particle.accelation = accel;
 
 		m_vwp_immediateParticleController.lock()->AddParticle(particle);

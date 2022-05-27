@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class SpriteParticleGenerator;
+	class WaveManager;
 
 	class FlockingLeader :public GameComponent
 	{
@@ -25,6 +26,14 @@ namespace ButiEngine {
 		float GetMoveSpeed() { return (m_pos - m_prevPos).GetLength(); }
 		bool IsGather() { return m_isGather; }
 	private:
+		void SetWorkerSpeed();
+		//拡散エフェクト
+		void CreateCircleFlash();
+		//収縮エフェクト
+		void CreateStarFlash();
+
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
+
 		Vector3 m_prevPos;
 		Vector3 m_pos;
 
