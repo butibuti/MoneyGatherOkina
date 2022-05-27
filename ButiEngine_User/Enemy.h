@@ -59,6 +59,8 @@ namespace ButiEngine {
 		void RemoveAllPocket();
 		void AddStickWorkerCount() { m_stickWorkerCount++; }
 		void RemoveSrickWorkerCount() { m_stickWorkerCount--; }
+		void SetAppearanceEffect(Value_weak_ptr<GameObject>arg_vwp_appearnceEffect);
+		Value_weak_ptr<GameObject>GconstetAppearanceEffect();
 	private:
 		void IncreaseVibration();
 		void DecreaseVibration();
@@ -94,7 +96,7 @@ namespace ButiEngine {
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_ptr<Timer> m_vlp_attackFlashTimer;
-
+		Value_weak_ptr<GameObject>m_vwp_appearnceEffect;
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
 
 		bool m_isNearPlayer;

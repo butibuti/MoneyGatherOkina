@@ -23,14 +23,16 @@ namespace ButiEngine {
 		}
 		void SetType(const std::int8_t arg_num) { m_spawnType = arg_num; }
 		void SetPosition(const Vector3& arg_position) { m_position = arg_position; }
-
+		void SetEnemyObject(Value_weak_ptr<GameObject> arg_vwp_enemy);
+		Value_weak_ptr<GameObject>GetEnemyObject()const {
+			return m_vwp_enemyObject;
+		}
 	private:
-		Value_ptr<Timer> m_vlp_spawnAnimationTimer;
-		Value_weak_ptr<GameObject> m_vlp_diamond;
-
+		Value_ptr<Timer> m_vlp_spawnAnimationTimer,m_vlp_brightOffTimer;
+		Value_weak_ptr<GameObject> m_vlp_diamond,m_vwp_appearnceObject,m_vwp_enemyObject,m_vwp_enemyDrawObject;
+		List<Value_weak_ptr<ButiRendering::CBuffer< ButiRendering::ObjectInformation>>> m_list_appearanceDrawInformation, m_list_drawObjectDrawInformation;
 		Vector3 m_position;
-		Vector3 m_scale;
-		float m_moveScale;
+		float m_diamondTargetScale,m_enemyDirection,m_effectProgress,m_effectTargetScale;
 		std::int8_t m_spawnType;
 	};
 }
