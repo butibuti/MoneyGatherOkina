@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "SpriteParticleGenerator.h"
 #include "GameSettings.h"
+#include "WaveManager.h"
 
 void ButiEngine::SpriteParticleGenerator::OnUpdate()
 {
@@ -16,6 +17,7 @@ void ButiEngine::SpriteParticleGenerator::OnShowUI()
 
 void ButiEngine::SpriteParticleGenerator::Start()
 {
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	m_vwp_spriteParticleController = gameObject.lock()->GetGameComponent<SpriteParticleController>();
 
 	m_vwp_spriteParticleController.lock()->AddParticleControlFunction("GatherControl", std::function<void(Particle2D&)>([](Particle2D& arg_particle) {
@@ -40,6 +42,11 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SpriteParticleGener
 
 void ButiEngine::SpriteParticleGenerator::AttackFlashParticles(const Vector3& arg_position, const float arg_spawnRadius, const float arg_size, const Vector4& arg_color)
 {
+	if (m_vwp_waveManager.lock()->IsClearAnimation() || m_vwp_waveManager.lock()->IsGameOver())
+	{
+		return;
+	}
+
 	Particle2D particle;
 
 	Vector3 dir;

@@ -462,11 +462,11 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	Color color = GameSettings::PLAYER_COLOR;
 	if (m_vlp_playerComponent->IsBomb())
 	{
-		color = GameSettings::SOUL_COLOR;
+		color = GameSettings::WORKER_COLOR;
 	}
 	else if (m_vlp_playerComponent->IsOverheat())
 	{
-		color = GameSettings::ATTACK_COLOR;
+		color = GameSettings::PLAYER_ATTACK_COLOR;
 	}
 
 	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, color);
@@ -481,7 +481,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 void ButiEngine::Enemy::CalculateVibrationIncrease()
 {
 	float playerVibrationForce = m_vlp_playerComponent->GetVibrationForce();
-	float workerVibrationForce = Worker::GetVibrationForce();
+	float workerVibrationForce = CalculateWorkerVibrationForce();
 
 	m_vibrationIncrease = 0.0f;
 
@@ -490,7 +490,7 @@ void ButiEngine::Enemy::CalculateVibrationIncrease()
 		m_vibrationIncrease += m_vlp_playerComponent->GetVibrationForce();
 	}
 
-	m_vibrationIncrease += workerVibrationForce * m_stickWorkerCount - m_vibrationResistance;
+	m_vibrationIncrease += workerVibrationForce - m_vibrationResistance;
 	m_vibrationIncrease = max(m_vibrationIncrease, 0.5f);
 }
 
@@ -564,6 +564,22 @@ void ButiEngine::Enemy::RuptureStickWorker()
 	{
 		(*itr).lock()->GetGameComponent<Pocket>()->ReleaseWorker();
 	}
+}
+
+float ButiEngine::Enemy::CalculateWorkerVibrationForce()
+{
+	//くっついているモブハチの攻撃力を合計した値を返す
+
+	float vibrationForce = 0.0f;
+
+	auto vec = GetStickWorkers();
+	auto end = vec.end();
+	for (auto itr = vec.begin(); itr != end; ++itr)
+	{
+		vibrationForce += (*itr).lock()->GetGameComponent<Worker>()->GetVibrationForce();
+	}
+
+	return vibrationForce;
 }
 
 void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other)

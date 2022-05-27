@@ -11,7 +11,7 @@ void ButiEngine::FlockingLeader::OnUpdate()
 	m_prevPos = m_pos;
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 
-	if (m_vwp_waveManager.lock()->IsGameOver())
+	if (m_vwp_waveManager.lock()->IsClearAnimation() || m_vwp_waveManager.lock()->IsGameOver())
 	{
 		return;
 	}
@@ -30,7 +30,7 @@ void ButiEngine::FlockingLeader::OnUpdate()
 	m_isGather = InputManager::IsPushGatherKey();
 	if (m_isGather)
 	{
-		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 10.0f, GameSettings::SOUL_COLOR);
+		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 10.0f, GameSettings::WORKER_COLOR);
 	}
 }
 

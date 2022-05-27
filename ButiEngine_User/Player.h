@@ -11,6 +11,7 @@ namespace ButiEngine {
 	class FlockingLeader;
 	class SoundPlayerComponent;
 	class PauseManagerComponent;
+	class SpriteParticleGenerator;
 
 	class Player :public GameComponent
 	{
@@ -38,12 +39,13 @@ namespace ButiEngine {
 			speed = min(speed, m_maxMoveSpeed);
 			return  speed;
 		}
+
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
 		float GetVibrationForce()
 		{
-			float force = MathHelper::Lerp(m_minVibrationForce, m_maxVibrationForce, GetVibrationRate());
-			return force;
+			return m_initVibrationForce * m_maxVibrationMagnification * GetVibrationRate();
 		}
+
 		float GetVibration() { return m_vibration; }
 		float GetVibrationRate()
 		{
@@ -51,6 +53,7 @@ namespace ButiEngine {
 			rate = min(rate, 1.0f);
 			return rate;
 		}
+
 		std::int8_t GetLife() { return m_life; }
 		float GetNearEnemyVibrationRate() { return m_nearEnemyVibrationRate; }
 		Vector3 GetVelocity() { return m_velocity; }
@@ -95,6 +98,8 @@ namespace ButiEngine {
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 
+		void CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_other);
+
 		void CreateDrawObject();
 		void CreateSensorObject();
 		void CreateBombObject();
@@ -114,8 +119,8 @@ namespace ButiEngine {
 		//êUìÆ
 		static float m_overheatMaxVibration;
 		static std::int32_t m_overheatFrame;
-		static float m_minVibrationForce;
-		static float m_maxVibrationForce;
+		static float m_initVibrationForce;
+		static float m_maxVibrationMagnification;
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
 
@@ -194,6 +199,7 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_particleTimer;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_weak_ptr<ParticleGenerater> m_vwp_polygonParticleGenerater;
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
 
 		Value_weak_ptr<GameObject> m_vwp_vignetteUI;
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;

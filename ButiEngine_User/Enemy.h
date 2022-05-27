@@ -9,7 +9,6 @@ namespace ButiEngine {
 	class EnemyScaleAnimationComponent;
 	class ParticleGenerater;
 	class SpriteParticleGenerator;
-	class AttackFlashSpawner;
 	class SoundPlayerComponent;
 	class PauseManagerComponent;
 
@@ -80,6 +79,7 @@ namespace ButiEngine {
 		void StopMobDamageSE();
 
 		void RuptureStickWorker();
+		float CalculateWorkerVibrationForce();
 
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other);
 

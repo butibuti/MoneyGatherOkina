@@ -23,12 +23,13 @@
 #include "GameSettings.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
-float ButiEngine::Worker::m_vibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
 float ButiEngine::Worker::m_minVibration = 20.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.2f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
+float ButiEngine::Worker::m_initVibrationForce = 0.1f;
+float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -50,7 +51,7 @@ void ButiEngine::Worker::OnUpdate()
 
 		m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
 		auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::SOUL_COLOR;
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
 	}
 	else
 	{
@@ -136,17 +137,19 @@ void ButiEngine::Worker::OnShowUI()
 	GUI::BulletText("MinVibration");
 	GUI::DragFloat("##minVibration", &m_minVibration, 1.0f, 0.0f, 1000.0f);
 
-	GUI::BulletText("VibrationForce");
-	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText(u8"çUåÇóÕ:%f", GetVibrationForce());
 
-	GUI::BulletText("VibrationIncrease");
+	GUI::BulletText(u8"èâä˙çUåÇóÕ");
+	GUI::DragFloat("##vMinForce", &m_initVibrationForce, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"çUåÇóÕÇÃç≈ëÂî{ó¶");
+	GUI::DragFloat("##vMaxForce", &m_maxVibrationMagnification, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"êUìÆílÇÃè„è∏ó ");
 	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
 
-	GUI::BulletText("VibrationDecrease");
+	GUI::BulletText(u8"êUìÆílÇÃå∏è≠ó ");
 	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
-
-	GUI::BulletText("MaxScaleRate");
-	GUI::DragFloat("##MaxScaleRate", &m_vibrationDecrease, 0.001f, 1.0f, 5.0f);
 }
 
 void ButiEngine::Worker::Start()
