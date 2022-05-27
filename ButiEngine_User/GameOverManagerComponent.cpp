@@ -6,6 +6,7 @@
 #include "ExpansionAnimationComponent.h"
 #include "InputManager.h"
 #include "WorldSpeedManager.h"
+#include "SoundPlayerComponent.h"
 
 void ButiEngine::GameOverManagerComponent::OnUpdate()
 {
@@ -55,6 +56,7 @@ void ButiEngine::GameOverManagerComponent::Start()
 	m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 	m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	m_isRetry = true;
 	m_isNext = false;
 	m_isInput = false;
@@ -116,11 +118,13 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 
 	if (InputManager::IsTriggerLeftKey() || InputManager::IsTriggerRightKey())
 	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_isRetry = !m_isRetry;
 	}
 
 	if (InputManager::IsTriggerDecideKey())
 	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
 		m_isInput = false;
 		m_isSelectAnimation = true;
 		m_vlp_selectAnimationTimer->Start();

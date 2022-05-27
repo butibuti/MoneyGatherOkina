@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include"FloatMotionComponent.h"
 #include "Flocking.h"
+#include "SoundPlayerComponent.h"
 #include"ButiEngineHeader/Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
 void ButiEngine::StageSelectManagerComponent::OnUpdate()
 {
@@ -14,10 +15,12 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 
 	if (InputManager::IsTriggerRightKey())
 	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum++;
 	}
 	else if(InputManager::IsTriggerLeftKey())
 	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum--;
 	}
 
@@ -27,13 +30,14 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 	{
 		m_vwp_gamePlayChangeAnimation.lock()->SceneEnd();
 		isSceneChange = true;
-
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
 
 	}
 	else if (InputManager::IsTriggerCancelKey())
 	{
 		//ƒ^ƒCƒgƒ‹‚É–ß‚é
 		BackScene();
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Cansel.wav"));
 	}
 
 	if (isSceneChange&&!m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) {
@@ -79,6 +83,7 @@ void ButiEngine::StageSelectManagerComponent::Start()
 		m_vwp_title = gameObject.lock()->GetGameComponent<TitleManagerComponent>();
 	}
 	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 }
 
 void ButiEngine::StageSelectManagerComponent::End()

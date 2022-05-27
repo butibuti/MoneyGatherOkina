@@ -11,6 +11,7 @@
 #include "PauseManagerComponent.h"
 #include "WorldSpeedManager.h"
 #include "CameraComponent.h"
+#include "SoundPlayerComponent.h"
 
 std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 10000;
 std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 10000;
@@ -83,6 +84,7 @@ void ButiEngine::WaveManager::Start()
 	m_vwp_stageProgressUIComponent = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline").lock()->GetGameComponent<StageProgressUIComponent>();
 	m_vwp_pauseManagerComponent = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
 	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	m_isClear = false;
 	m_isGameOver = false;
 	m_isAdvanceGameOver = false;

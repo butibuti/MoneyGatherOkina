@@ -11,6 +11,7 @@ namespace ButiEngine {
 	class StageProgressUIComponent;
 	class PauseManagerComponent;
 	class WorldSpeedManager;
+	class SoundPlayerComponent;
 
 	class WaveManager :public GameComponent
 	{
@@ -55,6 +56,7 @@ namespace ButiEngine {
 		Value_weak_ptr<StageProgressUIComponent> m_vwp_stageProgressUIComponent;
 		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 		Value_weak_ptr<WorldSpeedManager> m_vwp_worldSpeedManagerComponent;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 
 		std::string m_sceneName;
 

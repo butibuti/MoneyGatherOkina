@@ -87,7 +87,7 @@ void ButiEngine::EnemySpawnPointComponent::Start()
 	{
 	case 0: //ハエ
 		m_diamondTargetScale = 0.8f;
-		m_effectTargetScale = 1.0f;
+		m_effectTargetScale = 1.5f;
 		objectTag = GameObjectTag("Fly");
 		m_vwp_appearnceObject= GetManager().lock()->AddObjectFromCereal("AppearnceEffect_Fly");
 
@@ -95,7 +95,7 @@ void ButiEngine::EnemySpawnPointComponent::Start()
 		break;
 	case 1: //ストーカー
 		m_diamondTargetScale = 0.8f;
-		m_effectTargetScale = 1.0f;
+		m_effectTargetScale = 1.5f;
 		objectTag = GameObjectTag("Stalker");
 		m_vwp_appearnceObject = GetManager().lock()->AddObjectFromCereal("AppearnceEffect_Stalker");
 

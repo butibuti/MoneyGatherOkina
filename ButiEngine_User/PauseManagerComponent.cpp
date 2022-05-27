@@ -6,6 +6,8 @@
 #include "FadeOutComponent.h"
 #include "WaveManager.h"
 #include "FloatMotionComponent.h"
+#include "SoundPlayerComponent.h"
+#include "CameraShakeComponent.h"
 
 void ButiEngine::PauseManagerComponent::OnUpdate()
 {
@@ -32,6 +34,7 @@ void ButiEngine::PauseManagerComponent::OnUpdate()
 			//ポーズを解除する
 			DeadPauseSelectUI();
 			m_vlp_deadTimer->Start();
+			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Cansel.wav"));
 		}
 		else
 		{
@@ -39,12 +42,15 @@ void ButiEngine::PauseManagerComponent::OnUpdate()
 		}
 
 		//現在がポーズ中かどうかで処理を変える
-		if (m_isPause)
+		if (m_isPause && !m_isPauseExit)
 		{
 			//ポーズ中にする
 			m_vlp_appearTimer->Start();
 			m_vwp_fadeOutComponent.lock()->SetIsFade(false);
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.0f);
+			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
+			InputManager::VibrationStop();
+			GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStop();
 		}
 	}
 
@@ -108,6 +114,8 @@ void ButiEngine::PauseManagerComponent::Start()
 	auto floatMotion_cursorUI = m_vwp_cursorUI.lock()->GetGameComponent<FloatMotionComponent>();
 	floatMotion_cursorUI->SetIsRemove(true);
 
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+
 	m_isPause = false;
 	m_isPauseExit = false;
 	Reset();
@@ -137,6 +145,7 @@ void ButiEngine::PauseManagerComponent::InputSelect()
 
 	if (InputManager::IsTriggerUpKey() || InputManager::IsTriggerDownKey())
 	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_isBack = !m_isBack;
 	}
 
@@ -146,13 +155,18 @@ void ButiEngine::PauseManagerComponent::InputSelect()
 		if (m_isBack)
 		{
 			m_isPauseExit = true;
-			m_vlp_waitTimer->Reset();
-			m_vlp_appearTimer->Reset();
 
 			//ポーズを解除する
 			DeadPauseSelectUI();
 			m_vlp_deadTimer->Start();
+			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Cansel.wav"));
 		}
+		else
+		{
+			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
+		}
+		m_vlp_waitTimer->Reset();
+		m_vlp_appearTimer->Reset();
 	}
 }
 
@@ -242,7 +256,7 @@ void ButiEngine::PauseManagerComponent::ScaleAnimation()
 
 void ButiEngine::PauseManagerComponent::ExitUpdate()
 {
-	if (!m_isPauseExit) { return; }
+	if (!m_isPause || !m_isPauseExit) { return; }
 
 	if (m_vlp_exitTimer->Update())
 	{

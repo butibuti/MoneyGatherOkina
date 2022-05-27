@@ -7,7 +7,7 @@
 
 std::int32_t ButiEngine::Enemy_Stalker::m_progressPoint = 100;
 std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 8;
-float ButiEngine::Enemy_Stalker::m_createPocketRadius = 1.0f;
+float ButiEngine::Enemy_Stalker::m_createPocketRadius = 1.5f;
 float ButiEngine::Enemy_Stalker::m_vibrationCapacity = 100.0f;
 float ButiEngine::Enemy_Stalker::m_vibrationResistance = 0.0f;
 float ButiEngine::Enemy_Stalker::m_maxMoveSpeed = 0.15f;

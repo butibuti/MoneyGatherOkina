@@ -324,8 +324,7 @@ void ButiEngine::Player::Move()
 		{
 			auto position = gameObject.lock()->transform->GetWorldPosition();
 			Vector3 pachiPachiPosition = position - m_velocity * 10.0f;
-			m_vwp_particleGenerater.lock()->TrajectoryParticles(position);
-			m_vwp_particleGenerater.lock()->PachiPachiParticles(pachiPachiPosition);
+			m_vwp_polygonParticleGenerater.lock()->TrajectoryParticles(position);
 		}
 
 		m_vlp_lookAt->GetLookTarget()->SetLocalPosition((gameObject.lock()->transform->GetLocalPosition() + dir.GetNormalize() * 100.0f));
@@ -669,7 +668,10 @@ void ButiEngine::Player::Overheat()
 		m_isOverheat = false;
 		m_vibration = 0.0f;
 		m_isVibrate = false;
-		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
+		if (m_vwp_shockWave.lock())
+		{
+			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
+		}
 
 		StopVibrationEffect();
 

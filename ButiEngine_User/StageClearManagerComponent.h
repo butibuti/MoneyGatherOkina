@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class WorldSpeedManager;
+	class SoundPlayerComponent;
 
 	class StageClearManagerComponent :public GameComponent
 	{
@@ -30,6 +31,7 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_waitTimer;
 		Value_ptr<Timer> m_vlp_addTimer;
 		Value_weak_ptr<WorldSpeedManager> m_vwp_worldSpeedManagerComponent;
+		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 
 		std::int8_t m_uiCount;
 

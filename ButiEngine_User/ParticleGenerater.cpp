@@ -147,18 +147,18 @@ void ButiEngine::ParticleGenerater::TrajectoryParticles(const Vector3& arg_posit
 	Particle3D particle;
 
 	Vector3 randomPos = Vector3(ButiRandom::GetInt(-10, 10), ButiRandom::GetInt(-10, 10),
-		ButiRandom::GetInt(-10, 10)) * 0.075f;
+		ButiRandom::GetInt(-10, 10)) * 0.06f;
 	particle.position = arg_position + randomPos;
 
-	float speed = 0.025f;
+	float speed = 0.02f;
 
-	particle.life = 60;
+	particle.life = 90;
 	auto randomAxis = ButiRandom::GetInt(1, 10) * 0.1f;
 	particle.axis = Vector3(randomAxis, randomAxis, randomAxis);
 	particle.angle = ButiRandom::GetInt(0, 90);
 	particle.anglePase = ButiRandom::GetInt(1, 5) * 0.02f;
-	particle.size = 3.0f;
-	particle.sizePase = -0.05f;
+	particle.size = 5.0f;
+	particle.sizePase = -particle.size / 90;
 
 	//ÇŸÇ⁄â©êF
 	particle.color = ButiColor::Orange(ButiColor::ShadeIndex::Shade_5);
