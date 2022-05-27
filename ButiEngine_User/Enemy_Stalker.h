@@ -46,6 +46,10 @@ namespace ButiEngine {
 		static float m_createPocketRadius;
 		static float m_vibrationCapacity;
 		static float m_vibrationResistance;
+
+		static float m_knockBackForce;
+		static std::int32_t m_knockBackFrame;
+
 		static float m_maxMoveSpeed;
 		static float m_acceleration;
 

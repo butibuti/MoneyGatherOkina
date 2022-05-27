@@ -36,6 +36,9 @@ namespace ButiEngine {
 		static float m_vibrationCapacity;
 		static float m_vibrationResistance;
 
+		static float m_knockBackForce;
+		static std::int32_t m_knockBackFrame;
+
 		Value_ptr<Enemy> m_vlp_enemy;
 	};
 

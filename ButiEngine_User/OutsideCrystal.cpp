@@ -79,7 +79,6 @@ void ButiEngine::OutsideCrystal::Appeaer()
 	m_isAppear = true;
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
 	//collider->SetIsActive(true);
-	auto enemy = gameObject.lock()->GetGameComponent<Enemy>()->isCollision = true;
 }
 
 void ButiEngine::OutsideCrystal::Disappear()
@@ -90,7 +89,6 @@ void ButiEngine::OutsideCrystal::Disappear()
 
 	m_isAppear = false;
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
-	auto enemy = gameObject.lock()->GetGameComponent<Enemy>()->isCollision = false;
 	//collider->SetIsActive(false);
 
 

@@ -88,7 +88,6 @@ void ButiEngine::Enemy::OnSet()
 {
 	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (!isCollision) { return; }
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
@@ -110,7 +109,6 @@ void ButiEngine::Enemy::OnSet()
 
 	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (!isCollision) { return; }
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
@@ -142,6 +140,8 @@ void ButiEngine::Enemy::OnSet()
 	m_weight = 100.0f;
 	m_isCapaOver = false;
 	m_isMobDamageSE = false;
+	m_knockBackForce = 0.0f;
+	m_knockBackFrame = 30;
 }
 
 void ButiEngine::Enemy::OnRemove()
@@ -562,7 +562,7 @@ void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_othe
 		Vector3 otherPos = arg_vwp_other.lock()->transform->GetLocalPosition();
 		Vector3 dir = (pos - otherPos).GetNormalize();
 
-		gameObject.lock()->AddGameComponent<KnockBack>(dir, 0.5f, false, 30);
+		gameObject.lock()->AddGameComponent<KnockBack>(dir, m_knockBackForce, false, m_knockBackFrame);
 
 		auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 		if (stalker)

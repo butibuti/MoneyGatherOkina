@@ -10,6 +10,10 @@ std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 5;
 float ButiEngine::Enemy_Stalker::m_createPocketRadius = 1.0f;
 float ButiEngine::Enemy_Stalker::m_vibrationCapacity = 30.0f;
 float ButiEngine::Enemy_Stalker::m_vibrationResistance = 0.0f;
+
+float ButiEngine::Enemy_Stalker::m_knockBackForce = 0.3f;
+std::int32_t ButiEngine::Enemy_Stalker::m_knockBackFrame = 30;
+
 float ButiEngine::Enemy_Stalker::m_maxMoveSpeed = 0.125f;
 float ButiEngine::Enemy_Stalker::m_acceleration = 0.01f;
 
@@ -67,6 +71,12 @@ void ButiEngine::Enemy_Stalker::OnShowUI()
 
 	GUI::BulletText(u8"振動の抵抗");
 	GUI::DragFloat("##resistance", &m_vibrationResistance, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"ノックバックの初速");
+	GUI::DragFloat("##knockBackForce", &m_knockBackForce, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"ノックバックにかかる時間");
+	GUI::DragInt("##knockBackFrame", &m_knockBackFrame, 1, 0, 600);
 
 	GUI::BulletText(u8"最大速度");
 	GUI::DragFloat("##moveSpeed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
@@ -212,6 +222,8 @@ void ButiEngine::Enemy_Stalker::SetEnemyParameter()
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
 	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);
+	m_vlp_enemy->SetKnockBackForce(m_knockBackForce);
+	m_vlp_enemy->SetKnockBackFrame(m_knockBackFrame);
 	m_vlp_enemy->SetWeight(100.0f);
 }
 

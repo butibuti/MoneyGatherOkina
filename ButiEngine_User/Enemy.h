@@ -38,6 +38,8 @@ namespace ButiEngine {
 		void SetIsCapaOver(const bool arg_isCapaOver) { m_isCapaOver = arg_isCapaOver; }
 		void SetVibration(const float arg_vibration) { m_vibration = arg_vibration; }
 		void SetProgressPoint(const std::int32_t arg_progressPoint) { m_progressPoint = arg_progressPoint; }
+		void SetKnockBackForce(const float arg_knockBackForce) { m_knockBackForce = arg_knockBackForce; }
+		void SetKnockBackFrame(const std::int32_t arg_knockBackFrame) { m_knockBackFrame = arg_knockBackFrame; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
@@ -57,8 +59,6 @@ namespace ButiEngine {
 		void RemoveAllPocket();
 		void AddStickWorkerCount() { m_stickWorkerCount++; }
 		void RemoveSrickWorkerCount() { m_stickWorkerCount--; }
-
-		bool isCollision = true;
 	private:
 		void IncreaseVibration();
 		void DecreaseVibration();
@@ -81,6 +81,7 @@ namespace ButiEngine {
 
 		//êUìÆÇÃå∏è≠ó 
 		static float m_vibrationDecrease;
+		static float m_playerVibrationCoefficient;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
@@ -112,8 +113,10 @@ namespace ButiEngine {
 		bool m_isCapaOver;
 		bool m_isMobDamageSE;
 
-		static float m_playerVibrationCoefficient;
 		std::string m_gameObjectName;
+
+		float m_knockBackForce;
+		std::int32_t m_knockBackFrame;
 	};
 
 }

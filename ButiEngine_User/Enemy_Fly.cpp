@@ -12,6 +12,9 @@ float ButiEngine::Enemy_Fly::m_createPocketRadius = 1.0f;
 float ButiEngine::Enemy_Fly::m_vibrationCapacity = 10.0f;
 float ButiEngine::Enemy_Fly::m_vibrationResistance = 0.0f;
 
+float ButiEngine::Enemy_Fly::m_knockBackForce = 0.2f;
+std::int32_t ButiEngine::Enemy_Fly::m_knockBackFrame = 30;
+
 void ButiEngine::Enemy_Fly::OnUpdate()
 {
 }
@@ -40,6 +43,12 @@ void ButiEngine::Enemy_Fly::OnShowUI()
 
 	GUI::BulletText(u8"振動の抵抗");
 	GUI::DragFloat("##resistance", &m_vibrationResistance, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"ノックバックの初速");
+	GUI::DragFloat("##knockBackForce", &m_knockBackForce, 0.1f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"ノックバックにかかる時間");
+	GUI::DragInt("##knockBackFrame", &m_knockBackFrame, 1, 0, 600);
 }
 
 void ButiEngine::Enemy_Fly::Start()
@@ -69,6 +78,8 @@ void ButiEngine::Enemy_Fly::SetEnemyParameter()
 	m_vlp_enemy->CreatePocket(m_pocketCount, m_createPocketRadius);
 	m_vlp_enemy->SetVibrationCapacity(m_vibrationCapacity);
 	m_vlp_enemy->SetVibrationResistance(m_vibrationResistance);
+	m_vlp_enemy->SetKnockBackForce(m_knockBackForce);
+	m_vlp_enemy->SetKnockBackFrame(m_knockBackFrame);
 	m_vlp_enemy->SetWeight(100.0f);
 }
 

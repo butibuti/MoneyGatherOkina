@@ -669,6 +669,7 @@ void ButiEngine::Player::Overheat()
 		m_isOverheat = false;
 		m_vibration = 0.0f;
 		m_isVibrate = false;
+		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
 
 		StopVibrationEffect();
 
