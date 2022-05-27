@@ -263,6 +263,7 @@ void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 	if (collider)
 	{
 		collider->SetIsActive(false);
+		collider->CollisionStop();
 	}
 
 	auto tiltMotion = m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>();
@@ -321,6 +322,7 @@ void ButiEngine::Worker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_ot
 		if (collider)
 		{
 			collider->SetIsActive(false);
+			collider->CollisionStop();
 		}
 
 		m_vlp_nearPlayerTimer = ObjectFactory::Create<RelativeTimer>(30);
@@ -376,7 +378,7 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
 		if (collider)
 		{
-			collider->SetIsActive(false);
+			collider->SetIsActive(false); collider->CollisionStop();
 		}
 
 		auto lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
@@ -445,6 +447,7 @@ void ButiEngine::Worker::ReturnFlock()
 	if (collider)
 	{
 		collider->SetIsActive(true);
+		collider->CollisionStart();
 	}
 
 	auto lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();

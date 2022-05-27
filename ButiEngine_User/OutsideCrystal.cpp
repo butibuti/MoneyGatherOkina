@@ -78,7 +78,8 @@ void ButiEngine::OutsideCrystal::Appeaer()
 
 	m_isAppear = true;
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
-	//collider->SetIsActive(true);
+	collider->SetIsActive(true);
+	collider->CollisionStart();
 }
 
 void ButiEngine::OutsideCrystal::Disappear()
@@ -89,8 +90,8 @@ void ButiEngine::OutsideCrystal::Disappear()
 
 	m_isAppear = false;
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
-	//collider->SetIsActive(false);
-
+	collider->SetIsActive(false);
+	collider->CollisionStop();
 
 	m_vlp_appearIntervalTimer->Start();
 }
