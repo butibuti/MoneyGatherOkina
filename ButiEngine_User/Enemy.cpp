@@ -23,12 +23,18 @@
 #include "Crystal.h"
 #include "GameSettings.h"
 #include "SoundPlayerComponent.h"
+#include "OutsideCrystal.h"
+#include "Stick.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
+	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_Y))
+	{
+		RuptureStickWorker();
+	}
 	//Playerが近いか衝撃波が当たっていたら振動する
 	if (m_vibration > 0)
 	{
@@ -82,6 +88,7 @@ void ButiEngine::Enemy::OnSet()
 {
 	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (!isCollision) { return; }
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
@@ -103,6 +110,7 @@ void ButiEngine::Enemy::OnSet()
 
 	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (!isCollision) { return; }
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
@@ -246,11 +254,6 @@ void ButiEngine::Enemy::Dead()
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
 	}
 
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
-
-	RemoveAllPocket();
-	StopVibrationEffect();
-
 	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
 	if (boss)
 	{
@@ -270,8 +273,6 @@ void ButiEngine::Enemy::Dead()
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 	deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 2.0f);
 
-	gameObject.lock()->SetIsRemove(true);
-
 	if (m_isMobDamageSE)
 	{
 		//再生中なら止める
@@ -284,7 +285,22 @@ void ButiEngine::Enemy::Dead()
 	//死んだら画面揺らす
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
 
-	AddDeadCount();
+	AddPoint();
+
+	auto outsideCrystal = gameObject.lock()->GetGameComponent<OutsideCrystal>();
+	if (outsideCrystal)
+	{
+		outsideCrystal->Disappear();
+		RuptureStickWorker();
+		return;
+	}
+
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
+
+	RemoveAllPocket();
+	StopVibrationEffect();
+
+	gameObject.lock()->SetIsRemove(true);
 }
 
 void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount, const float arg_radius)
@@ -292,13 +308,6 @@ void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount, const f
 	RemoveAllPocket();
 
 	if (arg_pocketCount == 0) { return; }
-
-	//transform取得用worker
-	//auto tmpWorker = GetManager().lock()->AddObjectFromCereal("Target");
-
-	//自身の周りに等間隔でポケットを作成する
-	//float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
-	//float workerRadius = /*tmpWorker.lock()->transform->GetLocalScale().x*/0.5f * 0.5f;
 
 	auto pocketCenter = gameObject.lock()->transform->Clone();
 	auto pocketTransform = ObjectFactory::Create<Transform>();
@@ -323,8 +332,6 @@ void ButiEngine::Enemy::CreatePocket(const std::uint8_t arg_pocketCount, const f
 
 		pocketCenter->RollLocalRotationY_Degrees(rollAngle);
 	}
-
-	//tmpWorker.lock()->SetIsRemove(true);
 }
 
 void ButiEngine::Enemy::RemovePocket(const std::uint8_t arg_pocketNum)
@@ -462,8 +469,7 @@ void ButiEngine::Enemy::CalculateVibrationIncrease()
 
 	if (m_isNearPlayer || m_isHitShockWave)
 	{
-		float playerVibrationRate = m_vlp_playerComponent->GetVibrationRate();
-		m_vibrationIncrease += playerVibrationForce * (1 + playerVibrationRate * m_playerVibrationCoefficient);
+		m_vibrationIncrease += m_vlp_playerComponent->GetVibrationForce();
 	}
 
 	m_vibrationIncrease += workerVibrationForce * m_stickWorkerCount - m_vibrationResistance;
@@ -486,10 +492,10 @@ std::uint8_t ButiEngine::Enemy::GetStickWorkerCount()
 	return stickWorkerCount;
 }
 
-void ButiEngine::Enemy::AddDeadCount()
+void ButiEngine::Enemy::AddPoint()
 {
 	//ウェーブマネージャーの討伐数カウント関数を呼ぶ
-	m_vwp_waveManager.lock()->AddProgressPoint(m_progressPoint);
+	m_vwp_waveManager.lock()->AddPoint(m_progressPoint);
 }
 
 void ButiEngine::Enemy::StopVibrationEffect()
@@ -525,6 +531,15 @@ void ButiEngine::Enemy::MobDamegeSE()
 		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
 		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
 		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Attack_Loop.wav"), indexNum, 1, true);
+	}
+}
+
+void ButiEngine::Enemy::RuptureStickWorker()
+{
+	auto end = m_vec_pockets.end();
+	for (auto itr = m_vec_pockets.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->GetGameComponent<Pocket>()->ReleaseWorker();
 	}
 }
 

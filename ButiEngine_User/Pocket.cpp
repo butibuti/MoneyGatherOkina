@@ -25,7 +25,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Pocket::Clone()
 	return ObjectFactory::Create<Pocket>();
 }
 
-void ButiEngine::Pocket::Dead()
+void ButiEngine::Pocket::ReleaseWorker()
 {
 	if (m_vwp_worker.lock())
 	{
@@ -43,8 +43,15 @@ void ButiEngine::Pocket::Dead()
 			worker->Rupture(dir);
 
 			m_vwp_enemy.lock()->GetGameComponent<Enemy>()->RemoveSrickWorkerCount();
+
+			m_vwp_worker = Value_weak_ptr<GameObject>();
 		}
 	}
+}
+
+void ButiEngine::Pocket::Dead()
+{
+	ReleaseWorker();
 
 	gameObject.lock()->SetIsRemove(true);
 }

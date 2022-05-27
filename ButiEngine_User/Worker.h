@@ -38,6 +38,8 @@ namespace ButiEngine {
 			return rate;
 		}
 
+		Value_weak_ptr<GameObject> GetDrawObject();
+
 		void SetIsVibrate(const bool arg_isVibrate) { m_isVibrate = arg_isVibrate; }
 
 		void Dead();
@@ -72,6 +74,8 @@ namespace ButiEngine {
 		static float m_minVibration;
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
+
+		bool isCollision = true;
 
 		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
 

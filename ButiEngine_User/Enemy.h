@@ -57,6 +57,8 @@ namespace ButiEngine {
 		void RemoveAllPocket();
 		void AddStickWorkerCount() { m_stickWorkerCount++; }
 		void RemoveSrickWorkerCount() { m_stickWorkerCount--; }
+
+		bool isCollision = true;
 	private:
 		void IncreaseVibration();
 		void DecreaseVibration();
@@ -69,9 +71,11 @@ namespace ButiEngine {
 		//êUìÆó ÇÃè„è∏ílÇåvéZÇ∑ÇÈ
 		void CalculateVibrationIncrease();
 		std::uint8_t GetStickWorkerCount();
-		void AddDeadCount();
+		void AddPoint();
 		void StopVibrationEffect();
 		void MobDamegeSE();
+
+		void RuptureStickWorker();
 
 		void OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other);
 

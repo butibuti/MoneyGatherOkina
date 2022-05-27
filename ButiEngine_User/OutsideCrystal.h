@@ -21,13 +21,15 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetDefaultScale(const Vector3& arg_scale) { m_defaultScale = arg_scale; }
+
+		bool IsInvincible() { return m_isInvincible; }
+
 		void Appeaer();
 		void Disappear();
 	private:
+		void Wait();
 		void SetEnemyParameter();
-
-		Value_ptr<Timer> m_appearIntervalTimer;
-		bool m_isAppear;
 
 		static std::int32_t m_progressPoint;
 		static std::int32_t m_pocketCount;
@@ -35,6 +37,11 @@ namespace ButiEngine {
 		static float m_vibrationCapacity;
 		static float m_vibrationResistance;
 		static std::int32_t m_appearIntervalFrame;
+
+		Value_ptr<Timer> m_vlp_appearIntervalTimer;
+		Vector3 m_defaultScale;
+		bool m_isAppear;
+		bool m_isInvincible;
 	};
 
 }

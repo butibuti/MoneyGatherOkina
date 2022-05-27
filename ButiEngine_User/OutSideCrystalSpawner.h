@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class OutsideCrystal;
+	class WaveManager;
 
 	class OutsideCrystalSpawner :public GameComponent
 	{
@@ -22,15 +23,19 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
-		void ActivePhase(const std::int32_t arg_index);
 	private:
+		void ActivePhase(const std::int32_t arg_index);
+
 		void CreateCrystals();
 
 		static std::int32_t m_startCrystalCount;
+		static float m_startAngle;
 		static float m_spawnRadius;
+		static std::int32_t m_phaseCount;
+		static std::vector<std::int32_t> m_vec_phaseActivePoints;
 
 		std::vector<std::vector<Value_weak_ptr<OutsideCrystal>>> m_vec_crystals;
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 	};
 
 }

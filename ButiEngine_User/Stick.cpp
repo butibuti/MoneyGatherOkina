@@ -82,8 +82,9 @@ void ButiEngine::Stick::KeepWorldScale()
 void ButiEngine::Stick::KeepDistance()
 {
 	auto enemy = m_vwp_pocket.lock()->GetGameComponent<Pocket>()->GetEnemy();
+	auto drawObject = gameObject.lock()->GetGameComponent<Worker>()->GetDrawObject();
 	auto enemyDrawObject = enemy.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
-	float radius = gameObject.lock()->transform->GetWorldScale().x * 0.5f;
+	float radius = drawObject.lock()->transform->GetWorldScale().x * 0.5f;
 	float enemyRadius = enemyDrawObject.lock()->transform->GetWorldScale().x * 0.5f;
 
 	Vector3 pos = gameObject.lock()->transform->GetWorldPosition();

@@ -28,7 +28,8 @@ std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
-float ButiEngine::Player::m_vibrationForce = 5.0f;
+float ButiEngine::Player::m_minVibrationForce = 1.0f;
+float ButiEngine::Player::m_maxVibrationForce = 5.0f;
 float ButiEngine::Player::m_vibrationIncrease = 0.1f;
 float ButiEngine::Player::m_vibrationDecrease = 0.02f;
 
@@ -148,8 +149,13 @@ void ButiEngine::Player::OnShowUI()
 		m_overheatTimer->ChangeCountFrame(m_overheatFrame);
 	}
 
-	GUI::BulletText(u8"U“®‚Ì‹­‚³");
-	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText(u8"U“®—Í:%f", GetVibrationForce());
+
+	GUI::BulletText(u8"U“®’l0‚ÌŽž‚ÌU“®—Í");
+	GUI::DragFloat("##vMinForce", &m_minVibrationForce, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"U“®’l100‚ÌŽž‚ÌU“®—Í");
+	GUI::DragFloat("##vMaxForce", &m_maxVibrationForce, 1.0f, 0.0f, 100.0f);
 
 	GUI::BulletText(u8"U“®’l‚Ìã¸—Ê");
 	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
@@ -488,8 +494,14 @@ void ButiEngine::Player::VibrationEffect()
 			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
 
+			Vector4 color = GameSettings::PLAYER_COLOR;
+			if (m_isOverheat)
+			{
+				color = GameSettings::ATTACK_COLOR;
+			}
+
 			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
-			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = color;
 
 			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
 		}
@@ -656,9 +668,15 @@ void ButiEngine::Player::Overheat()
 
 		m_isOverheat = false;
 		m_vibration = 0.0f;
+		m_isVibrate = false;
 
-		auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+		StopVibrationEffect();
+
+		if (m_vwp_tiltFloatObject.lock())
+		{
+			auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+		}
 	
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
 	}

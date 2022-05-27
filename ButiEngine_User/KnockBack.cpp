@@ -23,7 +23,8 @@ void ButiEngine::KnockBack::OnUpdate()
 		m_velocityY -= gravity * GameDevice::WorldSpeed;
 		m_velocity.y = m_velocityY;
 
-		Vector3 pos = gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
+		gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
+		Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
 
 		if (pos.y < 0.0f || m_vlp_timer->Update())
 		{

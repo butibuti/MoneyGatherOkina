@@ -53,7 +53,7 @@ void ButiEngine::WaveManager::OnUpdate()
 		
 	}
 	//ƒNƒŠƒA‚µ‚Ä‚¢‚é‚©
-	if (m_progressPoint >= m_clearPoint && !m_isAdvanceGameOver)
+	if (m_point >= m_clearPoint && !m_isAdvanceGameOver)
 	{
 		m_isClear = true;
 	}
@@ -92,7 +92,7 @@ void ButiEngine::WaveManager::Start()
 	m_isNextScene = false;
 	m_isSceneStart = false;
 
-	m_progressPoint = 0;
+	m_point = 0;
 	m_clearPoint = 30;
 	m_enemySpawnCount = 0;
 
@@ -120,9 +120,9 @@ void ButiEngine::WaveManager::OnShowUI()
 	GUI::InputInt("##StageClearPoint", m_stageClearPoint);
 }
 
-void ButiEngine::WaveManager::AddProgressPoint(const std::int32_t arg_progressPoint)
+void ButiEngine::WaveManager::AddPoint(const std::int32_t arg_progressPoint)
 {
-	m_progressPoint += arg_progressPoint;
+	m_point += arg_progressPoint;
 }
 
 void ButiEngine::WaveManager::AddSpawnCount()
@@ -267,7 +267,7 @@ void ButiEngine::WaveManager::StageProgressAnimation()
 {
 	if (!m_vwp_stageProgressUIComponent.lock()) { return; }
 
-	auto rate = (float)m_progressPoint / (float)m_clearPoint;
+	auto rate = (float)m_point / (float)m_clearPoint;
 	m_vwp_stageProgressUIComponent.lock()->SetRate(rate);
 }
 

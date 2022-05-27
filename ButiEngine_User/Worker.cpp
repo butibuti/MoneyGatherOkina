@@ -23,7 +23,7 @@
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
-float ButiEngine::Worker::m_minVibration = 50.0f;
+float ButiEngine::Worker::m_minVibration = 20.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.5f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
 
@@ -93,14 +93,14 @@ void ButiEngine::Worker::OnSet()
 			{
 				OnCollisionEnemy(arg_vwp_other);
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("WorlerDamageArea")))
-			{
-				OnCollisionDamageArea(arg_vwp_other);
-			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
-			{
-				OnCollisionDamageArea(arg_vwp_other);
-			}
+			//else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("WorlerDamageArea")))
+			//{
+			//	OnCollisionDamageArea(arg_vwp_other);
+			//}
+			//else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("DamageArea")))
+			//{
+			//	OnCollisionDamageArea(arg_vwp_other);
+			//}
 		});
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
@@ -162,6 +162,12 @@ void ButiEngine::Worker::Start()
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Worker::Clone()
 {
 	return ObjectFactory::Create<Worker>();
+}
+
+ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Worker::GetDrawObject()
+{
+	if (!m_vwp_tiltFloatObject.lock()) { return Value_weak_ptr<GameObject>(); }
+	return m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
 }
 
 void ButiEngine::Worker::Dead()

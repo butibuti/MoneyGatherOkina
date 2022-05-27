@@ -38,7 +38,11 @@ namespace ButiEngine {
 			return  speed;
 		}
 		float GetMaxMoveSpeed() { return m_maxMoveSpeed; }
-		float GetVibrationForce() { return m_vibrationForce; }
+		float GetVibrationForce()
+		{
+			float force = MathHelper::Lerp(m_minVibrationForce, m_maxVibrationForce, GetVibrationRate());
+			return force;
+		}
 		float GetVibration() { return m_vibration; }
 		float GetVibrationRate()
 		{
@@ -108,7 +112,8 @@ namespace ButiEngine {
 		//êUìÆ
 		static float m_overheatMaxVibration;
 		static std::int32_t m_overheatFrame;
-		static float m_vibrationForce;
+		static float m_minVibrationForce;
+		static float m_maxVibrationForce;
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
 
