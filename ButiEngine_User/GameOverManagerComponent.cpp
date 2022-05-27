@@ -19,7 +19,7 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 		else if (m_nextCount == 1)
 		{
 			AppearSelectUI();
-			m_isNext = true;
+			m_isInput = true;
 		}
 		else
 		{
@@ -29,14 +29,21 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 		m_nextCount++;
 	}
 
+	if (m_vlp_selectAnimationTimer->Update())
+	{
+		m_isNext = true;
+	}
+
 	ScaleAnimation();
 	PlayerPikuPiku();
+	SelectAnimation();
 }
 
 void ButiEngine::GameOverManagerComponent::OnSet()
 {
-	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
-	m_vlp_pikupikuTimer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(100);
+	m_vlp_pikupikuTimer = ObjectFactory::Create<AbsoluteTimer>(ButiRandom::GetRandom(3, 30));
+	m_vlp_selectAnimationTimer = ObjectFactory::Create<AbsoluteTimer>(60);
 }
 
 void ButiEngine::GameOverManagerComponent::OnShowUI()
@@ -46,12 +53,14 @@ void ButiEngine::GameOverManagerComponent::OnShowUI()
 void ButiEngine::GameOverManagerComponent::Start()
 {
 	m_vlp_waitTimer->Start();
-	m_vlp_waitTimer->ChangeCountFrame(100);
 	m_vlp_pikupikuTimer->Start();
-	m_vlp_pikupikuTimer->ChangeCountFrame(ButiRandom::GetRandom(3, 30));
 	GetManager().lock()->AddObjectFromCereal("FadeOutUI");
+	m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
+	m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 	m_isRetry = true;
 	m_isNext = false;
+	m_isInput = false;
+	m_isSelectAnimation = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::GameOverManagerComponent::Clone()
@@ -97,7 +106,7 @@ void ButiEngine::GameOverManagerComponent::AppearSelectUI()
 
 void ButiEngine::GameOverManagerComponent::InputSelect()
 {
-	if (!m_isNext) { return; }
+	if (!m_isInput) { return; }
 
 	if (InputManager::IsTriggerLeftKey() || InputManager::IsTriggerRightKey())
 	{
@@ -106,7 +115,9 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 
 	if (InputManager::IsTriggerDecideKey())
 	{
-		m_isNext = false;
+		m_isInput = false;
+		m_isSelectAnimation = true;
+		m_vlp_selectAnimationTimer->Start();
 	}
 }
 
@@ -149,4 +160,11 @@ void ButiEngine::GameOverManagerComponent::PlayerPikuPiku()
 		m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ShakeComponent>()->Shake(0.5f, 2);
 	}
 	
+}
+
+void ButiEngine::GameOverManagerComponent::SelectAnimation()
+{
+	if (!m_isSelectAnimation) { return; }
+
+
 }

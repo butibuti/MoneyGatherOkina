@@ -10,6 +10,7 @@ namespace ButiEngine {
 	class BeeSoulPodUIComponent;
 	class FlockingLeader;
 	class SoundPlayerComponent;
+	class PauseManagerComponent;
 
 	class Player :public GameComponent
 	{
@@ -72,6 +73,7 @@ namespace ButiEngine {
 		void Move();
 		void MoveKnockBack();
 		void Damage();
+		void VibrationUpdate();
 
 		void VibrationController();
 		void IncreaseVibration();
@@ -190,6 +192,7 @@ namespace ButiEngine {
 
 		Value_weak_ptr<GameObject> m_vwp_vignetteUI;
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
+		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 		Value_ptr<Timer> m_vlp_vibUpSEResetTimer;
 	};
 
