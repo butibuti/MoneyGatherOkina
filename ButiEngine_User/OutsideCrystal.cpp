@@ -7,7 +7,7 @@
 std::int32_t ButiEngine::OutsideCrystal::m_progressPoint = 1000;
 std::int32_t ButiEngine::OutsideCrystal::m_pocketCount = 16;
 float ButiEngine::OutsideCrystal::m_createPocketRadius = 3.0f;
-float ButiEngine::OutsideCrystal::m_vibrationCapacity = 3000.0f;
+float ButiEngine::OutsideCrystal::m_vibrationCapacity = 300.0f;
 float ButiEngine::OutsideCrystal::m_vibrationResistance = 0.0f;
 std::int32_t ButiEngine::OutsideCrystal::m_appearIntervalFrame = 1800;
 

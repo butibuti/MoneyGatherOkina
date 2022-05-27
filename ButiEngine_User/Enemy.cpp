@@ -297,8 +297,10 @@ void ButiEngine::Enemy::Dead()
 	auto outsideCrystal = gameObject.lock()->GetGameComponent<OutsideCrystal>();
 	if (outsideCrystal)
 	{
-		outsideCrystal->Disappear();
 		RuptureStickWorker();
+		outsideCrystal->Disappear();
+		auto stalker = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
+		stalker.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 		return;
 	}
 
