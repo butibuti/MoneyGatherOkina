@@ -23,7 +23,7 @@
 #include "Crystal.h"
 #include "GameSettings.h"
 #include "SoundPlayerComponent.h"
-
+#include"EnemySpawnPointComponent.h"
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
 
@@ -280,7 +280,9 @@ void ButiEngine::Enemy::Dead()
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
 		m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
 	}
-
+	if (m_vwp_appearnceEffect.lock()) {
+		m_vwp_appearnceEffect.lock()->GetGameComponent< EnemySpawnPointComponent>()->SetEnemyObject(Value_weak_ptr<GameObject>());
+	}
 	//死んだら画面揺らす
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
 
@@ -342,6 +344,17 @@ void ButiEngine::Enemy::RemoveAllPocket()
 		(*itr).lock()->GetGameComponent<Pocket>()->Dead();
 	}
 	m_vec_pockets.clear();
+}
+
+void ButiEngine::Enemy::SetAppearanceEffect(Value_weak_ptr<GameObject> arg_vwp_appearnceEffect)
+{
+	m_vwp_appearnceEffect = arg_vwp_appearnceEffect;
+	m_vwp_appearnceEffect = arg_vwp_appearnceEffect;
+}
+
+ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Enemy::GconstetAppearanceEffect()
+{
+	return m_vwp_appearnceEffect;
 }
 
 void ButiEngine::Enemy::IncreaseVibration()
