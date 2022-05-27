@@ -19,19 +19,20 @@
 #include "GameSettings.h"
 #include "FlockingLeader.h"
 #include "SoundPlayerComponent.h"
+#include "PauseManagerComponent.h"
 
-float ButiEngine::Player::m_maxMoveSpeed = 0.25f;
-float ButiEngine::Player::m_acceleration = 0.1f;
+float ButiEngine::Player::m_maxMoveSpeed = 0.15f;
+float ButiEngine::Player::m_acceleration = 0.04f;
 float ButiEngine::Player::m_deceleration = 0.1f;
 
 std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
+float ButiEngine::Player::m_vibrationIncrease = 0.22f;
+float ButiEngine::Player::m_vibrationDecrease = 0.2f;
 float ButiEngine::Player::m_minVibrationForce = 1.0f;
 float ButiEngine::Player::m_maxVibrationForce = 5.0f;
-float ButiEngine::Player::m_vibrationIncrease = 0.1f;
-float ButiEngine::Player::m_vibrationDecrease = 0.02f;
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -45,21 +46,7 @@ void ButiEngine::Player::OnUpdate()
 	//	BombStart();
 	//}
 
-	//フロッキング招集モード時、近くに自分より振動値の大きいモブハチがいたら振動値を増やす
-	if (m_vwp_flockingLeader.lock()->IsGather() && m_nearWorkerCount != 0)
-	{
-		//コントローラーの振動値設定
-		//constexpr float maxControllerVibration = 1.0f;
-		//m_controllerVibration = MathHelper::Lerp(m_controllerVibration, maxControllerVibration, 0.025f);
-		m_controllerVibration = 1.0f;
-
-		IncreaseVibration();
-	}
-	else
-	{
-		m_controllerVibration = 0.0f;
-		DecreaseVibration();
-	}
+	VibrationUpdate();
 	VibrationEffect();
 
 	//m_nearEnemyCount = 0;
@@ -237,6 +224,7 @@ void ButiEngine::Player::Start()
 
 	m_vwp_vignetteUI = GetManager().lock()->AddObjectFromCereal("VignetteUI");
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+	m_vwp_pauseManagerComponent = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
 
 	m_vlp_vibUpSEResetTimer->Start();
 }
@@ -272,15 +260,7 @@ void ButiEngine::Player::Dead()
 	m_isVibrate = false;
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
 
-	if (m_isVibUpSE)
-	{
-		m_isVibUpSE = false;
-
-		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
-		m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
-	}
-
+	StopVibUpSE();
 	//gameObject.lock()->SetIsRemove(ture);
 }
 
@@ -407,6 +387,30 @@ void ButiEngine::Player::Damage()
 	m_vlp_invincibleTimer->Start();
 }
 
+void ButiEngine::Player::VibrationUpdate()
+{
+	if (m_vwp_pauseManagerComponent.lock()->IsPause())
+	{
+		StopVibUpSE();
+		return;
+	}
+	//フロッキング招集モード時、近くに自分より振動値の大きいモブハチがいたら振動値を増やす
+	if (m_vwp_flockingLeader.lock()->IsGather() && m_nearWorkerCount != 0)
+	{
+		//コントローラーの振動値設定
+		//constexpr float maxControllerVibration = 1.0f;
+		//m_controllerVibration = MathHelper::Lerp(m_controllerVibration, maxControllerVibration, 0.025f);
+		m_controllerVibration = 1.0f;
+
+		IncreaseVibration();
+	}
+	else
+	{
+		m_controllerVibration = 0.0f;
+		DecreaseVibration();
+	}
+}
+
 void ButiEngine::Player::VibrationController()
 {
 	InputManager::VibrationStop();
@@ -434,14 +438,14 @@ void ButiEngine::Player::IncreaseVibration()
 	}
 	m_vibration = min(m_vibration, m_maxVibration);
 
-	if (!m_isVibUpSE)
-	{
-		m_isVibUpSE = true;
+	//if (!m_isVibUpSE)
+	//{
+	//	m_isVibUpSE = true;
 
-		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
-		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
-		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
-	}
+	//	m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
+	//	auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+	//	m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
+	//}
 
 	if (GetVibrationRate() >= 1.0f)
 	{

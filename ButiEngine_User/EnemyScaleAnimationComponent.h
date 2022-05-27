@@ -21,6 +21,7 @@ namespace ButiEngine {
 
 		void SetScaleRate(const float arg_scaleRate) { m_lerpScale = arg_scaleRate; }
 		void SetAnotherScale(const Vector3& arg_scale) { m_anotherScale = arg_scale; }
+		void SetMaxPlusScale(const float arg_scaleRate) { m_maxPlusScale = m_defaultScale * arg_scaleRate; }
 		Vector3 GetScale() { return m_defaultScale; }
 
 	private:

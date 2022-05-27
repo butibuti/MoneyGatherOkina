@@ -11,6 +11,7 @@ namespace ButiEngine {
 	class SpriteParticleGenerator;
 	class AttackFlashSpawner;
 	class SoundPlayerComponent;
+	class PauseManagerComponent;
 
 	class Enemy :public GameComponent
 	{
@@ -74,6 +75,7 @@ namespace ButiEngine {
 		void AddPoint();
 		void StopVibrationEffect();
 		void MobDamegeSE();
+		void StopMobDamageSE();
 
 		void RuptureStickWorker();
 
@@ -92,6 +94,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
+		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_ptr<Timer> m_vlp_attackFlashTimer;
 

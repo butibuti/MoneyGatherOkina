@@ -6,16 +6,15 @@
 #include "SeparateDrawObject.h"
 
 std::int32_t ButiEngine::Enemy_Stalker::m_progressPoint = 100;
-std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 5;
+std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 8;
 float ButiEngine::Enemy_Stalker::m_createPocketRadius = 1.0f;
-float ButiEngine::Enemy_Stalker::m_vibrationCapacity = 30.0f;
+float ButiEngine::Enemy_Stalker::m_vibrationCapacity = 100.0f;
 float ButiEngine::Enemy_Stalker::m_vibrationResistance = 0.0f;
+float ButiEngine::Enemy_Stalker::m_maxMoveSpeed = 0.15f;
+float ButiEngine::Enemy_Stalker::m_acceleration = 0.003f;
 
 float ButiEngine::Enemy_Stalker::m_knockBackForce = 0.3f;
 std::int32_t ButiEngine::Enemy_Stalker::m_knockBackFrame = 30;
-
-float ButiEngine::Enemy_Stalker::m_maxMoveSpeed = 0.125f;
-float ButiEngine::Enemy_Stalker::m_acceleration = 0.01f;
 
 void ButiEngine::Enemy_Stalker::OnUpdate()
 {
