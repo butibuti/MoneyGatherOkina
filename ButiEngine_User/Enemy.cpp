@@ -445,8 +445,6 @@ void ButiEngine::Enemy::AttackFlashUpdate()
 	if (m_vlp_attackFlashTimer->Update())
 	{
 		CreateAttackFlashEffect();
-		auto soundTag = "Sound/Attack_OneShot_" + std::to_string(ButiRandom::GetInt(0, 3)) + ".wav";
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag(soundTag));
 	}
 }
 

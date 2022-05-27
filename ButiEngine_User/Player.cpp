@@ -487,9 +487,7 @@ void ButiEngine::Player::DecreaseVibration()
 
 void ButiEngine::Player::VibrationEffect()
 {
-	if (m_isDead) { return; }
-
-	if (m_isVibrate)
+	if (m_isVibrate && !m_isDead)
 	{
 		if (m_vwp_vibrationEffect.lock() == nullptr)
 		{
@@ -535,8 +533,6 @@ void ButiEngine::Player::VibrationEffect()
 
 void ButiEngine::Player::StopVibrationEffect()
 {
-	if (m_isDead) { return; }
-
 	if (m_vwp_vibrationEffect.lock() != nullptr)
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);

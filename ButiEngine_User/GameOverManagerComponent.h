@@ -50,6 +50,10 @@ namespace ButiEngine {
 		Vector3 m_nextTitleScale;
 
 		std::int8_t m_nextCount;
+		std::int8_t m_selectAnimationStep;
+
+		float m_selectAnimationScale;
+		float m_selectAnimationRotate;
 
 		bool m_isRetry;
 		bool m_isNext;

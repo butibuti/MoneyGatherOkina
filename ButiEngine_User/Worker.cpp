@@ -20,6 +20,7 @@
 #include "KnockBack.h"
 #include "SoundPlayerComponent.h"
 #include "EnemyScaleAnimationComponent.h"
+#include "GameSettings.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 0.1f;
@@ -40,30 +41,35 @@ void ButiEngine::Worker::OnUpdate()
 		OnRupture();
 	}
 
-	if (m_isVibrate)
+	if (m_vwp_vibrationEffect.lock() == nullptr)
 	{
-		if (m_vwp_vibrationEffect.lock() == nullptr)
-		{
-			//auto transform = gameObject.lock()->transform;
-			//m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_Player");
-			//m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetWorldPosition());
-			//m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 4.0f);
+		auto transform = gameObject.lock()->transform;
+		m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_Player");
+		m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetWorldPosition());
+		m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 4.0f);
 
-			//m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
-		}
-		else
-		{
-			auto transform = gameObject.lock()->transform;
-			m_vwp_vibrationEffectComponent.lock()->SetVibration();
-			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetWorldPosition());
-		}
-		//ShakeDrawObject();
+		m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+		auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::SOUL_COLOR;
 	}
 	else
 	{
-		StopVibrationEffect();
-		//StopShakeDrawObject();
+		auto transform = gameObject.lock()->transform;
+		float vibrationRate = m_vibration / m_maxVibration;
+		m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, false);
+		m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetWorldPosition());
 	}
+
+	//if (m_isVibrate)
+	//{
+
+	//	//ShakeDrawObject();
+	//}
+	//else
+	//{
+	//	StopVibrationEffect();
+	//	//StopShakeDrawObject();
+	//}
 
 	ShakeDrawObject();
 
@@ -359,6 +365,7 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 	//敵に空いているポケットがあったらしがみつく
 	auto enemyComponent = arg_vwp_enemy.lock()->GetGameComponent<Enemy>();
 	if (!enemyComponent) { return; }
+
 	auto pocket = enemyComponent->GetNearFreePocket(gameObject.lock()->transform->GetLocalPosition(), m_nearBorder);
 
 	if (pocket.lock())
@@ -396,6 +403,9 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 		auto stickComponent = gameObject.lock()->AddGameComponent<Stick>();
 		stickComponent->SetPocket(pocket);
+
+		auto soundTag = "Sound/Attack_OneShot_" + std::to_string(ButiRandom::GetInt(0, 3)) + ".wav";
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag(soundTag));
 	}
 }
 
