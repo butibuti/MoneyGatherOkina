@@ -614,6 +614,7 @@ cd ..\</Command>
     <ClCompile Include="WaveManager.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerAttackFlashEffect.cpp" />
+    <ClCompile Include="WorkerSpawnEffect.cpp" />
     <ClCompile Include="WorkerSpawner.cpp" />
     <ClCompile Include="WorldSpeedManager.cpp" />
     <ClCompile Include="ExpansionAnimationComponent.cpp" />
@@ -703,6 +704,7 @@ cd ..\</Command>
     <ClInclude Include="WaveManager.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerAttackFlashEffect.h" />
+    <ClInclude Include="WorkerSpawnEffect.h" />
     <ClInclude Include="WorkerSpawner.h" />
     <ClInclude Include="WorldSpeedManager.h" />
     <ClInclude Include="ExpansionAnimationComponent.h" />

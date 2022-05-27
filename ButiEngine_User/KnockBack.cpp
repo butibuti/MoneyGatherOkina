@@ -15,7 +15,7 @@ void ButiEngine::KnockBack::OnUpdate()
 {
 	float progress = m_vlp_timer->GetPercent() * GameDevice::WorldSpeed;
 	progress = min(progress, 1.0f);
-	m_velocity = MathHelper::LerpPosition(m_startVelocity, Vector3Const::Zero, m_vlp_timer->GetPercent());
+	m_velocity = MathHelper::LerpPosition(m_startVelocity, Vector3Const::Zero, progress);
 
 	if (m_isGravity)
 	{

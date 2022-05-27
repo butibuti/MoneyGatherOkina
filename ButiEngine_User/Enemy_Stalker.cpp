@@ -209,7 +209,7 @@ void ButiEngine::Enemy_Stalker::OnPrey()
 
 void ButiEngine::Enemy_Stalker::PreyAnimation()
 {
-	float progress = m_vlp_preyTimer->GetPercent() * GameDevice::WorldSpeed;
+	float progress = m_vlp_preyTimer->GetPercent();
 	Vector3 newLookTargetPos = m_lookTargetAnimationStartPos + m_lookTargetMoveDir * (sin(2 * PI * progress * 10.0f)) * 1.5f;
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(newLookTargetPos);
 }
