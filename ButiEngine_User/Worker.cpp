@@ -19,6 +19,7 @@
 #include "FloatMotionComponent.h"
 #include "KnockBack.h"
 #include "SoundPlayerComponent.h"
+#include "EnemyScaleAnimationComponent.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
@@ -26,6 +27,7 @@ float ButiEngine::Worker::m_maxVibration = 150.0f;
 float ButiEngine::Worker::m_minVibration = 50.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.5f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
+float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -74,6 +76,8 @@ void ButiEngine::Worker::OnUpdate()
 		m_vlp_attackFlashTimer->Stop();
 		m_vlp_attackFlashTimer->Reset();
 	}
+
+	ScaleAnimation();
 }
 
 void ButiEngine::Worker::OnSet()
@@ -132,6 +136,9 @@ void ButiEngine::Worker::OnShowUI()
 
 	GUI::BulletText("VibrationDecrease");
 	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText("MaxScaleRate");
+	GUI::DragFloat("##MaxScaleRate", &m_vibrationDecrease, 0.001f, 1.0f, 5.0f);
 }
 
 void ButiEngine::Worker::Start()
@@ -474,7 +481,9 @@ void ButiEngine::Worker::ShakeDrawObject()
 		m_vwp_shakeComponent.lock()->ShakeStart();
 		return;
 	}
-	m_vwp_shakeComponent.lock()->SetShakePower(1.0f);
+
+	float shakePower = m_vibration / m_maxVibration;
+	m_vwp_shakeComponent.lock()->SetShakePower(shakePower);
 }
 
 void ButiEngine::Worker::StopShakeDrawObject()
@@ -498,6 +507,22 @@ void ButiEngine::Worker::DecreaseVibration()
 {
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 	m_vibration = max(m_vibration, m_minVibration);
+}
+
+void ButiEngine::Worker::ScaleAnimation()
+{
+	auto drawObject = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
+	if (!drawObject.lock()) { return; }
+	if (!m_vwp_scaleAnimationComponent.lock())
+	{
+		m_vwp_scaleAnimationComponent = drawObject.lock()->GetGameComponent<EnemyScaleAnimationComponent>();
+		return;
+	}
+
+	//ここでスケール割合値をセットしてあげる
+	float lerpScale = m_vibration / m_maxVibration;
+	m_vwp_scaleAnimationComponent.lock()->SetScaleRate(lerpScale);
+	m_vwp_scaleAnimationComponent.lock()->SetMaxPlusScale(m_maxScaleRate - 1.0f);
 }
 
 void ButiEngine::Worker::CreateDrawObject()

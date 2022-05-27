@@ -49,6 +49,11 @@ void ButiEngine::SoundPlayerComponent::OnSet()
     }
 }
 
+void ButiEngine::SoundPlayerComponent::OnRemove()
+{
+    StopLoopSound();
+}
+
 void ButiEngine::SoundPlayerComponent::OnShowUI()
 {
     bool isEdited = false;
@@ -159,6 +164,22 @@ void ButiEngine::SoundPlayerComponent::DestroyLoopIndex(const std::string& arg_i
             return;
         }
     }
+}
+
+//再生中のループサウンドがある場合、全て破棄する
+void ButiEngine::SoundPlayerComponent::StopLoopSound()
+{
+    std::int32_t index = 0;
+    auto end = m_vec_loopIndices.end();
+    for (auto itr = m_vec_loopIndices.begin(); itr != end; ++itr)
+    {
+        if ((*itr) != "_")
+        {
+            GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(index);
+        }
+        index++;
+    }
+
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SoundPlayerComponent::Clone()
