@@ -24,7 +24,7 @@
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_vibrationForce = 1.0f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
-float ButiEngine::Worker::m_minVibration = 50.0f;
+float ButiEngine::Worker::m_minVibration = 20.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.5f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
@@ -57,13 +57,15 @@ void ButiEngine::Worker::OnUpdate()
 			m_vwp_vibrationEffectComponent.lock()->SetVibration();
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetWorldPosition());
 		}
-		ShakeDrawObject();
+		//ShakeDrawObject();
 	}
 	else
 	{
 		StopVibrationEffect();
-		StopShakeDrawObject();
+		//StopShakeDrawObject();
 	}
+
+	ShakeDrawObject();
 
 	if (m_isAttack)
 	{
@@ -475,15 +477,16 @@ void ButiEngine::Worker::StopVibrationEffect()
 
 void ButiEngine::Worker::ShakeDrawObject()
 {
-	if (!m_vwp_shakeComponent.lock())
-	{
-		m_vwp_shakeComponent = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
-		m_vwp_shakeComponent.lock()->ShakeStart();
-		return;
-	}
+	//if (!m_vwp_shakeComponent.lock())
+	//{
+	//	m_vwp_shakeComponent = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<ShakeComponent>();
+	//	m_vwp_shakeComponent.lock()->ShakeStart();
+	//	m_vwp_shakeComponent.lock()->SetPositionAmplitude(2.0f);
+	//	return;
+	//}
 
-	float shakePower = m_vibration / m_maxVibration;
-	m_vwp_shakeComponent.lock()->SetShakePower(shakePower);
+	//float shakePower = m_vibration / m_maxVibration;
+	//m_vwp_shakeComponent.lock()->SetShakePower(shakePower * 4.0f);
 }
 
 void ButiEngine::Worker::StopShakeDrawObject()
