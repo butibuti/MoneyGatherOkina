@@ -63,7 +63,7 @@ void ButiEngine::VibrationEffectComponent::SetVibrationViolent(const float arg_v
 	}
 	else
 	{
-		scaleRate = 1.0f + vibPower * 0.3f;
+		scaleRate = 1.0f + vibPower * 3.0f;
 	}
 	m_calcScale = m_defaultScale * scaleRate;
 }

@@ -31,11 +31,6 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 		m_nextCount++;
 	}
 
-	if (m_vlp_selectAnimationTimer->Update())
-	{
-		m_isNext = true;
-	}
-
 	ScaleAnimation();
 	PlayerPikuPiku();
 	SelectAnimation();
@@ -45,7 +40,7 @@ void ButiEngine::GameOverManagerComponent::OnSet()
 {
 	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(100);
 	m_vlp_pikupikuTimer = ObjectFactory::Create<AbsoluteTimer>(ButiRandom::GetRandom(3, 30));
-	m_vlp_selectAnimationTimer = ObjectFactory::Create<AbsoluteTimer>(60);
+	m_vlp_selectAnimationTimer = ObjectFactory::Create<AbsoluteTimer>(10);
 }
 
 void ButiEngine::GameOverManagerComponent::OnShowUI()
@@ -64,6 +59,10 @@ void ButiEngine::GameOverManagerComponent::Start()
 	m_isNext = false;
 	m_isInput = false;
 	m_isSelectAnimation = false;
+	m_nextCount = 0;
+	m_selectAnimationStep = 0;
+	m_selectAnimationScale = 0;
+	m_selectAnimationRotate = 0;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::GameOverManagerComponent::Clone()
@@ -173,5 +172,66 @@ void ButiEngine::GameOverManagerComponent::SelectAnimation()
 {
 	if (!m_isSelectAnimation) { return; }
 
+	if (m_vlp_selectAnimationTimer->Update())
+	{
+		if (m_selectAnimationStep == 0)
+		{
+			//セレクトフラッシュを生成
+			m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
+			m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
+			Vector3 position;
+			if (m_isRetry)
+			{
+				position = Vector3(-410, -130, -10);
+			}
+			else
+			{
+				position = Vector3(410, -130, -10);
+			}
+			m_vwp_selectFlashEffectUI[0].lock()->transform->SetLocalPosition(position);
+			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalPosition(position);
+			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalRotationZ_Degrees(90);
 
+			m_selectAnimationRotate = 16;
+
+			m_vlp_selectAnimationTimer->ChangeCountFrame(8);
+		}
+		else if (m_selectAnimationStep == 1)
+		{
+			m_vlp_selectAnimationTimer->ChangeCountFrame(25);
+		}
+		else if(m_selectAnimationStep == 2)
+		{
+			m_isNext = true;
+		}
+
+		m_selectAnimationStep++;
+	}
+
+	//スケールを変える（小→大→小）
+	if (m_selectAnimationStep == 1)
+	{
+		m_selectAnimationScale = MathHelper::Lerp(m_selectAnimationScale, 200.0f, 0.6f);
+		m_vwp_selectFlashEffectUI[0].lock()->transform->RollLocalRotationZ_Degrees(-1);
+		m_vwp_selectFlashEffectUI[1].lock()->transform->RollLocalRotationZ_Degrees(-1);
+	}
+	else if (m_selectAnimationStep == 2)
+	{
+		m_selectAnimationScale = MathHelper::Lerp(m_selectAnimationScale, 0.0f, 0.2f);
+		m_selectAnimationRotate = MathHelper::Lerp(m_selectAnimationRotate, 1.0f, 0.08f);
+		m_vwp_selectFlashEffectUI[0].lock()->transform->RollLocalRotationZ_Degrees(-m_selectAnimationRotate);
+		m_vwp_selectFlashEffectUI[1].lock()->transform->RollLocalRotationZ_Degrees(-m_selectAnimationRotate);
+	}
+	else
+	{
+		m_selectAnimationScale = 0;
+	}
+
+	//スケールと回転の更新
+	if (m_vwp_selectFlashEffectUI[0].lock())
+	{
+		auto scale = m_vwp_selectFlashEffectUI[0].lock()->transform->GetLocalScale();
+		m_vwp_selectFlashEffectUI[0].lock()->transform->SetLocalScale(Vector3(scale.x, m_selectAnimationScale, scale.z));
+		m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalScale(Vector3(scale.x, m_selectAnimationScale, scale.z));
+	}
 }
