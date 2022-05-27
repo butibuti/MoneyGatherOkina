@@ -7,7 +7,15 @@ void ButiEngine::RotateAnimationComponent::OnUpdate()
 	{
 		SetRandomSpeed();
 	}
-	m_theta += m_motionSpeed * GameDevice::WorldSpeed;
+
+	if (m_isAbsolute)
+	{
+		m_theta += m_motionSpeed;
+	}
+	else
+	{
+		m_theta += m_motionSpeed * GameDevice::WorldSpeed;
+	}
 
 	Vector3 rotation = m_rotation;
 	switch (m_rotateAxisType)
@@ -38,8 +46,8 @@ void ButiEngine::RotateAnimationComponent::OnSet()
 	m_amplitude = 1.0f;
 	m_motionSpeed = 0.01f;
 
-	m_vlp_changeSpeedInterval = ObjectFactory::Create<RelativeTimer>(30);
-	m_vlp_changeSpeedInterval->Start();
+	m_isAbsolute = false;
+
 	m_targetSpeed = m_motionSpeed;
 	m_minTargetSpeed = 0.03f;
 	m_maxTargetSpeed = 0.3f;
@@ -59,6 +67,16 @@ void ButiEngine::RotateAnimationComponent::OnShowUI()
 
 void ButiEngine::RotateAnimationComponent::Start()
 {
+	if (!m_isAbsolute)
+	{
+		m_vlp_changeSpeedInterval = ObjectFactory::Create<RelativeTimer>(30);
+	}
+	else
+	{
+		m_vlp_changeSpeedInterval = ObjectFactory::Create<AbsoluteTimer>(30);
+	}
+
+	m_vlp_changeSpeedInterval->Start();
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::RotateAnimationComponent::Clone()

@@ -7,7 +7,15 @@ void ButiEngine::FloatMotionComponent::OnUpdate()
 	{
 		SetRandomSpeed();
 	}
-	m_theta += m_motionSpeed * GameDevice::WorldSpeed;
+	if (m_isAbsolute)
+	{
+		m_theta += m_motionSpeed;
+	}
+	else
+	{
+		m_theta += m_motionSpeed * GameDevice::WorldSpeed;
+	}
+
 	float positionY = m_position.y + std::sin(m_theta) * m_amplitude;
 	gameObject.lock()->transform->SetLocalPositionY(positionY);
 }
@@ -17,9 +25,7 @@ void ButiEngine::FloatMotionComponent::OnSet()
 	m_theta = 0.0f;
 	m_amplitude = 0.1f;
 	m_motionSpeed = 0.01f;
-
-	m_vlp_changeSpeedInterval = ObjectFactory::Create<RelativeTimer>(30);
-	m_vlp_changeSpeedInterval->Start();
+	m_isAbsolute = false;
 	m_targetSpeed = m_motionSpeed;
 	m_minTargetSpeed = 0.03f;
 	m_maxTargetSpeed = 0.3f;
@@ -55,6 +61,16 @@ void ButiEngine::FloatMotionComponent::OnShowUI()
 
 void ButiEngine::FloatMotionComponent::Start()
 {
+	if (!m_isAbsolute)
+	{
+		m_vlp_changeSpeedInterval = ObjectFactory::Create<RelativeTimer>(30);
+	}
+	else
+	{
+		m_vlp_changeSpeedInterval = ObjectFactory::Create<AbsoluteTimer>(30);
+	}
+	m_vlp_changeSpeedInterval->Start();
+
 	m_position = gameObject.lock()->transform->GetLocalPosition();
 }
 

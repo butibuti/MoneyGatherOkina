@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class WorldSpeedManager;
+
 	class GameOverManagerComponent :public GameComponent
 	{
 	public:
@@ -41,6 +43,7 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_nextTitleUI;
 		Value_weak_ptr<GameObject> m_vwp_cursorUI;
 		Value_weak_ptr<GameObject> m_vwp_selectFlashEffectUI[2];
+		Value_weak_ptr<WorldSpeedManager> m_vwp_worldSpeedManagerComponent;
 
 		Vector3 m_defaultSelectScale;
 		Vector3 m_retryScale;

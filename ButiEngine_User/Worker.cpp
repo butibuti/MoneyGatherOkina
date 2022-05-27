@@ -22,10 +22,10 @@
 #include "EnemyScaleAnimationComponent.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
-float ButiEngine::Worker::m_vibrationForce = 1.0f;
+float ButiEngine::Worker::m_vibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
 float ButiEngine::Worker::m_minVibration = 20.0f;
-float ButiEngine::Worker::m_vibrationIncrease = 0.5f;
+float ButiEngine::Worker::m_vibrationIncrease = 0.2f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 

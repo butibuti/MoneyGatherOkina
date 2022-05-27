@@ -28,6 +28,7 @@ namespace ButiEngine {
 		void SetIsRotateShake(const bool arg_isShake) { m_isRotateShake = arg_isShake; }
 		void SetIsPositionShake(const bool arg_isShake) { m_isPositionShake = arg_isShake; }
 		void SetIsScaleShake(const bool arg_isShake) { m_isScaleShake = arg_isShake; }
+		void SetIsAbsolute(const bool arg_isAbsolute) { m_isAbsolute = arg_isAbsolute; }
 		void ShakeStart();
 		void ShakeStop();
 		void SetShakePower(const float arg_amplitude);
@@ -54,6 +55,7 @@ namespace ButiEngine {
 		bool m_isRotateShake;
 		bool m_isPositionShake;
 		bool m_isScaleShake;
+		bool m_isAbsolute;
 	};
 
 }

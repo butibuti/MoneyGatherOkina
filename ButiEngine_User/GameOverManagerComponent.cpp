@@ -5,6 +5,7 @@
 #include "RotateAnimationComponent.h"
 #include "ExpansionAnimationComponent.h"
 #include "InputManager.h"
+#include "WorldSpeedManager.h"
 
 void ButiEngine::GameOverManagerComponent::OnUpdate()
 {
@@ -13,6 +14,7 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 	{
 		if (m_nextCount == 0)
 		{
+			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0);
 			m_vlp_waitTimer->ChangeCountFrame(60);
 			AppearGameOverUI();
 		}
@@ -57,6 +59,7 @@ void ButiEngine::GameOverManagerComponent::Start()
 	GetManager().lock()->AddObjectFromCereal("FadeOutUI");
 	m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 	m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
+	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
 	m_isRetry = true;
 	m_isNext = false;
 	m_isInput = false;
@@ -75,14 +78,17 @@ void ButiEngine::GameOverManagerComponent::AppearGameOverUI()
 	floatMotion_gameOverUI->SetAmplitude(15.0f);
 	floatMotion_gameOverUI->SetMotionSpeed(0.03f);
 	floatMotion_gameOverUI->SetIsRandomSpeed(false);
+	floatMotion_gameOverUI->SetIsAbsolute(true);
 	auto rotateAnimation_gameOverUI = gameOverUI.lock()->GetGameComponent<RotateAnimationComponent>();
 	rotateAnimation_gameOverUI->SetMotionSpeed(0.05f);
 	rotateAnimation_gameOverUI->SetIsRandomSpeed(false);
 	rotateAnimation_gameOverUI->SetAxisType(2);
+	rotateAnimation_gameOverUI->SetIsAbsolute(true);
 	auto expansion_gameOverUI = gameOverUI.lock()->GetGameComponent<ExpansionAnimationComponent>();
 	expansion_gameOverUI->SetScale(Vector3(1544, 360, 1));
 
 	m_vwp_gameOverPlayerUI = GetManager().lock()->AddObjectFromCereal("GameOverPlayerUI");
+	m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ShakeComponent>()->SetIsAbsolute(true);
 	auto expansion_gameOverPlayerUI = m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ExpansionAnimationComponent>();
 	expansion_gameOverPlayerUI->SetScale(Vector3(8, 8, 8));
 }
@@ -95,6 +101,7 @@ void ButiEngine::GameOverManagerComponent::AppearSelectUI()
 	floatMotion_cursorUI->SetAmplitude(10.0f);
 	floatMotion_cursorUI->SetMotionSpeed(0.1f);
 	floatMotion_cursorUI->SetIsRandomSpeed(false);
+	floatMotion_cursorUI->SetIsAbsolute(true);
 
 	m_vwp_retryUI = GetManager().lock()->AddObjectFromCereal("RetryUI");
 	m_vwp_nextTitleUI = GetManager().lock()->AddObjectFromCereal("NextTitleUI");
@@ -128,19 +135,19 @@ void ButiEngine::GameOverManagerComponent::ScaleAnimation()
 	Vector3 upScale = m_defaultSelectScale * 1.2f;
 	if (m_isRetry)
 	{
-		m_retryScale.x = MathHelper::Lerp(m_retryScale.x, upScale.x, 0.25f * GameDevice::WorldSpeed);
-		m_retryScale.y = MathHelper::Lerp(m_retryScale.y, upScale.y, 0.25f * GameDevice::WorldSpeed);
-		m_nextTitleScale.x = MathHelper::Lerp(m_nextTitleScale.x, m_defaultSelectScale.x, 0.25f * GameDevice::WorldSpeed);
-		m_nextTitleScale.y = MathHelper::Lerp(m_nextTitleScale.y, m_defaultSelectScale.y, 0.25f * GameDevice::WorldSpeed);
+		m_retryScale.x = MathHelper::Lerp(m_retryScale.x, upScale.x, 0.25f);
+		m_retryScale.y = MathHelper::Lerp(m_retryScale.y, upScale.y, 0.25f);
+		m_nextTitleScale.x = MathHelper::Lerp(m_nextTitleScale.x, m_defaultSelectScale.x, 0.25f);
+		m_nextTitleScale.y = MathHelper::Lerp(m_nextTitleScale.y, m_defaultSelectScale.y, 0.25f);
 		
 		m_vwp_cursorUI.lock()->transform->SetLocalPositionX(-625);
 	}
 	else
 	{
-		m_retryScale.x = MathHelper::Lerp(m_retryScale.x, m_defaultSelectScale.x, 0.25f * GameDevice::WorldSpeed);
-		m_retryScale.y = MathHelper::Lerp(m_retryScale.y, m_defaultSelectScale.y, 0.25f * GameDevice::WorldSpeed);
-		m_nextTitleScale.x = MathHelper::Lerp(m_nextTitleScale.x, upScale.x, 0.25f * GameDevice::WorldSpeed);
-		m_nextTitleScale.y = MathHelper::Lerp(m_nextTitleScale.y, upScale.y, 0.25f * GameDevice::WorldSpeed);
+		m_retryScale.x = MathHelper::Lerp(m_retryScale.x, m_defaultSelectScale.x, 0.25f);
+		m_retryScale.y = MathHelper::Lerp(m_retryScale.y, m_defaultSelectScale.y, 0.25f);
+		m_nextTitleScale.x = MathHelper::Lerp(m_nextTitleScale.x, upScale.x, 0.25f);
+		m_nextTitleScale.y = MathHelper::Lerp(m_nextTitleScale.y, upScale.y, 0.25f);
 
 		m_vwp_cursorUI.lock()->transform->SetLocalPositionX(185);
 	}

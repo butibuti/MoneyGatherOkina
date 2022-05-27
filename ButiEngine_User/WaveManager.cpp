@@ -191,8 +191,12 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	else if (!m_vwp_sceneChangeAnimationComponent.lock()->IsAnimation() && m_isNextScene)
 	{
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-		std::string sceneName = "StageSelect";
+		std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+		sceneManager->RemoveScene(sceneName);
+		sceneName = "StageSelect";
 		sceneManager->ChangeScene(sceneName);
+
+		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 	}
 }
 
@@ -222,6 +226,8 @@ void ButiEngine::WaveManager::GameOverAnimation()
 			sceneManager->RemoveScene(sceneName);
 			sceneManager->LoadScene(sceneName);
 			sceneManager->ChangeScene(sceneName);
+
+			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 		}
 		else
 		{
@@ -231,6 +237,8 @@ void ButiEngine::WaveManager::GameOverAnimation()
 			sceneName = "StageSelect";
 			sceneManager->LoadScene(sceneName);
 			sceneManager->ChangeScene(sceneName);
+
+			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 		}
 
 		////ウェーブの途中からやり直す
@@ -263,7 +271,7 @@ void ButiEngine::WaveManager::PauseAnimation()
 		sceneManager->LoadScene(sceneName);
 		sceneManager->ChangeScene(sceneName);
 
-		GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>()->SetSpeed(1.0f);
+		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 	}
 }
 

@@ -511,14 +511,14 @@ void ButiEngine::Enemy::MobDamegeSE()
 	}
 
 
-	if (!m_isMobDamageSE)
-	{
-		//再生
-		m_isMobDamageSE = true;
-		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
-		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
-		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Attack_Loop.wav"), indexNum, 1, true);
-	}
+	//if (!m_isMobDamageSE)
+	//{
+	//	//再生
+	//	m_isMobDamageSE = true;
+	//	m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
+	//	auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+	//	m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Attack_Loop.wav"), indexNum, 1, true);
+	//}
 }
 
 void ButiEngine::Enemy::StopMobDamageSE()

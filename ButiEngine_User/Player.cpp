@@ -21,8 +21,8 @@
 #include "SoundPlayerComponent.h"
 #include "PauseManagerComponent.h"
 
-float ButiEngine::Player::m_maxMoveSpeed = 0.25f;
-float ButiEngine::Player::m_acceleration = 0.1f;
+float ButiEngine::Player::m_maxMoveSpeed = 0.15f;
+float ButiEngine::Player::m_acceleration = 0.04f;
 float ButiEngine::Player::m_deceleration = 0.1f;
 
 std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
@@ -30,8 +30,8 @@ std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
 float ButiEngine::Player::m_vibrationForce = 5.0f;
-float ButiEngine::Player::m_vibrationIncrease = 0.1f;
-float ButiEngine::Player::m_vibrationDecrease = 0.02f;
+float ButiEngine::Player::m_vibrationIncrease = 0.22f;
+float ButiEngine::Player::m_vibrationDecrease = 0.2f;
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -432,14 +432,14 @@ void ButiEngine::Player::IncreaseVibration()
 	}
 	m_vibration = min(m_vibration, m_maxVibration);
 
-	if (!m_isVibUpSE)
-	{
-		m_isVibUpSE = true;
+	//if (!m_isVibUpSE)
+	//{
+	//	m_isVibUpSE = true;
 
-		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
-		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
-		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
-	}
+	//	m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
+	//	auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+	//	m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
+	//}
 
 	if (GetVibrationRate() >= 1.0f)
 	{

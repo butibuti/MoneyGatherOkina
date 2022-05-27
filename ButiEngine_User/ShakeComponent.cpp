@@ -22,7 +22,15 @@ void ButiEngine::ShakeComponent::OnUpdate()
 			randomRotate.y = ButiRandom::GetRandom(-5, 5);
 			randomRotate.z = ButiRandom::GetRandom(-5, 5);
 
-			m_moveRotate = randomRotate * m_amplitude * 2.0f * m_rotateAmplitude * GameDevice::WorldSpeed;
+			if (m_isAbsolute)
+			{
+				m_moveRotate = randomRotate * m_amplitude * 2.0f * m_rotateAmplitude;
+			}
+			else
+			{
+				m_moveRotate = randomRotate * m_amplitude * 2.0f * m_rotateAmplitude * GameDevice::WorldSpeed;
+			}
+			
 			m_moveRotate *= m_shakeAxis;
 		}
 
@@ -34,13 +42,28 @@ void ButiEngine::ShakeComponent::OnUpdate()
 			randomPosition.z = ButiRandom::GetRandom(-5, 5);
 			randomPosition.Normalize();
 
-			m_movePos = randomPosition * m_amplitude * 0.1f * m_positionAmplitude * GameDevice::WorldSpeed;
+			if (m_isAbsolute)
+			{
+				m_movePos = randomPosition * m_amplitude * 0.1f * m_positionAmplitude;
+			}
+			else
+			{
+				m_movePos = randomPosition * m_amplitude * 0.1f * m_positionAmplitude * GameDevice::WorldSpeed;
+			}
 		}
 
 		if (m_isScaleShake)
 		{
 			float randomScale = ButiRandom::GetRandom(-10, 10) * 0.1f;
-			m_moveScale = randomScale * m_amplitude * m_scaleAmplitude * GameDevice::WorldSpeed;
+			if (m_isAbsolute)
+			{
+				m_moveScale = randomScale * m_amplitude * m_scaleAmplitude;
+			}
+			else
+			{
+				m_moveScale = randomScale * m_amplitude * m_scaleAmplitude * GameDevice::WorldSpeed;
+			}
+
 		}
 
 	}
@@ -78,13 +101,14 @@ void ButiEngine::ShakeComponent::OnUpdate()
 
 void ButiEngine::ShakeComponent::OnSet()
 {
-	m_vlp_shakeTimer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_shakeTimer = ObjectFactory::Create<AbsoluteTimer>(2);
 	m_isShake = false;
 	m_isMove = false;
 	m_isShakeLimited = false;
 	m_isRotateShake = true;
 	m_isPositionShake = true;
 	m_isScaleShake = false;
+	m_isAbsolute = false;
 	m_currentRotate = gameObject.lock()->transform->GetLocalRotation().GetEulerOneValue_local().ToDegrees();
 	m_moveRotate = Vector3(0, 0, 0);
 	m_currentPos = gameObject.lock()->transform->GetLocalPosition();
