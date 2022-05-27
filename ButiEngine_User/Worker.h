@@ -8,6 +8,7 @@ namespace ButiEngine {
 	class SpriteParticleGenerator;
 	class Player;
 	class SoundPlayerComponent;
+	class EnemyScaleAnimationComponent;
 
 	class Worker :public GameComponent
 	{
@@ -63,6 +64,7 @@ namespace ButiEngine {
 
 		void IncreaseVibration();
 		void DecreaseVibration();
+		void ScaleAnimation();
 
 		void CreateDrawObject();
 		void SetLookAtParameter();
@@ -74,6 +76,7 @@ namespace ButiEngine {
 		static float m_minVibration;
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
+		static float m_maxScaleRate;
 
 		bool isCollision = true;
 
@@ -86,6 +89,7 @@ namespace ButiEngine {
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
 		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
+		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<Player> m_vlp_player;
 		Value_ptr<Timer> m_vlp_nearPlayerTimer;

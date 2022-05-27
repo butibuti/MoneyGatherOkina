@@ -39,10 +39,12 @@ namespace ButiEngine {
 		void DeadPauseWindowUI();
 		void DeadPauseSelectUI();
 		void ScaleAnimation();
+		void ExitUpdate();
 
 		Value_ptr<Timer> m_vlp_waitTimer;
 		Value_ptr<Timer> m_vlp_appearTimer;
 		Value_ptr<Timer> m_vlp_deadTimer;
+		Value_ptr<Timer> m_vlp_exitTimer;
 		Value_weak_ptr<WorldSpeedManager> m_vwp_worldSpeedManagerComponent;
 		Value_weak_ptr<ExpansionAnimationComponent> m_vwp_expansionPauseUIComponent;
 		Value_weak_ptr<ExpansionAnimationComponent> m_vwp_expansionPauseWindowUIComponent;
@@ -62,6 +64,7 @@ namespace ButiEngine {
 		std::int8_t m_nextCount;
 
 		bool m_isPause;
+		bool m_isPauseExit;
 		bool m_isNext;
 		bool m_isBack;
 

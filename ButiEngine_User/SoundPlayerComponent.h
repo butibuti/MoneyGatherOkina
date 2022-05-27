@@ -10,6 +10,7 @@ public:
 		return "SoundPlayerComponent";
 	}
 	void OnSet()override;
+	void OnRemove()override;
 	void OnShowUI()override;
 	void Start()override;
 	void PlayBGM(SoundTag arg_sound, const float arg_volume = 1.0f);
@@ -21,6 +22,7 @@ public:
 	void SetLoopIndex(const std::string& arg_indexName);
 	std::int32_t GetLoopIndex(const std::string& arg_indexName);
 	void DestroyLoopIndex(const std::string& arg_indexName);
+	void StopLoopSound();
 
 	Value_ptr<GameComponent> Clone()override;
 	template<class Archive>

@@ -26,7 +26,17 @@ void ButiEngine::PauseManagerComponent::OnUpdate()
 		Reset();
 		m_vlp_waitTimer->Reset();
 		m_vlp_appearTimer->Reset();
-		m_isPause = !m_isPause;
+		if (m_isPause)
+		{
+			m_isPauseExit = true;
+			//ポーズを解除する
+			DeadPauseSelectUI();
+			m_vlp_deadTimer->Start();
+		}
+		else
+		{
+			m_isPause = true;
+		}
 
 		//現在がポーズ中かどうかで処理を変える
 		if (m_isPause)
@@ -36,19 +46,13 @@ void ButiEngine::PauseManagerComponent::OnUpdate()
 			m_vwp_fadeOutComponent.lock()->SetIsFade(false);
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.0f);
 		}
-		else
-		{
-			//ポーズを解除する
-			DeadPauseSelectUI();
-			m_vlp_deadTimer->Start();
-			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
-		}
 	}
 
 	//ポーズ画面のUIを順々に追加していく処理がまとめられた関数
 	PauseUI();
 
 	ScaleAnimation();
+	ExitUpdate();
 
 	//ポーズ画面を閉じた際にフェードアウトやUIを引っ込めたり色々する場所
 	if (m_vlp_deadTimer->Update())
@@ -64,6 +68,7 @@ void ButiEngine::PauseManagerComponent::OnSet()
 	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(40);
 	m_vlp_appearTimer = ObjectFactory::Create<AbsoluteTimer>(20);
 	m_vlp_deadTimer = ObjectFactory::Create<AbsoluteTimer>(20);
+	m_vlp_exitTimer = ObjectFactory::Create<AbsoluteTimer>(20);
 }
 
 void ButiEngine::PauseManagerComponent::OnShowUI()
@@ -74,6 +79,7 @@ void ButiEngine::PauseManagerComponent::Start()
 {
 	m_vlp_waitTimer->Start();
 	m_vlp_appearTimer->Start();
+	m_vlp_exitTimer->Start();
 
 	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
 	m_vwp_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
@@ -82,7 +88,7 @@ void ButiEngine::PauseManagerComponent::Start()
 	m_vwp_fadeOutComponent.lock()->SetIsFade(true);
 	m_vwp_fadeOutComponent.lock()->SetMoveAlpha(0.1f);
 	m_vwp_fadeOutComponent.lock()->SetPositionZ(-0.051f);
-	m_vwp_fadeOutComponent.lock()->SetMaxAlpha(0.5f);
+	m_vwp_fadeOutComponent.lock()->SetMaxAlpha(0.8f);
 
 	m_vwp_pauseUI = GetManager().lock()->AddObjectFromCereal("PauseUI");
 	m_vwp_pauseWindowUI = GetManager().lock()->AddObjectFromCereal("PauseWindowUI");
@@ -103,6 +109,7 @@ void ButiEngine::PauseManagerComponent::Start()
 	floatMotion_cursorUI->SetIsRemove(true);
 
 	m_isPause = false;
+	m_isPauseExit = false;
 	Reset();
 	m_defaultSelectScale = Vector3(320, 160, 1);
 	m_currentSelectScale = Vector3(0, 0, 1);
@@ -138,12 +145,13 @@ void ButiEngine::PauseManagerComponent::InputSelect()
 		m_isNext = false;
 		if (m_isBack)
 		{
+			m_isPauseExit = true;
 			m_vlp_waitTimer->Reset();
 			m_vlp_appearTimer->Reset();
-			m_isPause = !m_isPause;
+
+			//ポーズを解除する
 			DeadPauseSelectUI();
 			m_vlp_deadTimer->Start();
-			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 		}
 	}
 }
@@ -230,4 +238,18 @@ void ButiEngine::PauseManagerComponent::ScaleAnimation()
 	m_vwp_pauseNextSelectUI.lock()->transform->SetLocalScale(m_pauseNextSelectScale);
 
 	m_vwp_cursorUI.lock()->transform->RollLocalRotationY_Degrees(3.0f);
+}
+
+void ButiEngine::PauseManagerComponent::ExitUpdate()
+{
+	if (!m_isPauseExit) { return; }
+
+	if (m_vlp_exitTimer->Update())
+	{
+		m_isPauseExit = false;
+		m_isPause = false;
+		m_vlp_exitTimer->Reset();
+
+		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+	}
 }
