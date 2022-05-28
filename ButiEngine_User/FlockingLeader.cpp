@@ -28,19 +28,19 @@ void ButiEngine::FlockingLeader::OnUpdate()
 
 	if (InputManager::IsTriggerGatherKey())
 	{
-		GatherStart();
+		//GatherStart();
 		CreateStarFlash();
 	}
 	else if (InputManager::IsReleaseGatherKey())
 	{
-		DiffusionStart();
+		//DiffusionStart();
 		CreateCircleFlash();
 	}
 
 	m_isGather = InputManager::IsPushGatherKey();
 	if (m_isGather)
 	{
-		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 20.0f, GameSettings::WORKER_COLOR);
+		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 5.0f, GameSettings::WORKER_COLOR);
 	}
 }
 

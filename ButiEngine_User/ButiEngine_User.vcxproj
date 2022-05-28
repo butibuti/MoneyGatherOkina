@@ -613,6 +613,7 @@ cd ..\</Command>
     <ClCompile Include="VignetteUIComponent.cpp" />
     <ClCompile Include="VolcanoRock.cpp" />
     <ClCompile Include="WaveManager.cpp" />
+    <ClCompile Include="WingAnimation.cpp" />
     <ClCompile Include="Worker.cpp" />
     <ClCompile Include="WorkerAttackFlashEffect.cpp" />
     <ClCompile Include="SpawnEffect.cpp" />
@@ -704,6 +705,7 @@ cd ..\</Command>
     <ClInclude Include="VignetteUIComponent.h" />
     <ClInclude Include="VolcanoRock.h" />
     <ClInclude Include="WaveManager.h" />
+    <ClInclude Include="WingAnimation.h" />
     <ClInclude Include="Worker.h" />
     <ClInclude Include="WorkerAttackFlashEffect.h" />
     <ClInclude Include="SpawnEffect.h" />

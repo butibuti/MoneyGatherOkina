@@ -75,7 +75,7 @@ void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transfo
 {
 	Particle2D particle;
 
-	std::int8_t maxParticleCount = 8;
+	std::int8_t maxParticleCount = 4;
 	for (std::int8_t i = 0; i < maxParticleCount; i++)
 	{
 		Vector3 dir;
@@ -102,7 +102,7 @@ void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transfo
 		//生成サイズ
 		particle.anglePase = 0.3f;
 		//最終サイズ
-		particle.sizePase = 8.0f;
+		particle.sizePase = 5.0f;
 		//ライフ
 		particle.life = 35;
 		//補完フレーム

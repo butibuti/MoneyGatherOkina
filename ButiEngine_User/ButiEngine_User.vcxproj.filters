@@ -99,6 +99,7 @@
     <ClCompile Include="OutSideCrystalSpawner.cpp" />
     <ClCompile Include="SpawnEffect.cpp" />
     <ClCompile Include="LoopAnimation.cpp" />
+    <ClCompile Include="WingAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="OutSideCrystalSpawner.h" />
     <ClInclude Include="SpawnEffect.h" />
     <ClInclude Include="LoopAnimation.h" />
+    <ClInclude Include="WingAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

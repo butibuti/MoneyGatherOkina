@@ -23,6 +23,7 @@
 #include "SpriteParticleGenerator.h"
 #include "SpawnEffect.h"
 #include "Worker.h"
+#include "WingAnimation.h"
 
 float ButiEngine::Player::m_defaultMaxMoveSpeed = 0.15f;
 float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.25f;
@@ -166,7 +167,9 @@ void ButiEngine::Player::OnShowUI()
 void ButiEngine::Player::Start()
 {
 	CreateDrawObject();
-	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>()->UnRegist();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(0)->UnRegist();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(1)->UnRegist();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(2)->UnRegist();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
 
@@ -286,7 +289,9 @@ void ButiEngine::Player::Revival()
 
 void ButiEngine::Player::Spawn()
 {
-	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(0)->ReRegist();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(1)->ReRegist();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(2)->ReRegist();
 
 	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
@@ -686,7 +691,11 @@ void ButiEngine::Player::StartOverheat()
 
 	m_maxMoveSpeed = m_overheatMaxMoveSpeed;
 
-	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
+	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(0);
+	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
+	meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(1);
+	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
+	meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(2);
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
 
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
@@ -784,7 +793,8 @@ void ButiEngine::Player::CreateDrawObject()
 	m_vwp_tiltFloatObject = GetManager().lock()->AddObjectFromCereal("TiltFloatObject");
 	m_vwp_tiltFloatObject.lock()->SetObjectName(m_vwp_tiltFloatObject.lock()->GetGameObjectName() + "_" + gameObject.lock()->GetGameObjectName());
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>()->SetParent(gameObject);
-	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
+	auto drawObject = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
+	drawObject.lock()->GetGameComponent<WingAnimation>()->SetParent(gameObject);
 }
 
 void ButiEngine::Player::CreateSensorObject()

@@ -23,6 +23,7 @@
 #include "GameSettings.h"
 #include "SpawnEffect.h"
 #include "WaveManager.h"
+#include "WingAnimation.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_maxVibration = 50.0f;
@@ -571,7 +572,8 @@ void ButiEngine::Worker::CreateDrawObject()
 	m_vwp_tiltFloatObject = GetManager().lock()->AddObjectFromCereal("TiltFloatObject");
 	m_vwp_tiltFloatObject.lock()->SetObjectName(m_vwp_tiltFloatObject.lock()->GetGameObjectName() + "_" + gameObject.lock()->GetGameObjectName());
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>()->SetParent(gameObject);
-	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
+	auto drawObject = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Worker");
+	drawObject.lock()->GetGameComponent<WingAnimation>()->SetParent(gameObject);
 }
 
 void ButiEngine::Worker::SetLookAtParameter()
