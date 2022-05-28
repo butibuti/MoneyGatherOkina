@@ -9,6 +9,10 @@
 
 void ButiEngine::FlockingLeader::OnUpdate()
 {
+	if (!m_vwp_waveManager.lock()->IsGameStart())
+	{
+		return;
+	}
 	m_prevPos = m_pos;
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 
@@ -19,12 +23,12 @@ void ButiEngine::FlockingLeader::OnUpdate()
 
 	if (InputManager::IsTriggerGatherKey())
 	{
-		SetWorkerSpeed();
+		GatherStart();
 		CreateStarFlash();
 	}
 	else if (InputManager::IsReleaseGatherKey())
 	{
-		SetWorkerSpeed();
+		DiffusionStart();
 		CreateCircleFlash();
 	}
 
@@ -68,13 +72,23 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FlockingLeader::Clo
 	return ObjectFactory::Create<FlockingLeader>();
 }
 
-void ButiEngine::FlockingLeader::SetWorkerSpeed()
+void ButiEngine::FlockingLeader::GatherStart()
 {
 	auto vec = Flocking::GetWorkers();
 	auto end = vec.end();
 	for (auto itr = vec.begin(); itr != end; ++itr)
 	{
-		(*itr)->GetGameComponent<Flocking>()->MaxSpeed();
+		(*itr)->GetGameComponent<Flocking>()->GatherStart();
+	}
+}
+
+void ButiEngine::FlockingLeader::DiffusionStart()
+{
+	auto vec = Flocking::GetWorkers();
+	auto end = vec.end();
+	for (auto itr = vec.begin(); itr != end; ++itr)
+	{
+		(*itr)->GetGameComponent<Flocking>()->DiffusionStart();
 	}
 }
 

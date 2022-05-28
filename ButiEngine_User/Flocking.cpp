@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "FlockingLeader.h"
 #include "InputManager.h"
+#include "Worker.h"
+#include "WaveManager.h"
 
 std::vector<ButiEngine::Value_ptr<ButiEngine::GameObject>> ButiEngine::Flocking::m_vec_workers;
 float ButiEngine::Flocking::m_gatherWeight = 0.0f;
@@ -19,10 +21,16 @@ float ButiEngine::Flocking::m_maxViewRadius = 0.1f;
 float ButiEngine::Flocking::m_nearBorder = 1.2f;
 float ButiEngine::Flocking::m_playerNearBorder = 1.7f;
 float ButiEngine::Flocking::m_leaderNearBorder = 1.7f;
-float ButiEngine::Flocking::m_maxMoveSpeed = 1.0f;
+float ButiEngine::Flocking::m_gatherStartSpeed = 0.3f;
+float ButiEngine::Flocking::m_diffusionStartSpeed = 1.0f;
 
 void ButiEngine::Flocking::OnUpdate()
 {
+	if (!m_vwp_waveManager.lock()->IsGameStart())
+	{
+		return;
+	}
+
 	SetLookSpeed();
 	//SetCohesionWeight();
 	//SetViewRadius();
@@ -70,16 +78,21 @@ void ButiEngine::Flocking::OnShowUI()
 	GUI::DragFloat("##playerNearBorder", &m_playerNearBorder, 0.01f, 0.0f, 100.0f);
 	GUI::BulletText("LeaderNearBorder");
 	GUI::DragFloat("##leaderNearBorder", &m_leaderNearBorder, 0.01f, 0.0f, 100.0f);
-	GUI::BulletText("MaxMoveSpeed");
-	GUI::DragFloat("##maxMoveSpeed", &m_maxMoveSpeed, 0.01f, 0.1f, 10.0f);
+
+	GUI::BulletText(u8"ŽûkŠJŽnŽž‚Ì‘¬“x");
+	GUI::DragFloat("##gatherSpeed", &m_gatherStartSpeed, 0.01f, 0.1f, 10.0f);
+	GUI::BulletText(u8"ŠgŽUŠJŽnŽž‚Ì‘¬“x");
+	GUI::DragFloat("##diffusionSpeed", &m_diffusionStartSpeed, 0.01f, 0.1f, 10.0f);
 }
 
 void ButiEngine::Flocking::Start()
 {
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	m_vwp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));
 	m_vwp_leader = GetManager().lock()->GetGameObject(GameObjectTag("Leader"));
 	m_vlp_playerComponent = m_vwp_player.lock()->GetGameComponent<Player>();
 	m_vlp_flockingLeader = m_vwp_leader.lock()->GetGameComponent<FlockingLeader>();
+	m_vwp_worker = gameObject.lock()->GetGameComponent<Worker>();
 
 	m_maxRotationSpeed = 0.3f;
 	m_rotationSpeed = m_maxRotationSpeed;

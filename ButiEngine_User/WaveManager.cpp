@@ -12,6 +12,7 @@
 #include "WorldSpeedManager.h"
 #include "CameraComponent.h"
 #include "SoundPlayerComponent.h"
+#include "WorkerSpawner.h"
 
 std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 10000;
 std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 10000;
@@ -22,6 +23,22 @@ void ButiEngine::WaveManager::OnUpdate()
 	{
 		m_isSceneStart = true;
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneStart();
+	}
+
+	if (!m_vwp_sceneChangeAnimationComponent.lock()->IsAnimation() && !m_isSpawnAnimation)
+	{
+		m_isSpawnAnimation = true;
+		m_vlp_spawnTimer->Start();
+	}
+
+	if (m_isSpawnAnimation)
+	{
+		SpawnAnimation();
+	}
+
+	if (!m_isGameStart)
+	{
+		return;
 	}
 
 	if (m_vwp_playerComponent.lock()->IsDead() && !m_isClear)
@@ -73,6 +90,8 @@ void ButiEngine::WaveManager::OnSet()
 		oneFrameObject = GetManager().lock()->AddObjectFromCereal("DrawObject_OneFrame");
 	}
 	m_vlp_advanceGameOverTimer = ObjectFactory::Create<AbsoluteTimer>(120);
+	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(150);
+	m_vlp_spawnIntervalTimer = ObjectFactory::Create<RelativeTimer>(50);
 }
 
 void ButiEngine::WaveManager::Start()
@@ -85,6 +104,8 @@ void ButiEngine::WaveManager::Start()
 	m_vwp_pauseManagerComponent = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
 	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+
+	m_isGameStart = false;
 	m_isClear = false;
 	m_isGameOver = false;
 	m_isAdvanceGameOver = false;
@@ -93,6 +114,9 @@ void ButiEngine::WaveManager::Start()
 	m_isGameOverButton = false;
 	m_isNextScene = false;
 	m_isSceneStart = false;
+	m_isSpawnAnimation = false;
+	m_isSpawnedPlayer = false;
+	m_isSpawnWorker = false;
 
 	m_point = 0;
 	m_clearPoint = 30;
@@ -109,9 +133,6 @@ void ButiEngine::WaveManager::Start()
 	{
 		m_clearPoint = m_stageClearPoint;
 	}
-
-	//エネミースポナーをスポーンさせる
-	//SpawnEnemySpawner();
 }
 
 void ButiEngine::WaveManager::OnShowUI()
@@ -291,6 +312,38 @@ void ButiEngine::WaveManager::StageProgressAnimation()
 
 	auto rate = (float)m_point / (float)m_clearPoint;
 	m_vwp_stageProgressUIComponent.lock()->SetRate(rate);
+}
+
+void ButiEngine::WaveManager::SpawnAnimation()
+{
+	if (m_isGameStart) { return; }
+
+	if (!m_isSpawnedPlayer)
+	{
+		m_vwp_playerComponent.lock()->Spawn();
+		m_vlp_spawnIntervalTimer->Start();
+		m_isSpawnedPlayer = true;
+	}
+	else if(m_vlp_spawnIntervalTimer->Update())
+	{
+		m_vlp_spawnIntervalTimer->Stop();
+		m_isSpawnWorker = true;
+	}
+
+	if (m_isSpawnWorker)
+	{
+		GetManager().lock()->GetGameObject("WorkerSpawner").lock()->GetGameComponent<WorkerSpawner>()->SpawnStart();
+		m_isSpawnWorker = false;
+	}
+
+	if (m_vlp_spawnTimer->Update())
+	{
+		m_vlp_spawnTimer->Stop();
+
+		m_isGameStart = true;
+		//エネミースポナーをスポーンさせる
+		SpawnEnemySpawner();
+	}
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::WaveManager::Clone()

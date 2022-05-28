@@ -563,6 +563,7 @@ cd ..\</Command>
     <ClCompile Include="LevelUpUIComponent.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
     <ClCompile Include="Loiter.cpp" />
+    <ClCompile Include="LoopAnimation.cpp" />
     <ClCompile Include="main.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release_imguiEditor|x64'">/wd4996 %(AdditionalOptions)</AdditionalOptions>
@@ -664,6 +665,7 @@ cd ..\</Command>
     <ClInclude Include="LevelUpUIComponent.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="Loiter.h" />
+    <ClInclude Include="LoopAnimation.h" />
     <ClInclude Include="MoveAnimationComponent.h" />
     <ClInclude Include="MoveRestriction.h" />
     <ClInclude Include="NumberComponent.h" />

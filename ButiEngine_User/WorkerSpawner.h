@@ -2,10 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Worker;
+
 	class WorkerSpawner :public GameComponent
 	{
 	public:
-
 		std::string GetGameComponentName()const override {
 			return "WorkerSpawner";
 		}
@@ -20,18 +21,23 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void StartTimer()
+		void SpawnStart()
 		{
-			if (m_vlp_spawnTimer)
-			{
-				m_vlp_spawnTimer->Start();
-			}
+			m_isSpawnWorker = true;
+			m_vlp_spawnTimer->Start();
 		}
 	private:
+		void RandomSpawnWorker();
 		void SpawnWorker();
+		void SetWorkerPosition();
 
 		Value_ptr<Timer> m_vlp_spawnTimer;
+		std::vector<Value_weak_ptr<Worker>> m_vec_workers;
 		std::int32_t m_spawnIntervalFrame;
+		std::int32_t m_initSpawnWorkerCount;
+
+		bool m_isSpawnWorker;
+		bool m_isSpawned;
 	};
 
 }

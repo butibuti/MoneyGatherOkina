@@ -21,6 +21,7 @@
 #include "SoundPlayerComponent.h"
 #include "PauseManagerComponent.h"
 #include "SpriteParticleGenerator.h"
+#include "SpawnEffect.h"
 
 float ButiEngine::Player::m_defaultMaxMoveSpeed = 0.15f;
 float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.25f;
@@ -38,6 +39,11 @@ float ButiEngine::Player::m_maxVibrationMagnification = 5.0f;
 
 void ButiEngine::Player::OnUpdate()
 {
+	if (!m_vwp_waveManager.lock()->IsGameStart())
+	{
+		return;
+	}
+
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		Damage();
@@ -160,6 +166,7 @@ void ButiEngine::Player::OnShowUI()
 void ButiEngine::Player::Start()
 {
 	CreateDrawObject();
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>()->UnRegist();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
 
@@ -274,6 +281,15 @@ void ButiEngine::Player::Revival()
 {
 	m_life = 3;
 	m_isDead = false;
+}
+
+void ButiEngine::Player::Spawn()
+{
+	m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+
+	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::PLAYER_COLOR);
 }
 
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)

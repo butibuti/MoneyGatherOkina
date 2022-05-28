@@ -27,7 +27,8 @@ namespace ButiEngine {
 		float GetMoveSpeed() { return (m_pos - m_prevPos).GetLength(); }
 		bool IsGather() { return m_isGather; }
 	private:
-		void SetWorkerSpeed();
+		void GatherStart();
+		void DiffusionStart();
 		//拡散エフェクト
 		void CreateCircleFlash();
 		//収縮エフェクト

@@ -33,6 +33,7 @@ namespace ButiEngine {
 		void AddPoint(const std::int32_t arg_progressPoint);
 		void AddSpawnCount();
 
+		bool IsGameStart() { return m_isGameStart; }
 		bool IsClearAnimation() { return m_isClear; }
 		bool IsGameOver() { return m_isAdvanceGameOver; }
 		bool IsEvent() { return m_isClear || m_isAdvanceGameOver; }
@@ -47,8 +48,11 @@ namespace ButiEngine {
 		void GameOverAnimation();
 		void PauseAnimation();
 		void StageProgressAnimation();
+		void SpawnAnimation();
 
 		Value_ptr<Timer> m_vlp_advanceGameOverTimer;
+		Value_ptr<Timer> m_vlp_spawnTimer;
+		Value_ptr<Timer> m_vlp_spawnIntervalTimer;
 
 		Value_weak_ptr<Player> m_vwp_playerComponent;
 		Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimationComponent;
@@ -60,6 +64,8 @@ namespace ButiEngine {
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 
 		std::string m_sceneName;
+
+		bool m_isGameStart;
 
 		//クリアしているかどうか
 		bool m_isClear;
@@ -73,6 +79,9 @@ namespace ButiEngine {
 		bool m_isGameOverButton;
 		bool m_isNextScene;
 		bool m_isSceneStart;
+		bool m_isSpawnAnimation;
+		bool m_isSpawnedPlayer;
+		bool m_isSpawnWorker;
 
 		//現在のポイント
 		std::int32_t m_point;

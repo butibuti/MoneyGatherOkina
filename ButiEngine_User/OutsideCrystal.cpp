@@ -12,7 +12,8 @@ float ButiEngine::OutsideCrystal::m_vibrationCapacity = 300.0f;
 float ButiEngine::OutsideCrystal::m_vibrationResistance = 0.0f;
 std::int32_t ButiEngine::OutsideCrystal::m_appearIntervalFrame = 300;
 std::int32_t ButiEngine::OutsideCrystal::m_spwanStalkerCount = 3;
-float ButiEngine::OutsideCrystal::m_stalerKnockBackForce = 0.7f;
+float ButiEngine::OutsideCrystal::m_stalerKnockBackForce = 0.4f;
+float ButiEngine::OutsideCrystal::m_knockBackY = 1.0f;
 
 void ButiEngine::OutsideCrystal::OnUpdate()
 {
@@ -55,6 +56,9 @@ void ButiEngine::OutsideCrystal::OnShowUI()
 
 	GUI::BulletText(u8"生成したストーカーを飛ばす力");
 	GUI::DragFloat("##stalkerKnockBackForce", &m_stalerKnockBackForce, 0.1f, 0.0f, 10.0f);
+
+	GUI::BulletText(u8"飛ばす高さ");
+	GUI::DragFloat("##knockBackY", &m_knockBackY, 0.1f, 0.0f, 10.0f);
 }
 
 void ButiEngine::OutsideCrystal::Start()
@@ -125,7 +129,7 @@ void ButiEngine::OutsideCrystal::SpawnStalker()
 		stalker.lock()->GetGameComponent<LookAtComponent>()->SetIsActive(false);
 
 		Vector3 dir = stalkerCenter->GetFront();
-		dir.y = 4.0f;
+		dir.y = m_knockBackY;
 		dir.Normalize();
 
 		stalker.lock()->AddGameComponent<KnockBack>(dir, m_stalerKnockBackForce, true, 300);

@@ -22,6 +22,7 @@
 #include "EnemyScaleAnimationComponent.h"
 #include "GameSettings.h"
 #include "SpawnEffect.h"
+#include "WaveManager.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
@@ -34,6 +35,11 @@ float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
+	if (!m_vwp_waveManager.lock()->IsGameStart())
+	{
+		return;
+	}
+
 	if (m_isNearPlayer)
 	{
 		OnNearPlayer();
@@ -43,6 +49,16 @@ void ButiEngine::Worker::OnUpdate()
 		OnRupture();
 	}
 
+	//if (m_isVibrate)
+	//{
+
+	//	//ShakeDrawObject();
+	//}
+	//else
+	//{
+	//	StopVibrationEffect();
+	//	//StopShakeDrawObject();
+	//}
 	if (m_vwp_vibrationEffect.lock() == nullptr)
 	{
 		auto transform = gameObject.lock()->transform;
@@ -61,18 +77,6 @@ void ButiEngine::Worker::OnUpdate()
 		m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, false);
 		m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetWorldPosition());
 	}
-
-	//if (m_isVibrate)
-	//{
-
-	//	//ShakeDrawObject();
-	//}
-	//else
-	//{
-	//	StopVibrationEffect();
-	//	//StopShakeDrawObject();
-	//}
-
 	ShakeDrawObject();
 
 	if (m_isAttack)
@@ -156,6 +160,10 @@ void ButiEngine::Worker::OnShowUI()
 
 void ButiEngine::Worker::Start()
 {
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+
+	gameObject.lock()->transform->SetWorldPostionY(-1000.0f);
+
 	CreateDrawObject();
 
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
@@ -171,10 +179,6 @@ void ButiEngine::Worker::Start()
 
 	/*auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
 	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());*/
-
-	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
-	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
-	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
@@ -194,16 +198,25 @@ ButiEngine::Value_weak_ptr<ButiEngine::GameObject> ButiEngine::Worker::GetDrawOb
 	return m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject();
 }
 
+void ButiEngine::Worker::Spawn()
+{
+	gameObject.lock()->transform->SetWorldPostionY(0.0f);
+
+	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
+
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
+	Vector3 front = gameObject.lock()->transform->GetFront();
+	front.y = 0.0f;
+	gameObject.lock()->transform->SetLookAtRotation(pos + front * 100.0f);
+	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(pos + front * 100.0f);
+}
+
 void ButiEngine::Worker::Dead()
 {
 	m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
 	m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
-
-	auto workerSpawner = GetManager().lock()->GetGameObject(GameObjectTag("WorkerSpawner")).lock()->GetGameComponent<WorkerSpawner>();
-	if (workerSpawner)
-	{
-		workerSpawner->StartTimer();
-	}
 
 	auto stick = gameObject.lock()->GetGameComponent<Stick>();
 	if (stick)
@@ -483,7 +496,6 @@ void ButiEngine::Worker::ReturnFlock()
 		tiltMotion->SetIsActive(true);
 	}
 
-	auto a = gameObject.lock()->transform->GetLocalPosition().y;
 	gameObject.lock()->transform->SetLocalPositionY(0.0f);
 
 	m_isAttack = false;
@@ -565,6 +577,7 @@ void ButiEngine::Worker::SetLookAtParameter()
 {
 	m_vlp_lookAt = gameObject.lock()->GetGameComponent<LookAtComponent>();
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
+	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront() * 100.0f);
 	m_vlp_lookAt->SetSpeed(0.1f);
 }
 

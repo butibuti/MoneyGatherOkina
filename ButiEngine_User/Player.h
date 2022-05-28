@@ -71,6 +71,7 @@ namespace ButiEngine {
 
 		void Dead();
 		void Revival();
+		void Spawn();
 		void AddNearEnemyCount() { m_nearEnemyCount++; }
 		void AddNearWorkerCount() { m_nearWorkerCount++; }
 		void KnockBack(const Vector3& arg_velocity);

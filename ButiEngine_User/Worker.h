@@ -9,6 +9,7 @@ namespace ButiEngine {
 	class Player;
 	class SoundPlayerComponent;
 	class EnemyScaleAnimationComponent;
+	class WaveManager;
 
 	class Worker :public GameComponent
 	{
@@ -44,6 +45,7 @@ namespace ButiEngine {
 
 		Value_weak_ptr<GameObject> GetDrawObject();
 
+		void Spawn();
 		void SetIsVibrate(const bool arg_isVibrate) { m_isVibrate = arg_isVibrate; }
 
 		void Dead();
@@ -94,6 +96,7 @@ namespace ButiEngine {
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<Player> m_vlp_player;
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 		Value_ptr<Timer> m_vlp_nearPlayerTimer;
 		Value_ptr<Timer> m_vlp_ruptureTimer;
 		Value_ptr<Timer> m_vlp_attackFlashTimer;

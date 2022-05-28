@@ -27,6 +27,7 @@ void ButiEngine::SpriteParticleGenerator::Start()
 		arg_particle.position = MathHelper::LerpPosition(p1, p2, progress);
 		//arg_particle.position = MathHelper::LerpPosition(arg_particle.position, Vector3Const::Zero, arg_particle.velocity.x);
 		arg_particle.size = MathHelper::Lerp(arg_particle.anglePase, arg_particle.sizePase, progress);
+		//arg_particle.color = MathHelper::LerpPosition(arg_particle.color, arg_particle.colorPase, 0.03f);
 		arg_particle.life -= 1.0f * GameDevice::WorldSpeed;
 		arg_particle.frame += 1.0f * GameDevice::WorldSpeed;
 		if ((arg_particle.position).GetLength() < 0.5f) {
@@ -108,7 +109,7 @@ void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transfo
 		particle.angle = 30;
 		//F
 		particle.color = arg_color;
-		//particle.colorPase = Vector4(0.0f, -0.03f);
+		particle.colorPase = GameSettings::PLAYER_COLOR;
 
 		std::int8_t rand = ButiRandom::GetInt(1, 20);
 		if (rand <= 1)

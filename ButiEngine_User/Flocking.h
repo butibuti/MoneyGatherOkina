@@ -4,6 +4,9 @@ namespace ButiEngine {
 
 	class Player;
 	class FlockingLeader;
+	class Worker;
+	class WaveManager;
+
 	class Flocking :public GameComponent
 	{
 	public:
@@ -26,7 +29,8 @@ namespace ButiEngine {
 		static std::vector<Value_ptr<GameObject>> GetWorkers() { return m_vec_workers; }
 		static void ResetWorkers() { m_vec_workers.clear(); }
 		
-		void MaxSpeed() { m_moveSpeed = m_maxMoveSpeed; }
+		void GatherStart() { m_moveSpeed = m_gatherStartSpeed; }
+		void DiffusionStart() { m_moveSpeed = m_diffusionStartSpeed; }
 		void AddFlocking();
 		void RemoveFlocking();
 	private:
@@ -61,13 +65,16 @@ namespace ButiEngine {
 		static float m_nearBorder;
 		static float m_playerNearBorder;
 		static float m_leaderNearBorder;
-		static float m_maxMoveSpeed;
+		static float m_gatherStartSpeed;
+		static float m_diffusionStartSpeed;
 
 		Value_weak_ptr<GameObject> m_vwp_player;
 		Value_weak_ptr<GameObject> m_vwp_leader;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<Player> m_vlp_playerComponent;
 		Value_ptr<FlockingLeader> m_vlp_flockingLeader;
+		Value_weak_ptr<Worker> m_vwp_worker;
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 		float m_maxRotationSpeed;
 		float m_rotationSpeed;
 		float m_playerMaxMoveSpeed;
