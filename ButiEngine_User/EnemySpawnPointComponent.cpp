@@ -20,7 +20,7 @@ void ButiEngine::EnemySpawnPointComponent::OnUpdate()
 	}
 	else if(m_vwp_enemyObject.lock()) {
 		for (auto& info : m_list_drawObjectDrawInformation) {
-			info.lock()->Get().ExInfo.x=1.0- m_vlp_brightOffTimer->GetPercent();
+			info.lock()->Get().ExInfo.x=Easing::EaseIn( 1.0- m_vlp_brightOffTimer->GetPercent());
 		}
 	}
 
@@ -63,7 +63,7 @@ void ButiEngine::EnemySpawnPointComponent::OnUpdate()
 
 
 		for (auto& drawInfo : m_list_appearanceDrawInformation) {
-			drawInfo.lock()->Get().ExInfo.x = m_vlp_spawnAnimationTimer->GetPercent();
+			drawInfo.lock()->Get().ExInfo.x =Easing::EaseOut( m_vlp_spawnAnimationTimer->GetPercent());
 		}
 	}
 }
