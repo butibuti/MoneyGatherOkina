@@ -21,6 +21,7 @@ namespace ButiEngine {
 		}
 
 	private:
+		//EnemySpawnData
 		std::int32_t m_volAndStageNum[2];
 		std::int32_t m_spawnerIndex;
 		std::int32_t m_maxSpawnCount;
@@ -30,6 +31,13 @@ namespace ButiEngine {
 		float m_endMinSpawnFrame;
 		float m_startWaitFrame;
 		float m_lastIntervalReachFrame;
+
+		//HeatUpData
+		bool m_isHeatUp;
+		std::int32_t m_maxHeatUpSpawnCount;
+		float m_maxSpawnRate;
+		float m_minSpawnRate;
+		float m_changeInterval;
 	};
 
 	struct EnemySpawnData {
@@ -39,8 +47,8 @@ namespace ButiEngine {
 		float m_endMinSpawnFrame;
 		float m_startWaitFrame;
 		float m_lastIntervalReachFrame;
-		//std::int32_t m_spawnerIndex;
-		//std::int32_t m_maxSpawnCount;
+		std::int32_t m_spawnerIndex;
+		std::int32_t m_maxSpawnCount;
 
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -51,14 +59,15 @@ namespace ButiEngine {
 			archive(m_endMinSpawnFrame);
 			archive(m_startWaitFrame);
 			archive(m_lastIntervalReachFrame);
-			//archive(m_spawnerIndex);
-			//archive(m_maxSpawnCount);
+			archive(m_spawnerIndex);
+			archive(m_maxSpawnCount);
 		}
 	};
 
-	struct StalkerHeatUpData
+	struct HeatUpData
 	{
-		std::int32_t m_maxSpawnCount;
+		bool m_isHeatUp;
+		std::int32_t m_maxHeatUpSpawnCount;
 		float m_maxSpawnRate;
 		float m_minSpawnRate;
 		float m_changeInterval;
@@ -66,7 +75,8 @@ namespace ButiEngine {
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
-			archive(m_maxSpawnCount);
+			archive(m_isHeatUp);
+			archive(m_maxHeatUpSpawnCount);
 			archive(m_maxSpawnRate);
 			archive(m_minSpawnRate);
 			archive(m_changeInterval);
@@ -75,6 +85,8 @@ namespace ButiEngine {
 
 	void OutputCereal(const EnemySpawnData& arg_vec_data, const std::string& arg_fileName);
 	void InputCereal(EnemySpawnData& arg_ref_output_vec_data, const std::string& arg_fileName);
+	void OutputCereal(const HeatUpData& arg_vec_data, const std::string& arg_fileName);
+	void InputCereal(HeatUpData& arg_ref_output_vec_data, const std::string& arg_fileName);
 
 }
 

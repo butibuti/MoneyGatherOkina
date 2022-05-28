@@ -23,6 +23,7 @@ namespace ButiEngine {
 		}
 		void SetType(const std::int8_t arg_num) { m_spawnType = arg_num; }
 		void SetPosition(const Vector3& arg_position) { m_position = arg_position; }
+		void SetEnemyTag(const std::string& arg_enemyTag) { m_enemyTag = arg_enemyTag; }
 		void SetEnemyObject(Value_weak_ptr<GameObject> arg_vwp_enemy);
 		Value_weak_ptr<GameObject>GetEnemyObject()const {
 			return m_vwp_enemyObject;
@@ -34,6 +35,7 @@ namespace ButiEngine {
 		Vector3 m_position;
 		float m_diamondTargetScale,m_enemyDirection,m_effectProgress,m_effectTargetScale;
 		std::int8_t m_spawnType;
+		std::string m_enemyTag;
 	};
 }
 

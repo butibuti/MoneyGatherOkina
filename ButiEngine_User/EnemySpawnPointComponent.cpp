@@ -48,6 +48,8 @@ void ButiEngine::EnemySpawnPointComponent::OnUpdate()
 		m_vwp_enemyObject.lock()->transform->SetLocalPosition(m_position);
 		m_vwp_enemyObject.lock()->transform->SetLocalRotationY_Degrees(m_enemyDirection);
 		m_vwp_enemyObject.lock()->GetGameComponent<Enemy>()->SetAppearanceEffect(gameObject);
+		auto objectTag = GameObjectTag(m_enemyTag);
+		m_vwp_enemyObject.lock()->SetGameObjectTag(objectTag);
 		//m_vlp_diamond.lock()->SetIsRemove(true);
 		m_vwp_appearnceObject.lock()->SetIsRemove(true);
 		m_vlp_brightOffTimer->Start();//
@@ -72,6 +74,7 @@ void ButiEngine::EnemySpawnPointComponent::OnSet()
 	m_vlp_brightOffTimer = ObjectFactory::Create<RelativeTimer>(30);
 	m_position = Vector3(0, 0, 0);
 	m_spawnType = 0;
+	m_enemyTag = "Fly_0";
 }
 
 void ButiEngine::EnemySpawnPointComponent::Start()
@@ -88,7 +91,7 @@ void ButiEngine::EnemySpawnPointComponent::Start()
 	case 0: //ƒnƒG
 		m_diamondTargetScale = 0.8f;
 		m_effectTargetScale = 1.5f;
-		objectTag = GameObjectTag("Fly");
+		objectTag = GameObjectTag(m_enemyTag);
 		m_vwp_appearnceObject= GetManager().lock()->AddObjectFromCereal("AppearnceEffect_Fly");
 
 
@@ -122,6 +125,7 @@ void ButiEngine::EnemySpawnPointComponent::Start()
 	m_vwp_appearnceObject.lock()->transform->SetLocalRotationY_Degrees(m_enemyDirection+180);
 	m_vwp_appearnceObject.lock()->transform->SetLocalScale(Vector3(m_effectTargetScale));
 	m_vwp_appearnceObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform,true);
+	m_vwp_appearnceObject.lock()->SetGameObjectTag(objectTag);
 	//m_vlp_diamond.lock()->SetGameObjectTag(objectTag);
 }
 

@@ -19,6 +19,14 @@ void ButiEngine::EnemySpawner::OnUpdate()
 		return;
 	}
 
+	if (m_isHeatUpActive)
+	{
+		if (m_vlp_changeTimer->Update())
+		{
+			m_isHeatUp = !m_isHeatUp;
+		}
+	}
+
 	//出現間隔を時間経過に応じて短くしていく
 	if (m_currentMaxSpawnFrame > m_endMaxSpawnFrame)
 	{
@@ -49,45 +57,51 @@ void ButiEngine::EnemySpawner::OnSet()
 {
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_changeTimer = ObjectFactory::Create<RelativeTimer>();
 	m_stageNumber = "0";
 	m_spawnType = 0;
+	m_spawnerIndex = 0;
 }
 
 void ButiEngine::EnemySpawner::Start()
 {
 	m_vlp_spawnTimer->Start();
 	m_vlp_waitTimer->Start();
+	m_vlp_changeTimer->Start();
 	m_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	m_maxEnemyFieldCount = 0;
+	m_maxHeatEnemyFieldCount = 0;
 	m_currentMaxSpawnFrame = 0;
 	m_currentMinSpawnFrame = 0;
 	m_startMaxSpawnFrame = 400;
 	m_endMaxSpawnFrame = 300;
 	m_startMinSpawnFrame = 300;
 	m_endMinSpawnFrame = 200;
-	m_startWaitFrame = 200;
+	m_startWaitFrame = 300;
 	m_lastIntervalReachFrame = 3000;
 	m_reachShorteningMaxFrame = 0;
 	m_reachShorteningMinFrame = 0;
 	m_randomSpawnFrame = 0;
+	m_maxSpawnRate = 1;
+	m_minSpawnRate = 1;
+	m_changeInterval = 300;
 	m_isOnce = false;
+	m_isHeatUp = false;
+	m_isHeatUpActive = false;
 
 	switch (m_spawnType)
 	{
 	case 0: //ハエ
-		m_maxEnemyFieldCount = 7;
-		m_tag = "Fly";
+		m_tag = "Fly_" + std::to_string(m_spawnerIndex);
 		break;
 	case 1: //ストーカー
-		m_maxEnemyFieldCount = 4;
-		m_tag = "Stalker";
+		m_tag = "Stalker_" + std::to_string(m_spawnerIndex);
 		break;
 	case 2: //キバ
-		m_maxEnemyFieldCount = 3;
-		m_tag = "Kiba";
+		m_tag = "Kiba_" + std::to_string(m_spawnerIndex);
 		break;
 	case 3: //カザン
-		m_maxEnemyFieldCount = 2;
-		m_tag = "Volcano";
+		m_tag = "Volcano_" + std::to_string(m_spawnerIndex);
 		break;
 	}
 }
@@ -97,28 +111,34 @@ void ButiEngine::EnemySpawner::OnShowUI()
 	switch (m_spawnType)
 	{
 	case 0: //ハエ
-		GUI::BulletText("FlySpawner");
+		GUI::BulletText("FlySpawner_" + std::to_string(m_spawnerIndex));
 		break;
 	case 1: //ストーカー
-		GUI::BulletText("StalkerSpawner");
+		GUI::BulletText("StalkerSpawner_" + std::to_string(m_spawnerIndex));
 		break;
 	case 2: //キバ
-		GUI::BulletText("KibaSpawner");
+		GUI::BulletText("KibaSpawner_" + std::to_string(m_spawnerIndex));
 		break;
 	case 3: //カザン
-		GUI::BulletText("VolcanoSpawner");
+		GUI::BulletText("VolcanoSpawner_" + std::to_string(m_spawnerIndex));
 		break;
 	default:
 		break;
 	}
 
+	GUI::Text("------CurrentParam------");
+	GUI::Text("CurrentMaxSpawnFrame:%f", m_currentMaxSpawnFrame);
+	GUI::Text("CurrentMinSpawnFrame:%f", m_currentMinSpawnFrame);
+	GUI::BulletText("IsHeatUp_Current");
+	GUI::Checkbox("##IsHeatUp_Current", m_isHeatUp);
+
+	GUI::Text("------Common------");
+	GUI::BulletText("StageNum(0-1)");
+	GUI::InputInt("##StageData", m_inputStageNumber);
+
+	GUI::Text("------EnemySpawnData------");
 	GUI::BulletText("MaxFieldSpawnCount");
 	GUI::InputInt("##maxFieldCount", m_maxEnemyFieldCount);
-	
-	GUI::BulletText("CurrentMaxSpawnFrame");
-	GUI::BulletText(m_currentMaxSpawnFrame);
-	GUI::BulletText("CurrentMinSpawnFrame");
-	GUI::BulletText(m_currentMinSpawnFrame);
 
 	GUI::BulletText("StartWaitFrame");
 	if (GUI::DragFloat("##StartWaitFrame", m_startWaitFrame, 10,-10, 12000))
@@ -133,26 +153,22 @@ void ButiEngine::EnemySpawner::OnShowUI()
 	GUI::BulletText("StartMaxSpawnFrame");
 	if (GUI::DragFloat("##StartMaxSpawnFrame", m_startMaxSpawnFrame, 10,0, 12000))
 	{
-		m_vlp_waitTimer->ChangeCountFrame(m_startMaxSpawnFrame);
 		FixShorteningFrame();
 	}
 	GUI::BulletText("EndMaxSpawnFrame");
 	if (GUI::DragFloat("##EndMaxSpawnFrame", m_endMaxSpawnFrame, 10,0, 12000))
 	{
-		m_vlp_waitTimer->ChangeCountFrame(m_endMaxSpawnFrame);
 		FixShorteningFrame();
 	}
 
 	GUI::BulletText("StartMinSpawnFrame");
 	if (GUI::DragFloat("##StartMinSpawnFrame", m_startMinSpawnFrame, 10,0, 12000))
 	{
-		m_vlp_waitTimer->ChangeCountFrame(m_startMinSpawnFrame);
 		FixShorteningFrame();
 	}
 	GUI::BulletText("EndMinSpawnFrame");
 	if (GUI::DragFloat("##EndMinSpawnFrame", m_endMinSpawnFrame, 10,0, 12000))
 	{
-		m_vlp_waitTimer->ChangeCountFrame(m_endMinSpawnFrame);
 		FixShorteningFrame();
 	}
 
@@ -162,10 +178,7 @@ void ButiEngine::EnemySpawner::OnShowUI()
 		FixShorteningFrame();
 	}
 
-	GUI::BulletText("StageNum(1-3)");
-	GUI::InputInt("##StageData", m_inputStageNumber);
-
-	if (GUI::Button("OutputData"))
+	if (GUI::Button("Output_EnemyData"))
 	{
 		EnemySpawnData outputDatas;
 		outputDatas.m_startWaitFrame = m_startWaitFrame;
@@ -175,7 +188,36 @@ void ButiEngine::EnemySpawner::OnShowUI()
 		outputDatas.m_endMinSpawnFrame = m_endMinSpawnFrame;
 		outputDatas.m_lastIntervalReachFrame = m_lastIntervalReachFrame;
 
-		std::string outputFileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + std::to_string(m_inputStageNumber) + ".enemyData";
+		std::string outputFileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + std::to_string(m_inputStageNumber) + "_" + std::to_string(m_spawnerIndex) + ".enemyData";
+		OutputCereal(outputDatas, outputFileName);
+	}
+
+	GUI::Text("------HeatUpData------");
+	GUI::BulletText("IsHeatUp_Data");
+	GUI::Checkbox("##IsHeatUp_Data", m_isHeatUpActive);
+
+	GUI::BulletText("MaxHeatUpSpawnCount");
+	GUI::InputInt("##MaxHeatUpSpawnCount", m_maxHeatEnemyFieldCount);
+
+	GUI::BulletText("MaxSpawnRate");
+	GUI::DragFloat("##MaxSpawnRate", m_maxSpawnRate, 0.02f, 0, 100);
+
+	GUI::BulletText("MinSpawnRate");
+	GUI::DragFloat("##MinSpawnRate", m_minSpawnRate, 0.02f, 0, 100);
+
+	GUI::BulletText("ChangeInterval");
+	GUI::DragFloat("##ChangeInterval", m_changeInterval, 10, 0, 6000);
+
+	if (GUI::Button("Output_HeatUpData"))
+	{
+		HeatUpData outputDatas;
+		outputDatas.m_isHeatUp = m_isHeatUpActive;
+		outputDatas.m_maxHeatUpSpawnCount = m_maxHeatEnemyFieldCount;
+		outputDatas.m_maxSpawnRate = m_maxSpawnRate;
+		outputDatas.m_minSpawnRate = m_minSpawnRate;
+		outputDatas.m_changeInterval = m_changeInterval;
+
+		std::string outputFileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + std::to_string(m_inputStageNumber) + "_" + std::to_string(m_spawnerIndex) + ".heatData";
 		OutputCereal(outputDatas, outputFileName);
 	}
 }
@@ -188,7 +230,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::EnemySpawner::Clone
 void ButiEngine::EnemySpawner::OnceUpdate()
 {
 	std::string filePath = "Resources/";
-	std::string fileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + m_stageNumber + ".enemyData";
+	std::string fileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + m_stageNumber + "_" + std::to_string(m_spawnerIndex) + ".enemyData";
 	EnemySpawnData vec_enemySpawnDatas;
 
 	if (Util::ExistFile(filePath + fileName))
@@ -202,6 +244,23 @@ void ButiEngine::EnemySpawner::OnceUpdate()
 		m_lastIntervalReachFrame = vec_enemySpawnDatas.m_lastIntervalReachFrame;
 	}
 
+	filePath = "Resources/";
+	fileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + m_stageNumber + "_" + std::to_string(m_spawnerIndex) + ".heatData";
+	HeatUpData vec_heatUpDatas;
+
+	if (Util::ExistFile(filePath + fileName))
+	{
+		InputCereal(vec_heatUpDatas, fileName);
+		m_isHeatUpActive = vec_heatUpDatas.m_isHeatUp;
+		if (m_isHeatUpActive)
+		{
+			m_maxSpawnRate = vec_heatUpDatas.m_maxSpawnRate;
+			m_minSpawnRate = vec_heatUpDatas.m_minSpawnRate;
+			m_changeInterval = vec_heatUpDatas.m_changeInterval;
+			m_maxHeatEnemyFieldCount = vec_heatUpDatas.m_maxHeatUpSpawnCount;
+		}
+	}
+
 	FixShorteningFrame();
 
 	m_currentMaxSpawnFrame = m_startMaxSpawnFrame;
@@ -210,18 +269,26 @@ void ButiEngine::EnemySpawner::OnceUpdate()
 	SetRandomSpawnFrame();
 
 	m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
+	m_vlp_changeTimer->ChangeCountFrame(m_changeInterval);
 }
 
 void ButiEngine::EnemySpawner::SpawnEnemy()
 {
 	//ステージクリア上限数出現していたらスポーンさせない
-	if (m_waveManagerComponent.lock()->GetSpawnCount() >= m_waveManagerComponent.lock()->GetMaxEnemyCount()) { return; }
+	if (m_waveManagerComponent.lock()->GetSpawnCount() >= m_waveManagerComponent.lock()->GetClearPoint()) { return; }
 	
 	auto objects = GetManager().lock()->GetGameObjects(GameObjectTag(m_tag));
 	std::int32_t objectsCount = objects.size();
 	
 	//〇体以上フィールドにいる場合は出現させない
-	if (objectsCount >= m_maxEnemyFieldCount) { return; }
+	if (m_isHeatUp)
+	{
+		if (objectsCount >= m_maxHeatEnemyFieldCount) { return; }
+	}
+	else
+	{
+		if (objectsCount >= m_maxEnemyFieldCount) { return; }
+	}
 
 	//敵を追加したらカウントを増やす
 	m_waveManagerComponent.lock()->AddSpawnCount();
@@ -269,6 +336,7 @@ void ButiEngine::EnemySpawner::SpawnEnemy()
 	auto spawnPointComponent = spawnPoint.lock()->GetGameComponent<EnemySpawnPointComponent>();
 	spawnPointComponent->SetType(m_spawnType);
 	spawnPointComponent->SetPosition(randomPosition);
+	spawnPointComponent->SetEnemyTag(m_tag);
 }
 
 void ButiEngine::EnemySpawner::FixShorteningFrame()
@@ -279,7 +347,19 @@ void ButiEngine::EnemySpawner::FixShorteningFrame()
 
 void ButiEngine::EnemySpawner::SetRandomSpawnFrame()
 {
-	m_randomSpawnFrame = ButiRandom::GetInt(m_currentMinSpawnFrame, m_currentMaxSpawnFrame);
+	if (m_isHeatUp)
+	{
+		auto maxRate = 1.0f / m_maxSpawnRate;
+		auto minRate = 1.0f / m_minSpawnRate;
+		auto calcMaxFrame = m_currentMaxSpawnFrame * maxRate;
+		auto calcMinFrame = m_currentMinSpawnFrame * minRate;
+		m_randomSpawnFrame = ButiRandom::GetInt(calcMinFrame, calcMaxFrame);
+	}
+	else
+	{
+		m_randomSpawnFrame = ButiRandom::GetInt(m_currentMinSpawnFrame, m_currentMaxSpawnFrame);
+	}
+
 	m_vlp_spawnTimer->ChangeCountFrame(m_randomSpawnFrame);
 }
 

@@ -159,18 +159,26 @@ void ButiEngine::WaveManager::SpawnEnemySpawner()
 
 
 	//スポナーを生成
-	auto flySpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	flySpawner->SetType(0);
-	flySpawner->SetStageNum(stageNum);
-	auto stalkerSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	stalkerSpawner->SetType(1);
-	stalkerSpawner->SetStageNum(stageNum);
-	auto kibaSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	kibaSpawner->SetType(2);
-	kibaSpawner->SetStageNum(stageNum);
-	auto volcanoSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
-	volcanoSpawner->SetType(3);
-	volcanoSpawner->SetStageNum(stageNum);
+	for (std::int8_t i = 0; i < 4; i++)
+	{
+		auto flySpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+		flySpawner->SetType(0);
+		flySpawner->SetStageNum(stageNum);
+		flySpawner->SetSpawnerIndex(i);
+		auto stalkerSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+		stalkerSpawner->SetType(1);
+		stalkerSpawner->SetStageNum(stageNum);
+		stalkerSpawner->SetSpawnerIndex(i);
+		auto kibaSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+		kibaSpawner->SetType(2);
+		kibaSpawner->SetStageNum(stageNum);
+		kibaSpawner->SetSpawnerIndex(i);
+		auto volcanoSpawner = GetManager().lock()->AddObjectFromCereal("EnemySpawner").lock()->GetGameComponent<EnemySpawner>();
+		volcanoSpawner->SetType(3);
+		volcanoSpawner->SetStageNum(stageNum);
+		volcanoSpawner->SetSpawnerIndex(i);
+	}
+
 }
 
 void ButiEngine::WaveManager::StageClearAnimation()

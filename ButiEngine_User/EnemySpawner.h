@@ -24,6 +24,7 @@ namespace ButiEngine {
 
 		void SetType(const std::int8_t arg_num) { m_spawnType = arg_num; }
 		void SetStageNum(const std::string arg_num) { m_stageNumber = arg_num; }
+		void SetSpawnerIndex(const std::int8_t arg_index) { m_spawnerIndex = arg_index; }
 
 	private:
 		void OnceUpdate();
@@ -35,10 +36,13 @@ namespace ButiEngine {
 		Value_weak_ptr<WaveManager> m_waveManagerComponent;
 		Value_ptr<Timer> m_vlp_spawnTimer;
 		Value_ptr<Timer> m_vlp_waitTimer;
+		Value_ptr<Timer> m_vlp_changeTimer;
 		
 		std::int32_t m_maxEnemyFieldCount;
+		std::int32_t m_maxHeatEnemyFieldCount;
 		std::int32_t m_inputStageNumber;
 		std::int8_t m_spawnType;
+		std::int8_t m_spawnerIndex;
 		std::string m_stageNumber;
 		std::string m_tag;
 
@@ -55,7 +59,13 @@ namespace ButiEngine {
 		float m_reachShorteningMaxFrame;
 		float m_reachShorteningMinFrame;
 
+		float m_maxSpawnRate;
+		float m_minSpawnRate;
+		float m_changeInterval;
+
 		bool m_isOnce;
+		bool m_isHeatUp;
+		bool m_isHeatUpActive;
 	};
 }
 
