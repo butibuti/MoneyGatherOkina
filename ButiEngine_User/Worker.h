@@ -52,6 +52,7 @@ namespace ButiEngine {
 		void Rupture(const Vector3& arg_dir);
 		void Predated(Value_weak_ptr<GameObject> arg_vwp_other);
 		void CreateAttackFlashEffect();
+		void RemoveVibration(const float arg_vibration) { m_vibration -= arg_vibration; }
 	private:
 		void OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);

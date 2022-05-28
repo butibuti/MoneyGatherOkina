@@ -45,13 +45,13 @@ void ButiEngine::Sensor::OnCollisionFlocking(Value_weak_ptr<GameObject> arg_vwp_
 	auto worker = arg_vwp_other.lock()->GetGameComponent<Worker>();
 	if (!worker) { return; }
 
-	//プレイヤーの振動値がモブハチの振動値より小さかったら振動値を増やす
-	float playerVibration = m_vwp_player.lock()->GetVibration();
+	//モブハチの振動値がプレイヤーの振動値の上昇量より大きかったら振動値を増やす
+	float playerVibrationIncrease = m_vwp_player.lock()->GetVibrationIncrease();
 	float workerVibration = worker->GetVibration();
 
-	if (playerVibration <= workerVibration)
+	if (workerVibration > playerVibrationIncrease)
 	{
-		m_vwp_player.lock()->AddNearWorkerCount();
+		m_vwp_player.lock()->AddNearWorker(worker);
 	}
 
 	m_vwp_player.lock()->SetStrongestNearWorkerVibration(workerVibration);

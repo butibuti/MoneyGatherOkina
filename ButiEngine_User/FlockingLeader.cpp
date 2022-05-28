@@ -13,6 +13,11 @@ void ButiEngine::FlockingLeader::OnUpdate()
 	{
 		return;
 	}
+	if (!m_isDraw)
+	{
+		gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		m_isDraw = true;
+	}
 	m_prevPos = m_pos;
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 
@@ -61,9 +66,11 @@ void ButiEngine::FlockingLeader::Start()
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	m_vwp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManagerComponent>();
 	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SphereParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	gameObject.lock()->GetGameComponent<MeshDrawComponent>()->UnRegist();
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 	m_prevPos = m_pos;
 
+	m_isDraw = false;
 	m_isGather = true;
 }
 

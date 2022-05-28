@@ -327,6 +327,10 @@ void ButiEngine::ParticleGenerater::ExplosionPolygonParticles(const Vector3& arg
 	}
 }
 
+void ButiEngine::ParticleGenerater::SpawnParticles(const Vector3& arg_position, const Vector4& arg_color)
+{
+}
+
 void ButiEngine::ParticleGenerater::Flickering()
 {
 	if (m_flickeringFrame < 2)

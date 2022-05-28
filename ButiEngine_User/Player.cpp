@@ -22,6 +22,7 @@
 #include "PauseManagerComponent.h"
 #include "SpriteParticleGenerator.h"
 #include "SpawnEffect.h"
+#include "Worker.h"
 
 float ButiEngine::Player::m_defaultMaxMoveSpeed = 0.15f;
 float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.25f;
@@ -57,8 +58,7 @@ void ButiEngine::Player::OnUpdate()
 	VibrationUpdate();
 	VibrationEffect();
 
-	//m_nearEnemyCount = 0;
-	m_nearWorkerCount = 0;
+	m_vec_nearWorkers.clear();
 	m_strongestNearWorkerVibration = 0.0f;
 
 	MoveKnockBack();
@@ -417,7 +417,7 @@ void ButiEngine::Player::VibrationUpdate()
 		return;
 	}
 	//フロッキング招集モード時、近くに自分より振動値の大きいモブハチがいたら振動値を増やす
-	if (m_vwp_flockingLeader.lock()->IsGather() && m_nearWorkerCount != 0)
+	if (m_vwp_flockingLeader.lock()->IsGather() && m_vec_nearWorkers.size() != 0)
 	{
 		//コントローラーの振動値設定
 		//constexpr float maxControllerVibration = 1.0f;
@@ -450,15 +450,23 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isDead) { return; }
 	if (m_isOverheat) { return; }
 
-	m_vibration += m_vibrationIncrease * m_nearWorkerCount /*m_nearEnemyCount*/ * GameDevice::WorldSpeed;
-	//m_vibration = min(m_vibration, m_strongestNearWorkerVibration);
-
-	if (m_vibration >= m_strongestNearWorkerVibration)
+	//モブハチから振動値を受け取る
+	float vibrationIncrease = CalculateVibrationIncrease();
+	m_vibration += vibrationIncrease;
+	
+	if (m_vibration >= m_maxVibration)
 	{
-		m_vibration = m_strongestNearWorkerVibration;
+		float overVibration = m_vibration - m_maxVibration;
+		m_vibration -= overVibration;
+		vibrationIncrease += overVibration;
 		m_controllerVibration = 0.0f;
 	}
-	m_vibration = min(m_vibration, m_maxVibration);
+
+	auto end = m_vec_nearWorkers.end();
+	for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->RemoveVibration(vibrationIncrease);
+	}
 
 	//if (!m_isVibUpSE)
 	//{
@@ -516,7 +524,7 @@ void ButiEngine::Player::VibrationEffect()
 			auto transform = gameObject.lock()->transform;
 			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
 			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
-			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 1.5f);
+			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(0.0f);
 
 			Vector4 color = GameSettings::PLAYER_COLOR;
 			if (m_isOverheat)
@@ -528,6 +536,7 @@ void ButiEngine::Player::VibrationEffect()
 			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = color;
 
 			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+			m_vwp_vibrationEffectComponent.lock()->SetDefaultScale(m_defaultScale * 2.0f);
 		}
 		else
 		{
@@ -760,6 +769,11 @@ void ButiEngine::Player::CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_o
 	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, 150.0f, GameSettings::ENEMY_ATTACK_COLOR);
 }
 
+float ButiEngine::Player::CalculateVibrationIncrease()
+{
+	return m_vibrationIncrease * m_vec_nearWorkers.size() * GameDevice::WorldSpeed;
+}
+
 void ButiEngine::Player::CreateDrawObject()
 {
 	m_vwp_tiltFloatObject = GetManager().lock()->AddObjectFromCereal("TiltFloatObject");
@@ -800,8 +814,6 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_isVibrate = false;
 	m_vibration = 0.0f;
 	m_maxVibration = 100.0f;
-	m_nearEnemyCount = 0;
-	m_nearWorkerCount = 0;
 	m_strongestNearWorkerVibration = 0.0f;
 	m_nearEnemyVibrationRate = 0.0f;
 	m_isOverheat = false;

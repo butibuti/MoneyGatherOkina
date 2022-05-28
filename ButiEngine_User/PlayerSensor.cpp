@@ -14,7 +14,6 @@ void ButiEngine::PlayerSensor::OnSet()
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
 			{
-				m_vlp_player->AddNearEnemyCount();
 				float nearEnemyVibrationRate = m_vlp_player->GetNearEnemyVibrationRate();
 				float enemyVibrationRate = m_vlp_enemy->GetVibrationRate();
 				if (enemyVibrationRate > nearEnemyVibrationRate)

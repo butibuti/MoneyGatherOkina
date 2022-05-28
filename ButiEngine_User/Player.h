@@ -12,6 +12,7 @@ namespace ButiEngine {
 	class SoundPlayerComponent;
 	class PauseManagerComponent;
 	class SpriteParticleGenerator;
+	class Worker;
 
 	class Player :public GameComponent
 	{
@@ -53,6 +54,7 @@ namespace ButiEngine {
 			rate = min(rate, 1.0f);
 			return rate;
 		}
+		float GetVibrationIncrease() { return m_vibrationIncrease; }
 
 		std::int8_t GetLife() { return m_life; }
 		float GetNearEnemyVibrationRate() { return m_nearEnemyVibrationRate; }
@@ -72,8 +74,7 @@ namespace ButiEngine {
 		void Dead();
 		void Revival();
 		void Spawn();
-		void AddNearEnemyCount() { m_nearEnemyCount++; }
-		void AddNearWorkerCount() { m_nearWorkerCount++; }
+		void AddNearWorker(Value_weak_ptr<Worker> arg_vwp_worker) { m_vec_nearWorkers.push_back(arg_vwp_worker); }
 		void KnockBack(const Vector3& arg_velocity);
 		void SetShockWaveScale(const Vector3& arg_scale);
 
@@ -100,6 +101,8 @@ namespace ButiEngine {
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		void CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_other);
+
+		float CalculateVibrationIncrease();
 
 		void CreateDrawObject();
 		void CreateSensorObject();
@@ -166,6 +169,7 @@ namespace ButiEngine {
 		Value_weak_ptr<FlockingLeader> m_vwp_flockingLeader;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<NumberManagerComponent> m_vwp_numberManagerComponent;
+		std::vector<Value_weak_ptr<Worker>> m_vec_nearWorkers;
 		Value_ptr<Timer> m_overheatTimer;
 		Vector3 m_defaultNumberUIScale;
 		Vector3 m_defaultMaxUIScale;
@@ -174,8 +178,6 @@ namespace ButiEngine {
 		float m_previousVibrationPower;
 		float m_vibration;
 		float m_maxVibration;
-		std::uint8_t m_nearEnemyCount;
-		std::uint8_t m_nearWorkerCount;
 		float m_strongestNearWorkerVibration;
 		float m_nearEnemyVibrationRate;
 		bool m_isOverheat;

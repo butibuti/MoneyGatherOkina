@@ -25,10 +25,10 @@
 #include "WaveManager.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
-float ButiEngine::Worker::m_maxVibration = 150.0f;
-float ButiEngine::Worker::m_minVibration = 20.0f;
-float ButiEngine::Worker::m_vibrationIncrease = 0.2f;
-float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
+float ButiEngine::Worker::m_maxVibration = 50.0f;
+float ButiEngine::Worker::m_minVibration = 0.0f;
+float ButiEngine::Worker::m_vibrationIncrease = 0.1f;
+float ButiEngine::Worker::m_vibrationDecrease = 0.05f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 float ButiEngine::Worker::m_initVibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
@@ -64,9 +64,10 @@ void ButiEngine::Worker::OnUpdate()
 		auto transform = gameObject.lock()->transform;
 		m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_NoBloom");
 		m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetWorldPosition());
-		m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 4.0f);
+		m_vwp_vibrationEffect.lock()->transform->SetLocalScale(0.0f);
 
 		m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
+		m_vwp_vibrationEffectComponent.lock()->SetDefaultScale(m_defaultScale * 4.0f);
 		auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
 		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
 	}

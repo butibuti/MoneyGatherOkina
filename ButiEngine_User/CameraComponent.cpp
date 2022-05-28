@@ -21,7 +21,7 @@ void ButiEngine::CameraComponent::Start()
     //カメラの初期位置
     //m_defaultPosition = Vector3(0, 7.0f, -10.0f);
     m_defaultPosition = Vector3(0.0f, 24.0f, -7.0f);
-    m_currentPosition = m_defaultPosition;
+    m_currentPosition = Vector3(0.0f, 15.0f, -5.0f);
     m_previousPosition = m_currentPosition;
 
     //カメラの初期角度
@@ -30,7 +30,7 @@ void ButiEngine::CameraComponent::Start()
     m_currentRotateX = m_defaultRotateX;
     m_previousRotateX = m_currentRotateX;
 
-    //0～3
+    //0～4
     m_zoomOperationNum = 1;
 
     if (m_vwp_cameraAxis.lock() == nullptr)
@@ -80,13 +80,16 @@ void ButiEngine::CameraComponent::ZoomOperation(const std::int8_t arg_zoomOperat
     case 0: //ズームイン
         CanZoom(Vector3(0.0f, 5.0f, -7.0f), 0.6f);
         break;
-    case 1: //デフォルト
+    case 1:
+        CanZoom(Vector3(0.0f, 15.0f, -5.0f), 1.3f);
+        break;
+    case 2: //デフォルト
         CanZoom(m_defaultPosition, m_defaultRotateX);
         break;
-    case 2: //ズームアウト
+    case 3: //ズームアウト
         CanZoom(Vector3(0.0f, 24.0f, -16.0f), 1.0f);
         break;
-    case 3: //ウルトラズームアウト
+    case 4: //ウルトラズームアウト
         //CanZoom(Vector3(0.0f, 36.0f, -10.0f), 1.3f);
         CanZoom(Vector3(0.0f, 60.0f, -10.0f), 1.3f);
         break;
@@ -117,21 +120,21 @@ void ButiEngine::CameraComponent::InputOperationNum()
 
 void ButiEngine::CameraComponent::FixOperationNum()
 {
-    //0～3に修正
+    //0～4に修正
     if (m_zoomOperationNum < 0)
     {
         m_zoomOperationNum = 0;
     }
-    else if (m_zoomOperationNum > 3)
+    else if (m_zoomOperationNum > 4)
     {
-        m_zoomOperationNum = 3;
+        m_zoomOperationNum = 4;
     }
 }
 
 void ButiEngine::CameraComponent::CameraReset()
 {
     //カメラをデフォルトの位置に戻す
-    m_zoomOperationNum = 1;
+    m_zoomOperationNum = 2;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::CameraComponent::Clone()

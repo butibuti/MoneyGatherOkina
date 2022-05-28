@@ -35,6 +35,6 @@ void ButiEngine::ShockWave::Disappear()
 void ButiEngine::ShockWave::SetScale(const float arg_vibrationPower)
 {
 	float vibPower = arg_vibrationPower;
-	float scaleRate = 0.2f + vibPower;
+	float scaleRate = 0.25f + vibPower;
 	m_calcScale = m_maxScale * scaleRate;
 }

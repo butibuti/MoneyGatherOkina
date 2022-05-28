@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "SpawnEffect.h"
+#include "ParticleGenerater.h"
 
 void ButiEngine::SpawnEffect::OnUpdate()
 {
@@ -30,6 +31,8 @@ void ButiEngine::SpawnEffect::OnShowUI()
 
 void ButiEngine::SpawnEffect::Start()
 {
+	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
+
 	m_lifeTimer = ObjectFactory::Create<RelativeTimer>(20);
 	m_lifeTimer->Start();
 	m_startScale = gameObject.lock()->transform->GetLocalScale();

@@ -341,6 +341,7 @@ void ButiEngine::WaveManager::SpawnAnimation()
 		m_vlp_spawnTimer->Stop();
 
 		m_isGameStart = true;
+		GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(2);
 		//エネミースポナーをスポーンさせる
 		SpawnEnemySpawner();
 	}

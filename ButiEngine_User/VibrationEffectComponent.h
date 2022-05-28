@@ -25,6 +25,7 @@ namespace ButiEngine {
 		void SetVibration();
 		void SetVibrationViolent(const float arg_vibrationPower, const bool arg_isPlayer);
 		void SetEffectPosition(const Vector3& arg_position);
+		void SetDefaultScale(const Vector3& arg_scale) { m_defaultScale = arg_scale; }
 
 	private:
 		void Animation();
