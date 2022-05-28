@@ -168,7 +168,7 @@ void ButiEngine::Player::Start()
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_life = 3;
 
-	m_maxWorkerCount = 1;
+	m_maxWorkerCount = 20;
 
 	m_vwp_beeSoulPod = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
 
@@ -242,20 +242,20 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 
 void ButiEngine::Player::Dead()
 {
-	if (m_vwp_shockWave.lock())
-	{
-		m_vwp_shockWave.lock()->SetIsRemove(true);
-	}
+	//if (m_vwp_shockWave.lock())
+	//{
+	//	m_vwp_shockWave.lock()->SetIsRemove(true);
+	//}
 
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 30);
 
 	auto position = gameObject.lock()->transform->GetWorldPosition();
 	m_vwp_polygonParticleGenerater.lock()->ExplosionParticles(position);
 
-	if (m_vwp_sensor.lock())
-	{
-		m_vwp_sensor.lock()->SetIsRemove(true);
-	}
+	//if (m_vwp_sensor.lock())
+	//{
+	//	m_vwp_sensor.lock()->SetIsRemove(true);
+	//}
 
 	//if (m_vwp_bomb.lock())
 	//{
