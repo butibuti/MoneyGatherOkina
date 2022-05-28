@@ -4,6 +4,7 @@
 #include "MoveAnimationComponent.h"
 #include "CameraComponent.h"
 #include "SoundPlayerComponent.h"
+#include "Enemy.h"
 
 void ButiEngine::StageClearManagerComponent::OnUpdate()
 {
@@ -37,6 +38,16 @@ void ButiEngine::StageClearManagerComponent::Start()
 	m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.2f, 120);
 
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+
+	auto enemys = GetManager().lock()->GetGameObjects(GameObjectTag("Enemy"));
+	for (auto itr = enemys.begin(); itr != enemys.end(); ++itr)
+	{
+		if ((*itr)->HasGameObjectTag(GameObjectTag("OutsideCrystal")))
+		{
+			continue;
+		}
+		(*itr)->GetGameComponent<Enemy>()->Dead();
+	}
 
 	m_uiCount = 0;
 }
