@@ -29,7 +29,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		static float GetVibrationForce() { return m_vibrationForce; }
+		float GetVibrationForce()
+		{
+			return m_initVibrationForce * m_maxVibrationMagnification * GetVibrationRate();
+		}
 
 		float GetVibration() { return m_vibration; }
 		float GetVibrationRate()
@@ -71,14 +74,13 @@ namespace ButiEngine {
 		void SetVibrationParameter();
 
 		static float m_nearBorder;
-		static float m_vibrationForce;
+		static float m_initVibrationForce;
+		static float m_maxVibrationMagnification;
 		static float m_maxVibration;
 		static float m_minVibration;
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
 		static float m_maxScaleRate;
-
-		bool isCollision = true;
 
 		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
 

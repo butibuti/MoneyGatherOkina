@@ -33,6 +33,10 @@ float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
+	if (m_isDead || m_vwp_waveManager.lock()->IsEvent())
+	{
+		return;
+	}
 	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_Y))
 	{
 		RuptureStickWorker();
@@ -138,6 +142,7 @@ void ButiEngine::Enemy::OnSet()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 
+	m_isDead = false;
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
 	m_stickWorkerCount = 0;
@@ -273,7 +278,6 @@ void ButiEngine::Enemy::Dead()
 	if (crystal)
 	{
 		crystal->Dead();
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Crystal.wav"));
 		return;
 	}
 
@@ -285,10 +289,6 @@ void ButiEngine::Enemy::Dead()
 
 	StopMobDamageSE();
 
-	
-	if (m_vwp_appearnceEffect.lock()) {
-		m_vwp_appearnceEffect.lock()->GetGameComponent< EnemySpawnPointComponent>()->SetEnemyObject(Value_weak_ptr<GameObject>());
-	}
 	//死んだら画面揺らす
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
 
@@ -297,11 +297,19 @@ void ButiEngine::Enemy::Dead()
 	auto outsideCrystal = gameObject.lock()->GetGameComponent<OutsideCrystal>();
 	if (outsideCrystal)
 	{
+		m_isDead = true;
+		m_isCapaOver = false;
+		m_vibration = 0.0f;
+
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 		RuptureStickWorker();
+		outsideCrystal->SpawnStalker();
 		outsideCrystal->Disappear();
-		auto stalker = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
-		stalker.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 		return;
+	}
+
+	if (m_vwp_appearnceEffect.lock()) {
+		m_vwp_appearnceEffect.lock()->GetGameComponent<EnemySpawnPointComponent>()->SetEnemyObject(Value_weak_ptr<GameObject>());
 	}
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
@@ -381,12 +389,12 @@ void ButiEngine::Enemy::IncreaseVibration()
 	//振動量が上限を超えたら死ぬ
 	if (m_vibration > m_vibrationCapacity)
 	{
+		m_isCapaOver = true;
 		//ボスじゃなかったら即死
 		if (!gameObject.lock()->HasGameObjectTag(GameObjectTag("Boss")))
 		{
 			Dead();
 		}
-		m_isCapaOver = true;
 	}
 }
 
@@ -462,11 +470,11 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	Color color = GameSettings::PLAYER_COLOR;
 	if (m_vlp_playerComponent->IsBomb())
 	{
-		color = GameSettings::SOUL_COLOR;
+		color = GameSettings::WORKER_COLOR;
 	}
 	else if (m_vlp_playerComponent->IsOverheat())
 	{
-		color = GameSettings::ATTACK_COLOR;
+		color = GameSettings::PLAYER_ATTACK_COLOR;
 	}
 
 	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, color);
@@ -481,7 +489,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 void ButiEngine::Enemy::CalculateVibrationIncrease()
 {
 	float playerVibrationForce = m_vlp_playerComponent->GetVibrationForce();
-	float workerVibrationForce = Worker::GetVibrationForce();
+	float workerVibrationForce = CalculateWorkerVibrationForce();
 
 	m_vibrationIncrease = 0.0f;
 
@@ -490,7 +498,7 @@ void ButiEngine::Enemy::CalculateVibrationIncrease()
 		m_vibrationIncrease += m_vlp_playerComponent->GetVibrationForce();
 	}
 
-	m_vibrationIncrease += workerVibrationForce * m_stickWorkerCount - m_vibrationResistance;
+	m_vibrationIncrease += workerVibrationForce - m_vibrationResistance;
 	m_vibrationIncrease = max(m_vibrationIncrease, 0.5f);
 }
 
@@ -564,6 +572,23 @@ void ButiEngine::Enemy::RuptureStickWorker()
 	{
 		(*itr).lock()->GetGameComponent<Pocket>()->ReleaseWorker();
 	}
+	m_stickWorkerCount = 0;
+}
+
+float ButiEngine::Enemy::CalculateWorkerVibrationForce()
+{
+	//くっついているモブハチの攻撃力を合計した値を返す
+
+	float vibrationForce = 0.0f;
+
+	auto vec = GetStickWorkers();
+	auto end = vec.end();
+	for (auto itr = vec.begin(); itr != end; ++itr)
+	{
+		vibrationForce += (*itr).lock()->GetGameComponent<Worker>()->GetVibrationForce();
+	}
+
+	return vibrationForce;
 }
 
 void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_other)
@@ -583,7 +608,9 @@ void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_othe
 
 		Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 		Vector3 otherPos = arg_vwp_other.lock()->transform->GetLocalPosition();
-		Vector3 dir = (pos - otherPos).GetNormalize();
+		Vector3 dir = pos - otherPos;
+		dir.y = 0.0f;
+		dir.Normalize();
 
 		gameObject.lock()->AddGameComponent<KnockBack>(dir, m_knockBackForce, false, m_knockBackFrame);
 

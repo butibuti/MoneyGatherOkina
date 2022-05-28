@@ -21,14 +21,16 @@
 #include "SoundPlayerComponent.h"
 #include "EnemyScaleAnimationComponent.h"
 #include "GameSettings.h"
+#include "SpawnEffect.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
-float ButiEngine::Worker::m_vibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
 float ButiEngine::Worker::m_minVibration = 20.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.2f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.1f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
+float ButiEngine::Worker::m_initVibrationForce = 0.1f;
+float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -44,13 +46,13 @@ void ButiEngine::Worker::OnUpdate()
 	if (m_vwp_vibrationEffect.lock() == nullptr)
 	{
 		auto transform = gameObject.lock()->transform;
-		m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_Player");
+		m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_NoBloom");
 		m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetWorldPosition());
 		m_vwp_vibrationEffect.lock()->transform->SetLocalScale(m_defaultScale * 4.0f);
 
 		m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
 		auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::SOUL_COLOR;
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
 	}
 	else
 	{
@@ -92,6 +94,7 @@ void ButiEngine::Worker::OnSet()
 {
 	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other.lock()->transform->GetWorldScale() == Vector3Const::Zero) { return; }
 			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
 			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
@@ -136,17 +139,19 @@ void ButiEngine::Worker::OnShowUI()
 	GUI::BulletText("MinVibration");
 	GUI::DragFloat("##minVibration", &m_minVibration, 1.0f, 0.0f, 1000.0f);
 
-	GUI::BulletText("VibrationForce");
-	GUI::DragFloat("##vForce", &m_vibrationForce, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText(u8"UŒ‚—Í:%f", GetVibrationForce());
 
-	GUI::BulletText("VibrationIncrease");
+	GUI::BulletText(u8"‰ŠúUŒ‚—Í");
+	GUI::DragFloat("##vMinForce", &m_initVibrationForce, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"UŒ‚—Í‚ÌÅ‘å”{—¦");
+	GUI::DragFloat("##vMaxForce", &m_maxVibrationMagnification, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"U“®’l‚Ìã¸—Ê");
 	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
 
-	GUI::BulletText("VibrationDecrease");
+	GUI::BulletText(u8"U“®’l‚ÌŒ¸­—Ê");
 	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
-
-	GUI::BulletText("MaxScaleRate");
-	GUI::DragFloat("##MaxScaleRate", &m_vibrationDecrease, 0.001f, 1.0f, 5.0f);
 }
 
 void ButiEngine::Worker::Start()
@@ -164,8 +169,12 @@ void ButiEngine::Worker::Start()
 
 	m_vlp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
 
-	auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
-	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	/*auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
+	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());*/
+
+	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();

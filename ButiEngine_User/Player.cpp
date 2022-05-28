@@ -20,8 +20,10 @@
 #include "FlockingLeader.h"
 #include "SoundPlayerComponent.h"
 #include "PauseManagerComponent.h"
+#include "SpriteParticleGenerator.h"
 
-float ButiEngine::Player::m_maxMoveSpeed = 0.15f;
+float ButiEngine::Player::m_defaultMaxMoveSpeed = 0.15f;
+float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.25f;
 float ButiEngine::Player::m_acceleration = 0.04f;
 float ButiEngine::Player::m_deceleration = 0.1f;
 
@@ -31,8 +33,8 @@ float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
 float ButiEngine::Player::m_vibrationIncrease = 0.22f;
 float ButiEngine::Player::m_vibrationDecrease = 0.2f;
-float ButiEngine::Player::m_minVibrationForce = 1.0f;
-float ButiEngine::Player::m_maxVibrationForce = 5.0f;
+float ButiEngine::Player::m_initVibrationForce = 1.0f;
+float ButiEngine::Player::m_maxVibrationMagnification = 5.0f;
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -96,6 +98,7 @@ void ButiEngine::Player::OnSet()
 		});
 
 	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
+	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_vibUpSEResetTimer = ObjectFactory::Create<RelativeTimer>(5);
@@ -110,8 +113,11 @@ void ButiEngine::Player::OnShowUI()
 	GUI::Text(u8"ƒ‚ƒuƒnƒ`Å‘å”:%d", m_maxWorkerCount);
 	GUI::Text(u8"‘Ì—Í:%d", m_life);
 
-	GUI::BulletText(u8"Å‘å‘¬“x");
-	GUI::DragFloat("##speed", &m_maxMoveSpeed, 0.01f, 0.0f, 1.0f);
+	GUI::BulletText(u8"’ÊíŽžÅ‘å‘¬“x");
+	GUI::DragFloat("##defaultMaxSpeed", &m_defaultMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
+
+	GUI::BulletText(u8"ƒI[ƒo[ƒq[ƒgŽžÅ‘å‘¬“x");
+	GUI::DragFloat("##overheatMaxSpeed", &m_overheatMaxMoveSpeed, 0.01f, 0.0f, 1.0f);
 
 	GUI::BulletText(u8"‰Á‘¬“x");
 	GUI::DragFloat("##accel", &m_acceleration, 0.001f, 0.0f, 1.0f);
@@ -136,13 +142,13 @@ void ButiEngine::Player::OnShowUI()
 		m_overheatTimer->ChangeCountFrame(m_overheatFrame);
 	}
 
-	GUI::BulletText(u8"U“®—Í:%f", GetVibrationForce());
+	GUI::BulletText(u8"UŒ‚—Í:%f", GetVibrationForce());
 
-	GUI::BulletText(u8"U“®’l0‚ÌŽž‚ÌU“®—Í");
-	GUI::DragFloat("##vMinForce", &m_minVibrationForce, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText(u8"‰ŠúUŒ‚—Í");
+	GUI::DragFloat("##vMinForce", &m_initVibrationForce, 1.0f, 0.0f, 100.0f);
 
-	GUI::BulletText(u8"U“®’l100‚ÌŽž‚ÌU“®—Í");
-	GUI::DragFloat("##vMaxForce", &m_maxVibrationForce, 1.0f, 0.0f, 100.0f);
+	GUI::BulletText(u8"UŒ‚—Í‚ÌÅ‘å”{—¦");
+	GUI::DragFloat("##vMaxForce", &m_maxVibrationMagnification, 1.0f, 0.0f, 100.0f);
 
 	GUI::BulletText(u8"U“®’l‚Ìã¸—Ê");
 	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
@@ -181,8 +187,7 @@ void ButiEngine::Player::Start()
 	
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
 	m_velocity = Vector3Const::Zero;
-	m_defaultMaxMoveSpeed = 0.25f;
-	//m_bombMaxMoveSpeed = 0.4f;
+	m_maxMoveSpeed = m_defaultMaxMoveSpeed;
 
 	m_vwp_flockingLeader = GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>();
 
@@ -205,7 +210,7 @@ void ButiEngine::Player::Start()
 	auto hzUI = GetManager().lock()->AddObjectFromCereal("HzUI"); //Hz‚ÌUI¶¬
 	hzUI.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
 	hzUI.lock()->transform->SetLocalPosition(Vector3(250, -30, 0));
-	hzUI.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::SOUL_COLOR;
+	hzUI.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
 	m_vwp_maxUI = GetManager().lock()->AddObjectFromCereal("MaxUI"); //Max‚ÌUI¶¬
 	m_vwp_maxUI.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
 	m_vwp_maxUI.lock()->transform->SetLocalPosition(Vector3(10, 10, 0));
@@ -221,6 +226,7 @@ void ButiEngine::Player::Start()
 	m_vlp_particleTimer->ChangeCountFrame(4);
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("ParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
 
 	m_vwp_vignetteUI = GetManager().lock()->AddObjectFromCereal("VignetteUI");
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
@@ -388,7 +394,8 @@ void ButiEngine::Player::Damage()
 
 void ButiEngine::Player::VibrationUpdate()
 {
-	if (m_vwp_pauseManagerComponent.lock()->IsPause())
+	bool isEvent = m_vwp_pauseManagerComponent.lock()->IsPause() || m_vwp_waveManager.lock()->IsEvent();
+	if (isEvent)
 	{
 		StopVibUpSE();
 		return;
@@ -498,7 +505,7 @@ void ButiEngine::Player::VibrationEffect()
 			Vector4 color = GameSettings::PLAYER_COLOR;
 			if (m_isOverheat)
 			{
-				color = GameSettings::ATTACK_COLOR;
+				color = GameSettings::PLAYER_ATTACK_COLOR;
 			}
 
 			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
@@ -517,7 +524,7 @@ void ButiEngine::Player::VibrationEffect()
 			Vector4 color = GameSettings::PLAYER_COLOR;
 			if (m_isOverheat)
 			{
-				color = GameSettings::ATTACK_COLOR;
+				color = GameSettings::PLAYER_ATTACK_COLOR;
 			}
 
 			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
@@ -647,13 +654,16 @@ void ButiEngine::Player::Bomb()
 
 void ButiEngine::Player::StartOverheat()
 {
-	m_isOverheat = true;
 	m_overheatTimer->Start();
 
+	m_maxMoveSpeed = m_overheatMaxMoveSpeed;
+
 	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>();
-	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
+	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
 
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
+
+	m_isOverheat = true;
 }
 
 void ButiEngine::Player::Overheat()
@@ -665,7 +675,8 @@ void ButiEngine::Player::Overheat()
 		m_overheatTimer->Stop();
 		m_overheatTimer->Reset();
 
-		m_isOverheat = false;
+		m_maxMoveSpeed = m_defaultMaxMoveSpeed;
+
 		m_vibration = 0.0f;
 		m_isVibrate = false;
 		if (m_vwp_shockWave.lock())
@@ -682,6 +693,8 @@ void ButiEngine::Player::Overheat()
 		}
 	
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
+
+		m_isOverheat = false;
 	}
 }
 
@@ -703,6 +716,7 @@ void ButiEngine::Player::OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vw
 	Vector3 velocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
 	KnockBack(velocity);
 	Damage();
+	CreateDamageEffect(arg_vwp_other);
 }
 
 void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other)
@@ -719,6 +733,15 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 	Vector3 knockBackVelocity = gameObject.lock()->transform->GetLocalPosition() - arg_vwp_other.lock()->transform->GetWorldPosition();
 	KnockBack(knockBackVelocity);
 	Damage();
+	CreateDamageEffect(arg_vwp_other);
+}
+
+void ButiEngine::Player::CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	Vector3 dir = (arg_vwp_other.lock()->transform->GetLocalPosition() - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
+	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
+	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
+	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, 150.0f, GameSettings::ENEMY_ATTACK_COLOR);
 }
 
 void ButiEngine::Player::CreateDrawObject()

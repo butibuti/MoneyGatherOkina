@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class SpriteParticleGenerator;
 	class WaveManager;
+	class PauseManagerComponent;
 
 	class FlockingLeader :public GameComponent
 	{
@@ -32,7 +33,10 @@ namespace ButiEngine {
 		//収縮エフェクト
 		void CreateStarFlash();
 
+		bool IsStop();
+
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
+		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManager;
 
 		Vector3 m_prevPos;
 		Vector3 m_pos;

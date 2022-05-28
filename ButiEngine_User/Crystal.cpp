@@ -72,7 +72,7 @@ void ButiEngine::Crystal::Dead()
 
 void ButiEngine::Crystal::Appear()
 {
-	float progress = m_vlp_appearTimer->GetPercent() * GameDevice::WorldSpeed;
+	float progress = m_vlp_appearTimer->GetPercent();
 	progress = min(progress, 1.0f);
 
 	Vector3 scale = m_defaultScale * Easing::EaseOutElastic(progress);
@@ -108,7 +108,7 @@ void ButiEngine::Crystal::WaitStart()
 
 void ButiEngine::Crystal::Disappeaer()
 {
-	float progress = m_vlp_disappearTimer->GetPercent() * GameDevice::WorldSpeed;
+	float progress = m_vlp_disappearTimer->GetPercent();
 	progress = min(progress, 1.0f);
 
 	Vector3 scale = m_defaultScale * Easing::EaseOutElastic(1.0f - progress);

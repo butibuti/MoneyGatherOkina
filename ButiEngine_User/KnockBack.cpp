@@ -15,7 +15,7 @@ void ButiEngine::KnockBack::OnUpdate()
 {
 	float progress = m_vlp_timer->GetPercent() * GameDevice::WorldSpeed;
 	progress = min(progress, 1.0f);
-	m_velocity = MathHelper::LerpPosition(m_startVelocity, Vector3Const::Zero, m_vlp_timer->GetPercent());
+	m_velocity = MathHelper::LerpPosition(m_startVelocity, Vector3Const::Zero, progress);
 
 	if (m_isGravity)
 	{
@@ -26,7 +26,7 @@ void ButiEngine::KnockBack::OnUpdate()
 		gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
 		Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
 
-		if (pos.y < 0.0f || m_vlp_timer->Update())
+		if (pos.y < 0.0f)
 		{
 			gameObject.lock()->transform->SetWorldPostionY(0.0f);
 			SetIsRemove(true);

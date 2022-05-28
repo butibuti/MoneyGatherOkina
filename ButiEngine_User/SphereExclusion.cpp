@@ -57,6 +57,7 @@ void ButiEngine::SphereExclusion::Exclusion(Value_weak_ptr<GameObject> arg_vwp_o
 	float otherRadius = otherTransform->GetWorldScale().x * 0.5f;
 
 	Vector3 newPos = otherPos + dir * (radius + otherRadius + 0.001f);
+	newPos.y = pos.y;
 
 	transform->SetWorldPosition(newPos);
 

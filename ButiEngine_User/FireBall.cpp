@@ -92,7 +92,7 @@ void ButiEngine::FireBall::ChargeStart()
 
 void ButiEngine::FireBall::Appear()
 {
-	float progress = m_vlp_appearTimer->GetPercent() * GameDevice::WorldSpeed;
+	float progress = m_vlp_appearTimer->GetPercent();
 	progress = min(progress, 1.0f);
 
 	Vector3 scale = MathHelper::LerpPosition(Vector3Const::Zero, m_defaultScale, Easing::EaseOutElastic(progress));
@@ -154,7 +154,7 @@ void ButiEngine::FireBall::RotateStart()
 
 void ButiEngine::FireBall::Disappeaer()
 {
-	float progress = m_vlp_disappearTimer->GetPercent() * GameDevice::WorldSpeed;
+	float progress = m_vlp_disappearTimer->GetPercent();
 	progress = min(progress, 1.0f);
 
 	Vector3 scale = MathHelper::LerpPosition(m_beforeDisappearScale, Vector3Const::Zero, Easing::EaseInCirc(progress));

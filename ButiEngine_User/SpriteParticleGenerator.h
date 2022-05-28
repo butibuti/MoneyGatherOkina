@@ -3,6 +3,8 @@
 
 namespace ButiEngine {
 
+	class WaveManager;
+
 	class SpriteParticleGenerator : public GameComponent
 	{
 	public:
@@ -25,6 +27,7 @@ namespace ButiEngine {
 
 	private:
 		Value_weak_ptr<SpriteParticleController> m_vwp_spriteParticleController;
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 	};
 }
 

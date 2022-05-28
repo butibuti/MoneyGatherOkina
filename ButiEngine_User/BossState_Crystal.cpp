@@ -62,7 +62,7 @@ void ButiEngine::BossState_Crystal::EndState()
 
 void ButiEngine::BossState_Crystal::Charge()
 {
-	float progress = m_vlp_chargeTimer->GetPercent() * GameDevice::WorldSpeed;
+	float progress = m_vlp_chargeTimer->GetPercent();
 	progress = min(progress, 1.0f);
 
 	Vector4 bloomPower = MathHelper::LerpPosition(m_defaultBloomPower, m_maxBloomPower, Easing::EaseOutCirc(progress));
@@ -102,7 +102,7 @@ void ButiEngine::BossState_Crystal::AppearStart()
 
 void ButiEngine::BossState_Crystal::Wait()
 {
-	float progress = m_vlp_waitTimer->GetPercent() * GameDevice::WorldSpeed;
+	float progress = m_vlp_waitTimer->GetPercent();
 	progress = min(progress, 1.0f);
 
 	Vector4 bloomPower = MathHelper::LerpPosition(m_maxBloomPower, m_defaultBloomPower, Easing::EaseOutCirc(progress));
