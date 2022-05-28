@@ -217,6 +217,7 @@ void ButiEngine::Player::Start()
 	m_defaultMaxUIScale = m_vwp_maxUI.lock()->transform->GetLocalScale();
 	m_vwp_maxUI.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 
+	m_vwp_numberManagerComponent.lock()->SetRotate(Vector3(20, 15, 0));
 	m_vwp_hzUIParent.lock()->transform->SetLocalRotationX_Degrees(20);
 	m_vwp_hzUIParent.lock()->transform->SetLocalRotationY_Degrees(-15);
 
@@ -570,6 +571,7 @@ void ButiEngine::Player::VibrationPowerDrawUpdate()
 	{
 		//Max
 		vibParcent = 99;
+
 		m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-700, -400, 50));
 		m_vwp_numberManager.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 		m_vwp_numberManagerComponent.lock()->SetScaleAnimationActive(false);
@@ -590,6 +592,7 @@ void ButiEngine::Player::VibrationPowerDrawUpdate()
 			m_isFixNumberUIScale = false;
 			m_vwp_numberManager.lock()->transform->SetLocalScale(m_defaultNumberUIScale);
 		}
+
 		m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-825, -390, 50));
 		m_vwp_maxUI.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 	}

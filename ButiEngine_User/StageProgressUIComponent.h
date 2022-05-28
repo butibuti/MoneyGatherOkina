@@ -20,6 +20,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		void SetRate(const float arg_rate) { m_rate = arg_rate; }
+		void SetColor(const Vector4& arg_color) { m_defaultColor = arg_color; }
 
 	private:
 		Value_ptr<Timer> m_vlp_timer;

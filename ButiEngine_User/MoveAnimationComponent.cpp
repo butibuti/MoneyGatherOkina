@@ -15,8 +15,9 @@ void ButiEngine::MoveAnimationComponent::OnUpdate()
 		if (m_isShake)
 		{
 			auto shakeComponent = gameObject.lock()->GetGameComponent<ShakeComponent>();
-			shakeComponent->Shake(1.0f, 10);
+			shakeComponent->Shake(0.5f, 6);
 			shakeComponent->SetShakeAxis(Vector3(0, 0, 1));
+			shakeComponent->SetIsAbsolute(true);
 		}
 		m_currentPosition = m_endPosition;
 		m_isActive = false;
@@ -36,7 +37,7 @@ void ButiEngine::MoveAnimationComponent::OnSet()
 	m_startPosition = gameObject.lock()->transform->GetLocalPosition();
 	m_endPosition = Vector3(0, 0, 0);
 	m_speed = 0.2f;
-	m_isActive = true;
+	m_isActive = false;
 	m_isShake = false;
 }
 

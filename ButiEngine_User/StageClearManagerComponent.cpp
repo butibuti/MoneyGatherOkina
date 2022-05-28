@@ -5,6 +5,8 @@
 #include "CameraComponent.h"
 #include "SoundPlayerComponent.h"
 #include "Enemy.h"
+#include "FadeOutComponent.h"
+#include "InputManager.h"
 
 void ButiEngine::StageClearManagerComponent::OnUpdate()
 {
@@ -14,6 +16,7 @@ void ButiEngine::StageClearManagerComponent::OnUpdate()
 	//スロー効果が終わったらaddTimerのフレーム毎にオブジェクトを右上に追加していく
 	if (m_vlp_addTimer->Update())
 	{
+		InputManager::VibrationStop();
 		AddUI();
 	}
 }
@@ -74,6 +77,10 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 		moveAnimationComponent->SetEndPosition(endPosition);
 		moveAnimationComponent->SetSpeed(0.9f);
 		moveAnimationComponent->SetIsShake(true);
+		moveAnimationComponent->SetIsActive(true);
+
+		auto fadeUIComponent = GetManager().lock()->AddObjectFromCereal("FadeOutUI").lock()->GetGameComponent<FadeOutComponent>();
+		fadeUIComponent->SetMaxAlpha(0.5f);
 	}
 	else if (m_uiCount == 8)
 	{
@@ -84,6 +91,7 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 		moveAnimationComponent->SetEndPosition(endPosition);
 		moveAnimationComponent->SetSpeed(0.9f);
 		moveAnimationComponent->SetIsShake(true);
+		moveAnimationComponent->SetIsActive(true);
 	}
 	else if(m_uiCount == 9)
 	{

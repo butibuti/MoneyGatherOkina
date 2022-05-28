@@ -187,6 +187,8 @@ void ButiEngine::EnemySpawner::OnShowUI()
 		outputDatas.m_startMinSpawnFrame = m_startMinSpawnFrame;
 		outputDatas.m_endMinSpawnFrame = m_endMinSpawnFrame;
 		outputDatas.m_lastIntervalReachFrame = m_lastIntervalReachFrame;
+		outputDatas.m_spawnerIndex = m_spawnerIndex;
+		outputDatas.m_maxSpawnCount = m_maxEnemyFieldCount;
 
 		std::string outputFileName = "EnemyData/" + std::to_string(m_spawnType) + "_" + std::to_string(m_inputStageNumber) + "_" + std::to_string(m_spawnerIndex) + ".enemyData";
 		OutputCereal(outputDatas, outputFileName);
