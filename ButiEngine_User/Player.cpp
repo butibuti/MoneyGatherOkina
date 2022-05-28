@@ -97,7 +97,7 @@ void ButiEngine::Player::OnSet()
 			}
 		});
 
-	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
+	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_vibUpSEResetTimer = ObjectFactory::Create<RelativeTimer>(5);
@@ -394,7 +394,8 @@ void ButiEngine::Player::Damage()
 
 void ButiEngine::Player::VibrationUpdate()
 {
-	if (m_vwp_pauseManagerComponent.lock()->IsPause())
+	bool isEvent = m_vwp_pauseManagerComponent.lock()->IsPause() || m_vwp_waveManager.lock()->IsClearAnimation() || m_vwp_waveManager.lock()->IsGameOver();
+	if (isEvent)
 	{
 		StopVibUpSE();
 		return;
@@ -737,7 +738,7 @@ void ButiEngine::Player::CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_o
 	Vector3 dir = (arg_vwp_other.lock()->transform->GetLocalPosition() - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
-	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, 100.0f, GameSettings::ENEMY_ATTACK_COLOR);
+	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, 150.0f, GameSettings::ENEMY_ATTACK_COLOR);
 }
 
 void ButiEngine::Player::CreateDrawObject()

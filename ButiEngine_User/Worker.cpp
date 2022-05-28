@@ -21,6 +21,7 @@
 #include "SoundPlayerComponent.h"
 #include "EnemyScaleAnimationComponent.h"
 #include "GameSettings.h"
+#include "SpawnEffect.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
@@ -169,6 +170,10 @@ void ButiEngine::Worker::Start()
 
 	/*auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
 	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());*/
+
+	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
 
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();

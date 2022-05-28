@@ -97,6 +97,7 @@
     <ClCompile Include="FieldParticleEmitter.cpp" />
     <ClCompile Include="OutsideCrystal.cpp" />
     <ClCompile Include="OutSideCrystalSpawner.cpp" />
+    <ClCompile Include="SpawnEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="FieldParticleEmitter.h" />
     <ClInclude Include="OutsideCrystal.h" />
     <ClInclude Include="OutSideCrystalSpawner.h" />
+    <ClInclude Include="SpawnEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

@@ -2,11 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class WorkerSpawnEffect :public GameComponent
+	class SpawnEffect :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()const override {
-			return "WorkerSpawnEffect";
+			return "SpawnEffect";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -19,6 +19,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void SetColor(const Vector4& arg_color);
 	private:
 		Value_ptr<Timer> m_lifeTimer;
 
@@ -28,4 +30,4 @@ namespace ButiEngine {
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(WorkerSpawnEffect, true);
+BUTI_REGIST_GAMECOMPONENT(SpawnEffect, true);
