@@ -160,11 +160,17 @@ void ButiEngine::GameOverManagerComponent::AppearProgressBarUI()
 	auto progressBarInline = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline");
 	progressBarInline.lock()->transform->SetLocalPosition(Vector3(0, -1000, -0.11f));
 	auto progressUIComponent = progressBarInline.lock()->GetGameComponent<StageProgressUIComponent>();
-	auto waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
-	float rate = (float)waveManagerComponent->GetPoint() / (float)waveManagerComponent->GetClearPoint();
+	m_vwp_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	float rate = (float)m_vwp_waveManagerComponent.lock()->GetPoint() / (float)m_vwp_waveManagerComponent.lock()->GetClearPoint();
 	progressUIComponent->SetColor(Vector4(1, 0, 0.23f, 1));
 	progressUIComponent->SetRate(rate);
 	m_progressRate = (std::int8_t)(rate * 50.0f);
+	float retryRate = (float)m_vwp_waveManagerComponent.lock()->GetRetryPoint() / (float)m_vwp_waveManagerComponent.lock()->GetClearPoint();
+	std::int8_t retryProgressRate = (std::int8_t)(retryRate * 100.0f);
+	if (m_progressRate < retryProgressRate)
+	{
+		m_progressRate = retryProgressRate;
+	}
 	auto progressBarInline_moveAnimation = progressBarInline.lock()->GetGameComponent<MoveAnimationComponent>();
 	progressBarInline_moveAnimation->SetEndPosition(Vector3(0, -100, -0.11f));
 	progressBarInline_moveAnimation->SetStartPosition(Vector3(0, -1000, -0.11f));
@@ -281,6 +287,11 @@ void ButiEngine::GameOverManagerComponent::SelectAnimation()
 		}
 		else if(m_selectAnimationStep == 2)
 		{
+			auto retryPoint = (std::int32_t)((float)m_vwp_waveManagerComponent.lock()->GetClearPoint() * (float)m_currentProgressRate * 0.01f);
+			if (m_vwp_waveManagerComponent.lock()->GetRetryPoint() < retryPoint)
+			{
+				m_vwp_waveManagerComponent.lock()->SetRetryPoint(retryPoint);
+			}
 			m_isNext = true;
 		}
 

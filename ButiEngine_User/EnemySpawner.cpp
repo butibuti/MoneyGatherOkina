@@ -280,7 +280,8 @@ void ButiEngine::EnemySpawner::SpawnEnemy()
 {
 	//ステージクリア上限数出現していたらスポーンさせない
 	if (m_waveManagerComponent.lock()->GetSpawnCount() >= m_waveManagerComponent.lock()->GetClearPoint()) { return; }
-	
+	if (m_waveManagerComponent.lock()->IsClearAnimation()) { return; }
+
 	auto objects = GetManager().lock()->GetGameObjects(GameObjectTag(m_tag));
 	std::int32_t objectsCount = objects.size();
 	

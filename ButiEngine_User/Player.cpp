@@ -206,7 +206,7 @@ void ButiEngine::Player::Start()
 	//CreateBombObject();
 
 	m_vwp_hzUIParent = GetManager().lock()->AddObjectFromCereal("HzUIParent");
-	m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-700, -400, 50));
+	m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-825, -390, 50));
 	m_vwp_numberManager = GetManager().lock()->AddObjectFromCereal("NumberManager");
 	m_vwp_numberManager.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
 	m_vwp_numberManager.lock()->transform->SetLocalPosition(Vector3(0, 0, 0));
@@ -440,6 +440,7 @@ void ButiEngine::Player::VibrationController()
 
 	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
 
 	//float vibrationPower = m_vibration / m_maxVibration;
 	InputManager::VibrationStart(m_controllerVibration);

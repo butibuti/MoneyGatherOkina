@@ -6,6 +6,7 @@ namespace ButiEngine {
 	class SoundPlayerComponent;
 	class StageProgressUIComponent;
 	class NumberManagerComponent;
+	class WaveManager;
 
 	class GameOverManagerComponent :public GameComponent
 	{
@@ -52,6 +53,7 @@ namespace ButiEngine {
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		Value_weak_ptr<StageProgressUIComponent> m_vwp_progressUIComponent;
 		Value_weak_ptr<NumberManagerComponent> m_vwp_restartProgressNumber;
+		Value_weak_ptr<WaveManager> m_vwp_waveManagerComponent;
 
 		Vector3 m_defaultSelectScale;
 		Vector3 m_retryScale;
