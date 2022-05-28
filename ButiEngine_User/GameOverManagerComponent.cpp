@@ -175,6 +175,11 @@ void ButiEngine::GameOverManagerComponent::PlayerPikuPiku()
 void ButiEngine::GameOverManagerComponent::SelectAnimation()
 {
 	if (!m_isSelectAnimation) { return; }
+	if (!m_isRetry)
+	{
+		m_isNext = true;
+		return;
+	}
 
 	if (m_vlp_selectAnimationTimer->Update())
 	{
@@ -183,15 +188,7 @@ void ButiEngine::GameOverManagerComponent::SelectAnimation()
 			//セレクトフラッシュを生成
 			m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 			m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
-			Vector3 position;
-			if (m_isRetry)
-			{
-				position = Vector3(-410, -130, -10);
-			}
-			else
-			{
-				position = Vector3(410, -130, -10);
-			}
+			Vector3 position = Vector3(-410, -130, -10);
 			m_vwp_selectFlashEffectUI[0].lock()->transform->SetLocalPosition(position);
 			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalPosition(position);
 			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalRotationZ_Degrees(90);

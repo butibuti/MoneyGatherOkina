@@ -3,6 +3,7 @@
 #include"StageSelectManagerComponent.h"
 #include"FadeOutComponent.h"
 #include "InputManager.h"
+#include "SoundPlayerComponent.h"
 
 bool isInit = false;
 
@@ -14,6 +15,7 @@ void ButiEngine::TitleManagerComponent::OnUpdate()
 
 	if ( !m_vlp_timer->IsOn()&&!m_vlp_selectUIApperTimer->IsOn() && !m_vwp_fadeComponent.lock()->IsFadeAnimation()&& InputManager::IsTriggerDecideKey())
 	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
 		m_vlp_timer->Start();
 	}
 	if (m_vlp_timer->IsOn()) {
@@ -54,6 +56,7 @@ void ButiEngine::TitleManagerComponent::Start()
 		m_vlp_timer = ObjectFactory::Create<RelativeTimer>(60);
 		m_vlp_selectUIApperTimer = ObjectFactory::Create<RelativeTimer>(60);
 	}
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 }
 
 

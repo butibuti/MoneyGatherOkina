@@ -4,6 +4,7 @@
 namespace ButiEngine {
 class StageSelectManagerComponent;
 class FadeOutComponent;
+class SoundPlayerComponent;
 class TitleManagerComponent : public GameComponent
 {
 public:
@@ -29,6 +30,7 @@ private:
 	Value_ptr<RelativeTimer> m_vlp_timer,m_vlp_selectUIApperTimer;
 	Value_weak_ptr<StageSelectManagerComponent> vwp_stageselect;
 	Value_weak_ptr<FadeOutComponent> m_vwp_fadeComponent;
+	Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 };
 }
 
