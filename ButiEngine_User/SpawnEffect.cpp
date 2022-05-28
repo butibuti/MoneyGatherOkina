@@ -1,6 +1,6 @@
 #include "stdafx_u.h"
 #include "SpawnEffect.h"
-#include "ParticleGenerater.h"
+#include "SpriteParticleGenerator.h"
 
 void ButiEngine::SpawnEffect::OnUpdate()
 {
@@ -31,7 +31,8 @@ void ButiEngine::SpawnEffect::OnShowUI()
 
 void ButiEngine::SpawnEffect::Start()
 {
-	m_vwp_polygonParticleGenerater = GetManager().lock()->GetGameObject("PolygonParticleController").lock()->GetGameComponent<ParticleGenerater>();
+	auto spriteParticleGenerater = GetManager().lock()->GetGameObject("SphereParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	spriteParticleGenerater->SpawnParticles(gameObject.lock()->transform->GetLocalPosition(), color);
 
 	m_lifeTimer = ObjectFactory::Create<RelativeTimer>(20);
 	m_lifeTimer->Start();
@@ -48,6 +49,8 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::SpawnEffect::Clone(
 
 void ButiEngine::SpawnEffect::SetColor(const Vector4& arg_color)
 {
+	color = arg_color;
+
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = arg_color;
 }

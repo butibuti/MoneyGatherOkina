@@ -26,7 +26,6 @@ namespace ButiEngine {
 		void PachiPachiParticles(const Vector3& arg_position);
 		void CatchParticles(const Vector3& arg_position, Value_ptr<ButiEngine::Transform> arg_vlp_parentTransform);
 		void ExplosionPolygonParticles(const Vector3& arg_position, const bool arg_isBig);
-		void SpawnParticles(const Vector3& arg_position, const Vector4& arg_color);
 
 	private:
 		void Flickering();

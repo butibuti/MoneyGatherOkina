@@ -21,7 +21,7 @@ void ButiEngine::WorkerSpawner::OnShowUI()
 
 void ButiEngine::WorkerSpawner::Start()
 {
-	m_spawnIntervalFrame = 3;
+	m_spawnIntervalFrame = 2;
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(m_spawnIntervalFrame);
 
 	auto player = GetManager().lock()->GetGameObject(GameObjectTag("Player"));

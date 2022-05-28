@@ -2,8 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class ParticleGenerater;
-
 	class SpawnEffect :public GameComponent
 	{
 	public:
@@ -29,7 +27,7 @@ namespace ButiEngine {
 		Vector3 m_startScale;
 		Vector3 m_targetScale;
 
-		Value_weak_ptr<ParticleGenerater> m_vwp_polygonParticleGenerater;
+		Vector4 color;
 	};
 
 }

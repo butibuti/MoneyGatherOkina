@@ -132,3 +132,54 @@ void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transfo
 		m_vwp_spriteParticleController.lock()->AddParticle(particle);
 	}
 }
+
+void ButiEngine::SpriteParticleGenerator::SpawnParticles(const Vector3& arg_position, const Vector4& arg_color)
+{
+	for (std::int8_t i = 0; i < 10; i++)
+	{
+		Particle2D particle;
+
+		particle.position = arg_position;
+
+		particle.life = 30;
+		particle.size = 5.0f;
+		particle.sizePase = -particle.size / particle.life;
+		particle.color = arg_color;
+
+		Vector3 velocity;
+		velocity.x = (float)ButiRandom::GetRandom(-50, 50, 100);
+		velocity.y = (float)ButiRandom::GetRandom(50, 100, 100);
+		velocity.z = (float)ButiRandom::GetRandom(-50, 50, 100);
+		particle.velocity = velocity.Normalize() * ButiRandom::GetRandom(0.15f, 0.3f, 100);
+		particle.force = Vector3(0.0f, -0.05f, 0.0f);
+
+		m_vwp_spriteParticleController.lock()->AddParticle(particle);
+	}
+
+	std::int8_t maxParticleCount = 16;
+	for (std::int8_t i = 0; i < maxParticleCount; i++)
+	{
+		Particle2D particle;
+		particle.position = arg_position;
+		particle.position.y += 0.25f;
+
+		float speed = 0.0f;
+
+		particle.life = 20;
+		particle.size = 8.0f;
+		particle.sizePase = -particle.size / particle.life;
+
+		particle.color = arg_color;
+
+		Vector2 result;
+		float angle = 360.0f / (float)maxParticleCount;
+		float radian = angle * i * (3.1415f / 180);
+		result = Vector2(cos(radian), sin(radian));
+		result.Normalize();
+
+		Vector2 vel = result;
+		particle.velocity = Vector3(vel.x, 0, vel.y) * 0.2f;
+
+		m_vwp_spriteParticleController.lock()->AddParticle(particle);
+	}
+}
