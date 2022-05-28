@@ -92,6 +92,7 @@ void ButiEngine::OutsideCrystal::Appeaer()
 	m_isAppear = true;
 	gameObject.lock()->GetGameComponent<Collision::ColliderComponent>()->CollisionStart();
 	gameObject.lock()->GetGameComponent<Enemy>()->SetIsDead(false);
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->transform->RollIdentity();
 }
 
 void ButiEngine::OutsideCrystal::Disappear()
