@@ -103,6 +103,8 @@ void ButiEngine::CameraShakeComponent::ShakeStart(const float arg_amplitude, con
 
 void ButiEngine::CameraShakeComponent::ShakeStop()
 {
+	if (!m_startFlag) { return; }
+
 	gameObject.lock()->transform->SetLocalRotation(m_defaultRotate);
 	m_amplitude = 0.0f;
 	m_subAmplitude = 0.0f;
