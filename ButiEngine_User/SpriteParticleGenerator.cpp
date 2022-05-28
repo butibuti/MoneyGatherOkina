@@ -108,7 +108,7 @@ void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transfo
 		particle.angle = 30;
 		//F
 		particle.color = arg_color;
-		particle.colorPase = Vector4(0.0f, -0.03f);
+		//particle.colorPase = Vector4(0.0f, -0.03f);
 
 		std::int8_t rand = ButiRandom::GetInt(1, 20);
 		if (rand <= 1)

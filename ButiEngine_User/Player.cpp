@@ -168,7 +168,7 @@ void ButiEngine::Player::Start()
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_life = 3;
 
-	m_maxWorkerCount = 20;
+	m_maxWorkerCount = 1;
 
 	m_vwp_beeSoulPod = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
 
