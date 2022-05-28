@@ -31,7 +31,7 @@ void ButiEngine::FlockingLeader::OnUpdate()
 	m_isGather = InputManager::IsPushGatherKey();
 	if (m_isGather)
 	{
-		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 10.0f, GameSettings::WORKER_COLOR);
+		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 20.0f, GameSettings::WORKER_COLOR);
 	}
 }
 
@@ -94,8 +94,7 @@ void ButiEngine::FlockingLeader::CreateStarFlash()
 
 bool ButiEngine::FlockingLeader::IsStop()
 {
-	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return true; }
-	if (m_vwp_waveManager.lock()->IsGameOver()) { return true; }
+	if (m_vwp_waveManager.lock()->IsEvent()) { return true; }
 	if (m_vwp_pauseManager.lock()->IsPause()) { return true; }
 	
 	return false;

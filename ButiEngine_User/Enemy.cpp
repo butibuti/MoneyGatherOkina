@@ -33,6 +33,10 @@ float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
 
 void ButiEngine::Enemy::OnUpdate()
 {
+	if (m_isDead || m_vwp_waveManager.lock()->IsEvent())
+	{
+		return;
+	}
 	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_Y))
 	{
 		RuptureStickWorker();
@@ -138,6 +142,7 @@ void ButiEngine::Enemy::OnSet()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 
+	m_isDead = false;
 	m_isNearPlayer = false;
 	m_isHitShockWave = false;
 	m_stickWorkerCount = 0;
@@ -273,7 +278,6 @@ void ButiEngine::Enemy::Dead()
 	if (crystal)
 	{
 		crystal->Dead();
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Crystal.wav"));
 		return;
 	}
 
@@ -285,10 +289,6 @@ void ButiEngine::Enemy::Dead()
 
 	StopMobDamageSE();
 
-	
-	if (m_vwp_appearnceEffect.lock()) {
-		m_vwp_appearnceEffect.lock()->GetGameComponent< EnemySpawnPointComponent>()->SetEnemyObject(Value_weak_ptr<GameObject>());
-	}
 	//Ž€‚ñ‚¾‚ç‰æ–Ê—h‚ç‚·
 	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(2, 4);
 
@@ -297,11 +297,19 @@ void ButiEngine::Enemy::Dead()
 	auto outsideCrystal = gameObject.lock()->GetGameComponent<OutsideCrystal>();
 	if (outsideCrystal)
 	{
+		m_isDead = true;
+		m_isCapaOver = false;
+		m_vibration = 0.0f;
+
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 		RuptureStickWorker();
+		outsideCrystal->SpawnStalker();
 		outsideCrystal->Disappear();
-		auto stalker = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
-		stalker.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 		return;
+	}
+
+	if (m_vwp_appearnceEffect.lock()) {
+		m_vwp_appearnceEffect.lock()->GetGameComponent<EnemySpawnPointComponent>()->SetEnemyObject(Value_weak_ptr<GameObject>());
 	}
 
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->Dead();
@@ -381,12 +389,12 @@ void ButiEngine::Enemy::IncreaseVibration()
 	//U“®—Ê‚ªãŒÀ‚ð’´‚¦‚½‚çŽ€‚Ê
 	if (m_vibration > m_vibrationCapacity)
 	{
+		m_isCapaOver = true;
 		//ƒ{ƒX‚¶‚á‚È‚©‚Á‚½‚ç‘¦Ž€
 		if (!gameObject.lock()->HasGameObjectTag(GameObjectTag("Boss")))
 		{
 			Dead();
 		}
-		m_isCapaOver = true;
 	}
 }
 
@@ -564,6 +572,7 @@ void ButiEngine::Enemy::RuptureStickWorker()
 	{
 		(*itr).lock()->GetGameComponent<Pocket>()->ReleaseWorker();
 	}
+	m_stickWorkerCount = 0;
 }
 
 float ButiEngine::Enemy::CalculateWorkerVibrationForce()
@@ -599,7 +608,9 @@ void ButiEngine::Enemy::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_othe
 
 		Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 		Vector3 otherPos = arg_vwp_other.lock()->transform->GetLocalPosition();
-		Vector3 dir = (pos - otherPos).GetNormalize();
+		Vector3 dir = pos - otherPos;
+		dir.y = 0.0f;
+		dir.Normalize();
 
 		gameObject.lock()->AddGameComponent<KnockBack>(dir, m_knockBackForce, false, m_knockBackFrame);
 

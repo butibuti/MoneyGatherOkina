@@ -21,6 +21,8 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		bool IsGravity() { return m_isGravity; }
 	private:
 		Value_ptr<Timer> m_vlp_timer;
 		Vector3 m_velocity;

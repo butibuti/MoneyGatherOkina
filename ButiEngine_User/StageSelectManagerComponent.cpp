@@ -12,11 +12,11 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 		return;
 	}
 
-	if (InputManager::IsTriggerRightKey())
+	if (InputManager::IsTriggerRightKey() && !isSceneChange)
 	{
 		m_stageNum++;
 	}
-	else if(InputManager::IsTriggerLeftKey())
+	else if(InputManager::IsTriggerLeftKey() && !isSceneChange)
 	{
 		m_stageNum--;
 	}

@@ -40,6 +40,7 @@ namespace ButiEngine {
 		void SetProgressPoint(const std::int32_t arg_progressPoint) { m_progressPoint = arg_progressPoint; }
 		void SetKnockBackForce(const float arg_knockBackForce) { m_knockBackForce = arg_knockBackForce; }
 		void SetKnockBackFrame(const std::int32_t arg_knockBackFrame) { m_knockBackFrame = arg_knockBackFrame; }
+		void SetIsDead(const bool arg_isDead) { m_isDead = arg_isDead; }
 
 		Value_weak_ptr<GameObject> GetPlayer() { return m_vwp_player; }
 		Value_weak_ptr<GameObject> GetNearFreePocket(const Vector3& arg_pos, float arg_border);
@@ -102,9 +103,11 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject>m_vwp_appearnceEffect;
 		std::vector<Value_weak_ptr<GameObject>> m_vec_pockets;
 
+		bool m_isDead;
+
 		bool m_isNearPlayer;
 		bool m_isHitShockWave;
-		std::uint8_t m_stickWorkerCount;
+		std::int16_t m_stickWorkerCount;
 		Vector3 m_defaultScale;
 
 		float m_weight;

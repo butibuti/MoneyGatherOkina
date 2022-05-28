@@ -27,6 +27,7 @@ namespace ButiEngine {
 
 		void Appeaer();
 		void Disappear();
+		void SpawnStalker();
 	private:
 		void Wait();
 		void SetEnemyParameter();
@@ -37,6 +38,8 @@ namespace ButiEngine {
 		static float m_vibrationCapacity;
 		static float m_vibrationResistance;
 		static std::int32_t m_appearIntervalFrame;
+		static std::int32_t m_spwanStalkerCount;
+		static float m_stalerKnockBackForce;
 
 		Value_ptr<Timer> m_vlp_appearIntervalTimer;
 		Vector3 m_defaultScale;

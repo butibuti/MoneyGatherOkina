@@ -4,6 +4,7 @@
 #include "Worker.h"
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
+#include "KnockBack.h"
 
 std::int32_t ButiEngine::Enemy_Stalker::m_progressPoint = 100;
 std::int32_t ButiEngine::Enemy_Stalker::m_pocketCount = 8;
@@ -18,6 +19,21 @@ std::int32_t ButiEngine::Enemy_Stalker::m_knockBackFrame = 30;
 
 void ButiEngine::Enemy_Stalker::OnUpdate()
 {
+	auto knockBack = gameObject.lock()->GetGameComponent<KnockBack>();
+	if (knockBack && knockBack->IsGravity())
+	{
+		return; 
+	}
+	else if(!m_vlp_lookAt->IsActive())
+	{
+		m_vlp_lookAt->SetIsActive(true);
+		gameObject.lock()->transform->SetWorldPostionY(0.0f);
+		Vector3 lookPos = gameObject.lock()->transform->GetLocalPosition() + gameObject.lock()->transform->GetFront() * 100.0f;
+		lookPos.y = 0.0f;
+		gameObject.lock()->transform->SetLookAtRotation(lookPos);
+		m_vlp_lookAt->GetLookTarget()->SetLocalPosition(lookPos);
+	}
+
 	if (m_isPrey)
 	{
 		OnPrey();

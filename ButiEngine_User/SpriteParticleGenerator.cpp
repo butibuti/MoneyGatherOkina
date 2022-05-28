@@ -101,13 +101,14 @@ void ButiEngine::SpriteParticleGenerator::GatherParticles(Value_weak_ptr<Transfo
 		//生成サイズ
 		particle.anglePase = 0.3f;
 		//最終サイズ
-		particle.sizePase = 5.0f;
+		particle.sizePase = 8.0f;
 		//ライフ
 		particle.life = 35;
 		//補完フレーム
 		particle.angle = 30;
 		//色
 		particle.color = arg_color;
+		particle.colorPase = Vector4(0.0f, -0.03f);
 
 		std::int8_t rand = ButiRandom::GetInt(1, 20);
 		if (rand <= 1)

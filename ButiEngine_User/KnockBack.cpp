@@ -26,7 +26,7 @@ void ButiEngine::KnockBack::OnUpdate()
 		gameObject.lock()->transform->Translate(m_velocity * GameDevice::WorldSpeed);
 		Vector3 pos = gameObject.lock()->transform->GetWorldPosition();
 
-		if (pos.y < 0.0f || m_vlp_timer->Update())
+		if (pos.y < 0.0f)
 		{
 			gameObject.lock()->transform->SetWorldPostionY(0.0f);
 			SetIsRemove(true);

@@ -97,6 +97,7 @@ void ButiEngine::Player::OnSet()
 			}
 		});
 
+	gameObject.lock()->AddCollisionEnterReaction(collisionLambda);
 	gameObject.lock()->AddCollisionStayReaction(collisionLambda);
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
@@ -394,7 +395,7 @@ void ButiEngine::Player::Damage()
 
 void ButiEngine::Player::VibrationUpdate()
 {
-	bool isEvent = m_vwp_pauseManagerComponent.lock()->IsPause() || m_vwp_waveManager.lock()->IsClearAnimation() || m_vwp_waveManager.lock()->IsGameOver();
+	bool isEvent = m_vwp_pauseManagerComponent.lock()->IsPause() || m_vwp_waveManager.lock()->IsEvent();
 	if (isEvent)
 	{
 		StopVibUpSE();

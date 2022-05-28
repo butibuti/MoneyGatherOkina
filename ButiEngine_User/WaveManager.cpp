@@ -109,7 +109,7 @@ void ButiEngine::WaveManager::Start()
 	}
 
 	//エネミースポナーをスポーンさせる
-	SpawnEnemySpawner();
+	//SpawnEnemySpawner();
 }
 
 void ButiEngine::WaveManager::OnShowUI()
