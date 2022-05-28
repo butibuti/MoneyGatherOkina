@@ -145,6 +145,7 @@ void ButiEngine::WaveManager::OnShowUI()
 
 void ButiEngine::WaveManager::AddPoint(const std::int32_t arg_progressPoint)
 {
+	if (m_isClear || m_isAdvanceGameOver) { return; }
 	m_point += arg_progressPoint;
 }
 

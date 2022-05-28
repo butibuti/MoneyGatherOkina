@@ -7,6 +7,11 @@
 #include "InputManager.h"
 #include "WorldSpeedManager.h"
 #include "SoundPlayerComponent.h"
+#include "MoveAnimationComponent.h"
+#include "StageProgressUIComponent.h"
+#include "WaveManager.h"
+#include "NumberManagerComponent.h"
+#include "GameSettings.h"
 
 void ButiEngine::GameOverManagerComponent::OnUpdate()
 {
@@ -15,12 +20,39 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 	{
 		if (m_nextCount == 0)
 		{
+			//ゲームオーバーロゴ追加
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0);
 			m_vlp_waitTimer->ChangeCountFrame(60);
 			AppearGameOverUI();
 		}
 		else if (m_nextCount == 1)
 		{
+			//プログレスバー追加
+			m_vlp_waitTimer->ChangeCountFrame(50);
+			AppearProgressBarUI();
+		}
+		else if (m_nextCount == 2)
+		{
+			//
+			m_vlp_waitTimer->ChangeCountFrame(m_progressRate);
+			m_isAddProgress = true;
+			auto progressBarInline = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline");
+			progressBarInline.lock()->transform->SetLocalPosition(Vector3(0, -100, -0.12f));
+			m_vwp_progressUIComponent = progressBarInline.lock()->GetGameComponent<StageProgressUIComponent>();
+			m_vwp_progressUIComponent.lock()->SetRate(0);
+
+			auto restratNumber = GetManager().lock()->AddObjectFromCereal("NumberManager");
+			restratNumber.lock()->transform->SetLocalPosition(Vector3(-550, -230, -50));
+			restratNumber.lock()->transform->SetLocalRotation(Vector3(0, 0, 0));
+			m_vwp_restartProgressNumber = restratNumber.lock()->GetGameComponent<NumberManagerComponent>();
+			m_vwp_restartProgressNumber.lock()->SetDigit(2);
+			m_vwp_restartProgressNumber.lock()->SetColor(GameSettings::PLAYER_COLOR);
+			m_vwp_restartProgressNumber.lock()->SetNumber(0);
+			m_vwp_restartProgressNumber.lock()->SetScale(Vector3(7, 7, 1));
+		}
+		else if (m_nextCount == 3)
+		{
+			//もう一度、タイトルUIの追加
 			AppearSelectUI();
 			m_isInput = true;
 		}
@@ -32,8 +64,24 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 		m_nextCount++;
 	}
 
+	if (m_isAddProgress)
+	{
+		if (m_vlp_addRateTimer->Update())
+		{
+			if (m_currentProgressRate < m_progressRate)
+			{
+				m_currentProgressRate++;
+
+				float rate = (float)m_currentProgressRate * 0.01f;
+				m_vwp_progressUIComponent.lock()->SetRate(rate);
+
+				m_vwp_restartProgressNumber.lock()->SetNumber(m_currentProgressRate);
+			}
+		}
+	}
+
 	ScaleAnimation();
-	PlayerPikuPiku();
+	//PlayerPikuPiku();
 	SelectAnimation();
 }
 
@@ -42,6 +90,7 @@ void ButiEngine::GameOverManagerComponent::OnSet()
 	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(100);
 	m_vlp_pikupikuTimer = ObjectFactory::Create<AbsoluteTimer>(ButiRandom::GetRandom(3, 30));
 	m_vlp_selectAnimationTimer = ObjectFactory::Create<AbsoluteTimer>(10);
+	m_vlp_addRateTimer = ObjectFactory::Create<AbsoluteTimer>(1);
 }
 
 void ButiEngine::GameOverManagerComponent::OnShowUI()
@@ -52,6 +101,7 @@ void ButiEngine::GameOverManagerComponent::Start()
 {
 	m_vlp_waitTimer->Start();
 	m_vlp_pikupikuTimer->Start();
+	m_vlp_addRateTimer->Start();
 	GetManager().lock()->AddObjectFromCereal("FadeOutUI");
 	m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 	m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
@@ -61,10 +111,13 @@ void ButiEngine::GameOverManagerComponent::Start()
 	m_isNext = false;
 	m_isInput = false;
 	m_isSelectAnimation = false;
+	m_isAddProgress = false;
 	m_nextCount = 0;
 	m_selectAnimationStep = 0;
 	m_selectAnimationScale = 0;
 	m_selectAnimationRotate = 0;
+	m_currentProgressRate = 0;
+	m_progressRate = 0;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::GameOverManagerComponent::Clone()
@@ -88,16 +141,41 @@ void ButiEngine::GameOverManagerComponent::AppearGameOverUI()
 	auto expansion_gameOverUI = gameOverUI.lock()->GetGameComponent<ExpansionAnimationComponent>();
 	expansion_gameOverUI->SetScale(Vector3(1544, 360, 1));
 
-	m_vwp_gameOverPlayerUI = GetManager().lock()->AddObjectFromCereal("GameOverPlayerUI");
-	m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ShakeComponent>()->SetIsAbsolute(true);
-	auto expansion_gameOverPlayerUI = m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ExpansionAnimationComponent>();
-	expansion_gameOverPlayerUI->SetScale(Vector3(8, 8, 8));
+	//m_vwp_gameOverPlayerUI = GetManager().lock()->AddObjectFromCereal("GameOverPlayerUI");
+	//m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ShakeComponent>()->SetIsAbsolute(true);
+	//auto expansion_gameOverPlayerUI = m_vwp_gameOverPlayerUI.lock()->GetGameComponent<ExpansionAnimationComponent>();
+	//expansion_gameOverPlayerUI->SetScale(Vector3(8, 8, 8));
+}
+
+void ButiEngine::GameOverManagerComponent::AppearProgressBarUI()
+{
+	auto progressBar = GetManager().lock()->AddObjectFromCereal("StageProgressUI");
+	progressBar.lock()->transform->SetLocalPosition(Vector3(0, -1000, -0.1f));
+	auto progressBar_moveAnimation = progressBar.lock()->GetGameComponent<MoveAnimationComponent>();
+	progressBar_moveAnimation->SetEndPosition(Vector3(0, -100, -0.1f));
+	progressBar_moveAnimation->SetStartPosition(Vector3(0, -1000, -0.1f));
+	progressBar_moveAnimation->SetIsActive(true);
+	progressBar_moveAnimation->SetSpeed(0.5f);
+
+	auto progressBarInline = GetManager().lock()->AddObjectFromCereal("StageProgressUI_Inline");
+	progressBarInline.lock()->transform->SetLocalPosition(Vector3(0, -1000, -0.11f));
+	auto progressUIComponent = progressBarInline.lock()->GetGameComponent<StageProgressUIComponent>();
+	auto waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	float rate = (float)waveManagerComponent->GetPoint() / (float)waveManagerComponent->GetClearPoint();
+	progressUIComponent->SetColor(Vector4(1, 0, 0.23f, 1));
+	progressUIComponent->SetRate(rate);
+	m_progressRate = (std::int8_t)(rate * 50.0f);
+	auto progressBarInline_moveAnimation = progressBarInline.lock()->GetGameComponent<MoveAnimationComponent>();
+	progressBarInline_moveAnimation->SetEndPosition(Vector3(0, -100, -0.11f));
+	progressBarInline_moveAnimation->SetStartPosition(Vector3(0, -1000, -0.11f));
+	progressBarInline_moveAnimation->SetIsActive(true);
+	progressBarInline_moveAnimation->SetSpeed(0.5f);
 }
 
 void ButiEngine::GameOverManagerComponent::AppearSelectUI()
 {
 	m_vwp_cursorUI = GetManager().lock()->AddObjectFromCereal("CursorUI");
-	m_vwp_cursorUI.lock()->transform->SetLocalPosition(Vector3(-625, -130, -0.1f));
+	m_vwp_cursorUI.lock()->transform->SetLocalPosition(Vector3(-625, -350, -0.1f));
 	auto floatMotion_cursorUI = m_vwp_cursorUI.lock()->GetGameComponent<FloatMotionComponent>();
 	floatMotion_cursorUI->SetAmplitude(10.0f);
 	floatMotion_cursorUI->SetMotionSpeed(0.1f);
@@ -188,7 +266,7 @@ void ButiEngine::GameOverManagerComponent::SelectAnimation()
 			//セレクトフラッシュを生成
 			m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 			m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
-			Vector3 position = Vector3(-410, -130, -10);
+			Vector3 position = Vector3(-410, -330, -10);
 			m_vwp_selectFlashEffectUI[0].lock()->transform->SetLocalPosition(position);
 			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalPosition(position);
 			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalRotationZ_Degrees(90);

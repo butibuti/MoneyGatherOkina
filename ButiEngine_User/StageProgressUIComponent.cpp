@@ -21,7 +21,10 @@ void ButiEngine::StageProgressUIComponent::OnUpdate()
 
 void ButiEngine::StageProgressUIComponent::OnSet()
 {
-	m_vlp_timer = ObjectFactory::Create<RelativeTimer>();
+	m_vlp_timer = ObjectFactory::Create<AbsoluteTimer>(5);
+	m_defaultColor = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color;
+	m_rate = 0;
+	m_previousRate = 0;
 }
 
 void ButiEngine::StageProgressUIComponent::OnShowUI()
@@ -30,12 +33,8 @@ void ButiEngine::StageProgressUIComponent::OnShowUI()
 
 void ButiEngine::StageProgressUIComponent::Start()
 {
-	m_defaultColor = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color;
-	m_rate = 0;
-	m_previousRate = 0;
 	m_isChangeColor = false;
 	gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().ExInfo.z = 1.0f;
-	m_vlp_timer->ChangeCountFrame(5);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::StageProgressUIComponent::Clone()
