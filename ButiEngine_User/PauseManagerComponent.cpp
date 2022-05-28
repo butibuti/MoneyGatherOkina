@@ -11,9 +11,10 @@
 
 void ButiEngine::PauseManagerComponent::OnUpdate()
 {
-	//クリアかゲームオーバー中はポーズできないようにする
+	//クリアかゲームオーバーかシーン開始演出中はポーズできないようにする
 	if (m_vwp_waveManagerComponent.lock()->IsGameOver() ||
-		m_vwp_waveManagerComponent.lock()->IsClearAnimation()) 
+		m_vwp_waveManagerComponent.lock()->IsClearAnimation() ||
+		!m_vwp_waveManagerComponent.lock()->IsGameStart()) 
 	{
 		return;
 	}

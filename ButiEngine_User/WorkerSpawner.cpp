@@ -117,6 +117,9 @@ void ButiEngine::WorkerSpawner::SetWorkerPosition()
 		workerCenter->RollLocalRotationY_Degrees(90.0f);
 	}
 
+	centerScale -= 0.5f;
+	workerCenter->SetLocalScale(centerScale);
+
 	rollAngle = 360.0f / dontSpawnWorkerCount;
 
 	std::uint8_t loopCount = dontSpawnWorkerCount;

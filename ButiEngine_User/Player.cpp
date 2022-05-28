@@ -689,12 +689,13 @@ void ButiEngine::Player::StartOverheat()
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
 
 	m_isOverheat = true;
+	m_isInvincible = true;
 }
 
 void ButiEngine::Player::Overheat()
 {
 	m_vibration = MathHelper::Lerp(m_vibration, m_overheatMaxVibration, 0.1f);
-
+	m_isInvincible = true;
 	if (m_overheatTimer->Update())
 	{
 		m_overheatTimer->Stop();
@@ -720,6 +721,7 @@ void ButiEngine::Player::Overheat()
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
 
 		m_isOverheat = false;
+		m_isInvincible = false;
 	}
 }
 
