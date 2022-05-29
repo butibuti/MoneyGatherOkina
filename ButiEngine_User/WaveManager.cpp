@@ -134,6 +134,8 @@ void ButiEngine::WaveManager::Start()
 	{
 		m_clearPoint = m_stageClearPoint;
 	}
+
+	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM1.wav"));
 }
 
 void ButiEngine::WaveManager::OnShowUI()
@@ -211,6 +213,7 @@ void ButiEngine::WaveManager::StageClearAnimation()
 
 	if (!m_vwp_stageClearManagerComponent.lock())
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 		auto stageClearManager = GetManager().lock()->AddObjectFromCereal("StageClearManager");
 		m_vwp_stageClearManagerComponent = stageClearManager.lock()->GetGameComponent<StageClearManagerComponent>();
 	}
@@ -218,6 +221,7 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	//ステージセレクトへ
 	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext())
 	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
 		m_isNextScene = true;
 	}
@@ -242,6 +246,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 
 	if (!m_vwp_gameOverManagerComponent.lock())
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 		auto gameOverManager = GetManager().lock()->AddObjectFromCereal("GameOverManager");
 		m_vwp_gameOverManagerComponent = gameOverManager.lock()->GetGameComponent<GameOverManagerComponent>();
 	}

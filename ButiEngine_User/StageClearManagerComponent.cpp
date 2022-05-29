@@ -69,18 +69,6 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 			cameraComponent->SetZoomOperationNum(0);
 			InputManager::VibrationStop();
 		}
-		else if (m_uiCount == 2)
-		{
-			auto enemys = GetManager().lock()->GetGameObjects(GameObjectTag("Enemy"));
-			for (auto itr = enemys.begin(); itr != enemys.end(); ++itr)
-			{
-				if ((*itr)->HasGameObjectTag(GameObjectTag("OutsideCrystal")))
-				{
-					continue;
-				}
-				(*itr)->GetGameComponent<Enemy>()->Dead();
-			}
-		}
 		std::string objectName = "ClearUI_" + std::to_string(m_uiCount);
 		auto clearUI = GetManager().lock()->AddObjectFromCereal(objectName);
 		auto position = clearUI.lock()->transform->GetLocalPosition();
@@ -107,6 +95,15 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 	}
 	else if(m_uiCount == 9)
 	{
+		auto enemys = GetManager().lock()->GetGameObjects(GameObjectTag("Enemy"));
+		for (auto itr = enemys.begin(); itr != enemys.end(); ++itr)
+		{
+			if ((*itr)->HasGameObjectTag(GameObjectTag("OutsideCrystal")))
+			{
+				continue;
+			}
+			(*itr)->GetGameComponent<Enemy>()->Dead();
+		}
 		m_isNext = true;
 	}
 

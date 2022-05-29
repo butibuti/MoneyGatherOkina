@@ -44,6 +44,7 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 		isSceneChange = false;
 		//ŽŸ‚ÌƒV[ƒ“‚Ö
 		NextScene();
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 	}
 }
 
@@ -84,6 +85,9 @@ void ButiEngine::StageSelectManagerComponent::Start()
 	}
 	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+	
+	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM2.wav"));
+	
 }
 
 void ButiEngine::StageSelectManagerComponent::End()
