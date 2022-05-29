@@ -23,7 +23,7 @@ void ButiEngine::StageClearManagerComponent::OnUpdate()
 void ButiEngine::StageClearManagerComponent::OnSet()
 {
 	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(120);
-	m_vlp_addTimer = ObjectFactory::Create<AbsoluteTimer>(7);
+	m_vlp_addTimer = ObjectFactory::Create<AbsoluteTimer>(8);
 }
 
 void ButiEngine::StageClearManagerComponent::OnShowUI()
@@ -50,6 +50,8 @@ void ButiEngine::StageClearManagerComponent::Start()
 		}
 		(*itr)->GetGameComponent<Enemy>()->Dead();
 	}
+
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
 
 	m_uiCount = 0;
 }
@@ -95,6 +97,15 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 	}
 	else if(m_uiCount == 9)
 	{
+		m_isNext = true;
+	}
+
+	if (m_uiCount < 10)
+	{
+		m_uiCount++;
+	}
+	else
+	{
 		auto enemys = GetManager().lock()->GetGameObjects(GameObjectTag("Enemy"));
 		for (auto itr = enemys.begin(); itr != enemys.end(); ++itr)
 		{
@@ -104,11 +115,8 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 			}
 			(*itr)->GetGameComponent<Enemy>()->Dead();
 		}
-		m_isNext = true;
-	}
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
 
-	if (m_uiCount < 11)
-	{
-		m_uiCount++;
+		m_vlp_addTimer->Stop();
 	}
 }

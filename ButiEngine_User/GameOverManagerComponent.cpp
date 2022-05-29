@@ -202,13 +202,13 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 
 	if (InputManager::IsTriggerLeftKey() || InputManager::IsTriggerRightKey())
 	{
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Select.wav"));
 		m_isRetry = !m_isRetry;
 	}
 
 	if (InputManager::IsTriggerDecideKey())
 	{
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 		m_isInput = false;
 		m_isSelectAnimation = true;
 		m_vlp_selectAnimationTimer->Start();

@@ -244,7 +244,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		fly->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
+		DeadSound(false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
@@ -252,7 +252,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		kiba->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+		DeadSound(true);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
@@ -260,7 +260,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		stalker->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
+		DeadSound(false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
 	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
@@ -275,7 +275,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		volcano->Dead();
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+		DeadSound(true);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 
@@ -509,6 +509,20 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
 
 	m_vlp_attackFlashTimer->Reset();
+}
+
+void ButiEngine::Enemy::DeadSound(const bool arg_isBigSound)
+{
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
+
+	if (arg_isBigSound)
+	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+	}
+	else
+	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
+	}
 }
 
 

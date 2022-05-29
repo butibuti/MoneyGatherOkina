@@ -47,6 +47,7 @@ void ButiEngine::WaveManager::OnUpdate()
 		if (!m_isAdvanceGameOver)
 		{
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.3f, 120);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 		}
 		m_isAdvanceGameOver = true;
 		if (m_vlp_advanceGameOverTimer->Update())
@@ -221,7 +222,7 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	//ステージセレクトへ
 	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext())
 	{
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
 		m_isNextScene = true;
 	}
@@ -236,6 +237,7 @@ void ButiEngine::WaveManager::StageClearAnimation()
 		m_retryPoint = 0;
 
 		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 	}
 }
 
@@ -246,7 +248,6 @@ void ButiEngine::WaveManager::GameOverAnimation()
 
 	if (!m_vwp_gameOverManagerComponent.lock())
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 		auto gameOverManager = GetManager().lock()->AddObjectFromCereal("GameOverManager");
 		m_vwp_gameOverManagerComponent = gameOverManager.lock()->GetGameComponent<GameOverManagerComponent>();
 	}
@@ -268,6 +269,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 			sceneManager->ChangeScene(sceneName);
 
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 		}
 		else
 		{
@@ -281,6 +283,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 			m_retryPoint = 0;
 
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 		}
 
 		////ウェーブの途中からやり直す
@@ -316,6 +319,7 @@ void ButiEngine::WaveManager::PauseAnimation()
 		m_retryPoint = 0;
 
 		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 	}
 }
 

@@ -33,7 +33,7 @@ void ButiEngine::VibrationEffectComponent::Start()
 	m_calcScale = m_defaultScale;
 	m_randomPosY = ButiRandom::GetInt(1, 500) * 0.0001f;
 	m_animationCount = 0;
-	m_maxAnimationCount = 3;
+	m_maxAnimationCount = 1;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::VibrationEffectComponent::Clone()
