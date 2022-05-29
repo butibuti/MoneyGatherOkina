@@ -52,6 +52,7 @@ void ButiEngine::SoundPlayerComponent::OnSet()
 void ButiEngine::SoundPlayerComponent::OnRemove()
 {
     StopLoopSound();
+    GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 }
 
 void ButiEngine::SoundPlayerComponent::OnShowUI()

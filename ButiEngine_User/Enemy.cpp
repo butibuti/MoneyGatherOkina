@@ -236,6 +236,8 @@ void ButiEngine::Enemy::Dead()
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	auto randomRotate = (float)ButiRandom::GetInt(-180, 180);
+	deadEffect.lock()->transform->SetLocalRotationZ_Degrees(randomRotate);
 
 	auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
 	if (fly)
@@ -484,6 +486,8 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	playerVibrationRate = min(playerVibrationRate, 1.0f);
 	float size = MathHelper::Lerp(6.0f, 9.0f, playerVibrationRate) * 10.0f;
 
+	auto randomIndex = ButiRandom::GetInt(0, 1);
+
 	Color color = GameSettings::PLAYER_COLOR;
 	if (m_vlp_playerComponent->IsBomb())
 	{
@@ -492,6 +496,11 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	else if (m_vlp_playerComponent->IsOverheat())
 	{
 		color = GameSettings::PLAYER_ATTACK_COLOR;
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Attack_OneShot_" + std::to_string(randomIndex) + ".wav"));
+	}
+	else
+	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Attack_OneShot_" + std::to_string(randomIndex) + ".wav"));
 	}
 
 	m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 1.0f, size, color);
