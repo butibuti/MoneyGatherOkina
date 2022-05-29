@@ -532,7 +532,7 @@ void ButiEngine::Player::VibrationEffect()
 {
 	if (m_isVibrate && !m_isDead)
 	{
-		if (m_vwp_vibrationEffect.lock() == nullptr)
+		if (!m_vwp_vibrationEffect.lock())
 		{
 			auto transform = gameObject.lock()->transform;
 			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
@@ -577,7 +577,7 @@ void ButiEngine::Player::VibrationEffect()
 
 void ButiEngine::Player::StopVibrationEffect()
 {
-	if (m_vwp_vibrationEffect.lock() != nullptr)
+	if (m_vwp_vibrationEffect.lock())
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();

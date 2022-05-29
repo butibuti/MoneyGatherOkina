@@ -236,6 +236,7 @@ void ButiEngine::Enemy::Dead()
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+
 	auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
 	if (fly)
 	{
@@ -541,7 +542,7 @@ void ButiEngine::Enemy::AddPoint()
 
 void ButiEngine::Enemy::StopVibrationEffect()
 {
-	if (m_vwp_vibrationEffect.lock() != nullptr)
+	if (m_vwp_vibrationEffect.lock())
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
