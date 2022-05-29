@@ -164,7 +164,18 @@ void ButiEngine::Worker::Start()
 {
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
-	gameObject.lock()->transform->SetWorldPostionY(-1000.0f);
+	m_isTutorialVibrationObject = gameObject.lock()->HasGameObjectTag(GameObjectTag("VibrationObject"));
+
+	if (m_vwp_waveManager.lock()->IsTutorial() && !m_isTutorialVibrationObject)
+	{
+		auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+		spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+		spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
+	}
+	else if(!m_isTutorialVibrationObject)
+	{
+		gameObject.lock()->transform->SetWorldPostionY(-1000.0f);
+	}
 
 	CreateDrawObject();
 
@@ -217,8 +228,8 @@ void ButiEngine::Worker::Spawn()
 
 void ButiEngine::Worker::Dead()
 {
-	m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
-	m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
+	//m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
+	//m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
 
 	auto stick = gameObject.lock()->GetGameComponent<Stick>();
 	if (stick)
@@ -547,6 +558,10 @@ void ButiEngine::Worker::IncreaseVibration()
 
 void ButiEngine::Worker::DecreaseVibration()
 {
+	if (m_isTutorialVibrationObject)
+	{
+		return;
+	}
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 	m_vibration = max(m_vibration, m_minVibration);
 }
@@ -582,9 +597,17 @@ void ButiEngine::Worker::SetLookAtParameter()
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront() * 100.0f);
 	m_vlp_lookAt->SetSpeed(0.1f);
+	if (m_isTutorialVibrationObject)
+	{
+		m_vlp_lookAt->SetIsActive(false);
+	}
 }
 
 void ButiEngine::Worker::SetVibrationParameter()
 {
 	m_vibration = m_minVibration;
+	if (m_isTutorialVibrationObject)
+	{
+		m_vibration = 50.0f;
+	}
 }

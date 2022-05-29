@@ -91,8 +91,27 @@ void ButiEngine::WaveManager::OnSet()
 		oneFrameObject = GetManager().lock()->AddObjectFromCereal("DrawObject_OneFrame");
 	}
 	m_vlp_advanceGameOverTimer = ObjectFactory::Create<AbsoluteTimer>(120);
-	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(150);
-	m_vlp_spawnIntervalTimer = ObjectFactory::Create<RelativeTimer>(50);
+
+	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+
+	std::uint16_t spawnFrame = 150;
+	std::uint16_t spawnIntervalFrame = 50;
+
+	if (m_sceneName == "Stage_0")
+	{
+		m_isTutorial = true;
+		spawnFrame = 50;
+		spawnIntervalFrame = 0;
+		m_clearPoint = m_tutorialClearPoint;
+	}
+	else if (m_sceneName == "Stage_1")
+	{
+		m_isTutorial = false;
+		m_clearPoint = m_stageClearPoint;
+	}
+
+	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(spawnFrame);
+	m_vlp_spawnIntervalTimer = ObjectFactory::Create<RelativeTimer>(spawnIntervalFrame);
 }
 
 void ButiEngine::WaveManager::Start()
@@ -120,20 +139,7 @@ void ButiEngine::WaveManager::Start()
 	m_isSpawnWorker = false;
 
 	m_point = m_retryPoint;
-	m_clearPoint = 30;
 	m_enemySpawnCount = 0;
-
-	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
-
-
-	if (m_sceneName == "Stage_0")
-	{
-		m_clearPoint = m_tutorialClearPoint;
-	}
-	else if (m_sceneName == "Stage_1")
-	{
-		m_clearPoint = m_stageClearPoint;
-	}
 
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM1.wav"));
 }
@@ -355,8 +361,12 @@ void ButiEngine::WaveManager::SpawnAnimation()
 
 		m_isGameStart = true;
 		GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(2);
-		//エネミースポナーをスポーンさせる
-		SpawnEnemySpawner();
+
+		if (!m_isTutorial)
+		{
+			//エネミースポナーをスポーンさせる
+			SpawnEnemySpawner();
+		}
 	}
 }
 

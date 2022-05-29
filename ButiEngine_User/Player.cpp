@@ -470,6 +470,7 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isDead) { return; }
 	if (m_isOverheat) { return; }
 	if (m_isOverheatEffect) { return; }
+	if (m_vec_nearWorkers.size() == 0) { return; }
 
 	//モブハチから振動値を受け取る
 	float vibrationIncrease = CalculateVibrationIncrease();
@@ -483,10 +484,12 @@ void ButiEngine::Player::IncreaseVibration()
 		m_controllerVibration = 0.0f;
 	}
 
+	float removeVibration = vibrationIncrease / m_vec_nearWorkers.size();
+
 	auto end = m_vec_nearWorkers.end();
 	for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
 	{
-		(*itr).lock()->RemoveVibration(vibrationIncrease);
+		(*itr).lock()->RemoveVibration(removeVibration);
 	}
 
 	//if (!m_isVibUpSE)
