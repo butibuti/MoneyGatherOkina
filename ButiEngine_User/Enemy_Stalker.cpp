@@ -46,18 +46,18 @@ void ButiEngine::Enemy_Stalker::OnUpdate()
 
 void ButiEngine::Enemy_Stalker::OnSet()
 {
-	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
+			if (arg_vwp_other->GetIsRemove()) { return; }
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Player")))
 			{
 				OnCollisionPlayer(arg_vwp_other);
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Worker")))
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Worker")))
 			{
 				OnCollisionWorker(arg_vwp_other);
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				OnCollisionEnemy(arg_vwp_other);
 			}

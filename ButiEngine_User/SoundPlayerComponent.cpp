@@ -58,6 +58,11 @@ void ButiEngine::SoundPlayerComponent::OnRemove()
 void ButiEngine::SoundPlayerComponent::OnShowUI()
 {
     bool isEdited = false;
+    static float masterVolume=1.0f;
+    if (GUI::DragFloat(("MasterVolume"), masterVolume, 0.01f, 0.0f, 1.0f)) {
+        gameObject.lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(masterVolume);
+    }
+
     for (auto& soundTagAndVolume : m_umap_soundVolume) {
         GUI::Text(soundTagAndVolume.first+":");
         GUI::SameLine();
@@ -65,6 +70,9 @@ void ButiEngine::SoundPlayerComponent::OnShowUI()
         GUI::SameLine();
         if (GUI::ArrowButton("##play" + soundTagAndVolume.first, GUI::GuiDir_Right)) {
             gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(soundTagAndVolume.first, soundTagAndVolume.second);
+        }GUI::SameLine();
+        if (GUI::ArrowButton("##isolatePlay" + soundTagAndVolume.first, GUI::GuiDir_Right)) {
+            gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(soundTagAndVolume.first, soundTagAndVolume.second,true);
         }
     }
     if (isEdited) {
@@ -90,7 +98,14 @@ void ButiEngine::SoundPlayerComponent::PlaySE(SoundTag arg_sound, const float ar
     if (!m_umap_soundVolume.count(arg_sound.GetID())) {
         return;
     }
-    gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(arg_sound,m_umap_soundVolume.at(arg_sound.GetID())*arg_volume);
+    gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(arg_sound, m_umap_soundVolume.at(arg_sound.GetID()) * arg_volume,false);
+}
+void ButiEngine::SoundPlayerComponent::PlayIsolateSE(SoundTag arg_sound, const float arg_volume)
+{
+    if (!m_umap_soundVolume.count(arg_sound.GetID())) {
+        return;
+    }
+    gameObject.lock()->GetApplication().lock()->GetSoundManager()->PlaySE(arg_sound, m_umap_soundVolume.at(arg_sound.GetID()) * arg_volume,true);
 }
 
 void ButiEngine::SoundPlayerComponent::PlayControllableSE(SoundTag arg_sound, const std::int32_t arg_index,  const float arg_volume, const bool arg_isLoop)

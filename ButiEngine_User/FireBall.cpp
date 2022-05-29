@@ -25,11 +25,11 @@ void ButiEngine::FireBall::OnUpdate()
 
 void ButiEngine::FireBall::OnSet()
 {
-	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionEnterLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
+			if (arg_vwp_other->GetIsRemove()) { return; }
 
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Player")))
 			{
 				Dead();
 			}

@@ -11,6 +11,7 @@ void ButiEngine::EnemySpawnPointComponent::OnUpdate()
 		for (auto& drawComponent : drawcomponents) {
 			m_list_drawObjectDrawInformation.Add(drawComponent->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation"));
 		}
+		m_vwp_appearnceObject.lock()->SetIsRemove(true);
 	}
 
 	if (m_vlp_brightOffTimer->Update()) {
@@ -51,7 +52,6 @@ void ButiEngine::EnemySpawnPointComponent::OnUpdate()
 		auto objectTag = GameObjectTag(m_enemyTag);
 		m_vwp_enemyObject.lock()->SetGameObjectTag(objectTag);
 		//m_vlp_diamond.lock()->SetIsRemove(true);
-		m_vwp_appearnceObject.lock()->SetIsRemove(true);
 		m_vlp_brightOffTimer->Start();//
 	}
 	else if(m_vlp_spawnAnimationTimer->IsOn())
