@@ -21,8 +21,10 @@ namespace ButiEngine {
 		}
 
 		void SetColor(const Vector4& arg_color);
+		void SetLife(const std::uint16_t arg_life) { m_life = arg_life; }
 	private:
-		Value_ptr<Timer> m_lifeTimer;
+		Value_ptr<Timer> m_vlp_lifeTimer;
+		std::uint16_t m_life;
 
 		Vector3 m_startScale;
 		Vector3 m_targetScale;
