@@ -14,6 +14,7 @@ void ButiEngine::WingAnimation::OnUpdate()
 	{
 		vibrationRate = m_vwp_worker.lock()->GetVibrationRate();
 	}
+	vibrationRate = min(vibrationRate, 1.0f);
 
 	m_flapSpeed = MathHelper::Lerp(m_minFlapSpeed, m_maxFlapSpeed, vibrationRate) * GameDevice::WorldSpeed;
 

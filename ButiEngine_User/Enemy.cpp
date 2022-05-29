@@ -481,6 +481,7 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition() + dir * radius;
 
 	float playerVibrationRate = m_vlp_playerComponent->GetVibrationRate();
+	playerVibrationRate = min(playerVibrationRate, 1.0f);
 	float size = MathHelper::Lerp(6.0f, 9.0f, playerVibrationRate) * 10.0f;
 
 	Color color = GameSettings::PLAYER_COLOR;

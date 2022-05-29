@@ -52,7 +52,6 @@ namespace ButiEngine {
 		float GetVibrationRate()
 		{
 			float rate = m_vibration / m_maxVibration;
-			rate = min(rate, 1.0f);
 			return rate;
 		}
 		float GetVibrationIncrease() { return m_vibrationIncrease; }
