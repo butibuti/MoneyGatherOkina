@@ -91,7 +91,7 @@ void ButiEngine::WorkerSpawner::SetWorkerPosition()
 	workerTransform->SetBaseTransform(workerCenter);
 	workerTransform->SetLocalPosition(Vector3(radius, 0.0f, 0.0f));
 
-	std::uint8_t vertexCount = 6;
+	std::uint8_t vertexCount = ButiRandom::GetInt(3, 10);
 	float rollAngle = 360.0f / vertexCount;
 
 	std::uint8_t dontSpawnWorkerCount = m_initSpawnWorkerCount;
@@ -116,9 +116,6 @@ void ButiEngine::WorkerSpawner::SetWorkerPosition()
 		workerCenter->SetLocalScale(centerScale);
 		workerCenter->RollLocalRotationY_Degrees(90.0f);
 	}
-
-	centerScale -= 0.5f;
-	workerCenter->SetLocalScale(centerScale);
 
 	rollAngle = 360.0f / dontSpawnWorkerCount;
 
