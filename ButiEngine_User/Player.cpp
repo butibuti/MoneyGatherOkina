@@ -36,8 +36,8 @@ std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
-float ButiEngine::Player::m_vibrationIncrease = 0.22f;
-float ButiEngine::Player::m_vibrationDecrease = 0.02f;
+float ButiEngine::Player::m_vibrationIncrease = 0.21f;
+float ButiEngine::Player::m_vibrationDecrease = 0.2f;
 float ButiEngine::Player::m_initVibrationForce = 1.0f;
 float ButiEngine::Player::m_overheatVibrationForce = 10.0f;
 float ButiEngine::Player::m_maxVibrationMagnification = 5.0f;
