@@ -13,6 +13,7 @@ namespace ButiEngine {
 	class PauseManagerComponent;
 	class SpriteParticleGenerator;
 	class Worker;
+	class WorldSpeedManager;
 
 	class Player :public GameComponent
 	{
@@ -95,6 +96,8 @@ namespace ButiEngine {
 		void Bomb();
 		void StartOverheat();
 		void Overheat();
+		void StartOverheatEffect();
+		void OverheatEffect();
 
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
@@ -130,6 +133,7 @@ namespace ButiEngine {
 		static float m_vibrationDecrease;
 
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
+		Value_weak_ptr<WorldSpeedManager> m_vwp_worldSpeedManager;
 
 		//ÉpÉâÉÅÅ[É^
 		Vector3 m_defaultScale;
@@ -161,6 +165,8 @@ namespace ButiEngine {
 		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
 
 		//êUìÆ
+		Value_ptr<Timer> m_overheatTimer;
+		Value_ptr<Timer> m_vlp_overheatEffectTimer;
 		Value_weak_ptr<GameObject> m_vwp_shockWave;
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<GameObject> m_vwp_numberManager;
@@ -170,21 +176,21 @@ namespace ButiEngine {
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<NumberManagerComponent> m_vwp_numberManagerComponent;
 		std::vector<Value_weak_ptr<Worker>> m_vec_nearWorkers;
-		Value_ptr<Timer> m_overheatTimer;
 		Vector3 m_defaultNumberUIScale;
 		Vector3 m_defaultMaxUIScale;
-		bool m_isVibrate;
-		bool m_isVibUpSE;
+		std::string m_gameObjectName;
 		float m_previousVibrationPower;
 		float m_vibration;
 		float m_maxVibration;
 		float m_strongestNearWorkerVibration;
 		float m_nearEnemyVibrationRate;
-		bool m_isOverheat;
 		float m_controllerVibration;
 		std::int32_t m_vibUpCount;
+		bool m_isVibrate;
+		bool m_isVibUpSE;
+		bool m_isOverheat;
 		bool m_isFixNumberUIScale;
-		std::string m_gameObjectName;
+		bool m_isOverheatEffect;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;
