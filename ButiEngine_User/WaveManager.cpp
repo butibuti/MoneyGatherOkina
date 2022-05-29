@@ -16,6 +16,7 @@
 
 std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 10000;
 std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 10000;
+std::int32_t ButiEngine::WaveManager::m_retryPoint = 0;
 
 void ButiEngine::WaveManager::OnUpdate()
 {
@@ -118,7 +119,7 @@ void ButiEngine::WaveManager::Start()
 	m_isSpawnedPlayer = false;
 	m_isSpawnWorker = false;
 
-	m_point = 0;
+	m_point = m_retryPoint;
 	m_clearPoint = 30;
 	m_enemySpawnCount = 0;
 
@@ -228,6 +229,8 @@ void ButiEngine::WaveManager::StageClearAnimation()
 		sceneName = "StageSelect";
 		sceneManager->ChangeScene(sceneName);
 
+		m_retryPoint = 0;
+
 		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 	}
 }
@@ -270,6 +273,8 @@ void ButiEngine::WaveManager::GameOverAnimation()
 			sceneManager->LoadScene(sceneName);
 			sceneManager->ChangeScene(sceneName);
 
+			m_retryPoint = 0;
+
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 		}
 
@@ -302,6 +307,8 @@ void ButiEngine::WaveManager::PauseAnimation()
 		sceneName = "StageSelect";
 		sceneManager->LoadScene(sceneName);
 		sceneManager->ChangeScene(sceneName);
+
+		m_retryPoint = 0;
 
 		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 	}

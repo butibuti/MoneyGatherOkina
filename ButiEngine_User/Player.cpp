@@ -24,6 +24,8 @@
 #include "SpawnEffect.h"
 #include "Worker.h"
 #include "WingAnimation.h"
+#include "WorldSpeedManager.h"
+#include "CameraComponent.h"
 
 float ButiEngine::Player::m_defaultMaxMoveSpeed = 0.15f;
 float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.25f;
@@ -35,7 +37,7 @@ std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
 float ButiEngine::Player::m_vibrationIncrease = 0.22f;
-float ButiEngine::Player::m_vibrationDecrease = 0.2f;
+float ButiEngine::Player::m_vibrationDecrease = 0.02f;
 float ButiEngine::Player::m_initVibrationForce = 1.0f;
 float ButiEngine::Player::m_maxVibrationMagnification = 5.0f;
 
@@ -70,6 +72,10 @@ void ButiEngine::Player::OnUpdate()
 		OnInvincible();
 	}
 
+	if (m_isOverheatEffect)
+	{
+		OverheatEffect();
+	}
 	if (m_isOverheat)
 	{
 		Overheat();
@@ -109,6 +115,7 @@ void ButiEngine::Player::OnSet()
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_vibUpSEResetTimer = ObjectFactory::Create<RelativeTimer>(5);
+	m_vlp_overheatEffectTimer = ObjectFactory::Create<AbsoluteTimer>(60);
 }
 
 void ButiEngine::Player::OnRemove()
@@ -174,6 +181,7 @@ void ButiEngine::Player::Start()
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1.0f);
 
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+	m_vwp_worldSpeedManager = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_life = 3;
@@ -209,7 +217,7 @@ void ButiEngine::Player::Start()
 	//CreateBombObject();
 
 	m_vwp_hzUIParent = GetManager().lock()->AddObjectFromCereal("HzUIParent");
-	m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-700, -400, 50));
+	m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-825, -390, 50));
 	m_vwp_numberManager = GetManager().lock()->AddObjectFromCereal("NumberManager");
 	m_vwp_numberManager.lock()->transform->SetBaseTransform(m_vwp_hzUIParent.lock()->transform);
 	m_vwp_numberManager.lock()->transform->SetLocalPosition(Vector3(0, 0, 0));
@@ -445,6 +453,7 @@ void ButiEngine::Player::VibrationController()
 
 	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
 
 	//float vibrationPower = m_vibration / m_maxVibration;
 	InputManager::VibrationStart(m_controllerVibration);
@@ -455,6 +464,7 @@ void ButiEngine::Player::IncreaseVibration()
 {
 	if (m_isDead) { return; }
 	if (m_isOverheat) { return; }
+	if (m_isOverheatEffect) { return; }
 
 	//モブハチから振動値を受け取る
 	float vibrationIncrease = CalculateVibrationIncrease();
@@ -485,7 +495,8 @@ void ButiEngine::Player::IncreaseVibration()
 
 	if (GetVibrationRate() >= 1.0f)
 	{
-		StartOverheat();
+		StartOverheatEffect();
+		//StartOverheat();
 		StopVibUpSE();
 		//meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
 		//meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
@@ -502,6 +513,7 @@ void ButiEngine::Player::DecreaseVibration()
 	if (m_isDead) { return; }
 	if (!m_isVibrate) { return; }
 	if (m_isOverheat) { return; }
+	if (m_isOverheatEffect) { return; }
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 
@@ -525,7 +537,7 @@ void ButiEngine::Player::VibrationEffect()
 {
 	if (m_isVibrate && !m_isDead)
 	{
-		if (m_vwp_vibrationEffect.lock() == nullptr)
+		if (!m_vwp_vibrationEffect.lock())
 		{
 			auto transform = gameObject.lock()->transform;
 			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
@@ -570,7 +582,7 @@ void ButiEngine::Player::VibrationEffect()
 
 void ButiEngine::Player::StopVibrationEffect()
 {
-	if (m_vwp_vibrationEffect.lock() != nullptr)
+	if (m_vwp_vibrationEffect.lock())
 	{
 		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
@@ -691,6 +703,10 @@ void ButiEngine::Player::StartOverheat()
 
 	m_maxMoveSpeed = m_overheatMaxMoveSpeed;
 
+	auto camera = GetManager().lock()->GetGameObject("Camera");
+	camera.lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(4, 30);
+	camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(3);
+
 	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(0);
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
 	meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(1);
@@ -722,6 +738,12 @@ void ButiEngine::Player::Overheat()
 			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->Disappear();
 		}
 
+		if (!m_vwp_waveManager.lock()->IsClearAnimation())
+		{
+			auto camera = GetManager().lock()->GetGameObject("Camera");
+			camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(2);
+		}
+
 		StopVibrationEffect();
 
 		if (m_vwp_tiltFloatObject.lock())
@@ -734,6 +756,32 @@ void ButiEngine::Player::Overheat()
 
 		m_isOverheat = false;
 		m_isInvincible = false;
+	}
+}
+
+void ButiEngine::Player::StartOverheatEffect()
+{
+	auto camera = GetManager().lock()->GetGameObject("Camera");
+	camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(1);
+	m_vwp_worldSpeedManager.lock()->SetSpeed(0.2f);
+	m_vlp_overheatEffectTimer->Start();
+	m_isOverheatEffect = true;
+	m_isInvincible = true;
+}
+
+void ButiEngine::Player::OverheatEffect()
+{
+	m_isInvincible = true;
+	if (m_vlp_overheatEffectTimer->Update())
+	{
+		m_isOverheatEffect = false;
+		m_vlp_overheatEffectTimer->Stop();
+		m_vlp_overheatEffectTimer->Reset();
+
+		m_vwp_worldSpeedManager.lock()->SetSpeed(1.0f);
+
+		StartOverheat();
+
 	}
 }
 
@@ -826,15 +874,16 @@ void ButiEngine::Player::SetVibrationParameter()
 {
 	m_overheatTimer = ObjectFactory::Create<RelativeTimer>(m_overheatFrame);
 
-	m_isVibrate = false;
 	m_vibration = 0.0f;
 	m_maxVibration = 100.0f;
 	m_strongestNearWorkerVibration = 0.0f;
 	m_nearEnemyVibrationRate = 0.0f;
-	m_isOverheat = false;
 	m_controllerVibration = 0.0f;
 	m_previousVibrationPower = 0;
+	m_isVibrate = false;
+	m_isOverheat = false;
 	m_isFixNumberUIScale = false;
+	m_isOverheatEffect = false;
 }
 
 void ButiEngine::Player::StopVibUpSE()

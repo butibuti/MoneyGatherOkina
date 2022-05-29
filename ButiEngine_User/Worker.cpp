@@ -60,7 +60,7 @@ void ButiEngine::Worker::OnUpdate()
 	//	StopVibrationEffect();
 	//	//StopShakeDrawObject();
 	//}
-	if (m_vwp_vibrationEffect.lock() == nullptr)
+	if (!m_vwp_vibrationEffect.lock())
 	{
 		auto transform = gameObject.lock()->transform;
 		m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect_NoBloom");
