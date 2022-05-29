@@ -15,7 +15,7 @@ std::int32_t main()
 {
 	std::cout << "debug" << std::endl;
 #else
-std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR arg, std::int32_t)
+std::int32_t APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR arg, std::int32_t)
 {
 #endif
 	std::int32_t returnCode = 0;
@@ -41,6 +41,7 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR arg, std::int32_t)
 
 #else
 	auto init = InputApplicationInitData();
+	init.hInstance = hInstance;
 	auto app = CreateApplicationInstance(init);
 
 	GameDevice::Initialize();

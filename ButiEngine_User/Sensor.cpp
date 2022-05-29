@@ -9,20 +9,20 @@ void ButiEngine::Sensor::OnUpdate()
 
 void ButiEngine::Sensor::OnSet()
 {
-	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionStayLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			if (arg_vwp_other->GetIsRemove()) { return; }
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				//m_vwp_player.lock()->AddNearEnemyCount();
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Flocking")))
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Flocking")))
 			{
 				OnCollisionFlocking(arg_vwp_other);
 			}
 		});
 
-	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionLeaveLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
 		});
 

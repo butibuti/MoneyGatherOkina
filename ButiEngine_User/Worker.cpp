@@ -98,11 +98,11 @@ void ButiEngine::Worker::OnUpdate()
 
 void ButiEngine::Worker::OnSet()
 {
-	auto collisionLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->transform->GetWorldScale() == Vector3Const::Zero) { return; }
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
+			if (arg_vwp_other->transform->GetWorldScale() == Vector3Const::Zero) { return; }
+			if (arg_vwp_other->GetIsRemove()) { return; }
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
 				OnCollisionPlayer(arg_vwp_other);
 			}
@@ -110,7 +110,7 @@ void ButiEngine::Worker::OnSet()
 			//{
 			//	OnCollisionStalker(arg_vwp_other);
 			//}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				OnCollisionEnemy(arg_vwp_other);
 			}

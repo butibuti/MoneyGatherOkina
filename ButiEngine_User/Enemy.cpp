@@ -97,21 +97,21 @@ void ButiEngine::Enemy::OnUpdate()
 
 void ButiEngine::Enemy::OnSet()
 {
-	auto collisionEnterLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionEnterLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
 			if (gameObject.lock()->transform->GetWorldScale() == Vector3Const::Zero) { return; }
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Enemy")))
+			if (arg_vwp_other->GetIsRemove()) { return; }
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
 				OnCollisionEnemy(arg_vwp_other);
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
 				//m_isNearPlayer = true;
 				//m_vlp_attackFlashTimer->Start();
 				//CreateAttackFlashEffect();
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
 				m_isHitShockWave = true;
 				m_vlp_attackFlashTimer->Start();
@@ -119,14 +119,14 @@ void ButiEngine::Enemy::OnSet()
 			}
 		});
 
-	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionLeaveLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Sensor")))
+			if (arg_vwp_other->GetIsRemove()) { return; }
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Sensor")))
 			{
 				//m_isNearPlayer = false;
 			}
-			else if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("ShockWave")))
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("ShockWave")))
 			{
 				m_isHitShockWave = false;
 			}

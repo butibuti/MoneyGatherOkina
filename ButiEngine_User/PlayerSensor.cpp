@@ -9,10 +9,10 @@ void ButiEngine::PlayerSensor::OnUpdate()
 
 void ButiEngine::PlayerSensor::OnSet()
 {
-	auto collisionStayLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionStayLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
+			if (arg_vwp_other->GetIsRemove()) { return; }
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Player")))
 			{
 				float nearEnemyVibrationRate = m_vlp_player->GetNearEnemyVibrationRate();
 				float enemyVibrationRate = m_vlp_enemy->GetVibrationRate();
@@ -25,10 +25,10 @@ void ButiEngine::PlayerSensor::OnSet()
 			}
 		});
 
-	auto collisionLeaveLambda = std::function<void(Value_weak_ptr<GameObject>&)>([this](Value_weak_ptr<GameObject>& arg_vwp_other)->void
+	auto collisionLeaveLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
-			if (arg_vwp_other.lock()->GetIsRemove()) { return; }
-			if (arg_vwp_other.lock()->HasGameObjectTag(GameObjectTag("Player")))
+			if (arg_vwp_other->GetIsRemove()) { return; }
+			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Player")))
 			{
 				m_vlp_player->SetNearEnemyVibrationRate(0.0f);
 				m_vlp_enemy->SetIsNearPlayer(false);
