@@ -5,9 +5,9 @@
 
 std::int32_t ButiEngine::OutsideCrystalSpawner::m_startCrystalCount = 3;
 float ButiEngine::OutsideCrystalSpawner::m_startAngle = 0.0f;
-float ButiEngine::OutsideCrystalSpawner::m_spawnRadius = 35.0f;
+float ButiEngine::OutsideCrystalSpawner::m_spawnRadius = 30.0f;
 std::int32_t ButiEngine::OutsideCrystalSpawner::m_phaseCount = 3;
-std::vector<std::int32_t> ButiEngine::OutsideCrystalSpawner::m_vec_phaseActivePoints = { 0, 3000, 6000 };
+std::vector<std::int32_t> ButiEngine::OutsideCrystalSpawner::m_vec_phaseActivePoints = { 0, 1000, 2000 };
 
 void ButiEngine::OutsideCrystalSpawner::OnUpdate()
 {
@@ -88,6 +88,8 @@ void ButiEngine::OutsideCrystalSpawner::CreateCrystals()
 	crystalTransform->SetLocalPosition(Vector3(0.0f, 0.0f, m_spawnRadius));
 	crystalCenter->RollLocalRotationY_Degrees(m_startAngle);
 
+	Vector3 centerScale = crystalCenter->GetLocalScale();
+
 	for (std::uint8_t i = 0; i < m_phaseCount; i++)
 	{
 		std::uint8_t crystalCount = i * m_startCrystalCount;
@@ -107,6 +109,12 @@ void ButiEngine::OutsideCrystalSpawner::CreateCrystals()
 			m_vec_crystals[i].push_back(crystalComponent);
 
 			crystalCenter->RollLocalRotationY_Degrees(rollAngle);
+		}
+
+		if (i == 1)
+		{
+			centerScale += 0.075f;
+			crystalCenter->SetLocalScale(centerScale);
 		}
 
 		float rollAngle_ = rollAngle / pow(2.0f, i + 1);

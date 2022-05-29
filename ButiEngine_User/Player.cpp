@@ -39,6 +39,7 @@ std::int32_t ButiEngine::Player::m_overheatFrame = 600;
 float ButiEngine::Player::m_vibrationIncrease = 0.22f;
 float ButiEngine::Player::m_vibrationDecrease = 0.02f;
 float ButiEngine::Player::m_initVibrationForce = 1.0f;
+float ButiEngine::Player::m_overheatVibrationForce = 10.0f;
 float ButiEngine::Player::m_maxVibrationMagnification = 5.0f;
 
 void ButiEngine::Player::OnUpdate()
@@ -159,10 +160,13 @@ void ButiEngine::Player::OnShowUI()
 	GUI::BulletText(u8"UŒ‚—Í:%f", GetVibrationForce());
 
 	GUI::BulletText(u8"‰ŠúUŒ‚—Í");
-	GUI::DragFloat("##vMinForce", &m_initVibrationForce, 1.0f, 0.0f, 100.0f);
+	GUI::DragFloat("##vInitForce", &m_initVibrationForce, 1.0f, 0.0f, 100.0f);
 
 	GUI::BulletText(u8"UŒ‚—Í‚ÌÅ‘å”{—¦");
 	GUI::DragFloat("##vMaxForce", &m_maxVibrationMagnification, 1.0f, 0.0f, 100.0f);
+
+	GUI::BulletText(u8"ƒI[ƒo[ƒq[ƒgŽž‚ÌUŒ‚—Í");
+	GUI::DragFloat("##vOverheatForce", &m_overheatVibrationForce, 1.0f, 0.0f, 100.0f);
 
 	GUI::BulletText(u8"U“®’l‚Ìã¸—Ê");
 	GUI::DragFloat("##vIncrease", &m_vibrationIncrease, 0.001f, 0.0f, 1.0f);
@@ -347,8 +351,9 @@ void ButiEngine::Player::Move()
 
 	if (leftStick != 0)
 	{
-		Vector3 dir = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
-		dir.y = 0.0f;
+		//Vector3 dir = leftStick.x * cameraTransform->GetRight() + leftStick.y * cameraTransform->GetFront();
+		//dir.y = 0.0f;
+		Vector3 dir = Vector3(leftStick.x, 0.0f, leftStick.y);
 
 		m_velocity += dir.GetNormalize() * m_acceleration * GameDevice::WorldSpeed;
 		if (m_velocity.GetLength() > m_maxMoveSpeed)
