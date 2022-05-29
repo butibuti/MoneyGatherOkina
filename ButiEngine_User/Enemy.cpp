@@ -453,12 +453,12 @@ void ButiEngine::Enemy::ScaleAnimation()
 		auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
 		if (fly)
 		{
-			m_vwp_scaleAnimationComponent.lock()->SetMaxPlusScale(0.75f);
+			m_vwp_scaleAnimationComponent.lock()->SetMaxPlusScale(0.5f);
 		}
 		auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 		if (stalker)
 		{
-			m_vwp_scaleAnimationComponent.lock()->SetMaxPlusScale(0.75f);
+			m_vwp_scaleAnimationComponent.lock()->SetMaxPlusScale(0.5f);
 		}
 		return;
 	}
