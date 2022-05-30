@@ -45,15 +45,15 @@ std::int32_t APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR arg, std::in
 	auto app = CreateApplicationInstance(init);
 
 	GameDevice::Initialize();
-	//GameDevice::GetInput()->SetCursorHide(true);
+	GameDevice::GetInput()->SetCursorHide(true);
 	GameDevice::GetInput()->Initialize(app);
 	app->PreLoadResources();
-	app->InitLoadResources();
+	//app->InitLoadResources();
 
-	app->GetSceneManager()->LoadScene_Init(init.initSceneName);
+	app->GetSceneManager()->LoadScene_Init("LogoScene");
 
 
-	app->GetGraphicDevice()->SetClearColor(Vector4(0.5, 0.1, 0.5, 1));
+	app->GetGraphicDevice()->SetClearColor(Vector4(0, 0, 0, 1));
 	returnCode = app->Run();
 	app->Exit();
 #endif // _EDITORBUILD
