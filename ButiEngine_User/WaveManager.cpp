@@ -410,7 +410,7 @@ void ButiEngine::WaveManager::SpawnAnimation()
 		if (!m_isTutorial)
 		{
 			//エネミースポナーをスポーンさせる
-			//SpawnEnemySpawner();
+			SpawnEnemySpawner();
 		}
 	}
 }
