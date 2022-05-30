@@ -913,6 +913,9 @@ void ButiEngine::Player::OnCollisionShockWave(Value_weak_ptr<GameObject> arg_vwp
 {
 	m_isHitShockWave_Worker = true;
 	m_controllerVibration = 1.0f;
+
+	m_strongestNearWorkerVibration = arg_vwp_other.lock()->GetGameComponent<ShockWave>()->GetParent().lock()->GetGameComponent<Worker>()->GetVibration();
+
 	IncreaseVibration();
 }
 
@@ -926,7 +929,12 @@ void ButiEngine::Player::CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_o
 
 float ButiEngine::Player::CalculateVibrationIncrease()
 {
-	return m_vibrationIncrease * m_vec_nearWorkers.size() * GameDevice::WorldSpeed;
+	float increase = m_vibrationIncrease * m_vec_nearWorkers.size() * GameDevice::WorldSpeed;
+	if (m_isHitShockWave_Worker)
+	{
+		increase = m_vibrationIncrease * GameDevice::WorldSpeed;
+	}
+	return increase;
 }
 
 void ButiEngine::Player::CreateDrawObject()
