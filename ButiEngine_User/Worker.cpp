@@ -26,8 +26,8 @@
 #include "WingAnimation.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
-float ButiEngine::Worker::m_maxVibration = 50.0f;
-float ButiEngine::Worker::m_minVibration = 0.0f;
+float ButiEngine::Worker::m_maxVibration = 150.0f;
+float ButiEngine::Worker::m_minVibration = 20.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.21f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.2f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
