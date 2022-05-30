@@ -93,6 +93,7 @@ namespace ButiEngine {
 		void IncreaseVibration();
 		void DecreaseVibration();
 		void VibrationEffect();
+		void VibrationEffectOverheat();
 		void StopVibrationEffect();
 		void VibrationPowerDrawUpdate();
 		void ShakeDrawObject();
@@ -144,6 +145,7 @@ namespace ButiEngine {
 		Vector3 m_defaultScale;
 		std::int8_t m_life;
 		std::uint8_t m_maxWorkerCount;
+		float m_masterVolume;
 
 		//à⁄ìÆ
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
@@ -174,11 +176,13 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_overheatEffectTimer;
 		Value_weak_ptr<GameObject> m_vwp_shockWave;
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
+		Value_weak_ptr<GameObject> m_vwp_vibrationEffectOverheat;
 		Value_weak_ptr<GameObject> m_vwp_numberManager;
 		Value_weak_ptr<GameObject> m_vwp_maxUI;
 		Value_weak_ptr<GameObject> m_vwp_hzUIParent;
 		Value_weak_ptr<FlockingLeader> m_vwp_flockingLeader;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
+		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectOverheatComponent;
 		Value_weak_ptr<NumberManagerComponent> m_vwp_numberManagerComponent;
 		std::vector<Value_weak_ptr<Worker>> m_vec_nearWorkers;
 		Vector3 m_defaultNumberUIScale;
@@ -196,6 +200,7 @@ namespace ButiEngine {
 		bool m_isOverheat;
 		bool m_isFixNumberUIScale;
 		bool m_isOverheatEffect;
+		bool m_isOverheatSoundStop;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;

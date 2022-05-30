@@ -35,6 +35,7 @@ namespace ButiEngine {
 
 		Vector3 m_defaultScale;
 		Vector3 m_calcScale;
+		Vector3 m_currentScale;
 
 		float m_randomPosY;
 

@@ -27,6 +27,7 @@
 #include "OutsideCrystal.h"
 #include "Stick.h"
 #include "PauseManagerComponent.h"
+#include "TutorialCrystal.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
@@ -232,7 +233,6 @@ bool ButiEngine::Enemy::IsVibrate()
 
 void ButiEngine::Enemy::Dead()
 {
-	auto position = gameObject.lock()->transform->GetWorldPosition();
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
@@ -242,55 +242,52 @@ void ButiEngine::Enemy::Dead()
 	auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
 	if (fly)
 	{
-		fly->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
+		fly->Dead();		
+		DeadSound(false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
 	if (kiba)
 	{
 		kiba->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+		DeadSound(true);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
 	if (stalker)
 	{
 		stalker->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
+		DeadSound(false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
-	}
-	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
-	if (tutorial)
-	{
-		tutorial->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
-		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
 	if (volcano)
 	{
 		volcano->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+		DeadSound(true);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 
-	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
-	if (boss)
+	auto tutorialCrystal = gameObject.lock()->GetGameComponent<TutorialCrystal>();
+	if (tutorialCrystal)
 	{
-		gameObject.lock()->SetIsRemove(true);
-		return;
+		tutorialCrystal->Dead();
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
-	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
-	if (crystal)
-	{
-		crystal->Dead();
-		return;
-	}
+
+	//auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
+	//if (boss)
+	//{
+	//	gameObject.lock()->SetIsRemove(true);
+	//	return;
+	//}
+	//auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
+	//if (crystal)
+	//{
+	//	crystal->Dead();
+	//	return;
+	//}
 
 
 
@@ -509,6 +506,27 @@ void ButiEngine::Enemy::CreateAttackFlashEffect()
 	m_vlp_attackFlashTimer->ChangeCountFrame(spawnIntervalFrame);
 
 	m_vlp_attackFlashTimer->Reset();
+}
+
+void ButiEngine::Enemy::DeadSound(const bool arg_isBigSound)
+{
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
+
+	if (arg_isBigSound)
+	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+	}
+	else
+	{
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
+	}
+
+	if (m_vwp_particleGenerater.lock())
+	{
+		auto position = gameObject.lock()->transform->GetWorldPosition();
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, arg_isBigSound);
+	}
+
 }
 
 

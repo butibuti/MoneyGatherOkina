@@ -35,7 +35,7 @@ void ButiEngine::PauseManagerComponent::OnUpdate()
 			//ポーズを解除する
 			DeadPauseSelectUI();
 			m_vlp_deadTimer->Start();
-			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Cansel.wav"));
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Cansel.wav"));
 		}
 		else
 		{
@@ -49,7 +49,7 @@ void ButiEngine::PauseManagerComponent::OnUpdate()
 			m_vlp_appearTimer->Start();
 			m_vwp_fadeOutComponent.lock()->SetIsFade(false);
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.0f);
-			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 			InputManager::VibrationStop();
 			GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStop();
 		}
@@ -146,7 +146,7 @@ void ButiEngine::PauseManagerComponent::InputSelect()
 
 	if (InputManager::IsTriggerUpKey() || InputManager::IsTriggerDownKey())
 	{
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Select.wav"));
 		m_isBack = !m_isBack;
 	}
 
@@ -160,11 +160,11 @@ void ButiEngine::PauseManagerComponent::InputSelect()
 			//ポーズを解除する
 			DeadPauseSelectUI();
 			m_vlp_deadTimer->Start();
-			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Cansel.wav"));
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Cansel.wav"));
 		}
 		else
 		{
-			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 		}
 		m_vlp_waitTimer->Reset();
 		m_vlp_appearTimer->Reset();

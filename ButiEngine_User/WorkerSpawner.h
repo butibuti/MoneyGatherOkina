@@ -23,8 +23,16 @@ namespace ButiEngine {
 
 		void SpawnStart()
 		{
+			if (m_isTutorial) { return; }
 			m_isSpawnWorker = true;
 			m_vlp_spawnTimer->Start();
+		}
+
+		void RandomSpawnStart()
+		{
+			if (!m_isTutorial) { return; }
+			m_isRandomSpawnWorker = true;
+			m_vlp_randomSpawnTimer->Start();
 		}
 	private:
 		void RandomSpawnWorker();
@@ -32,12 +40,15 @@ namespace ButiEngine {
 		void SetWorkerPosition();
 
 		Value_ptr<Timer> m_vlp_spawnTimer;
+		Value_ptr<Timer> m_vlp_randomSpawnTimer;
 		std::vector<Value_weak_ptr<Worker>> m_vec_workers;
 		std::int32_t m_spawnIntervalFrame;
 		std::int32_t m_initSpawnWorkerCount;
 
+		bool m_isRandomSpawnWorker;
 		bool m_isSpawnWorker;
 		bool m_isSpawned;
+		bool m_isTutorial;
 	};
 
 }

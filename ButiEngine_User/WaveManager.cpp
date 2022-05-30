@@ -47,6 +47,7 @@ void ButiEngine::WaveManager::OnUpdate()
 		if (!m_isAdvanceGameOver)
 		{
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(0.3f, 120);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 		}
 		m_isAdvanceGameOver = true;
 		if (m_vlp_advanceGameOverTimer->Update())
@@ -91,8 +92,27 @@ void ButiEngine::WaveManager::OnSet()
 		oneFrameObject = GetManager().lock()->AddObjectFromCereal("DrawObject_OneFrame");
 	}
 	m_vlp_advanceGameOverTimer = ObjectFactory::Create<AbsoluteTimer>(120);
-	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(150);
-	m_vlp_spawnIntervalTimer = ObjectFactory::Create<RelativeTimer>(50);
+
+	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+
+	std::uint16_t spawnFrame = 150;
+	std::uint16_t spawnIntervalFrame = 70;
+
+	if (m_sceneName == "Stage_0")
+	{
+		m_isTutorial = true;
+		spawnFrame = 50;
+		spawnIntervalFrame = 0;
+		m_clearPoint = m_tutorialClearPoint;
+	}
+	else if (m_sceneName == "Stage_1")
+	{
+		m_isTutorial = false;
+		m_clearPoint = m_stageClearPoint;
+	}
+
+	m_vlp_spawnTimer = ObjectFactory::Create<AbsoluteTimer>(spawnFrame);
+	m_vlp_spawnIntervalTimer = ObjectFactory::Create<AbsoluteTimer>(spawnIntervalFrame);
 }
 
 void ButiEngine::WaveManager::Start()
@@ -120,20 +140,7 @@ void ButiEngine::WaveManager::Start()
 	m_isSpawnWorker = false;
 
 	m_point = m_retryPoint;
-	m_clearPoint = 30;
 	m_enemySpawnCount = 0;
-
-	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
-
-
-	if (m_sceneName == "Stage_0")
-	{
-		m_clearPoint = m_tutorialClearPoint;
-	}
-	else if (m_sceneName == "Stage_1")
-	{
-		m_clearPoint = m_stageClearPoint;
-	}
 
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM1.wav"));
 }
@@ -219,9 +226,9 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	}
 
 	//ステージセレクトへ
-	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext())
+	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext() && !m_isNextScene)
 	{
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
 		m_isNextScene = true;
 	}
@@ -236,6 +243,7 @@ void ButiEngine::WaveManager::StageClearAnimation()
 		m_retryPoint = 0;
 
 		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 	}
 }
 
@@ -246,7 +254,6 @@ void ButiEngine::WaveManager::GameOverAnimation()
 
 	if (!m_vwp_gameOverManagerComponent.lock())
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 		auto gameOverManager = GetManager().lock()->AddObjectFromCereal("GameOverManager");
 		m_vwp_gameOverManagerComponent = gameOverManager.lock()->GetGameComponent<GameOverManagerComponent>();
 	}
@@ -268,6 +275,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 			sceneManager->ChangeScene(sceneName);
 
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 		}
 		else
 		{
@@ -281,6 +289,7 @@ void ButiEngine::WaveManager::GameOverAnimation()
 			m_retryPoint = 0;
 
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 		}
 
 		////ウェーブの途中からやり直す
@@ -316,6 +325,7 @@ void ButiEngine::WaveManager::PauseAnimation()
 		m_retryPoint = 0;
 
 		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
 	}
 }
 
@@ -355,8 +365,12 @@ void ButiEngine::WaveManager::SpawnAnimation()
 
 		m_isGameStart = true;
 		GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(2);
-		//エネミースポナーをスポーンさせる
-		SpawnEnemySpawner();
+
+		if (!m_isTutorial)
+		{
+			//エネミースポナーをスポーンさせる
+			SpawnEnemySpawner();
+		}
 	}
 }
 

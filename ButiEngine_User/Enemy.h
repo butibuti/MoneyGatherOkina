@@ -70,6 +70,7 @@ namespace ButiEngine {
 		void ScaleAnimation();
 		void AttackFlashUpdate();
 		void CreateAttackFlashEffect();
+		void DeadSound(const bool arg_isBigSound);
 
 		//U“®—Ê‚Ìã¸’l‚ğŒvZ‚·‚é
 		void CalculateVibrationIncrease();

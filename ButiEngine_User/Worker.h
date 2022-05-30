@@ -52,7 +52,16 @@ namespace ButiEngine {
 		void Rupture(const Vector3& arg_dir);
 		void Predated(Value_weak_ptr<GameObject> arg_vwp_other);
 		void CreateAttackFlashEffect();
-		void RemoveVibration(const float arg_vibration) { m_vibration -= arg_vibration; }
+		void RemoveVibration(const float arg_vibration)
+		{
+			m_vibration -= arg_vibration; 
+			m_vibration = max(m_vibration, m_minVibration);
+
+			if (m_isTutorialVibrationObject)
+			{
+				m_vlp_vibrationResetTimer->Reset();
+			}
+		}
 	private:
 		void OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
@@ -84,6 +93,7 @@ namespace ButiEngine {
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
 		static float m_maxScaleRate;
+		static float m_tutorialMaxVibration;
 
 		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
 
@@ -112,6 +122,9 @@ namespace ButiEngine {
 		bool m_isAttackSE;
 		
 		float m_vibration;
+
+		bool m_isTutorialVibrationObject;
+		Value_ptr<Timer> m_vlp_vibrationResetTimer;
 	};
 
 }

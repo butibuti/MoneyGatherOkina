@@ -37,7 +37,7 @@ std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
 float ButiEngine::Player::m_vibrationIncrease = 0.21f;
-float ButiEngine::Player::m_vibrationDecrease = 0.2f;
+float ButiEngine::Player::m_vibrationDecrease = 0.02f;
 float ButiEngine::Player::m_initVibrationForce = 1.0f;
 float ButiEngine::Player::m_overheatVibrationForce = 10.0f;
 float ButiEngine::Player::m_maxVibrationMagnification = 5.0f;
@@ -60,7 +60,6 @@ void ButiEngine::Player::OnUpdate()
 	//}
 
 	VibrationUpdate();
-	VibrationEffect();
 
 	m_vec_nearWorkers.clear();
 	m_strongestNearWorkerVibration = 0.0f;
@@ -80,6 +79,27 @@ void ButiEngine::Player::OnUpdate()
 	if (m_isOverheat)
 	{
 		Overheat();
+		VibrationEffectOverheat();
+	}
+	else
+	{
+		VibrationEffect();
+	}
+	if (m_isOverheatSoundStop)
+	{
+		if (m_masterVolume > 0)
+		{
+			m_masterVolume -= 0.1f;
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(m_masterVolume);
+		}
+	}
+	else
+	{
+		if (m_masterVolume < 1.0f)
+		{
+			m_masterVolume += 0.1f;
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(m_masterVolume);
+		}
 	}
 
 	//if (m_isBomb)
@@ -116,7 +136,7 @@ void ButiEngine::Player::OnSet()
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_vibUpSEResetTimer = ObjectFactory::Create<RelativeTimer>(5);
-	m_vlp_overheatEffectTimer = ObjectFactory::Create<AbsoluteTimer>(60);
+	m_vlp_overheatEffectTimer = ObjectFactory::Create<RelativeTimer>(10);
 }
 
 void ButiEngine::Player::OnRemove()
@@ -191,6 +211,8 @@ void ButiEngine::Player::Start()
 	m_life = 3;
 
 	m_maxWorkerCount = 20;
+
+	m_masterVolume = 1.0f;
 
 	m_vwp_beeSoulPod = GetManager().lock()->GetGameObject("BeeSoulPod").lock()->GetGameComponent<BeeSoulPodUIComponent>();
 
@@ -307,7 +329,23 @@ void ButiEngine::Player::Spawn()
 
 	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
-	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::PLAYER_COLOR);
+	spawnEffect.lock()->transform->SetLocalScale(3.0f);
+	auto spawnEffectComponent = spawnEffect.lock()->GetGameComponent<SpawnEffect>();
+	spawnEffectComponent->SetColor(GameSettings::PLAYER_COLOR);
+	spawnEffectComponent->SetLife(10);
+
+	auto transform = gameObject.lock()->transform;
+	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
+	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	auto randomRotate = (float)ButiRandom::GetInt(-180, 180);
+	deadEffect.lock()->transform->SetLocalRotationZ_Degrees(randomRotate);
+	deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+
+	auto camera = GetManager().lock()->GetGameObject("Camera");
+	//camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(1);
+	camera.lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(3, 60);
+
+	//GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>()->SetSpeed(0.1f, 60);
 }
 
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
@@ -470,24 +508,36 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isDead) { return; }
 	if (m_isOverheat) { return; }
 	if (m_isOverheatEffect) { return; }
+	if (m_vec_nearWorkers.size() == 0) { return; }
 
 	//ƒ‚ƒuƒnƒ`‚©‚çU“®’l‚ðŽó‚¯Žæ‚é
 	float vibrationIncrease = CalculateVibrationIncrease();
 	m_vibration += vibrationIncrease;
-	
-	if (m_vibration >= m_maxVibration)
+
+
+	//‹zŽû
+	//if (m_vibration >= m_maxVibration)
+	//{
+	//	float overVibration = m_vibration - m_maxVibration;
+	//	m_vibration -= overVibration;
+	//	vibrationIncrease += overVibration;
+	//	m_controllerVibration = 0.0f;
+	//}
+
+	//float removeVibration = vibrationIncrease / m_vec_nearWorkers.size();
+
+	//auto end = m_vec_nearWorkers.end();
+	//for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
+	//{
+	//	(*itr).lock()->RemoveVibration(removeVibration);
+	//}
+
+	if (m_vibration >= m_strongestNearWorkerVibration)
 	{
-		float overVibration = m_vibration - m_maxVibration;
-		m_vibration -= overVibration;
-		vibrationIncrease += overVibration;
+		m_vibration = m_strongestNearWorkerVibration;
 		m_controllerVibration = 0.0f;
 	}
-
-	auto end = m_vec_nearWorkers.end();
-	for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
-	{
-		(*itr).lock()->RemoveVibration(vibrationIncrease);
-	}
+	m_vibration = min(m_vibration, m_maxVibration);
 
 	//if (!m_isVibUpSE)
 	//{
@@ -549,14 +599,8 @@ void ButiEngine::Player::VibrationEffect()
 			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
 			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(0.0f);
 
-			Vector4 color = GameSettings::PLAYER_COLOR;
-			if (m_isOverheat)
-			{
-				color = GameSettings::PLAYER_ATTACK_COLOR;
-			}
-
 			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
-			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = color;
+			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
 
 			m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
 			m_vwp_vibrationEffectComponent.lock()->SetDefaultScale(m_defaultScale * 2.0f);
@@ -568,30 +612,55 @@ void ButiEngine::Player::VibrationEffect()
 			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, true);
 			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
 			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
+		}
 
-			Vector4 color = GameSettings::PLAYER_COLOR;
-			if (m_isOverheat)
-			{
-				color = GameSettings::PLAYER_ATTACK_COLOR;
-			}
-
-			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
-			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = color;
+		if (m_vwp_vibrationEffectOverheat.lock())
+		{
+			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
 		}
 	}
-	else
+}
+
+void ButiEngine::Player::VibrationEffectOverheat()
+{
+	if (m_isVibrate && !m_isDead)
 	{
-		StopVibrationEffect();
+		if (!m_vwp_vibrationEffectOverheat.lock())
+		{
+			auto transform = gameObject.lock()->transform;
+			m_vwp_vibrationEffectOverheat = GetManager().lock()->AddObjectFromCereal("VibrationEffect_Overheat");
+			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalScale(0.0f);
+
+			auto meshDraw = m_vwp_vibrationEffectOverheat.lock()->GetGameComponent<MeshDrawComponent>();
+			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
+
+			m_vwp_vibrationEffectOverheatComponent = m_vwp_vibrationEffectOverheat.lock()->GetGameComponent<VibrationEffectComponent>();
+			m_vwp_vibrationEffectOverheatComponent.lock()->SetDefaultScale(m_defaultScale * 2.0f);
+		}
+		else
+		{
+			auto transform = gameObject.lock()->transform;
+			float vibrationRate = m_vibration / m_maxVibration;
+			m_vwp_vibrationEffectOverheatComponent.lock()->SetVibrationViolent(vibrationRate, true);
+			m_vwp_vibrationEffectOverheatComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
+			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
+		}
+
+		if (m_vwp_vibrationEffect.lock())
+		{
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
+		}
 	}
 }
 
 void ButiEngine::Player::StopVibrationEffect()
 {
-	if (m_vwp_vibrationEffect.lock())
-	{
-		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
-		m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
-	}
+	//if (m_vwp_vibrationEffect.lock())
+	//{
+	//	m_vwp_vibrationEffect.lock()->SetIsRemove(true);
+	//	m_vwp_vibrationEffect = Value_weak_ptr<GameObject>();
+	//}
 }
 
 void ButiEngine::Player::VibrationPowerDrawUpdate()
@@ -749,7 +818,7 @@ void ButiEngine::Player::Overheat()
 			camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(2);
 		}
 
-		StopVibrationEffect();
+		//StopVibrationEffect();
 
 		if (m_vwp_tiltFloatObject.lock())
 		{
@@ -776,6 +845,7 @@ void ButiEngine::Player::StartOverheatEffect()
 	m_vlp_overheatEffectTimer->Start();
 	m_isOverheatEffect = true;
 	m_isInvincible = true;
+	m_isOverheatSoundStop = true;
 }
 
 void ButiEngine::Player::OverheatEffect()
@@ -791,6 +861,7 @@ void ButiEngine::Player::OverheatEffect()
 
 		StartOverheat();
 
+		m_isOverheatSoundStop = false;
 	}
 }
 
@@ -893,6 +964,7 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_isOverheat = false;
 	m_isFixNumberUIScale = false;
 	m_isOverheatEffect = false;
+	m_isOverheatSoundStop = false;
 }
 
 void ButiEngine::Player::StopVibUpSE()

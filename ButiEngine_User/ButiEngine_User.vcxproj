@@ -530,6 +530,7 @@ cd ..\</Command>
     <ClCompile Include="BossState_Jump.cpp" />
     <ClCompile Include="CameraAxis.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="CrossBeamEffectComponent.cpp" />
     <ClCompile Include="Crystal.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="DrawObject.cpp" />
@@ -608,6 +609,7 @@ cd ..\</Command>
     <ClCompile Include="Suicide.cpp" />
     <ClCompile Include="TiltMotion.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
+    <ClCompile Include="TutorialCrystal.cpp" />
     <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="VibrationSensor.cpp" />
     <ClCompile Include="VignetteUIComponent.cpp" />
@@ -634,6 +636,7 @@ cd ..\</Command>
     <ClInclude Include="BossState_Jump.h" />
     <ClInclude Include="CameraAxis.h" />
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="CrossBeamEffectComponent.h" />
     <ClInclude Include="Crystal.h" />
     <ClInclude Include="DrawObject.h" />
     <ClInclude Include="Enemy.h" />
@@ -700,6 +703,7 @@ cd ..\</Command>
     <ClInclude Include="Suicide.h" />
     <ClInclude Include="TiltMotion.h" />
     <ClInclude Include="TitleManagerComponent.h" />
+    <ClInclude Include="TutorialCrystal.h" />
     <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="VibrationSensor.h" />
     <ClInclude Include="VignetteUIComponent.h" />

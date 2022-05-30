@@ -2,11 +2,12 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class SpawnEffect :public GameComponent
+	class TutorialCrystal :public GameComponent
 	{
 	public:
+
 		std::string GetGameComponentName()const override {
-			return "SpawnEffect";
+			return "TutorialCrystal";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -20,18 +21,17 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetColor(const Vector4& arg_color);
-		void SetLife(const std::uint16_t arg_life) { m_life = arg_life; }
+		void Dead();
 	private:
-		Value_ptr<Timer> m_vlp_lifeTimer;
-		std::uint16_t m_life;
+		void SetEnemyParameter();
 
-		Vector3 m_startScale;
-		Vector3 m_targetScale;
-
-		Vector4 color;
+		static std::int32_t m_progressPoint;
+		static std::int32_t m_pocketCount;
+		static float m_createPocketRadius;
+		static float m_vibrationCapacity;
+		static float m_vibrationResistance;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(SpawnEffect, true);
+BUTI_REGIST_GAMECOMPONENT(TutorialCrystal, true);

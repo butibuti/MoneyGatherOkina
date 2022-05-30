@@ -33,6 +33,9 @@ namespace ButiEngine {
 		void AddPoint(const std::int32_t arg_progressPoint);
 		void AddSpawnCount();
 
+		void SetIsTutorial(const bool arg_isTutorial) { m_isTutorial = arg_isTutorial; }
+
+		bool IsTutorial() { return m_isTutorial; }
 		bool IsGameStart() { return m_isGameStart; }
 		bool IsClearAnimation() { return m_isClear; }
 		bool IsGameOver() { return m_isAdvanceGameOver; }
@@ -45,8 +48,8 @@ namespace ButiEngine {
 		static void SetRetryPoint(const std::int32_t arg_retryPoint) { m_retryPoint = arg_retryPoint; }
 		static std::int32_t GetRetryPoint() { return m_retryPoint; }
 
-	private:
 		void SpawnEnemySpawner();
+	private:
 		void StageClearAnimation();
 		void GameOverAnimation();
 		void PauseAnimation();
@@ -68,6 +71,7 @@ namespace ButiEngine {
 
 		std::string m_sceneName;
 
+		bool m_isTutorial;
 		bool m_isGameStart;
 
 		//ƒNƒŠƒA‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©

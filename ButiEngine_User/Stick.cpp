@@ -119,10 +119,6 @@ void ButiEngine::Stick::CheckMoveFinish()
 		{
 			m_isPocketCatch = true;
 			auto position = gameObject.lock()->transform->GetLocalPosition();
-			m_vwp_particleGenerater.lock()->CatchParticles(position, gameObject.lock()->transform);
-
-			auto soundTag = "Sound/Attack_OneShot_" + std::to_string(ButiRandom::GetInt(0, 3)) + ".wav";
-			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag(soundTag));
 		}
 	}
 }
