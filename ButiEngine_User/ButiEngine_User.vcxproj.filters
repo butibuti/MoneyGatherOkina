@@ -103,6 +103,7 @@
     <ClCompile Include="TutorialCrystal.cpp" />
     <ClCompile Include="CrossBeamEffectComponent.cpp" />
     <ClCompile Include="ProgressPointUI.cpp" />
+    <ClCompile Include="TutorialCrystalSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraAxis.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="CrossBeamEffectComponent.h" />
     <ClInclude Include="TutorialCrystal.h" />
     <ClInclude Include="ProgressPointUI.h" />
+    <ClInclude Include="TutorialCrystalSpawner.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

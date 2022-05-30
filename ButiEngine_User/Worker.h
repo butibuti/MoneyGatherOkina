@@ -94,7 +94,6 @@ namespace ButiEngine {
 		static float m_vibrationIncrease;
 		static float m_vibrationDecrease;
 		static float m_maxScaleRate;
-		static float m_tutorialMaxVibration;
 		static float m_spawnParticleSpeed;
 
 		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
@@ -129,6 +128,7 @@ namespace ButiEngine {
 		float m_vibration;
 
 		bool m_isTutorialVibrationObject;
+		float m_tutorialMaxVibration;
 		Value_ptr<Timer> m_vlp_vibrationResetTimer;
 	};
 

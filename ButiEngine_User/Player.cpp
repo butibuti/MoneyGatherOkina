@@ -911,12 +911,25 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 
 void ButiEngine::Player::OnCollisionShockWave(Value_weak_ptr<GameObject> arg_vwp_other)
 {
-	m_isHitShockWave_Worker = true;
+	//m_isHitShockWave_Worker = true;
 
-	m_strongestNearWorkerVibration = arg_vwp_other.lock()->GetGameComponent<ShockWave>()->GetParent().lock()->GetGameComponent<Worker>()->GetVibration();
+	//m_strongestNearWorkerVibration = arg_vwp_other.lock()->GetGameComponent<ShockWave>()->GetParent().lock()->GetGameComponent<Worker>()->GetVibration();
 
-	m_controllerVibration = 1.0f;
-	IncreaseVibration();
+	//m_controllerVibration = 1.0f;
+	//IncreaseVibration();
+
+	auto worker = arg_vwp_other.lock()->GetGameComponent<ShockWave>()->GetParent().lock()->GetGameComponent<Worker>();
+	if (!worker) { return; }
+
+	//プレイヤーの振動値がモブハチの振動値より小さかったら振動値を増やす
+	float workerVibration = worker->GetVibration();
+
+	if (m_vibration <= workerVibration)
+	{
+		AddNearWorker(worker);
+	}
+
+	SetStrongestNearWorkerVibration(workerVibration);
 
 	//auto worker = arg_vwp_other.lock()->GetGameComponent<ShockWave>()->GetParent().lock()->GetGameComponent<Worker>();
 	//float workerVibration = worker->GetVibration();

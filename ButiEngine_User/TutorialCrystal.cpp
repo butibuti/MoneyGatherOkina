@@ -6,11 +6,13 @@
 #include "WaveManager.h"
 #include "WorkerSpawner.h"
 #include "Worker.h"
+#include "TutorialCrystalSpawner.h"
+#include "FlockingLeader.h"
 
 std::int32_t ButiEngine::TutorialCrystal::m_progressPoint = 0;
-std::int32_t ButiEngine::TutorialCrystal::m_pocketCount = 16;
+std::int32_t ButiEngine::TutorialCrystal::m_pocketCount = 0;
 float ButiEngine::TutorialCrystal::m_createPocketRadius = 3.0f;
-float ButiEngine::TutorialCrystal::m_vibrationCapacity = 300.0f;
+float ButiEngine::TutorialCrystal::m_vibrationCapacity = 200.0f;
 float ButiEngine::TutorialCrystal::m_vibrationResistance = 0.0f;
 
 void ButiEngine::TutorialCrystal::OnUpdate()
@@ -19,6 +21,7 @@ void ButiEngine::TutorialCrystal::OnUpdate()
 
 void ButiEngine::TutorialCrystal::OnSet()
 {
+	m_isLast = false;
 }
 
 void ButiEngine::TutorialCrystal::OnRemove()
@@ -48,6 +51,8 @@ void ButiEngine::TutorialCrystal::Start()
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("TutorialCrystal");
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1000.0f);
 
+	m_vwp_crystalSpawner = GetManager().lock()->GetGameObject("TutorialCrystalSpawner").lock()->GetGameComponent<TutorialCrystalSpawner>();
+
 	SetEnemyParameter();
 }
 
@@ -58,11 +63,26 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::TutorialCrystal::Cl
 
 void ButiEngine::TutorialCrystal::Dead()
 {
-	GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>()->SpawnEnemySpawner();
-	GetManager().lock()->GetGameObject("WorkerSpawner").lock()->GetGameComponent<WorkerSpawner>()->RandomSpawnStart();
-	GetManager().lock()->GetGameObject("TutorialVibrationObject").lock()->GetGameComponent<Worker>()->Dead();
-	GetManager().lock()->GetGameObject("TutorialVibrationObject_1").lock()->GetGameComponent<Worker>()->Dead();
-	GetManager().lock()->AddObjectFromCereal("OutsideCrystalSpawner");
+	if (m_isLast)
+	{
+		GetManager().lock()->GetGameObject("WorkerSpawner").lock()->GetGameComponent<WorkerSpawner>()->RandomSpawnStart();
+		GetManager().lock()->GetGameObject("TutorialVibrationObject25").lock()->GetGameComponent<Worker>()->Dead();
+		GetManager().lock()->GetGameObject("TutorialVibrationObject25_1").lock()->GetGameComponent<Worker>()->Dead();
+		GetManager().lock()->GetGameObject("TutorialVibrationObject75").lock()->GetGameComponent<Worker>()->Dead();
+		GetManager().lock()->GetGameObject("TutorialVibrationObject75_1").lock()->GetGameComponent<Worker>()->Dead();
+		GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>()->SetIsTutorialStart(true);
+	}
+	else
+	{
+		m_vwp_crystalSpawner.lock()->RemoveCrystal();
+
+		if (m_vwp_crystalSpawner.lock()->GetCrystalCount() == 0)
+		{
+			auto crystal = GetManager().lock()->AddObjectFromCereal("TutorialCrystal");
+			crystal.lock()->transform->SetLocalPosition(0.0f);
+			crystal.lock()->GetGameComponent<TutorialCrystal>()->SetIsLast(true);
+		}
+	}
 }
 
 void ButiEngine::TutorialCrystal::SetEnemyParameter()

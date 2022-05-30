@@ -36,7 +36,6 @@ float ButiEngine::Worker::m_vibrationDecrease = 0.2f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 float ButiEngine::Worker::m_initVibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
-float ButiEngine::Worker::m_tutorialMaxVibration = 50.0f;
 float ButiEngine::Worker::m_spawnParticleSpeed = 0.6f;
 
 void ButiEngine::Worker::OnUpdate()
@@ -659,6 +658,11 @@ void ButiEngine::Worker::SetVibrationParameter()
 	m_vibration = m_minVibration;
 	if (m_isTutorialVibrationObject)
 	{
+		m_tutorialMaxVibration = 25.0f;
+		if (gameObject.lock()->HasGameObjectTag("VibrationObject75"))
+		{
+			m_tutorialMaxVibration = 75.0f;
+		}
 		m_vibration = m_tutorialMaxVibration;
 	}
 }
