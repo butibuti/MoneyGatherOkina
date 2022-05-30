@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class WaveManager;
+
 	class OutsideCrystal :public GameComponent
 	{
 	public:
@@ -41,6 +43,8 @@ namespace ButiEngine {
 		static std::int32_t m_spwanStalkerCount;
 		static float m_stalerKnockBackForce;
 		static float m_knockBackY;
+
+		Value_weak_ptr<WaveManager> m_vwp_waveManager;
 
 		Value_ptr<Timer> m_vlp_appearIntervalTimer;
 		Vector3 m_defaultScale;

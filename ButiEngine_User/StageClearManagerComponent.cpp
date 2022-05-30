@@ -44,10 +44,6 @@ void ButiEngine::StageClearManagerComponent::Start()
 	auto enemys = GetManager().lock()->GetGameObjects(GameObjectTag("Enemy"));
 	for (auto itr = enemys.begin(); itr != enemys.end(); ++itr)
 	{
-		if ((*itr)->HasGameObjectTag(GameObjectTag("OutsideCrystal")))
-		{
-			continue;
-		}
 		(*itr)->GetGameComponent<Enemy>()->Dead();
 	}
 

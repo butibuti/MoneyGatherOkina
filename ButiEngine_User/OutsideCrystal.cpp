@@ -4,6 +4,9 @@
 #include "SphereExclusion.h"
 #include "SeparateDrawObject.h"
 #include "KnockBack.h"
+#include "SpawnEffect.h"
+#include "GameSettings.h"
+#include "WaveManager.h"
 
 std::int32_t ButiEngine::OutsideCrystal::m_progressPoint = 1000;
 std::int32_t ButiEngine::OutsideCrystal::m_pocketCount = 16;
@@ -69,6 +72,8 @@ void ButiEngine::OutsideCrystal::Start()
 	m_vlp_appearIntervalTimer = ObjectFactory::Create<RelativeTimer>(0);
 	SetEnemyParameter();
 
+	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
+
 	gameObject.lock()->transform->SetLocalScale(0.0f);
 	m_isAppear = true;
 	m_isInvincible = true;
@@ -85,7 +90,7 @@ ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::OutsideCrystal::Clo
 
 void ButiEngine::OutsideCrystal::Appeaer()
 {
-	if (m_isAppear) { return; }
+	if (m_isAppear || m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
 
 	gameObject.lock()->transform->SetLocalScale(m_defaultScale);
 
@@ -93,6 +98,13 @@ void ButiEngine::OutsideCrystal::Appeaer()
 	gameObject.lock()->GetGameComponent<Collision::ColliderComponent>()->CollisionStart();
 	gameObject.lock()->GetGameComponent<Enemy>()->SetIsDead(false);
 	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->transform->RollIdentity();
+
+	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	spawnEffect.lock()->transform->SetLocalScale(10.0f);
+	auto spawnEffectComponent = spawnEffect.lock()->GetGameComponent<SpawnEffect>();
+	spawnEffectComponent->SetColor(GameSettings::ENEMY_COLOR);
+	spawnEffectComponent->SetLife(60);
 }
 
 void ButiEngine::OutsideCrystal::Disappear()
@@ -109,6 +121,8 @@ void ButiEngine::OutsideCrystal::Disappear()
 
 void ButiEngine::OutsideCrystal::SpawnStalker()
 {
+	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
+
 	auto stalkerCenter = gameObject.lock()->transform->Clone();
 	stalkerCenter->SetLocalScale(1.0f);
 

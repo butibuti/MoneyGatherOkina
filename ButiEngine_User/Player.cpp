@@ -329,7 +329,23 @@ void ButiEngine::Player::Spawn()
 
 	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
-	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::PLAYER_COLOR);
+	spawnEffect.lock()->transform->SetLocalScale(3.0f);
+	auto spawnEffectComponent = spawnEffect.lock()->GetGameComponent<SpawnEffect>();
+	spawnEffectComponent->SetColor(GameSettings::PLAYER_COLOR);
+	spawnEffectComponent->SetLife(10);
+
+	auto transform = gameObject.lock()->transform;
+	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
+	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	auto randomRotate = (float)ButiRandom::GetInt(-180, 180);
+	deadEffect.lock()->transform->SetLocalRotationZ_Degrees(randomRotate);
+	deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+
+	auto camera = GetManager().lock()->GetGameObject("Camera");
+	//camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(1);
+	camera.lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(3, 60);
+
+	//GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>()->SetSpeed(0.1f, 60);
 }
 
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
@@ -492,24 +508,36 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isDead) { return; }
 	if (m_isOverheat) { return; }
 	if (m_isOverheatEffect) { return; }
+	if (m_vec_nearWorkers.size() == 0) { return; }
 
 	//ƒ‚ƒuƒnƒ`‚©‚çU“®’l‚ðŽó‚¯Žæ‚é
 	float vibrationIncrease = CalculateVibrationIncrease();
 	m_vibration += vibrationIncrease;
-	
-	if (m_vibration >= m_maxVibration)
+
+
+	//‹zŽû
+	//if (m_vibration >= m_maxVibration)
+	//{
+	//	float overVibration = m_vibration - m_maxVibration;
+	//	m_vibration -= overVibration;
+	//	vibrationIncrease += overVibration;
+	//	m_controllerVibration = 0.0f;
+	//}
+
+	//float removeVibration = vibrationIncrease / m_vec_nearWorkers.size();
+
+	//auto end = m_vec_nearWorkers.end();
+	//for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
+	//{
+	//	(*itr).lock()->RemoveVibration(removeVibration);
+	//}
+
+	if (m_vibration >= m_strongestNearWorkerVibration)
 	{
-		float overVibration = m_vibration - m_maxVibration;
-		m_vibration -= overVibration;
-		vibrationIncrease += overVibration;
+		m_vibration = m_strongestNearWorkerVibration;
 		m_controllerVibration = 0.0f;
 	}
-
-	auto end = m_vec_nearWorkers.end();
-	for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
-	{
-		(*itr).lock()->RemoveVibration(vibrationIncrease);
-	}
+	m_vibration = min(m_vibration, m_maxVibration);
 
 	//if (!m_isVibUpSE)
 	//{

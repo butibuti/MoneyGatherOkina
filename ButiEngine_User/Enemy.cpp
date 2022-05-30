@@ -27,6 +27,7 @@
 #include "OutsideCrystal.h"
 #include "Stick.h"
 #include "PauseManagerComponent.h"
+#include "TutorialCrystal.h"
 
 float ButiEngine::Enemy::m_vibrationDecrease = 0.1f;
 float ButiEngine::Enemy::m_playerVibrationCoefficient = 3.0f;
@@ -259,12 +260,6 @@ void ButiEngine::Enemy::Dead()
 		DeadSound(false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
-	auto tutorial = gameObject.lock()->GetGameComponent<Enemy_Tutorial>();
-	if (tutorial)
-	{
-		tutorial->Dead();
-		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
-	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
 	if (volcano)
 	{
@@ -273,18 +268,26 @@ void ButiEngine::Enemy::Dead()
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 
-	auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
-	if (boss)
+	auto tutorialCrystal = gameObject.lock()->GetGameComponent<TutorialCrystal>();
+	if (tutorialCrystal)
 	{
-		gameObject.lock()->SetIsRemove(true);
-		return;
+		tutorialCrystal->Dead();
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
-	auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
-	if (crystal)
-	{
-		crystal->Dead();
-		return;
-	}
+
+	//auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
+	//if (boss)
+	//{
+	//	gameObject.lock()->SetIsRemove(true);
+	//	return;
+	//}
+	//auto crystal = gameObject.lock()->GetGameComponent<Crystal>();
+	//if (crystal)
+	//{
+	//	crystal->Dead();
+	//	return;
+	//}
 
 
 

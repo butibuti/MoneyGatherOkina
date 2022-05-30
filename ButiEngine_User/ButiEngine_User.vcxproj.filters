@@ -100,6 +100,7 @@
     <ClCompile Include="SpawnEffect.cpp" />
     <ClCompile Include="LoopAnimation.cpp" />
     <ClCompile Include="WingAnimation.cpp" />
+    <ClCompile Include="TutorialCrystal.cpp" />
     <ClCompile Include="CrossBeamEffectComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,7 @@
     <ClInclude Include="LoopAnimation.h" />
     <ClInclude Include="WingAnimation.h" />
     <ClInclude Include="CrossBeamEffectComponent.h" />
+    <ClInclude Include="TutorialCrystal.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />

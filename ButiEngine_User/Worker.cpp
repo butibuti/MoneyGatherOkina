@@ -24,15 +24,18 @@
 #include "SpawnEffect.h"
 #include "WaveManager.h"
 #include "WingAnimation.h"
+#include "CameraShakeComponent.h"
+#include "WorldSpeedManager.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
-float ButiEngine::Worker::m_maxVibration = 50.0f;
-float ButiEngine::Worker::m_minVibration = 0.0f;
+float ButiEngine::Worker::m_maxVibration = 150.0f;
+float ButiEngine::Worker::m_minVibration = 20.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.21f;
 float ButiEngine::Worker::m_vibrationDecrease = 0.2f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 float ButiEngine::Worker::m_initVibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
+float ButiEngine::Worker::m_tutorialMaxVibration = 50.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -45,6 +48,13 @@ void ButiEngine::Worker::OnUpdate()
 	{
 		OnNearPlayer();
 	}
+
+	if (m_isTutorialVibrationObject && m_vibration < m_tutorialMaxVibration && m_vlp_vibrationResetTimer->Update())
+	{
+		m_vlp_vibrationResetTimer->Reset();
+		m_vibration = m_tutorialMaxVibration;
+	}
+
 	if (m_isRupture)
 	{
 		OnRupture();
@@ -137,13 +147,16 @@ void ButiEngine::Worker::OnShowUI()
 	GUI::BulletText("NearBorder");
 	GUI::DragFloat("##nearBorder", &m_nearBorder, 0.1f, 0.0f, 10.0f);
 
-	GUI::Text("Vibration:%f", m_vibration);
+	GUI::Text(u8"U“®’l:%f", m_vibration);
 
-	GUI::BulletText("MaxVibration");
+	GUI::BulletText(u8"Å‘åU“®’l");
 	GUI::DragFloat("##maxVibration", &m_maxVibration, 1.0f, 1.0f, 1000.0f);
 
-	GUI::BulletText("MinVibration");
+	GUI::BulletText(u8"Å¬U“®’l");
 	GUI::DragFloat("##minVibration", &m_minVibration, 1.0f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"ƒ`ƒ…[ƒgƒŠƒAƒ‹ŽžÅ‘åU“®’l");
+	GUI::DragFloat("##tutorialMaxVibration", &m_tutorialMaxVibration, 1.0f, 0.0f, 1000.0f);
 
 	GUI::BulletText(u8"UŒ‚—Í:%f", GetVibrationForce());
 
@@ -164,7 +177,23 @@ void ButiEngine::Worker::Start()
 {
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
-	gameObject.lock()->transform->SetWorldPostionY(-1000.0f);
+	m_isTutorialVibrationObject = gameObject.lock()->HasGameObjectTag(GameObjectTag("VibrationObject"));
+
+	if (m_isTutorialVibrationObject)
+	{
+		m_vlp_vibrationResetTimer = ObjectFactory::Create<RelativeTimer>(180);
+		m_vlp_vibrationResetTimer->Start();
+	}
+	else if (m_vwp_waveManager.lock()->IsTutorial())
+	{
+		auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+		spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+		spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
+	}
+	else
+	{
+		gameObject.lock()->transform->SetWorldPostionY(-1000.0f);
+	}
 
 	CreateDrawObject();
 
@@ -206,6 +235,7 @@ void ButiEngine::Worker::Spawn()
 
 	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	spawnEffect.lock()->transform->SetLocalScale(2.0f);
 	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
 
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
@@ -213,17 +243,31 @@ void ButiEngine::Worker::Spawn()
 	front.y = 0.0f;
 	gameObject.lock()->transform->SetLookAtRotation(pos + front * 100.0f);
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(pos + front * 100.0f);
+
+	auto transform = gameObject.lock()->transform;
+	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect_NoBloom");
+	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	auto randomRotate = (float)ButiRandom::GetInt(-180, 180);
+	deadEffect.lock()->transform->SetLocalRotationZ_Degrees(randomRotate);
+	deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
+
+	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(0.5, 4);
 }
 
 void ButiEngine::Worker::Dead()
 {
-	m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
-	m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
+	//m_vwp_beeSoul = GetManager().lock()->AddObjectFromCereal("BeeSoul");
+	//m_vwp_beeSoul.lock()->GetGameComponent<BeeSoulComponent>()->SetPosition(gameObject.lock()->transform->GetWorldPosition());
 
 	auto stick = gameObject.lock()->GetGameComponent<Stick>();
 	if (stick)
 	{
 		stick->Dead();
+	}
+
+	if (m_vwp_vibrationEffect.lock())
+	{
+		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 	}
 
 	if (m_vwp_tiltFloatObject.lock())
@@ -547,6 +591,10 @@ void ButiEngine::Worker::IncreaseVibration()
 
 void ButiEngine::Worker::DecreaseVibration()
 {
+	if (m_isTutorialVibrationObject)
+	{
+		return;
+	}
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 	m_vibration = max(m_vibration, m_minVibration);
 }
@@ -582,9 +630,17 @@ void ButiEngine::Worker::SetLookAtParameter()
 	m_vlp_lookAt->SetLookTarget(gameObject.lock()->transform->Clone());
 	m_vlp_lookAt->GetLookTarget()->Translate(gameObject.lock()->transform->GetFront() * 100.0f);
 	m_vlp_lookAt->SetSpeed(0.1f);
+	if (m_isTutorialVibrationObject)
+	{
+		m_vlp_lookAt->SetIsActive(false);
+	}
 }
 
 void ButiEngine::Worker::SetVibrationParameter()
 {
 	m_vibration = m_minVibration;
+	if (m_isTutorialVibrationObject)
+	{
+		m_vibration = m_tutorialMaxVibration;
+	}
 }
