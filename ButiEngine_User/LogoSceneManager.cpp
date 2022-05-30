@@ -1,70 +1,130 @@
 
 #include "LogoSceneManager.h"
 #include"Header/ApplicationCreater.h"
+#include"SceneChangeAnimationComponent.h"
 void ButiEngine::LogoSceneManager::OnUpdate()
 {
-   
-    auto app = GetManager().lock()->GetApplication().lock();
+    if (m_vlp_timer) {
 
-    if (shp_transTimer->Update()) {
-        isTrans = true;
-        shp_transTimer->Stop();
-        
+        if (m_vlp_timer->Update()) {
+            m_vec_timerResetFuncion[m_index]();
+        }
+        else {
+            m_vec_timerUpdatingFunction[m_index]();
+        }
     }
-    if (isTrans&&!app->GetResourceContainer()->IsLoading()) {
+    else if(!m_vwp_sceneChangeAnimation.lock()->IsAnimation()){
+        auto app = GetManager().lock()->GetApplication().lock();
+        if (!app->GetResourceContainer()->IsLoading()) {
 
-        //app->GetGraphicDevice()->SetClearColor(Vector4((255.0f / 255.0f), (254.0f / 255.0f), (250.0f / 255.0f), 1.0f));
-        app->GetSceneManager()->LoadScene(gameObject.lock()->GetApplication().lock()->GetAppInitData()->initSceneName);
-        app->GetSceneManager()->ChangeScene(gameObject.lock()->GetApplication().lock()->GetAppInitData()->initSceneName);
+            //app->GetGraphicDevice()->SetClearColor(Vector4((255.0f / 255.0f), (254.0f / 255.0f), (250.0f / 255.0f), 1.0f));
+            std::string sceneName = "StageSelect";
+            app->GetSceneManager()->RemoveScene(sceneName);
+            app->GetSceneManager()->LoadScene(sceneName);
+            app->GetSceneManager()->ChangeScene(sceneName);
+        }
     }
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::LogoSceneManager::Clone()
 {
     auto output = ObjectFactory::Create<LogoSceneManager>();
-    if (shp_timer) {
-        output->shp_timer = shp_timer->Clone();
-    }if (shp_transTimer) {
-        output->shp_transTimer = shp_transTimer->Clone();
-    }
+    output->m_logokeepTime = m_logokeepTime;
+    output->m_logoApperanceTime = m_logoApperanceTime;
+    output->m_logoDisappearanceTime = m_logoDisappearanceTime;
+    output->m_sceneChangeWait = m_sceneChangeWait;
     return output;
 }
 
 void ButiEngine::LogoSceneManager::OnShowUI()
 {
-    if (GUI::TreeNode("Timer")) {
-        shp_timer->ShowGUI();
-        GUI::TreePop();
-    }
-    if (GUI::TreeNode("TransitionTimer")) {
-        shp_transTimer->ShowGUI();
-        GUI::TreePop();
-    }
-    GUI::BulletText("logoSpeed");
-    GUI::DragFloat("##logoapp", logoApperanceSpeed, 0.001f);
+    GUI::DragFloat("LogoAppearance", m_logoApperanceTime);
+    GUI::DragFloat("LogoDisappearance", m_logoDisappearanceTime);
+    GUI::DragFloat("LogoKeep", m_logokeepTime);
+    GUI::DragFloat("Wait", m_sceneChangeWait);
 }
 
 void ButiEngine::LogoSceneManager::Start()
 {
-    shp_logoBuffer = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation");
-    shp_teamBuffer = GetManager().lock()->GetGameObject("TeamLogo").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation");
+    m_vlp_logoBuffer = GetManager().lock()->GetGameObject("EngineLogo").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation");
+    m_vlp_teamBuffer = GetManager().lock()->GetGameObject("TeamLogo").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation");
+    m_vwp_sceneChangeAnimation = gameObject.lock()->GetGameComponent<SceneChangeAnimationComponent>();
+    m_vwp_sceneChangeAnimation.lock()->HidePanel();
 
+    m_vec_timerCounts.push_back(m_logoApperanceTime);
+    m_vec_timerCounts.push_back(m_logokeepTime);
+    m_vec_timerCounts.push_back(m_logoDisappearanceTime);
+    m_vec_timerCounts.push_back(m_sceneChangeWait);
+    m_vec_timerCounts.push_back(m_logoApperanceTime);
+    m_vec_timerCounts.push_back(m_logokeepTime);
+    m_vec_timerCounts.push_back(m_logoDisappearanceTime);
+    m_vec_timerCounts.push_back(m_sceneChangeWait);
 
+    m_vlp_timer = ObjectFactory::Create<AbsoluteTimer>(m_vec_timerCounts[m_index]);
+    m_vlp_timer->Start();
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        m_vlp_logoBuffer->Get().color.w = m_vlp_timer->GetPercent();
+        });
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        });
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        m_vlp_logoBuffer->Get().color.w = 1.0 - m_vlp_timer->GetPercent();
+        });
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        });
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        m_vlp_teamBuffer->Get().color.w = m_vlp_timer->GetPercent();
+        });
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        });
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        m_vlp_teamBuffer->Get().color.w = 1.0 - m_vlp_timer->GetPercent();
+        });
+    m_vec_timerUpdatingFunction.push_back([this]()->void {
+        });
 
-    GetManager().lock()->AddObjectFromCereal("LoadAnim", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.1), Vector3Const::Zero, Vector3(0, 0, 1)));
-
-    shp_transTimer->Start();
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_vlp_logoBuffer->Get().color.w = 1.0f;
+        m_index++;
+        m_vlp_timer->ChangeCountFrame(m_vec_timerCounts[m_index]);
+        });
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_index++;
+        m_vlp_timer->ChangeCountFrame(m_vec_timerCounts[m_index]);
+        });
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_vlp_logoBuffer->Get().color.w = 0.0f;
+        m_index++;
+        m_vlp_timer->ChangeCountFrame(m_vec_timerCounts[m_index]);
+        });
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_index++;
+        m_vlp_timer->ChangeCountFrame(m_vec_timerCounts[m_index]);
+        });
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_vlp_teamBuffer->Get().color.w = 1.0f;
+        m_index++;
+        m_vlp_timer->ChangeCountFrame(m_vec_timerCounts[m_index]);
+        });
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_index++;
+        m_vlp_timer->ChangeCountFrame(m_vec_timerCounts[m_index]);
+        });
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_vlp_teamBuffer->Get().color.w = 0.0f;
+        m_index++;
+        m_vlp_timer->ChangeCountFrame(m_vec_timerCounts[m_index]);
+        });
+    m_vec_timerResetFuncion.push_back([this]()->void {
+        m_vwp_sceneChangeAnimation.lock()->SceneEnd();
+        m_vlp_timer = nullptr;
+        });
+#ifndef DEBUG
     auto app = GetManager().lock()->GetApplication().lock();
     app->InitLoadResources_async();
-    
+#endif // !DEBUG    
 }
 
 void ButiEngine::LogoSceneManager::OnSet()
 {
-    if (!shp_timer) {
-        shp_timer = ObjectFactory::Create<RelativeTimer>(60.0f);
-    }
-    if (!shp_transTimer) {
-        shp_transTimer = ObjectFactory::Create<RelativeTimer>(60.0f);
-    }
 }
