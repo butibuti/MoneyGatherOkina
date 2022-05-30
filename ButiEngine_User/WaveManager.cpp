@@ -95,7 +95,7 @@ void ButiEngine::WaveManager::OnSet()
 	m_sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
 
 	std::uint16_t spawnFrame = 150;
-	std::uint16_t spawnIntervalFrame = 50;
+	std::uint16_t spawnIntervalFrame = 70;
 
 	if (m_sceneName == "Stage_0")
 	{
@@ -110,8 +110,8 @@ void ButiEngine::WaveManager::OnSet()
 		m_clearPoint = m_stageClearPoint;
 	}
 
-	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>(spawnFrame);
-	m_vlp_spawnIntervalTimer = ObjectFactory::Create<RelativeTimer>(spawnIntervalFrame);
+	m_vlp_spawnTimer = ObjectFactory::Create<AbsoluteTimer>(spawnFrame);
+	m_vlp_spawnIntervalTimer = ObjectFactory::Create<AbsoluteTimer>(spawnIntervalFrame);
 }
 
 void ButiEngine::WaveManager::Start()

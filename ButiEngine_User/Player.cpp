@@ -307,7 +307,23 @@ void ButiEngine::Player::Spawn()
 
 	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
-	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::PLAYER_COLOR);
+	spawnEffect.lock()->transform->SetLocalScale(3.0f);
+	auto spawnEffectComponent = spawnEffect.lock()->GetGameComponent<SpawnEffect>();
+	spawnEffectComponent->SetColor(GameSettings::PLAYER_COLOR);
+	spawnEffectComponent->SetLife(10);
+
+	auto transform = gameObject.lock()->transform;
+	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
+	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	auto randomRotate = (float)ButiRandom::GetInt(-180, 180);
+	deadEffect.lock()->transform->SetLocalRotationZ_Degrees(randomRotate);
+	deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+
+	auto camera = GetManager().lock()->GetGameObject("Camera");
+	//camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(1);
+	camera.lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(3, 60);
+
+	//GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>()->SetSpeed(0.1f, 60);
 }
 
 void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)

@@ -24,6 +24,8 @@
 #include "SpawnEffect.h"
 #include "WaveManager.h"
 #include "WingAnimation.h"
+#include "CameraShakeComponent.h"
+#include "WorldSpeedManager.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
@@ -233,6 +235,7 @@ void ButiEngine::Worker::Spawn()
 
 	auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 	spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	spawnEffect.lock()->transform->SetLocalScale(2.0f);
 	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
 
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
@@ -240,6 +243,15 @@ void ButiEngine::Worker::Spawn()
 	front.y = 0.0f;
 	gameObject.lock()->transform->SetLookAtRotation(pos + front * 100.0f);
 	m_vlp_lookAt->GetLookTarget()->SetLocalPosition(pos + front * 100.0f);
+
+	auto transform = gameObject.lock()->transform;
+	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect_NoBloom");
+	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+	auto randomRotate = (float)ButiRandom::GetInt(-180, 180);
+	deadEffect.lock()->transform->SetLocalRotationZ_Degrees(randomRotate);
+	deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
+
+	GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(0.5, 4);
 }
 
 void ButiEngine::Worker::Dead()

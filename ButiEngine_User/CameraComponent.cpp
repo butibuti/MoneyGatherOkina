@@ -21,7 +21,7 @@ void ButiEngine::CameraComponent::Start()
     //カメラの初期位置
     //m_defaultPosition = Vector3(0, 7.0f, -10.0f);
     m_defaultPosition = Vector3(0.0f, 24.0f, -7.0f);
-    m_currentPosition = Vector3(0.0f, 15.0f, -5.0f);
+    m_currentPosition = m_defaultPosition;
     m_previousPosition = m_currentPosition;
 
     //カメラの初期角度
