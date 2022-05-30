@@ -81,7 +81,6 @@ namespace ButiEngine {
 		void Spawn();
 		void AddNearWorker(Value_weak_ptr<Worker> arg_vwp_worker) { m_vec_nearWorkers.push_back(arg_vwp_worker); }
 		void KnockBack(const Vector3& arg_velocity);
-		void SetShockWaveScale(const Vector3& arg_scale);
 
 	private:
 		void Move();
@@ -107,6 +106,7 @@ namespace ButiEngine {
 		void OnInvincible();
 		void OnCollisionDamageArea(Value_weak_ptr<GameObject> arg_vwp_other);
 		void OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_other);
+		void OnCollisionShockWave(Value_weak_ptr<GameObject> arg_vwp_other);
 
 		void CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_other);
 
@@ -201,6 +201,7 @@ namespace ButiEngine {
 		bool m_isFixNumberUIScale;
 		bool m_isOverheatEffect;
 		bool m_isOverheatSoundStop;
+		bool m_isHitShockWave_Worker;
 
 		//ç∞
 		Value_weak_ptr<BeeSoulPodUIComponent> m_vwp_beeSoulPod;

@@ -101,6 +101,7 @@ namespace ButiEngine {
 
 		Value_weak_ptr<GameObject> m_vwp_vibrationEffect;
 		Value_weak_ptr<GameObject> m_vwp_beeSoul;
+		Value_weak_ptr<GameObject> m_vwp_shockWave;
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;

@@ -26,6 +26,7 @@
 #include "WingAnimation.h"
 #include "CameraShakeComponent.h"
 #include "WorldSpeedManager.h"
+#include "ShockWave.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
 float ButiEngine::Worker::m_maxVibration = 150.0f;
@@ -94,6 +95,10 @@ void ButiEngine::Worker::OnUpdate()
 		float vibrationRate = m_vibration / m_maxVibration;
 		m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, false);
 		m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetWorldPosition());
+		if (m_vwp_shockWave.lock())
+		{
+			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate * 2.5f);
+		}
 	}
 	ShakeDrawObject();
 
@@ -192,6 +197,10 @@ void ButiEngine::Worker::Start()
 	{
 		m_vlp_vibrationResetTimer = ObjectFactory::Create<RelativeTimer>(180);
 		m_vlp_vibrationResetTimer->Start();
+
+		m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave_Worker");
+		m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+		m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetParent(gameObject);
 	}
 	else if (m_vwp_waveManager.lock()->IsTutorial())
 	{
@@ -216,9 +225,6 @@ void ButiEngine::Worker::Start()
 	m_isAttack = false;
 
 	m_vlp_player = GetManager().lock()->GetGameObject(GameObjectTag("Player")).lock()->GetGameComponent<Player>();
-
-	/*auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
-	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());*/
 
 	m_vwp_flocking = gameObject.lock()->GetGameComponent<Flocking>();
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
@@ -274,6 +280,11 @@ void ButiEngine::Worker::Dead()
 	if (stick)
 	{
 		stick->Dead();
+	}
+
+	if (m_vwp_shockWave.lock())
+	{
+		m_vwp_shockWave.lock()->SetIsRemove(true);
 	}
 
 	if (m_vwp_vibrationEffect.lock())

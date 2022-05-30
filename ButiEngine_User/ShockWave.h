@@ -20,10 +20,14 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetParent(Value_weak_ptr<GameObject> arg_parent) { m_vwp_parent = arg_parent; }
+		Value_weak_ptr<GameObject> GetParent() { return m_vwp_parent; }
+
 		void Disappear();
 		void SetScale(const float arg_vibrationPower);
 
 	private:
+		Value_weak_ptr<GameObject> m_vwp_parent;
 		Vector3 m_maxScale;
 		Vector3 m_calcScale;
 

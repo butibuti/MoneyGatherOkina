@@ -63,6 +63,7 @@ void ButiEngine::Player::OnUpdate()
 
 	m_vec_nearWorkers.clear();
 	m_strongestNearWorkerVibration = 0.0f;
+	m_isHitShockWave_Worker = false;
 
 	MoveKnockBack();
 	Move();
@@ -128,6 +129,10 @@ void ButiEngine::Player::OnSet()
 			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Stalker")))
 			{
 				OnCollisionStalker(arg_vwp_other);
+			}
+			else if (arg_vwp_other->HasGameObjectTag(GameObjectTag("ShockWave_Worker")))
+			{
+				OnCollisionShockWave(arg_vwp_other);
 			}
 		});
 
@@ -239,6 +244,7 @@ void ButiEngine::Player::Start()
 
 	m_vwp_shockWave = GetManager().lock()->AddObjectFromCereal("ShockWave");
 	m_vwp_shockWave.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetParent(gameObject);
 
 	//CreateBombObject();
 
@@ -366,12 +372,6 @@ void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 	m_knockBackVelocity.Normalize();
 }
 
-void ButiEngine::Player::SetShockWaveScale(const Vector3& arg_scale)
-{
-	Vector3 scale = arg_scale / gameObject.lock()->transform->GetLocalScale();
-	m_vwp_shockWave.lock()->transform->SetLocalScale(scale);
-}
-
 void ButiEngine::Player::Move()
 {
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
@@ -483,7 +483,7 @@ void ButiEngine::Player::VibrationUpdate()
 
 		IncreaseVibration();
 	}
-	else
+	else if(!m_isHitShockWave_Worker)
 	{
 		m_controllerVibration = 0.0f;
 		DecreaseVibration();
@@ -515,7 +515,6 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isDead) { return; }
 	if (m_isOverheat) { return; }
 	if (m_isOverheatEffect) { return; }
-	if (m_vec_nearWorkers.size() == 0) { return; }
 
 	//モブハチから振動値を受け取る
 	float vibrationIncrease = CalculateVibrationIncrease();
@@ -910,6 +909,13 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 	CreateDamageEffect(arg_vwp_other);
 }
 
+void ButiEngine::Player::OnCollisionShockWave(Value_weak_ptr<GameObject> arg_vwp_other)
+{
+	m_isHitShockWave_Worker = true;
+	m_controllerVibration = 1.0f;
+	IncreaseVibration();
+}
+
 void ButiEngine::Player::CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_other)
 {
 	Vector3 dir = (arg_vwp_other.lock()->transform->GetLocalPosition() - gameObject.lock()->transform->GetLocalPosition()).GetNormalize();
@@ -972,6 +978,7 @@ void ButiEngine::Player::SetVibrationParameter()
 	m_isFixNumberUIScale = false;
 	m_isOverheatEffect = false;
 	m_isOverheatSoundStop = false;
+	m_isHitShockWave_Worker = false;
 }
 
 void ButiEngine::Player::StopVibUpSE()
