@@ -475,22 +475,31 @@ void ButiEngine::Player::IncreaseVibration()
 	//ƒ‚ƒuƒnƒ`‚©‚çU“®’l‚ðŽó‚¯Žæ‚é
 	float vibrationIncrease = CalculateVibrationIncrease();
 	m_vibration += vibrationIncrease;
-	
-	if (m_vibration >= m_maxVibration)
+
+
+	//‹zŽû
+	//if (m_vibration >= m_maxVibration)
+	//{
+	//	float overVibration = m_vibration - m_maxVibration;
+	//	m_vibration -= overVibration;
+	//	vibrationIncrease += overVibration;
+	//	m_controllerVibration = 0.0f;
+	//}
+
+	//float removeVibration = vibrationIncrease / m_vec_nearWorkers.size();
+
+	//auto end = m_vec_nearWorkers.end();
+	//for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
+	//{
+	//	(*itr).lock()->RemoveVibration(removeVibration);
+	//}
+
+	if (m_vibration >= m_strongestNearWorkerVibration)
 	{
-		float overVibration = m_vibration - m_maxVibration;
-		m_vibration -= overVibration;
-		vibrationIncrease += overVibration;
+		m_vibration = m_strongestNearWorkerVibration;
 		m_controllerVibration = 0.0f;
 	}
-
-	float removeVibration = vibrationIncrease / m_vec_nearWorkers.size();
-
-	auto end = m_vec_nearWorkers.end();
-	for (auto itr = m_vec_nearWorkers.begin(); itr != end; ++itr)
-	{
-		(*itr).lock()->RemoveVibration(removeVibration);
-	}
+	m_vibration = min(m_vibration, m_maxVibration);
 
 	//if (!m_isVibUpSE)
 	//{
