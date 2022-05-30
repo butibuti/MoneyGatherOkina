@@ -232,7 +232,6 @@ bool ButiEngine::Enemy::IsVibrate()
 
 void ButiEngine::Enemy::Dead()
 {
-	auto position = gameObject.lock()->transform->GetWorldPosition();
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
@@ -242,8 +241,7 @@ void ButiEngine::Enemy::Dead()
 	auto fly = gameObject.lock()->GetGameComponent<Enemy_Fly>();
 	if (fly)
 	{
-		fly->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
+		fly->Dead();		
 		DeadSound(false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
@@ -251,7 +249,6 @@ void ButiEngine::Enemy::Dead()
 	if (kiba)
 	{
 		kiba->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 		DeadSound(true);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
@@ -259,7 +256,6 @@ void ButiEngine::Enemy::Dead()
 	if (stalker)
 	{
 		stalker->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 		DeadSound(false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
@@ -267,14 +263,12 @@ void ButiEngine::Enemy::Dead()
 	if (tutorial)
 	{
 		tutorial->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, false);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
 	if (volcano)
 	{
 		volcano->Dead();
-		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, true);
 		DeadSound(true);
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
@@ -523,6 +517,13 @@ void ButiEngine::Enemy::DeadSound(const bool arg_isBigSound)
 	{
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Small.wav"));
 	}
+
+	if (m_vwp_particleGenerater.lock())
+	{
+		auto position = gameObject.lock()->transform->GetWorldPosition();
+		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, arg_isBigSound);
+	}
+
 }
 
 

@@ -220,7 +220,7 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	}
 
 	//ステージセレクトへ
-	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext())
+	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext() && !m_isNextScene)
 	{
 		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();

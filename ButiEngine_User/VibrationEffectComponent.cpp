@@ -5,6 +5,10 @@
 void ButiEngine::VibrationEffectComponent::OnUpdate()
 {
 	Animation();
+	m_currentScale.x = MathHelper::Lerp(m_currentScale.x, m_calcScale.x, 0.25f);
+	m_currentScale.y = MathHelper::Lerp(m_currentScale.y, m_calcScale.y, 0.25f);
+	m_currentScale.z = MathHelper::Lerp(m_currentScale.z, m_calcScale.z, 0.25f);
+	gameObject.lock()->transform->SetLocalScale(m_currentScale);
 
 	if (m_animationCount >= m_maxAnimationCount)
 	{
@@ -34,6 +38,7 @@ void ButiEngine::VibrationEffectComponent::Start()
 	m_randomPosY = ButiRandom::GetInt(1, 500) * 0.0001f;
 	m_animationCount = 0;
 	m_maxAnimationCount = 1;
+	m_currentScale = Vector3(0, 0, 0);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::VibrationEffectComponent::Clone()
@@ -83,15 +88,6 @@ void ButiEngine::VibrationEffectComponent::Animation()
 	if (!m_vlp_animationTimer->Update()) { return; }
 
 	m_animationCount++;
-
-	if (m_animationCount % 2)
-	{
-		gameObject.lock()->transform->SetLocalScale(m_calcScale * 0.9f);
-	}
-	else
-	{
-		gameObject.lock()->transform->SetLocalScale(m_calcScale);
-	}
 
 	/////////////////////////////////////////////////////
 	//gameObject.lock()->transform->SetLocalScale(0.0f);

@@ -1,24 +1,26 @@
 #include "stdafx_u.h"
 #include "StageSelectManagerComponent.h"
 #include "SceneChangeAnimationComponent.h"
-#include"TitleManagerComponent.h"
 #include "InputManager.h"
-#include"FloatMotionComponent.h"
-#include "Flocking.h"
+#include "FloatMotionComponent.h"
 #include "SoundPlayerComponent.h"
-#include"ButiEngineHeader/Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
+#include "ButiEngineHeader/Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
+
 void ButiEngine::StageSelectManagerComponent::OnUpdate()
 {
-	if (m_vwp_title.lock()->IsTitle()) {
-		return;
+	if (!isSceneChange)
+	{
+		isSceneChange = true;
+		m_vwp_gamePlayChangeAnimation.lock()->SceneStart();
 	}
+	if (!m_waitTimer->Update_continue()) { return; }
 
-	if (InputManager::IsTriggerRightKey() && !isSceneChange)
+	if (InputManager::IsTriggerRightKey())
 	{
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum++;
 	}
-	else if(InputManager::IsTriggerLeftKey() && !isSceneChange)
+	else if(InputManager::IsTriggerLeftKey())
 	{
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum--;
@@ -26,22 +28,16 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 
 	FixStageNum();
 
-	if (InputManager::IsTriggerDecideKey() && !isSceneChange)
+	if (InputManager::IsTriggerDecideKey())
 	{
 		m_vwp_gamePlayChangeAnimation.lock()->SceneEnd();
-		isSceneChange = true;
+		isSceneChange = false;
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
 
 	}
-	else if (InputManager::IsTriggerCancelKey())
-	{
-		//タイトルに戻る
-		BackScene();
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Cansel.wav"));
-	}
 
-	if (isSceneChange&&!m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) {
-		isSceneChange = false;
+	if (!isSceneChange && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) 
+	{
 		//次のシーンへ
 		NextScene();
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
@@ -50,6 +46,7 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 
 void ButiEngine::StageSelectManagerComponent::OnSet()
 {
+	m_waitTimer = ObjectFactory::Create<AbsoluteTimer>(60);
 }
 
 void ButiEngine::StageSelectManagerComponent::OnShowUI()
@@ -58,32 +55,13 @@ void ButiEngine::StageSelectManagerComponent::OnShowUI()
 
 void ButiEngine::StageSelectManagerComponent::Start()
 {
+	m_waitTimer->Start();
 	m_stageNum = 0;
 	m_maxStageNum = 1;
-	if (!m_vwp_gamePlayChangeAnimation.lock()) {
-		m_vwp_gamePlayChangeAnimation = gameObject.lock()->GetGameComponent<SceneChangeAnimationComponent>();
-		m_vwp_gamePlayChangeAnimation.lock()->HidePanel();
-		auto playerFloatAnim = GetManager().lock()->GetGameObject("DrawObject_Player").lock()->GetGameComponent<FloatMotionComponent>();
-		playerFloatAnim->SetAmplitude(0.1f);
-		playerFloatAnim->SetMotionSpeed(0.035f);
-		auto lastBossFloatAnim = GetManager().lock()->GetGameObject("DrawObject_LastBoss").lock()->GetGameComponent<FloatMotionComponent>();
-		lastBossFloatAnim->SetAmplitude(0.32f);
-		lastBossFloatAnim->SetMotionSpeed(0.015f);
-		for (std::int32_t i = 0; i < 4; i++) {
-			auto workerFloatAnim = GetManager().lock()->GetGameObject("DrawObject_Worker_"+std::to_string(i)).lock()->GetGameComponent<FloatMotionComponent>();
-			workerFloatAnim->SetMinTargetSpeed(0.05f);
-			workerFloatAnim->SetMaxTargetSpeed(0.2f);
-		}
-		
+	isSceneChange = false;
 
-	}
-	else {
-		m_vwp_gamePlayChangeAnimation.lock()->SceneStart();
-	}
-	if (!m_vwp_title.lock()) {
-		m_vwp_title = gameObject.lock()->GetGameComponent<TitleManagerComponent>();
-	}
-	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
+	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
+	m_vwp_gamePlayChangeAnimation = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM2.wav"));
@@ -130,7 +108,6 @@ void ButiEngine::StageSelectManagerComponent::FixStageNum()
 	{
 		m_stageNum = m_maxStageNum;
 	}
-	GetManager().lock()->GetGameObject("RemainUI").lock()->GetGameComponent<SpriteAnimationComponent>()->SetHorizontalAnim(m_stageNum);
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::StageSelectManagerComponent::Clone()

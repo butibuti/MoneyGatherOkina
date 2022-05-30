@@ -34,6 +34,7 @@ private:
 
 	std::int16_t m_stageNum;
 	std::int16_t m_maxStageNum;
+	Value_ptr<Timer> m_waitTimer;
 	Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_gamePlayChangeAnimation;
 	Value_weak_ptr<TitleManagerComponent> m_vwp_title;
 	Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;

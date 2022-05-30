@@ -12,6 +12,7 @@
 #include "WaveManager.h"
 #include "NumberManagerComponent.h"
 #include "GameSettings.h"
+#include "CrossBeamEffectComponent.h"
 
 void ButiEngine::GameOverManagerComponent::OnUpdate()
 {
@@ -89,7 +90,7 @@ void ButiEngine::GameOverManagerComponent::OnSet()
 {
 	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(100);
 	m_vlp_pikupikuTimer = ObjectFactory::Create<AbsoluteTimer>(ButiRandom::GetRandom(3, 30));
-	m_vlp_selectAnimationTimer = ObjectFactory::Create<AbsoluteTimer>(10);
+	m_vlp_selectAnimationTimer = ObjectFactory::Create<AbsoluteTimer>(43);
 	m_vlp_addRateTimer = ObjectFactory::Create<AbsoluteTimer>(1);
 }
 
@@ -103,8 +104,6 @@ void ButiEngine::GameOverManagerComponent::Start()
 	m_vlp_pikupikuTimer->Start();
 	m_vlp_addRateTimer->Start();
 	GetManager().lock()->AddObjectFromCereal("FadeOutUI");
-	m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
-	m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
 	m_vwp_worldSpeedManagerComponent = GetManager().lock()->GetGameObject("WorldSpeedManager").lock()->GetGameComponent<WorldSpeedManager>();
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	m_isRetry = true;
@@ -113,9 +112,6 @@ void ButiEngine::GameOverManagerComponent::Start()
 	m_isSelectAnimation = false;
 	m_isAddProgress = false;
 	m_nextCount = 0;
-	m_selectAnimationStep = 0;
-	m_selectAnimationScale = 0;
-	m_selectAnimationRotate = 0;
 	m_currentProgressRate = 0;
 	m_progressRate = 0;
 }
@@ -212,6 +208,9 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 		m_isInput = false;
 		m_isSelectAnimation = true;
 		m_vlp_selectAnimationTimer->Start();
+		Vector3 position = Vector3(-410, -330, -10);
+		auto crossBeamEffect = GetManager().lock()->AddObjectFromCereal("CrossBeamEffect").lock()->GetGameComponent<CrossBeamEffectComponent>();
+		crossBeamEffect->SetPosition(position);
 	}
 }
 
@@ -267,61 +266,12 @@ void ButiEngine::GameOverManagerComponent::SelectAnimation()
 
 	if (m_vlp_selectAnimationTimer->Update())
 	{
-		if (m_selectAnimationStep == 0)
+		auto retryPoint = (std::int32_t)((float)m_vwp_waveManagerComponent.lock()->GetClearPoint() * (float)m_currentProgressRate * 0.01f);
+		if (m_vwp_waveManagerComponent.lock()->GetRetryPoint() < retryPoint)
 		{
-			//セレクトフラッシュを生成
-			m_vwp_selectFlashEffectUI[0] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
-			m_vwp_selectFlashEffectUI[1] = GetManager().lock()->AddObjectFromCereal("SelectFlashEffect");
-			Vector3 position = Vector3(-410, -330, -10);
-			m_vwp_selectFlashEffectUI[0].lock()->transform->SetLocalPosition(position);
-			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalPosition(position);
-			m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalRotationZ_Degrees(90);
-
-			m_selectAnimationRotate = 16;
-
-			m_vlp_selectAnimationTimer->ChangeCountFrame(8);
+			m_vwp_waveManagerComponent.lock()->SetRetryPoint(retryPoint);
 		}
-		else if (m_selectAnimationStep == 1)
-		{
-			m_vlp_selectAnimationTimer->ChangeCountFrame(25);
-		}
-		else if(m_selectAnimationStep == 2)
-		{
-			auto retryPoint = (std::int32_t)((float)m_vwp_waveManagerComponent.lock()->GetClearPoint() * (float)m_currentProgressRate * 0.01f);
-			if (m_vwp_waveManagerComponent.lock()->GetRetryPoint() < retryPoint)
-			{
-				m_vwp_waveManagerComponent.lock()->SetRetryPoint(retryPoint);
-			}
-			m_isNext = true;
-		}
-
-		m_selectAnimationStep++;
+		m_isNext = true;
 	}
 
-	//スケールを変える（小→大→小）
-	if (m_selectAnimationStep == 1)
-	{
-		m_selectAnimationScale = MathHelper::Lerp(m_selectAnimationScale, 200.0f, 0.6f);
-		m_vwp_selectFlashEffectUI[0].lock()->transform->RollLocalRotationZ_Degrees(-1);
-		m_vwp_selectFlashEffectUI[1].lock()->transform->RollLocalRotationZ_Degrees(-1);
-	}
-	else if (m_selectAnimationStep == 2)
-	{
-		m_selectAnimationScale = MathHelper::Lerp(m_selectAnimationScale, 0.0f, 0.2f);
-		m_selectAnimationRotate = MathHelper::Lerp(m_selectAnimationRotate, 1.0f, 0.08f);
-		m_vwp_selectFlashEffectUI[0].lock()->transform->RollLocalRotationZ_Degrees(-m_selectAnimationRotate);
-		m_vwp_selectFlashEffectUI[1].lock()->transform->RollLocalRotationZ_Degrees(-m_selectAnimationRotate);
-	}
-	else
-	{
-		m_selectAnimationScale = 0;
-	}
-
-	//スケールと回転の更新
-	if (m_vwp_selectFlashEffectUI[0].lock())
-	{
-		auto scale = m_vwp_selectFlashEffectUI[0].lock()->transform->GetLocalScale();
-		m_vwp_selectFlashEffectUI[0].lock()->transform->SetLocalScale(Vector3(scale.x, m_selectAnimationScale, scale.z));
-		m_vwp_selectFlashEffectUI[1].lock()->transform->SetLocalScale(Vector3(scale.x, m_selectAnimationScale, scale.z));
-	}
 }
