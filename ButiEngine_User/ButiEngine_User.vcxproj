@@ -520,6 +520,7 @@ cd ..\</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbsoluteAnimationRemoverComponent.cpp" />
+    <ClCompile Include="AllStageClearManagerComponent.cpp" />
     <ClCompile Include="AnimationRemoverComponent.cpp" />
     <ClCompile Include="AppealRBUI.cpp" />
     <ClCompile Include="AttackFlashSpawner.cpp" />
@@ -627,6 +628,7 @@ cd ..\</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbsoluteAnimationRemoverComponent.h" />
+    <ClInclude Include="AllStageClearManagerComponent.h" />
     <ClInclude Include="AnimationRemoverComponent.h" />
     <ClInclude Include="AppealRBUI.h" />
     <ClInclude Include="AttackFlashSpawner.h" />

@@ -7,6 +7,7 @@ class SceneChangeAnimationComponent;
 class TitleManagerComponent;
 class SoundPlayerComponent;
 class EnemyScaleAnimationComponent;
+class MoveAnimationComponent;
 
 class StageSelectManagerComponent : public GameComponent
 {
@@ -32,6 +33,7 @@ public:
 
 private:
 	void FixStageNum();
+	void ScaleRateUpdate();
 
 	static std::int16_t m_stageNum;
 
@@ -42,17 +44,21 @@ private:
 	Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 	Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_enemyScaleAnimationComponent;
 	Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_crystalScaleAnimationComponent;
+	Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_endGameScaleAnimationComponent;
+	Value_weak_ptr<MoveAnimationComponent> m_vwp_moveAnimationComponent;
 	Value_weak_ptr<GameObject> m_vwp_kiba;
 	Value_weak_ptr<GameObject> m_vwp_crystal;
+	Value_weak_ptr<GameObject> m_vwp_endGame;
+	Value_weak_ptr<GameObject> m_vwp_moveParent;
 	//Value_weak_ptr<TitleManagerComponent> m_vwp_title;
 
 	Vector3 m_centerPosition;
 	Vector3 m_rightPosition;
 	Vector3 m_leftPosition;
-	Vector3 m_kibaPosition;
-	Vector3 m_crystalPosition;
 
-	float m_scaleRate;
+	float m_kibaScaleRate;
+	float m_crystalScaleRate;
+	float m_endGameScaleRate;
 	float m_animationRate;
 	bool m_isSceneChange = false;
 };

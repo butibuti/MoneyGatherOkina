@@ -7,6 +7,7 @@
 #include "SceneChangeAnimationComponent.h"
 #include "GameOverManagerComponent.h"
 #include "StageClearManagerComponent.h"
+#include "AllStageClearManagerComponent.h"
 #include "StageProgressUIComponent.h"
 #include "PauseManagerComponent.h"
 #include "WorldSpeedManager.h"
@@ -74,6 +75,11 @@ void ButiEngine::WaveManager::OnUpdate()
 	}
 	//クリアしているか
 	if (m_point >= m_clearPoint && !m_isAdvanceGameOver)
+	{
+		m_isClear = true;
+	}
+
+	if (GameDevice::GetInput()->TriggerKey(Keys::L))
 	{
 		m_isClear = true;
 	}
@@ -218,33 +224,68 @@ void ButiEngine::WaveManager::StageClearAnimation()
 	//クリア時に通るようにする
 	if (!m_isClear) return;
 
-	if (!m_vwp_stageClearManagerComponent.lock())
+	if (m_sceneName == "Stage_1")
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
-		auto stageClearManager = GetManager().lock()->AddObjectFromCereal("StageClearManager");
-		m_vwp_stageClearManagerComponent = stageClearManager.lock()->GetGameComponent<StageClearManagerComponent>();
+		if (!m_vwp_allStageClearManagerComponent.lock())
+		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
+			auto stageClearManager = GetManager().lock()->AddObjectFromCereal("AllStageClearManager");
+			m_vwp_allStageClearManagerComponent = stageClearManager.lock()->GetGameComponent<AllStageClearManagerComponent>();
+		}
+
+		//ステージセレクトへ
+		if (InputManager::IsTriggerDecideKey() && m_vwp_allStageClearManagerComponent.lock()->IsNext() && !m_isNextScene)
+		{
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
+			m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
+			m_isNextScene = true;
+		}
+		else if (!m_vwp_sceneChangeAnimationComponent.lock()->IsAnimation() && m_isNextScene)
+		{
+			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+			std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+			sceneManager->RemoveScene(sceneName);
+			sceneName = "StageSelect";
+			sceneManager->ChangeScene(sceneName);
+
+			m_retryPoint = 0;
+
+			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
+		}
+	}
+	else
+	{
+		if (!m_vwp_stageClearManagerComponent.lock())
+		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
+			auto stageClearManager = GetManager().lock()->AddObjectFromCereal("StageClearManager");
+			m_vwp_stageClearManagerComponent = stageClearManager.lock()->GetGameComponent<StageClearManagerComponent>();
+		}
+
+		//ステージセレクトへ
+		if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext() && !m_isNextScene)
+		{
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
+			m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
+			m_isNextScene = true;
+		}
+		else if (!m_vwp_sceneChangeAnimationComponent.lock()->IsAnimation() && m_isNextScene)
+		{
+			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+			std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
+			sceneManager->RemoveScene(sceneName);
+			sceneName = "StageSelect";
+			sceneManager->ChangeScene(sceneName);
+
+			m_retryPoint = 0;
+
+			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
+		}
 	}
 
-	//ステージセレクトへ
-	if (InputManager::IsTriggerDecideKey() && m_vwp_stageClearManagerComponent.lock()->IsNext() && !m_isNextScene)
-	{
-		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
-		m_vwp_sceneChangeAnimationComponent.lock()->SceneEnd();
-		m_isNextScene = true;
-	}
-	else if (!m_vwp_sceneChangeAnimationComponent.lock()->IsAnimation() && m_isNextScene)
-	{
-		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-		std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
-		sceneManager->RemoveScene(sceneName);
-		sceneName = "StageSelect";
-		sceneManager->ChangeScene(sceneName);
-
-		m_retryPoint = 0;
-
-		m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
-	}
+	
 }
 
 void ButiEngine::WaveManager::GameOverAnimation()

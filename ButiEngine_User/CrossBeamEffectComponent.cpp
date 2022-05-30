@@ -23,7 +23,10 @@ void ButiEngine::CrossBeamEffectComponent::OnUpdate()
 			m_vlp_animationTimer->ChangeCountFrame(25);
 		}
 
-		m_animationStep++;
+		if (m_animationStep < 5)
+		{
+			m_animationStep++;
+		}
 	}
 
 	//スケールを変える（小→大→小）
