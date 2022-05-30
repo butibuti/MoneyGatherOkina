@@ -8,19 +8,14 @@
 
 void ButiEngine::StageSelectManagerComponent::OnUpdate()
 {
-	if (!isSceneChange)
-	{
-		isSceneChange = true;
-		m_vwp_gamePlayChangeAnimation.lock()->SceneStart();
-	}
-	if (!m_waitTimer->Update_continue()) { return; }
+	//if (!m_waitTimer->Update_continue()) { return; }
 
-	if (InputManager::IsTriggerRightKey())
+	if (!isSceneChange&&InputManager::IsTriggerRightKey()&&!m_vwp_gamePlayChangeAnimation.lock()->IsAnimation())
 	{
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum++;
 	}
-	else if(InputManager::IsTriggerLeftKey())
+	else if(!isSceneChange&&InputManager::IsTriggerLeftKey() && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation())
 	{
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum--;
@@ -28,15 +23,14 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 
 	FixStageNum();
 
-	if (InputManager::IsTriggerDecideKey())
+	if (InputManager::IsTriggerDecideKey() && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()&&!isSceneChange)
 	{
 		m_vwp_gamePlayChangeAnimation.lock()->SceneEnd();
-		isSceneChange = false;
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
-
+		isSceneChange = true;
 	}
 
-	if (!isSceneChange && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) 
+	if (isSceneChange && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) 
 	{
 		//ŽŸ‚ÌƒV[ƒ“‚Ö
 		NextScene();
@@ -60,8 +54,10 @@ void ButiEngine::StageSelectManagerComponent::Start()
 	m_maxStageNum = 1;
 	isSceneChange = false;
 
-	auto sceneChangeAnimation = GetManager().lock()->AddObjectFromCereal("SceneChangeAnimation");
-	m_vwp_gamePlayChangeAnimation = sceneChangeAnimation.lock()->GetGameComponent<SceneChangeAnimationComponent>();
+	//auto sceneChangeAnimation = GetManager().lock()->GetGameObject("SceneChangeAnimation");
+	m_vwp_gamePlayChangeAnimation = gameObject.lock()->GetGameComponent<SceneChangeAnimationComponent>();
+
+	m_vwp_gamePlayChangeAnimation.lock()->SceneStart();
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM2.wav"));
@@ -78,6 +74,8 @@ void ButiEngine::StageSelectManagerComponent::NextScene()
 	//std::string sceneName = "GamePlay";
 	std::string sceneName = "Stage_" + std::to_string(m_stageNum);
 	GUI::Console("Stage_" + std::to_string(m_stageNum)+"‚Ö‚ÌˆÚ“®");
+	m_stageNum++;
+	m_stageNum = min(m_stageNum, m_maxStageNum);
 	sceneManager->RemoveScene(sceneName);
 	sceneManager->LoadScene(sceneName);
 	sceneManager->ChangeScene(sceneName);
