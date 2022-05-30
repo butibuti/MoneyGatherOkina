@@ -3,7 +3,7 @@
 
 void ButiEngine::EnemyScaleAnimationComponent::OnUpdate()
 {
-	m_previousScale = m_defaultScale + m_maxPlusScale * Easing::EaseOutCubic(m_lerpScale);
+	m_previousScale = m_defaultScale + m_maxPlusScale * Easing::EaseOutExpo(m_lerpScale);
 	m_previousScale *= m_anotherScale;
 
 	gameObject.lock()->transform->SetLocalScale(m_previousScale);

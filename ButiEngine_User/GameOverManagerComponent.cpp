@@ -50,6 +50,9 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 			m_vwp_restartProgressNumber.lock()->SetColor(GameSettings::PLAYER_COLOR);
 			m_vwp_restartProgressNumber.lock()->SetNumber(0);
 			m_vwp_restartProgressNumber.lock()->SetScale(Vector3(7, 7, 1));
+
+			auto karaUI = GetManager().lock()->AddObjectFromCereal("KaraUI");
+			karaUI.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
 		}
 		else if (m_nextCount == 3)
 		{
@@ -208,9 +211,12 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 		m_isInput = false;
 		m_isSelectAnimation = true;
 		m_vlp_selectAnimationTimer->Start();
-		Vector3 position = Vector3(-410, -330, -10);
-		auto crossBeamEffect = GetManager().lock()->AddObjectFromCereal("CrossBeamEffect").lock()->GetGameComponent<CrossBeamEffectComponent>();
-		crossBeamEffect->SetPosition(position);
+		if (m_isRetry)
+		{
+			Vector3 position = Vector3(-410, -330, -10);
+			auto crossBeamEffect = GetManager().lock()->AddObjectFromCereal("CrossBeamEffect").lock()->GetGameComponent<CrossBeamEffectComponent>();
+			crossBeamEffect->SetPosition(position);
+		}
 	}
 }
 

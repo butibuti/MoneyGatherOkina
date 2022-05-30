@@ -519,6 +519,7 @@ cd ..\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbsoluteAnimationRemoverComponent.cpp" />
     <ClCompile Include="AnimationRemoverComponent.cpp" />
     <ClCompile Include="AppealRBUI.cpp" />
     <ClCompile Include="AttackFlashSpawner.cpp" />
@@ -625,6 +626,7 @@ cd ..\</Command>
     <ClCompile Include="WarningMark.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbsoluteAnimationRemoverComponent.h" />
     <ClInclude Include="AnimationRemoverComponent.h" />
     <ClInclude Include="AppealRBUI.h" />
     <ClInclude Include="AttackFlashSpawner.h" />

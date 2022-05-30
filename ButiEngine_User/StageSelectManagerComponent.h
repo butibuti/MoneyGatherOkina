@@ -6,6 +6,7 @@ namespace ButiEngine {
 class SceneChangeAnimationComponent;
 class TitleManagerComponent;
 class SoundPlayerComponent;
+class EnemyScaleAnimationComponent;
 
 class StageSelectManagerComponent : public GameComponent
 {
@@ -32,14 +33,28 @@ public:
 private:
 	void FixStageNum();
 
-	std::int16_t m_stageNum;
+	static std::int16_t m_stageNum;
+
 	std::int16_t m_maxStageNum;
 	Value_ptr<Timer> m_waitTimer;
 	Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_gamePlayChangeAnimation;
 	Value_weak_ptr<TitleManagerComponent> m_vwp_title;
 	Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
+	Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_enemyScaleAnimationComponent;
+	Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_crystalScaleAnimationComponent;
+	Value_weak_ptr<GameObject> m_vwp_kiba;
+	Value_weak_ptr<GameObject> m_vwp_crystal;
 	//Value_weak_ptr<TitleManagerComponent> m_vwp_title;
-	bool isSceneChange = false;
+
+	Vector3 m_centerPosition;
+	Vector3 m_rightPosition;
+	Vector3 m_leftPosition;
+	Vector3 m_kibaPosition;
+	Vector3 m_crystalPosition;
+
+	float m_scaleRate;
+	float m_animationRate;
+	bool m_isSceneChange = false;
 };
 }
 

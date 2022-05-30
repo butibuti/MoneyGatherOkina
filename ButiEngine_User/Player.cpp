@@ -49,10 +49,10 @@ void ButiEngine::Player::OnUpdate()
 		return;
 	}
 
-	//if (GameDevice::GetInput()->TriggerKey(Keys::O))
-	//{
-	//	Damage();
-	//}
+	if (GameDevice::GetInput()->TriggerKey(Keys::O))
+	{
+		GetManager().lock()->AddObjectFromCereal("PikinUI");
+	}
 
 	//if (InputManager::IsTriggerBombKey())
 	//{
@@ -546,14 +546,14 @@ void ButiEngine::Player::IncreaseVibration()
 	}
 	m_vibration = min(m_vibration, m_maxVibration);
 
-	//if (!m_isVibUpSE)
-	//{
-	//	m_isVibUpSE = true;
+	if (!m_isVibUpSE)
+	{
+		m_isVibUpSE = true;
 
-	//	m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
-	//	auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
-	//	m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
-	//}
+		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
+		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
+		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
+	}
 
 	if (GetVibrationRate() >= 1.0f)
 	{
@@ -626,6 +626,17 @@ void ButiEngine::Player::VibrationEffect()
 			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
 		}
 	}
+	else
+	{
+		if (m_vwp_vibrationEffect.lock())
+		{
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
+		}
+		if (m_vwp_vibrationEffectOverheat.lock())
+		{
+			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
+		}
+	}
 }
 
 void ButiEngine::Player::VibrationEffectOverheat()
@@ -657,6 +668,17 @@ void ButiEngine::Player::VibrationEffectOverheat()
 		if (m_vwp_vibrationEffect.lock())
 		{
 			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
+		}
+	}
+	else
+	{
+		if (m_vwp_vibrationEffect.lock())
+		{
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
+		}
+		if (m_vwp_vibrationEffectOverheat.lock())
+		{
+			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalPosition(Vector3(0, 3000, 0));
 		}
 	}
 }
@@ -846,6 +868,10 @@ void ButiEngine::Player::Overheat()
 
 void ButiEngine::Player::StartOverheatEffect()
 {
+	//ﾋﾟｷｰﾝ
+	m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/Kazan_HIt.wav"));
+	GetManager().lock()->AddObjectFromCereal("PikinUI");
+
 	auto camera = GetManager().lock()->GetGameObject("Camera");
 	camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(1);
 	m_vwp_worldSpeedManager.lock()->SetSpeed(0.2f);

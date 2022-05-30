@@ -27,6 +27,7 @@ namespace ButiEngine {
 		void SetMoveAlpha(const float arg_moveAlpha) { m_moveAlpha = arg_moveAlpha; }
 		void SetMaxAlpha(const float arg_maxAlpha) { m_maxAlpha = arg_maxAlpha; }
 		void SetPositionZ(const float arg_positionZ);
+		void SetColor(const Vector3& arg_color);
 		bool IsFadeAnimation()const;
 	private:
 		bool m_isFadeIn;

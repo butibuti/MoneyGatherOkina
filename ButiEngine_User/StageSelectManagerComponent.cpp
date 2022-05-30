@@ -4,33 +4,77 @@
 #include "InputManager.h"
 #include "FloatMotionComponent.h"
 #include "SoundPlayerComponent.h"
+#include "EnemyScaleAnimationComponent.h"
 #include "ButiEngineHeader/Header/GameObjects/DefaultGameComponent/SpriteAnimationComponent.h"
+
+std::int16_t ButiEngine::StageSelectManagerComponent::m_stageNum = 0;
 
 void ButiEngine::StageSelectManagerComponent::OnUpdate()
 {
 	//if (!m_waitTimer->Update_continue()) { return; }
 
-	if (!isSceneChange&&InputManager::IsTriggerRightKey()&&!m_vwp_gamePlayChangeAnimation.lock()->IsAnimation())
+	if (!m_isSceneChange&&InputManager::IsTriggerRightKey()&&!m_vwp_gamePlayChangeAnimation.lock()->IsAnimation())
 	{
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum++;
+		m_animationRate = 0;
 	}
-	else if(!isSceneChange&&InputManager::IsTriggerLeftKey() && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation())
+	else if(!m_isSceneChange&&InputManager::IsTriggerLeftKey() && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation())
 	{
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Select.wav"));
 		m_stageNum--;
+		m_animationRate = 0;
 	}
 
 	FixStageNum();
 
-	if (InputManager::IsTriggerDecideKey() && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()&&!isSceneChange)
+	if (m_animationRate < 1.0f)
+	{
+		m_animationRate += 0.1f;
+	}
+
+	if (m_stageNum == 0)
+	{
+		if (m_scaleRate > 0.0f)
+		{
+			m_scaleRate -= 0.2f;
+		}
+		else
+		{
+			m_scaleRate = 0;
+		}
+		m_kibaPosition.x = MathHelper::Lerp(m_kibaPosition.x, m_rightPosition.x, Easing::EaseOutExpo(m_animationRate));
+		m_crystalPosition.x = MathHelper::Lerp(m_crystalPosition.x, m_centerPosition.x, Easing::EaseOutExpo(m_animationRate));
+	}
+	else
+	{
+		if (m_scaleRate < 1.0f)
+		{
+			m_scaleRate += 0.2f;
+		}
+		else
+		{
+			m_scaleRate = 1.0f;
+		}
+		m_kibaPosition.x = MathHelper::Lerp(m_kibaPosition.x, m_centerPosition.x, Easing::EaseOutExpo(m_animationRate));
+		m_crystalPosition.x = MathHelper::Lerp(m_crystalPosition.x, m_leftPosition.x, Easing::EaseOutExpo(m_animationRate));
+	}
+
+	float crystalScale = 1.0f - m_scaleRate;
+	m_vwp_crystalScaleAnimationComponent.lock()->SetScaleRate(crystalScale);
+	m_vwp_enemyScaleAnimationComponent.lock()->SetScaleRate(m_scaleRate);
+
+	m_vwp_kiba.lock()->transform->SetLocalPosition(m_kibaPosition);
+	m_vwp_crystal.lock()->transform->SetLocalPosition(m_crystalPosition);
+
+	if (InputManager::IsTriggerDecideKey() && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()&&!m_isSceneChange)
 	{
 		m_vwp_gamePlayChangeAnimation.lock()->SceneEnd();
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/UI_Enter.wav"));
-		isSceneChange = true;
+		m_isSceneChange = true;
 	}
 
-	if (isSceneChange && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) 
+	if (m_isSceneChange && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) 
 	{
 		//ŽŸ‚ÌƒV[ƒ“‚Ö
 		NextScene();
@@ -50,9 +94,14 @@ void ButiEngine::StageSelectManagerComponent::OnShowUI()
 void ButiEngine::StageSelectManagerComponent::Start()
 {
 	m_waitTimer->Start();
-	m_stageNum = 0;
 	m_maxStageNum = 1;
-	isSceneChange = false;
+	m_scaleRate = 0;
+	m_animationRate = 0;
+	m_isSceneChange = false;
+
+	m_centerPosition = Vector3(0.0f, 0.0f, 0.0f);
+	m_rightPosition = Vector3(6.0f, 0.0f, 0.0f);
+	m_leftPosition = Vector3(-6.0f, 0.0f, 0.0f);
 
 	//auto sceneChangeAnimation = GetManager().lock()->GetGameObject("SceneChangeAnimation");
 	m_vwp_gamePlayChangeAnimation = gameObject.lock()->GetGameComponent<SceneChangeAnimationComponent>();
@@ -60,7 +109,32 @@ void ButiEngine::StageSelectManagerComponent::Start()
 	m_vwp_gamePlayChangeAnimation.lock()->SceneStart();
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	
+	m_vwp_kiba = GetManager().lock()->GetGameObject("SelectKiba");
+	m_vwp_enemyScaleAnimationComponent = m_vwp_kiba.lock()->GetGameComponent<EnemyScaleAnimationComponent>();
+	m_vwp_enemyScaleAnimationComponent.lock()->SetMaxPlusScale(1.0f);
+	m_vwp_enemyScaleAnimationComponent.lock()->SetScaleRate(1.0f);
+
+	m_vwp_crystal = GetManager().lock()->GetGameObject("SelectCrystal");
+	m_vwp_crystalScaleAnimationComponent = m_vwp_crystal.lock()->GetGameComponent<EnemyScaleAnimationComponent>();
+	m_vwp_crystalScaleAnimationComponent.lock()->SetMaxPlusScale(1.0f);
+	m_vwp_crystalScaleAnimationComponent.lock()->SetScaleRate(1.0f);
+
+	if (m_stageNum == 0)
+	{
+		m_kibaPosition = m_rightPosition;
+		m_crystalPosition = m_centerPosition;
+	}
+	else
+	{
+		m_kibaPosition = m_centerPosition;
+		m_crystalPosition = m_leftPosition;
+	}
+	m_vwp_kiba.lock()->transform->SetLocalPosition(m_kibaPosition);
+	m_vwp_crystal.lock()->transform->SetLocalPosition(m_crystalPosition);
+
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM2.wav"));
+
+	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform);
 	
 }
 

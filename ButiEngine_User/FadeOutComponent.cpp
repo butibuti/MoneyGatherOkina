@@ -49,6 +49,14 @@ void ButiEngine::FadeOutComponent::SetPositionZ(const float arg_positionZ)
 	gameObject.lock()->transform->SetLocalPositionZ(arg_positionZ);
 }
 
+void ButiEngine::FadeOutComponent::SetColor(const Vector3& arg_color)
+{
+	auto objInfo = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation");
+	objInfo->Get().color.x = arg_color.x;
+	objInfo->Get().color.y = arg_color.y;
+	objInfo->Get().color.z = arg_color.z;
+}
+
 bool ButiEngine::FadeOutComponent::IsFadeAnimation() const
 {
 	return m_isFadeIn ? gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color.w > 0.0f
