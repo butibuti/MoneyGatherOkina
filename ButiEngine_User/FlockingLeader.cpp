@@ -30,6 +30,10 @@ void ButiEngine::FlockingLeader::OnUpdate()
 	{
 		//GatherStart();
 		CreateStarFlash();
+		if (m_isTutorial)
+		{
+			TutorialEnemySpawn();
+		}
 	}
 	else if (InputManager::IsReleaseGatherKey())
 	{
@@ -72,6 +76,10 @@ void ButiEngine::FlockingLeader::Start()
 
 	m_isDraw = false;
 	m_isGather = true;
+
+	m_isTutorial = m_vwp_waveManager.lock()->IsTutorial();
+	m_isTutorialStart = false;
+	m_isTutorialEnemySpawn = false;
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FlockingLeader::Clone()
@@ -113,10 +121,21 @@ void ButiEngine::FlockingLeader::CreateStarFlash()
 	circleFlash.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 }
 
+void ButiEngine::FlockingLeader::TutorialEnemySpawn()
+{
+	if (m_isTutorialEnemySpawn) { return; }
+
+	GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>()->SpawnEnemySpawner();
+	GetManager().lock()->AddObjectFromCereal("OutsideCrystalSpawner");
+
+	m_isTutorialEnemySpawn = true;
+}
+
 bool ButiEngine::FlockingLeader::IsStop()
 {
 	if (m_vwp_waveManager.lock()->IsEvent()) { return true; }
 	if (m_vwp_pauseManager.lock()->IsPause()) { return true; }
+	if (m_isTutorial && !m_isTutorialStart) { return true; }
 	
 	return false;
 }

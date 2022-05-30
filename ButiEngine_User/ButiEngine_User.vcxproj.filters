@@ -102,6 +102,8 @@
     <ClCompile Include="WingAnimation.cpp" />
     <ClCompile Include="TutorialCrystal.cpp" />
     <ClCompile Include="CrossBeamEffectComponent.cpp" />
+    <ClCompile Include="ProgressPointUI.cpp" />
+    <ClCompile Include="TutorialCrystalSpawner.cpp" />
     <ClCompile Include="AbsoluteAnimationRemoverComponent.cpp" />
     <ClCompile Include="AllStageClearManagerComponent.cpp" />
   </ItemGroup>
@@ -205,6 +207,8 @@
     <ClInclude Include="WingAnimation.h" />
     <ClInclude Include="CrossBeamEffectComponent.h" />
     <ClInclude Include="TutorialCrystal.h" />
+    <ClInclude Include="ProgressPointUI.h" />
+    <ClInclude Include="TutorialCrystalSpawner.h" />
     <ClInclude Include="AbsoluteAnimationRemoverComponent.h" />
     <ClInclude Include="AllStageClearManagerComponent.h" />
   </ItemGroup>

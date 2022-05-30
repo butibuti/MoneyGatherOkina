@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class TutorialCrystalSpawner;
+
 	class TutorialCrystal :public GameComponent
 	{
 	public:
@@ -22,6 +24,7 @@ namespace ButiEngine {
 		}
 
 		void Dead();
+		void SetIsLast(const bool arg_isLast) { m_isLast = arg_isLast; }
 	private:
 		void SetEnemyParameter();
 
@@ -30,6 +33,10 @@ namespace ButiEngine {
 		static float m_createPocketRadius;
 		static float m_vibrationCapacity;
 		static float m_vibrationResistance;
+
+		Value_weak_ptr<TutorialCrystalSpawner> m_vwp_crystalSpawner;
+
+		bool m_isLast;
 	};
 
 }

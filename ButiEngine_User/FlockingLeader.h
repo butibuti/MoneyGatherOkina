@@ -24,6 +24,8 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		void SetIsTutorialStart(const bool arg_isTutorialStart) { m_isTutorialStart = arg_isTutorialStart; }
+
 		float GetMoveSpeed() { return (m_pos - m_prevPos).GetLength(); }
 		bool IsGather() { return m_isGather; }
 	private:
@@ -33,6 +35,8 @@ namespace ButiEngine {
 		void CreateCircleFlash();
 		//収縮エフェクト
 		void CreateStarFlash();
+
+		void TutorialEnemySpawn();
 
 		bool IsStop();
 
@@ -44,6 +48,10 @@ namespace ButiEngine {
 
 		bool m_isDraw;
 		bool m_isGather;
+
+		bool m_isTutorial;
+		bool m_isTutorialStart;
+		bool m_isTutorialEnemySpawn;
 		
 		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerator;
 	};

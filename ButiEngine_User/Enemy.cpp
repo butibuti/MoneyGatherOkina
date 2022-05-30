@@ -274,6 +274,7 @@ void ButiEngine::Enemy::Dead()
 		tutorialCrystal->Dead();
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
+		deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
 	}
 
 	//auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();

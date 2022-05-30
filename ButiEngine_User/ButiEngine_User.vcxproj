@@ -585,6 +585,7 @@ cd ..\</Command>
     <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
+    <ClCompile Include="ProgressPointUI.cpp" />
     <ClCompile Include="RotateAnimationComponent.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="Sensor.cpp" />
@@ -612,6 +613,7 @@ cd ..\</Command>
     <ClCompile Include="TiltMotion.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="TutorialCrystal.cpp" />
+    <ClCompile Include="TutorialCrystalSpawner.cpp" />
     <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="VibrationSensor.cpp" />
     <ClCompile Include="VignetteUIComponent.cpp" />
@@ -688,6 +690,7 @@ cd ..\</Command>
     <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
+    <ClInclude Include="ProgressPointUI.h" />
     <ClInclude Include="RotateAnimationComponent.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="Sensor.h" />
@@ -708,6 +711,7 @@ cd ..\</Command>
     <ClInclude Include="TiltMotion.h" />
     <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="TutorialCrystal.h" />
+    <ClInclude Include="TutorialCrystalSpawner.h" />
     <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="VibrationSensor.h" />
     <ClInclude Include="VignetteUIComponent.h" />
