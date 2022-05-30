@@ -11,6 +11,7 @@ void ButiEngine::Sensor::OnSet()
 {
 	auto collisionStayLambda = std::function<void(Value_ptr<GameObject>&)>([this](Value_ptr<GameObject>& arg_vwp_other)->void
 		{
+			if (arg_vwp_other->transform->GetLocalScale() == Vector3Const::Zero) { return; }
 			if (arg_vwp_other->GetIsRemove()) { return; }
 			if (arg_vwp_other->HasGameObjectTag(GameObjectTag("Enemy")))
 			{
@@ -57,6 +58,7 @@ void ButiEngine::Sensor::OnCollisionFlocking(Value_weak_ptr<GameObject> arg_vwp_
 
 	//m_vwp_player.lock()->SetStrongestNearWorkerVibration(workerVibration);
 
+	//ãŒÀ
 	auto worker = arg_vwp_other.lock()->GetGameComponent<Worker>();
 	if (!worker) { return; }
 

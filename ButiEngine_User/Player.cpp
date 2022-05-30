@@ -521,7 +521,7 @@ void ButiEngine::Player::IncreaseVibration()
 	m_vibration += vibrationIncrease;
 
 
-	//‹zŽû
+	//÷“n
 	//if (m_vibration >= m_maxVibration)
 	//{
 	//	float overVibration = m_vibration - m_maxVibration;
@@ -538,12 +538,14 @@ void ButiEngine::Player::IncreaseVibration()
 	//	(*itr).lock()->RemoveVibration(removeVibration);
 	//}
 
+	//“`”À
 	if (m_vibration >= m_strongestNearWorkerVibration)
 	{
 		m_vibration = m_strongestNearWorkerVibration;
 		m_controllerVibration = 0.0f;
 	}
 	m_vibration = min(m_vibration, m_maxVibration);
+
 
 	//if (!m_isVibUpSE)
 	//{
@@ -559,8 +561,6 @@ void ButiEngine::Player::IncreaseVibration()
 		StartOverheatEffect();
 		//StartOverheat();
 		StopVibUpSE();
-		//meshDraw = m_vwp_bomb.lock()->GetGameComponent<MeshDrawComponent>();
-		//meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::ATTACK_COLOR;
 	}
 
 	if (!m_isVibrate)
@@ -912,11 +912,19 @@ void ButiEngine::Player::OnCollisionStalker(Value_weak_ptr<GameObject> arg_vwp_o
 void ButiEngine::Player::OnCollisionShockWave(Value_weak_ptr<GameObject> arg_vwp_other)
 {
 	m_isHitShockWave_Worker = true;
-	m_controllerVibration = 1.0f;
 
 	m_strongestNearWorkerVibration = arg_vwp_other.lock()->GetGameComponent<ShockWave>()->GetParent().lock()->GetGameComponent<Worker>()->GetVibration();
 
+	m_controllerVibration = 1.0f;
 	IncreaseVibration();
+
+	//auto worker = arg_vwp_other.lock()->GetGameComponent<ShockWave>()->GetParent().lock()->GetGameComponent<Worker>();
+	//float workerVibration = worker->GetVibration();
+
+	//if (workerVibration > 0.0f)
+	//{
+	//	AddNearWorker(worker);
+	//}
 }
 
 void ButiEngine::Player::CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_other)

@@ -583,6 +583,7 @@ cd ..\</Command>
     <ClCompile Include="CameraShakeComponent.cpp" />
     <ClCompile Include="PolygonParticleGenerator.cpp" />
     <ClCompile Include="PredictedPoint.cpp" />
+    <ClCompile Include="ProgressPointUI.cpp" />
     <ClCompile Include="RotateAnimationComponent.cpp" />
     <ClCompile Include="SceneChangeAnimationComponent.cpp" />
     <ClCompile Include="Sensor.cpp" />
@@ -684,6 +685,7 @@ cd ..\</Command>
     <ClInclude Include="CameraShakeComponent.h" />
     <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
+    <ClInclude Include="ProgressPointUI.h" />
     <ClInclude Include="RotateAnimationComponent.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="Sensor.h" />
