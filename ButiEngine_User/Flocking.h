@@ -28,6 +28,8 @@ namespace ButiEngine {
 
 		static std::vector<Value_ptr<GameObject>> GetWorkers() { return m_vec_workers; }
 		static void ResetWorkers() { m_vec_workers.clear(); }
+
+		float GetMoveSpeed() { return m_moveSpeed; }
 		
 		void GatherStart() { m_moveSpeed = m_gatherStartSpeed; }
 		void DiffusionStart() { m_moveSpeed = m_diffusionStartSpeed; }

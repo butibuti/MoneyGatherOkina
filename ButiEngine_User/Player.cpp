@@ -49,10 +49,10 @@ void ButiEngine::Player::OnUpdate()
 		return;
 	}
 
-	if (GameDevice::GetInput()->TriggerKey(Keys::O))
-	{
-		Damage();
-	}
+	//if (GameDevice::GetInput()->TriggerKey(Keys::O))
+	//{
+	//	Damage();
+	//}
 
 	//if (InputManager::IsTriggerBombKey())
 	//{
@@ -499,7 +499,14 @@ void ButiEngine::Player::VibrationController()
 	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
 
 	//float vibrationPower = m_vibration / m_maxVibration;
-	InputManager::VibrationStart(m_controllerVibration);
+	if (m_isOverheat)
+	{
+		InputManager::VibrationStart(1.0f);
+	}
+	else
+	{
+		InputManager::VibrationStart(m_controllerVibration);
+	}
 	//InputManager::VibrationStart(m_nearEnemyVibrationRate);
 }
 

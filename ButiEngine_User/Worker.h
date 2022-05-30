@@ -10,6 +10,7 @@ namespace ButiEngine {
 	class SoundPlayerComponent;
 	class EnemyScaleAnimationComponent;
 	class WaveManager;
+	class Flocking;
 
 	class Worker :public GameComponent
 	{
@@ -94,6 +95,7 @@ namespace ButiEngine {
 		static float m_vibrationDecrease;
 		static float m_maxScaleRate;
 		static float m_tutorialMaxVibration;
+		static float m_spawnParticleSpeed;
 
 		Value_weak_ptr<GameObject> m_vwp_tiltFloatObject;
 
@@ -102,12 +104,14 @@ namespace ButiEngine {
 		Value_weak_ptr<VibrationEffectComponent> m_vwp_vibrationEffectComponent;
 		Value_weak_ptr<ShakeComponent> m_vwp_shakeComponent;
 		Value_weak_ptr<ParticleGenerater> m_vwp_particleGenerater;
-		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerater;
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_spriteParticleGenerator;
+		Value_weak_ptr<SpriteParticleGenerator> m_vwp_sphereParticleGenerator;
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_scaleAnimationComponent;
 		Value_ptr<LookAtComponent> m_vlp_lookAt;
 		Value_ptr<Player> m_vlp_player;
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;
+		Value_weak_ptr<Flocking> m_vwp_flocking;
 		Value_ptr<Timer> m_vlp_nearPlayerTimer;
 		Value_ptr<Timer> m_vlp_ruptureTimer;
 		Value_ptr<Timer> m_vlp_attackFlashTimer;

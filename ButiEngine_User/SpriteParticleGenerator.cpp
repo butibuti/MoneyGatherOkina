@@ -183,3 +183,30 @@ void ButiEngine::SpriteParticleGenerator::SpawnParticles(const Vector3& arg_posi
 		m_vwp_spriteParticleController.lock()->AddParticle(particle);
 	}
 }
+
+void ButiEngine::SpriteParticleGenerator::AfterImageParticles(const Vector3& arg_position)
+{
+	Particle2D particle;
+
+	Vector3 dir;
+	dir.x = ButiRandom::GetInt(-100, 100);
+	dir.y = ButiRandom::GetInt(-100, 100);
+	dir.z = ButiRandom::GetInt(-100, 100);
+	if (dir == Vector3Const::Zero)
+	{
+		dir.x = 1;
+	}
+	dir.Normalize();
+
+	float spawnRadius = ButiRandom::GetRandom(0.3f, 0.7f, 10);
+
+	particle.position = arg_position + dir * spawnRadius;
+	particle.angle = ButiRandom::GetRandom(0.0f, 1.0f, 100);
+	particle.life = 30;
+	particle.size = ButiRandom::GetRandom(8.0f, 12.0f, 10);
+	particle.sizePase = -particle.size / particle.life;
+	particle.color = GameSettings::WORKER_COLOR;
+	//particle.colorPase.w = -particle.color.w / particle.life;
+
+	m_vwp_spriteParticleController.lock()->AddParticle(particle);
+}

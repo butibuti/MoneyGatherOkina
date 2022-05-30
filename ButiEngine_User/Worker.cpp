@@ -36,6 +36,7 @@ float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 float ButiEngine::Worker::m_initVibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
 float ButiEngine::Worker::m_tutorialMaxVibration = 50.0f;
+float ButiEngine::Worker::m_spawnParticleSpeed = 0.6f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -44,9 +45,14 @@ void ButiEngine::Worker::OnUpdate()
 		return;
 	}
 
-	if (m_isNearPlayer)
+	//if (m_isNearPlayer)
+	//{
+	//	OnNearPlayer();
+	//}
+
+	if (m_vwp_flocking.lock() && m_vwp_flocking.lock()->IsActive() && m_vwp_flocking.lock()->GetMoveSpeed() > m_spawnParticleSpeed)
 	{
-		OnNearPlayer();
+		m_vwp_sphereParticleGenerator.lock()->AfterImageParticles(gameObject.lock()->transform->GetLocalPosition());
 	}
 
 	if (m_isTutorialVibrationObject && m_vibration < m_tutorialMaxVibration && m_vlp_vibrationResetTimer->Update())
@@ -171,6 +177,9 @@ void ButiEngine::Worker::OnShowUI()
 
 	GUI::BulletText(u8"振動値の減少量");
 	GUI::DragFloat("##vDecrease", &m_vibrationDecrease, 0.001f, 0.0f, 1.0f);
+
+	GUI::BulletText(u8"パーティクル出し始める速度");
+	GUI::DragFloat("##spawnParticleSpeed", &m_spawnParticleSpeed, 0.01f, 0.0f, 10.0f);
 }
 
 void ButiEngine::Worker::Start()
@@ -211,8 +220,10 @@ void ButiEngine::Worker::Start()
 	/*auto spawnFire = GetManager().lock()->AddObjectFromCereal("MobSpawnFire");
 	spawnFire.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());*/
 
+	m_vwp_flocking = gameObject.lock()->GetGameComponent<Flocking>();
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
-	m_vwp_spriteParticleGenerater = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
+	m_vwp_sphereParticleGenerator = GetManager().lock()->GetGameObject("SphereParticleController_NoBloom").lock()->GetGameComponent<SpriteParticleGenerator>();
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 
 	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
@@ -322,10 +333,9 @@ void ButiEngine::Worker::Predated(Value_weak_ptr<GameObject> arg_vwp_other)
 	//捕食されていたら何もしない
 	if (m_isPredated) { return; }
 
-	auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
-	if (flocking)
+	if (m_vwp_flocking.lock())
 	{
-		flocking->RemoveFlocking();
+		m_vwp_flocking.lock()->RemoveFlocking();
 	}
 
 	if (m_vlp_lookAt)
@@ -373,7 +383,7 @@ void ButiEngine::Worker::CreateAttackFlashEffect()
 
 	if (m_vlp_attackFlashTimer->Update())
 	{
-		m_vwp_spriteParticleGenerater.lock()->AttackFlashParticles(pos, 0.5f, 20.0f, Vector4(0.35, 1.0f, 1.0f, 1.0f));
+		m_vwp_spriteParticleGenerator.lock()->AttackFlashParticles(pos, 0.5f, 20.0f, Vector4(0.35, 1.0f, 1.0f, 1.0f));
 	}
 }
 
@@ -385,10 +395,9 @@ void ButiEngine::Worker::OnCollisionPlayer(Value_weak_ptr<GameObject> arg_vwp_ot
 	float playerVibrationRate = m_vlp_player->GetVibrationRate();
 	if (playerVibrationRate >= 1.0f)
 	{
-		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
-		if (flocking)
+		if (m_vwp_flocking.lock())
 		{
-			flocking->RemoveFlocking();
+			m_vwp_flocking.lock()->RemoveFlocking();
 		}
 
 		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
@@ -442,10 +451,9 @@ void ButiEngine::Worker::OnCollisionEnemy(Value_weak_ptr<GameObject> arg_vwp_ene
 
 		enemyComponent->AddStickWorkerCount();
 
-		auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
-		if (flocking)
+		if (m_vwp_flocking.lock())
 		{
-			flocking->RemoveFlocking();
+			m_vwp_flocking.lock()->RemoveFlocking();
 		}
 
 		auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
@@ -513,10 +521,9 @@ void ButiEngine::Worker::OnRupture()
 
 void ButiEngine::Worker::ReturnFlock()
 {
-	auto flocking = gameObject.lock()->GetGameComponent<Flocking>();
-	if (flocking)
+	if (m_vwp_flocking.lock())
 	{
-		flocking->AddFlocking();
+		m_vwp_flocking.lock()->AddFlocking();
 	}
 
 	auto collider = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>();
