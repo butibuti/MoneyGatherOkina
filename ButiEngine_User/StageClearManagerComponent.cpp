@@ -48,6 +48,8 @@ void ButiEngine::StageClearManagerComponent::Start()
 	}
 
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 
 	m_uiCount = 0;
 }
@@ -112,6 +114,8 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 			(*itr)->GetGameComponent<Enemy>()->Dead();
 		}
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 
 		m_vlp_addTimer->Stop();
 	}

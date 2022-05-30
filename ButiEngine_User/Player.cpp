@@ -136,7 +136,7 @@ void ButiEngine::Player::OnSet()
 
 	m_vlp_particleTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_vibUpSEResetTimer = ObjectFactory::Create<RelativeTimer>(5);
-	m_vlp_overheatEffectTimer = ObjectFactory::Create<RelativeTimer>(10);
+	m_vlp_overheatEffectTimer = ObjectFactory::Create<RelativeTimer>(20);
 }
 
 void ButiEngine::Player::OnRemove()

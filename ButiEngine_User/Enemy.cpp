@@ -305,7 +305,11 @@ void ButiEngine::Enemy::Dead()
 		m_isCapaOver = false;
 		m_vibration = 0.0f;
 		m_vwp_shakeComponent = Value_weak_ptr<ShakeComponent>();
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+		if (!m_vwp_waveManager.lock()->IsClearAnimation())
+		{
+			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+		}
+
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 		RuptureStickWorker();
 		outsideCrystal->SpawnStalker();
