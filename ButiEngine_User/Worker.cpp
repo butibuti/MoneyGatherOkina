@@ -33,6 +33,7 @@ float ButiEngine::Worker::m_vibrationDecrease = 0.2f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 float ButiEngine::Worker::m_initVibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
+float ButiEngine::Worker::m_tutorialMaxVibration = 50.0f;
 
 void ButiEngine::Worker::OnUpdate()
 {
@@ -45,6 +46,13 @@ void ButiEngine::Worker::OnUpdate()
 	{
 		OnNearPlayer();
 	}
+
+	if (m_isTutorialVibrationObject && m_vibration < m_tutorialMaxVibration && m_vlp_vibrationResetTimer->Update())
+	{
+		m_vlp_vibrationResetTimer->Reset();
+		m_vibration = m_tutorialMaxVibration;
+	}
+
 	if (m_isRupture)
 	{
 		OnRupture();
@@ -137,13 +145,16 @@ void ButiEngine::Worker::OnShowUI()
 	GUI::BulletText("NearBorder");
 	GUI::DragFloat("##nearBorder", &m_nearBorder, 0.1f, 0.0f, 10.0f);
 
-	GUI::Text("Vibration:%f", m_vibration);
+	GUI::Text(u8"U“®’l:%f", m_vibration);
 
-	GUI::BulletText("MaxVibration");
+	GUI::BulletText(u8"Å‘åU“®’l");
 	GUI::DragFloat("##maxVibration", &m_maxVibration, 1.0f, 1.0f, 1000.0f);
 
-	GUI::BulletText("MinVibration");
+	GUI::BulletText(u8"Å¬U“®’l");
 	GUI::DragFloat("##minVibration", &m_minVibration, 1.0f, 0.0f, 1000.0f);
+
+	GUI::BulletText(u8"ƒ`ƒ…[ƒgƒŠƒAƒ‹ŽžÅ‘åU“®’l");
+	GUI::DragFloat("##tutorialMaxVibration", &m_tutorialMaxVibration, 1.0f, 0.0f, 1000.0f);
 
 	GUI::BulletText(u8"UŒ‚—Í:%f", GetVibrationForce());
 
@@ -166,13 +177,18 @@ void ButiEngine::Worker::Start()
 
 	m_isTutorialVibrationObject = gameObject.lock()->HasGameObjectTag(GameObjectTag("VibrationObject"));
 
-	if (m_vwp_waveManager.lock()->IsTutorial() && !m_isTutorialVibrationObject)
+	if (m_isTutorialVibrationObject)
+	{
+		m_vlp_vibrationResetTimer = ObjectFactory::Create<RelativeTimer>(180);
+		m_vlp_vibrationResetTimer->Start();
+	}
+	else if (m_vwp_waveManager.lock()->IsTutorial())
 	{
 		auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 		spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 		spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
 	}
-	else if(!m_isTutorialVibrationObject)
+	else
 	{
 		gameObject.lock()->transform->SetWorldPostionY(-1000.0f);
 	}
@@ -235,6 +251,11 @@ void ButiEngine::Worker::Dead()
 	if (stick)
 	{
 		stick->Dead();
+	}
+
+	if (m_vwp_vibrationEffect.lock())
+	{
+		m_vwp_vibrationEffect.lock()->SetIsRemove(true);
 	}
 
 	if (m_vwp_tiltFloatObject.lock())
@@ -608,6 +629,6 @@ void ButiEngine::Worker::SetVibrationParameter()
 	m_vibration = m_minVibration;
 	if (m_isTutorialVibrationObject)
 	{
-		m_vibration = 50.0f;
+		m_vibration = m_tutorialMaxVibration;
 	}
 }

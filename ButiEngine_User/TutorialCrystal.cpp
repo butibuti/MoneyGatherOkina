@@ -62,6 +62,7 @@ void ButiEngine::TutorialCrystal::Dead()
 	GetManager().lock()->GetGameObject("WorkerSpawner").lock()->GetGameComponent<WorkerSpawner>()->RandomSpawnStart();
 	GetManager().lock()->GetGameObject("TutorialVibrationObject").lock()->GetGameComponent<Worker>()->Dead();
 	GetManager().lock()->GetGameObject("TutorialVibrationObject_1").lock()->GetGameComponent<Worker>()->Dead();
+	GetManager().lock()->AddObjectFromCereal("OutsideCrystalSpawner");
 }
 
 void ButiEngine::TutorialCrystal::SetEnemyParameter()
