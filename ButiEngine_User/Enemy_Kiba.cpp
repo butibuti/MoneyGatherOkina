@@ -9,7 +9,7 @@
 std::int32_t ButiEngine::Enemy_Kiba::m_progressPoint = 5;
 std::int32_t ButiEngine::Enemy_Kiba::m_pocketCount = 8;
 float ButiEngine::Enemy_Kiba::m_createPocketRadius = 3.0f;
-float ButiEngine::Enemy_Kiba::m_vibrationCapacity = 400.0f;
+float ButiEngine::Enemy_Kiba::m_vibrationCapacity = 300.0f;
 float ButiEngine::Enemy_Kiba::m_vibrationResistance = 0.5f;
 
 float ButiEngine::Enemy_Kiba::m_knockBackForce = 0.3f;
