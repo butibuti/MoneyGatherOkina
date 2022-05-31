@@ -211,9 +211,16 @@
     <ClInclude Include="TutorialCrystalSpawner.h" />
     <ClInclude Include="AbsoluteAnimationRemoverComponent.h" />
     <ClInclude Include="AllStageClearManagerComponent.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
     <None Include="ProtBuf\EngineEditorCommunicate.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ButiEngine_User.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\App.ico" />
   </ItemGroup>
 </Project>

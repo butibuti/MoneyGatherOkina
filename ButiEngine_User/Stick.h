@@ -2,7 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class RigidBodyComponent;
 	class ParticleGenerater;
 	class SoundPlayerComponent;
 

@@ -425,7 +425,7 @@ cd ..\</Command>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Debug\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Debug\ZDll.lib;$(SolutionDir)\Libs\dll\Debug\ButiFont.lib;$(SolutionDir)\Libs\lib\Debug\ButiUtil.lib;$(SolutionDir)\Libs\dll\Debug\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Debug\ButiBulletWrap.lib;$(SolutionDir)\Libs\lib\Debug_imguiEditor\ButiEngine.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Debug\ZDll.lib;$(SolutionDir)\Libs\dll\Debug\ButiFont.lib;$(SolutionDir)\Libs\lib\Debug\ButiUtil.lib;$(SolutionDir)\Libs\dll\Debug\ButiMemorySystem.lib;$(SolutionDir)\Libs\lib\Debug_imguiEditor\ButiEngine.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>cd .\ProtBuf
@@ -455,7 +455,7 @@ cd ..\</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\Release\;$(SolutionDir)Libs\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Release\ZDll.lib;$(SolutionDir)\Libs\dll\Release\ButiFont.lib;$(SolutionDir)\Libs\dll\Release\ButiMemorySystem.lib;$(SolutionDir)\Libs\dll\Release\ButiBulletWrap.lib;$(SolutionDir)\Libs\lib\Release\ButiUtil.lib;$(SolutionDir)\Libs\lib\Release\ButiEngine.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Libs\dll\Release\ZDll.lib;$(SolutionDir)\Libs\dll\Release\ButiFont.lib;$(SolutionDir)\Libs\dll\Release\ButiMemorySystem.lib;$(SolutionDir)\Libs\lib\Release\ButiUtil.lib;$(SolutionDir)\Libs\lib\Release\ButiEngine.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Editor|x64'">
@@ -691,6 +691,7 @@ cd ..\</Command>
     <ClInclude Include="PolygonParticleGenerator.h" />
     <ClInclude Include="PredictedPoint.h" />
     <ClInclude Include="ProgressPointUI.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RotateAnimationComponent.h" />
     <ClInclude Include="SceneChangeAnimationComponent.h" />
     <ClInclude Include="Sensor.h" />
@@ -729,6 +730,12 @@ cd ..\</Command>
   <ItemGroup>
     <None Include="..\output\UserSample\Debug\Resources\Application\ButiEngine.ini" />
     <None Include="ProtBuf\EngineEditorCommunicate.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ButiEngine_User.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\App.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
