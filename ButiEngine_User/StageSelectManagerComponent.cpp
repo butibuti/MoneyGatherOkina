@@ -179,11 +179,17 @@ void ButiEngine::StageSelectManagerComponent::ScaleRateUpdate()
 		if (m_kibaScaleRate > 0)
 		{
 			m_kibaScaleRate -= 0.2f;
-			m_endGameScaleRate -= 0.2f;
 		}
 		else
 		{
 			m_kibaScaleRate = 0;
+		}
+		if (m_endGameScaleRate > 0)
+		{
+			m_endGameScaleRate -= 0.2f;
+		}
+		else
+		{
 			m_endGameScaleRate = 0;
 		}
 		if (m_crystalScaleRate < 2)
@@ -200,11 +206,17 @@ void ButiEngine::StageSelectManagerComponent::ScaleRateUpdate()
 		if (m_crystalScaleRate > 0)
 		{
 			m_crystalScaleRate -= 0.2f;
-			m_endGameScaleRate -= 0.2f;
 		}
 		else
 		{
 			m_crystalScaleRate = 0;
+		}
+		if (m_endGameScaleRate > 0)
+		{
+			m_endGameScaleRate -= 0.2f;
+		}
+		else
+		{
 			m_endGameScaleRate = 0;
 		}
 		if (m_kibaScaleRate < 2)
@@ -221,11 +233,17 @@ void ButiEngine::StageSelectManagerComponent::ScaleRateUpdate()
 		if (m_crystalScaleRate > 0)
 		{
 			m_crystalScaleRate -= 0.2f;
-			m_kibaScaleRate -= 0.2f;
 		}
 		else
 		{
 			m_crystalScaleRate = 0;
+		}
+		if (m_kibaScaleRate > 0)
+		{
+			m_kibaScaleRate -= 0.2f;
+		}
+		else
+		{
 			m_kibaScaleRate = 0;
 		}
 		if (m_endGameScaleRate < 2)
