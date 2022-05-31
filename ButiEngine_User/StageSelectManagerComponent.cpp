@@ -135,7 +135,10 @@ void ButiEngine::StageSelectManagerComponent::Start()
 
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM2.wav"));
 
-	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform);
+	//竹渕が書いたブルーム用カメラにmainを親としてセットする処理
+	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
+	GetCamera("IsolateEffect")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
+	GetCamera("IsolateEffectBloom")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
 	
 }
 

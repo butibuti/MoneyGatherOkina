@@ -14,8 +14,8 @@ float ButiEngine::Enemy_Stalker::m_vibrationResistance = 0.0f;
 float ButiEngine::Enemy_Stalker::m_maxMoveSpeed = 0.15f;
 float ButiEngine::Enemy_Stalker::m_acceleration = 0.003f;
 
-float ButiEngine::Enemy_Stalker::m_knockBackForce = 0.3f;
-std::int32_t ButiEngine::Enemy_Stalker::m_knockBackFrame = 30;
+float ButiEngine::Enemy_Stalker::m_knockBackForce = 0.25f;
+std::int32_t ButiEngine::Enemy_Stalker::m_knockBackFrame = 20;
 
 void ButiEngine::Enemy_Stalker::OnUpdate()
 {

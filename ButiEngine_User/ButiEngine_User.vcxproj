@@ -614,6 +614,7 @@ cd ..\</Command>
     <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="TutorialCrystal.cpp" />
     <ClCompile Include="TutorialCrystalSpawner.cpp" />
+    <ClCompile Include="TutorialUI.cpp" />
     <ClCompile Include="VibrationEffectComponent.cpp" />
     <ClCompile Include="VibrationSensor.cpp" />
     <ClCompile Include="VignetteUIComponent.cpp" />
@@ -713,6 +714,7 @@ cd ..\</Command>
     <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="TutorialCrystal.h" />
     <ClInclude Include="TutorialCrystalSpawner.h" />
+    <ClInclude Include="TutorialUI.h" />
     <ClInclude Include="VibrationEffectComponent.h" />
     <ClInclude Include="VibrationSensor.h" />
     <ClInclude Include="VignetteUIComponent.h" />

@@ -8,6 +8,10 @@
 #include "Worker.h"
 #include "TutorialCrystalSpawner.h"
 #include "FlockingLeader.h"
+#include "SpawnEffect.h"
+#include "GameSettings.h"
+#include "SoundPlayerComponent.h"
+#include "TutorialUI.h"
 
 std::int32_t ButiEngine::TutorialCrystal::m_progressPoint = 0;
 std::int32_t ButiEngine::TutorialCrystal::m_pocketCount = 0;
@@ -71,6 +75,8 @@ void ButiEngine::TutorialCrystal::Dead()
 		GetManager().lock()->GetGameObject("TutorialVibrationObject75").lock()->GetGameComponent<Worker>()->Dead();
 		GetManager().lock()->GetGameObject("TutorialVibrationObject75_1").lock()->GetGameComponent<Worker>()->Dead();
 		GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>()->TutorialStart();
+
+		GetManager().lock()->GetGameObject("TutorialUI_Gather").lock()->GetGameComponent<TutorialUI>()->Appear();
 	}
 	else
 	{
@@ -81,6 +87,15 @@ void ButiEngine::TutorialCrystal::Dead()
 			auto crystal = GetManager().lock()->AddObjectFromCereal("TutorialCrystal");
 			crystal.lock()->transform->SetLocalPosition(0.0f);
 			crystal.lock()->GetGameComponent<TutorialCrystal>()->SetIsLast(true);
+
+			auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
+			spawnEffect.lock()->transform->SetLocalPosition(0.0f);
+			spawnEffect.lock()->transform->SetLocalScale(10.0f);
+			auto spawnEffectComponent = spawnEffect.lock()->GetGameComponent<SpawnEffect>();
+			spawnEffectComponent->SetColor(GameSettings::WORKER_COLOR);
+			spawnEffectComponent->SetLife(60);
+
+			GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>()->PlaySE(SoundTag("Sound/Beam.wav"), 3.0f);
 		}
 	}
 }
