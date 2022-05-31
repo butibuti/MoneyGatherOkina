@@ -13,12 +13,15 @@ void ButiEngine::LogoSceneManager::OnUpdate()
             m_vec_timerUpdatingFunction[m_index]();
         }
     }
-    else if(!m_vwp_sceneChangeAnimation.lock()->IsAnimation()){
+    if(m_vwp_sceneChangeAnimation.lock()&& !m_vwp_sceneChangeAnimation.lock()->IsAnimation()){
         auto app = GetManager().lock()->GetApplication().lock();
         if (!app->GetResourceContainer()->IsLoading()) {
 
             //app->GetGraphicDevice()->SetClearColor(Vector4((255.0f / 255.0f), (254.0f / 255.0f), (250.0f / 255.0f), 1.0f));
-            std::string sceneName = "StageSelect";
+#ifndef DEBUG
+            app->InitLoadResources();
+#endif // !DEBUG    
+            std::string sceneName = gameObject.lock()->GetApplication().lock()->GetAppInitData()->initSceneName;
             app->GetSceneManager()->RemoveScene(sceneName);
             app->GetSceneManager()->LoadScene(sceneName);
             app->GetSceneManager()->ChangeScene(sceneName);
@@ -119,10 +122,6 @@ void ButiEngine::LogoSceneManager::Start()
         m_vwp_sceneChangeAnimation.lock()->SceneEnd();
         m_vlp_timer = nullptr;
         });
-#ifndef DEBUG
-    auto app = GetManager().lock()->GetApplication().lock();
-    app->InitLoadResources_async();
-#endif // !DEBUG    
 }
 
 void ButiEngine::LogoSceneManager::OnSet()

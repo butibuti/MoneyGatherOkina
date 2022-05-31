@@ -234,6 +234,8 @@ namespace ButiEngine {
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 		Value_ptr<Timer> m_vlp_vibUpSEResetTimer;
+
+		Value_weak_ptr<MeshDrawComponent> m_vwp_maxUIDraw;
 	};
 
 }
