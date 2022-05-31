@@ -7,10 +7,12 @@ bool ButiEngine::WorldSpeedManager::m_isChangeSpeed;
 
 void ButiEngine::WorldSpeedManager::OnUpdate()
 {
+#ifdef DEBUG
 	if (GameDevice::GetInput()->TriggerKey(Keys::K))
 	{
 		SetSpeed(0.0f, 180);
 	}
+#endif // DEBUG
 	if (m_isChangeSpeed)
 	{
 		OnChangeSpeed();

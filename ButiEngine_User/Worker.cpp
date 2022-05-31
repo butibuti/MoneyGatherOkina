@@ -86,7 +86,9 @@ void ButiEngine::Worker::OnUpdate()
 		m_vwp_vibrationEffectComponent = m_vwp_vibrationEffect.lock()->GetGameComponent<VibrationEffectComponent>();
 		m_vwp_vibrationEffectComponent.lock()->SetDefaultScale(m_defaultScale * 4.0f);
 		auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
-		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
+		Vector4 color = GameSettings::WORKER_COLOR * 0.65f;
+		color.w = 1.0f;
+		meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = color;
 	}
 	else
 	{

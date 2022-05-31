@@ -81,10 +81,12 @@ void ButiEngine::WaveManager::OnUpdate()
 		m_isClear = true;
 	}
 
+#ifdef DEBUG
 	if (GameDevice::GetInput()->TriggerKey(Keys::L))
 	{
 		m_isClear = true;
 	}
+#endif // DEBUG
 
 	StageClearAnimation();
 	GameOverAnimation();

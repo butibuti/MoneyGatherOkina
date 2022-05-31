@@ -36,13 +36,13 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 	else if (m_stageNum == 1)
 	{
 		m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_leftPosition);
-		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(0);
+		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(2);
 		m_vwp_explanSpriteAnimComponent.lock()->SetHorizontalAnim(0);
 	}
 	else
 	{
 		m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_rightPosition);
-		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(2);
+		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(0);
 		m_vwp_explanSpriteAnimComponent.lock()->SetHorizontalAnim(2);
 	}
 
