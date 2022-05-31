@@ -266,6 +266,7 @@ void ButiEngine::Player::Start()
 	m_vwp_maxUI.lock()->transform->SetLocalPosition(Vector3(10, 10, 0));
 	m_defaultMaxUIScale = m_vwp_maxUI.lock()->transform->GetLocalScale();
 	m_vwp_maxUI.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
+	m_vwp_maxUIDraw = m_vwp_maxUI.lock()->GetGameComponent<MeshDrawComponent>();
 
 	m_vwp_numberManagerComponent.lock()->SetRotate(Vector3(20, 15, 0));
 	m_vwp_hzUIParent.lock()->transform->SetLocalRotationX_Degrees(20);
@@ -801,7 +802,7 @@ void ButiEngine::Player::Bomb()
 void ButiEngine::Player::StartOverheat()
 {
 	m_overheatTimer->Start();
-
+	m_vwp_maxUIDraw.lock()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().ExInfo.y = 0.0f;
 	m_maxMoveSpeed = m_overheatMaxMoveSpeed;
 
 	auto camera = GetManager().lock()->GetGameObject("Camera");
@@ -829,6 +830,7 @@ void ButiEngine::Player::Overheat()
 	{
 		m_overheatTimer->Stop();
 		m_overheatTimer->Reset();
+		m_vwp_maxUIDraw.lock()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().ExInfo.y = 1.0f;
 
 		m_maxMoveSpeed = m_defaultMaxMoveSpeed;
 
@@ -861,6 +863,9 @@ void ButiEngine::Player::Overheat()
 
 		m_isOverheat = false;
 		m_isInvincible = false;
+	}
+	else {
+		m_vwp_maxUIDraw.lock()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().ExInfo.y = m_overheatTimer->GetPercent();
 	}
 }
 
