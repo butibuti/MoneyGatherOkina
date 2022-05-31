@@ -26,12 +26,13 @@ public:
 	void OnSet()override;
 private:
 	Value_ptr<ButiRendering::CBuffer<ButiRendering::ObjectInformation>> m_vlp_logoBuffer, m_vlp_teamBuffer;
-	Value_ptr<AbsoluteTimer> m_vlp_timer;
+	Value_ptr<AbsoluteTimer> m_vlp_timer=nullptr;
 	Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_sceneChangeAnimation;
 	float m_logoApperanceTime,m_logokeepTime,m_logoDisappearanceTime,m_sceneChangeWait;
 	std::vector<float> m_vec_timerCounts;
 	std::vector<std::function<void()>>m_vec_timerUpdatingFunction,m_vec_timerResetFuncion;
 	std::uint8_t m_index=0;
+	bool filled = false;
 };
 
 }

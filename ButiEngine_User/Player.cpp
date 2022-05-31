@@ -780,6 +780,7 @@ void ButiEngine::Player::VibrationPowerDrawUpdate()
 
 		m_vwp_hzUIParent.lock()->transform->SetLocalPosition(Vector3(-800, 300, 50));
 		m_vwp_maxUI.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
+		m_vwp_maxUIDraw.lock()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().ExInfo.y = 0.0f;
 	}
 
 	m_vwp_numberManagerComponent.lock()->SetNumber(vibParcent);

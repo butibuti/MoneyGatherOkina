@@ -13,7 +13,11 @@ void ButiEngine::LogoSceneManager::OnUpdate()
         else {
             m_vec_timerUpdatingFunction[m_index]();
         }
-    }else if(!m_vwp_sceneChangeAnimation.lock()->IsAnimation()){
+    }
+    else if (m_vwp_sceneChangeAnimation.lock()&&!m_vwp_sceneChangeAnimation.lock()->IsAnimation()&&!filled) {
+        filled = true;
+    }else if(filled){
+        filled = false;
         auto app = GetManager().lock()->GetApplication().lock();
 
 #ifndef DEBUG
@@ -23,6 +27,7 @@ void ButiEngine::LogoSceneManager::OnUpdate()
         app->GetSceneManager()->RemoveScene(sceneName);
         app->GetSceneManager()->LoadScene(sceneName);
         app->GetSceneManager()->ChangeScene(sceneName);
+        m_vwp_sceneChangeAnimation = Value_weak_ptr<SceneChangeAnimationComponent>();
     }
 }
 
