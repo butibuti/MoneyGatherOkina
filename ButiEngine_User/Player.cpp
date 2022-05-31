@@ -36,7 +36,7 @@ std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
-float ButiEngine::Player::m_vibrationIncrease = 0.21f;
+float ButiEngine::Player::m_vibrationIncrease = 0.45f;
 float ButiEngine::Player::m_vibrationDecrease = 0.1f;
 float ButiEngine::Player::m_initVibrationForce = 6.0f;
 float ButiEngine::Player::m_overheatVibrationForce = 20.0f;
@@ -537,8 +537,6 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isOverheat) { return; }
 	if (m_isOverheatEffect) { return; }
 
-	m_targetColor = ButiColor::White();
-
 	//モブハチから振動値を受け取る
 	float vibrationIncrease = CalculateVibrationIncrease();
 	m_vibration += vibrationIncrease;
@@ -580,6 +578,15 @@ void ButiEngine::Player::IncreaseVibration()
 		m_vwp_soundPlayerComponent.lock()->SetLoopIndex(m_gameObjectName); //ループ中としてインデックスを追加
 		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
 		m_vwp_soundPlayerComponent.lock()->PlayControllableSE(SoundTag("Sound/Vibration.wav"), indexNum, 1, true);
+	}
+
+	if (!isSound)
+	{
+		m_targetColor = ButiColor::White();
+	}
+	else
+	{
+		m_targetColor = GameSettings::PLAYER_COLOR;
 	}
 
 	if (GetVibrationRate() >= 1.0f)

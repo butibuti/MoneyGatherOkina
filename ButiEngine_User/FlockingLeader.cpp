@@ -34,14 +34,15 @@ void ButiEngine::FlockingLeader::OnUpdate()
 		{
 			TutorialEnemySpawn();
 		}
+		m_isGather = true;
 	}
 	else if (InputManager::IsReleaseGatherKey())
 	{
 		//DiffusionStart();
 		CreateCircleFlash();
+		m_isGather = false;
 	}
 
-	m_isGather = InputManager::IsPushGatherKey();
 	if (m_isGather)
 	{
 		m_vwp_spriteParticleGenerator.lock()->GatherParticles(gameObject.lock()->transform, 5.0f, GameSettings::WORKER_COLOR);

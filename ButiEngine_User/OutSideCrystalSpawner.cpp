@@ -3,11 +3,11 @@
 #include "OutsideCrystal.h"
 #include "WaveManager.h"
 
-std::int32_t ButiEngine::OutsideCrystalSpawner::m_startCrystalCount = 3;
+std::int32_t ButiEngine::OutsideCrystalSpawner::m_startCrystalCount = 10;
 float ButiEngine::OutsideCrystalSpawner::m_startAngle = 0.0f;
-float ButiEngine::OutsideCrystalSpawner::m_spawnRadius = 35.0f;
-std::int32_t ButiEngine::OutsideCrystalSpawner::m_phaseCount = 3;
-std::vector<float> ButiEngine::OutsideCrystalSpawner::m_vec_phaseActiveProgress = { 0.0f, 0.2f, 0.5f };
+float ButiEngine::OutsideCrystalSpawner::m_spawnRadius = 32.0f;
+std::int32_t ButiEngine::OutsideCrystalSpawner::m_phaseCount = 1;
+std::vector<float> ButiEngine::OutsideCrystalSpawner::m_vec_phaseActiveProgress = { 0.0f };
 
 void ButiEngine::OutsideCrystalSpawner::OnUpdate()
 {

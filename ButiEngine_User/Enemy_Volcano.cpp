@@ -14,7 +14,7 @@
 std::int32_t ButiEngine::Enemy_Volcano::m_progressPoint = 5;
 std::int32_t ButiEngine::Enemy_Volcano::m_pocketCount = 8;
 float ButiEngine::Enemy_Volcano::m_createPocketRadius = 4.0f;
-float ButiEngine::Enemy_Volcano::m_vibrationCapacity = 1000.0f;
+float ButiEngine::Enemy_Volcano::m_vibrationCapacity = 400.0f;
 float ButiEngine::Enemy_Volcano::m_vibrationResistance = 3.0f;
 
 float ButiEngine::Enemy_Volcano::m_knockBackForce = 0.3f;
