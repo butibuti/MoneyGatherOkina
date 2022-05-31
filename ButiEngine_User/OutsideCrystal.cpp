@@ -125,6 +125,12 @@ void ButiEngine::OutsideCrystal::SpawnStalker()
 {
 	if (m_vwp_waveManager.lock()->IsClearAnimation()) { return; }
 
+	std::uint16_t spawnStalkerCount = m_spwanStalkerCount;
+	if (m_vwp_waveManager.lock()->IsTutorial())
+	{
+		spawnStalkerCount = 1;
+	}
+
 	auto stalkerCenter = gameObject.lock()->transform->Clone();
 	stalkerCenter->SetLocalScale(1.0f);
 
@@ -134,9 +140,9 @@ void ButiEngine::OutsideCrystal::SpawnStalker()
 	float radius = gameObject.lock()->transform->GetLocalScale().x * 0.5f;
 	stalkerTransform->SetLocalPosition(Vector3(0.0f, 0.0f, radius));
 
-	float rollAngle = 360.0f / m_spwanStalkerCount;
+	float rollAngle = 360.0f / spawnStalkerCount;
 
-	for (std::uint8_t i = 0; i < m_spwanStalkerCount; i++)
+	for (std::uint8_t i = 0; i < spawnStalkerCount; i++)
 	{
 		auto stalker = GetManager().lock()->AddObjectFromCereal("Enemy_Stalker");
 
@@ -161,7 +167,13 @@ void ButiEngine::OutsideCrystal::Wait()
 	{
 		m_vlp_appearIntervalTimer->Stop();
 		m_vlp_appearIntervalTimer->Reset();
-		m_vlp_appearIntervalTimer->ChangeCountFrame(m_appearIntervalFrame);
+		std::uint16_t interval = m_appearIntervalFrame;
+		if (m_vwp_waveManager.lock()->IsTutorial())
+		{
+			interval = 600;
+		}
+
+		m_vlp_appearIntervalTimer->ChangeCountFrame(interval);
 
 		Appeaer();
 	}
