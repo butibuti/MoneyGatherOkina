@@ -70,7 +70,7 @@ void ButiEngine::TutorialCrystal::Dead()
 		GetManager().lock()->GetGameObject("TutorialVibrationObject25_1").lock()->GetGameComponent<Worker>()->Dead();
 		GetManager().lock()->GetGameObject("TutorialVibrationObject75").lock()->GetGameComponent<Worker>()->Dead();
 		GetManager().lock()->GetGameObject("TutorialVibrationObject75_1").lock()->GetGameComponent<Worker>()->Dead();
-		GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>()->SetIsTutorialStart(true);
+		GetManager().lock()->GetGameObject("FlockingLeader").lock()->GetGameComponent<FlockingLeader>()->TutorialStart();
 	}
 	else
 	{

@@ -236,6 +236,8 @@ bool ButiEngine::Enemy::IsVibrate()
 
 void ButiEngine::Enemy::Dead()
 {
+	CreateProgressPointUI();
+
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
@@ -247,7 +249,6 @@ void ButiEngine::Enemy::Dead()
 	{
 		fly->Dead();		
 		DeadSound(false);
-		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
@@ -255,7 +256,6 @@ void ButiEngine::Enemy::Dead()
 	{
 		kiba->Dead();
 		DeadSound(true);
-		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
@@ -263,7 +263,6 @@ void ButiEngine::Enemy::Dead()
 	{
 		stalker->Dead();
 		DeadSound(false);
-		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
@@ -271,7 +270,6 @@ void ButiEngine::Enemy::Dead()
 	{
 		volcano->Dead();
 		DeadSound(true);
-		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 
@@ -318,7 +316,6 @@ void ButiEngine::Enemy::Dead()
 			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 		}
 
-		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 		RuptureStickWorker();
 		outsideCrystal->SpawnStalker();
@@ -541,6 +538,8 @@ void ButiEngine::Enemy::DeadSound(const bool arg_isBigSound)
 
 void ButiEngine::Enemy::CreateProgressPointUI()
 {
+	if (m_progressPoint == 0) { return; }
+
 	std::string name = "ProgressPointUI" + std::to_string(m_progressPoint);
 	auto progressPointUI = GetManager().lock()->AddObjectFromCereal(name);
 	progressPointUI.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
