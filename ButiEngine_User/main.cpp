@@ -24,8 +24,8 @@ std::int32_t APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR arg, std::in
 #ifdef _IMGUIEDITOR
 	ButiTaskSystem::Start();
 	auto init = InputApplicationInitData();
+	init.isFullScreen = false;
 	auto vlp_app = CreateApplicationInstance(init);
-
 	GameDevice::Initialize();
 	GameDevice::GetInput()->Initialize(vlp_app);
 	GameDevice::SetReturnCode(0);
