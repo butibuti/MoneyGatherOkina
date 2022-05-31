@@ -18,7 +18,7 @@
 #include "TutorialUI.h"
 
 std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 100;
-std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 1000;
+std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 2000;
 std::int32_t ButiEngine::WaveManager::m_retryPoint = 0;
 
 void ButiEngine::WaveManager::OnUpdate()

@@ -28,7 +28,7 @@
 #include "CameraComponent.h"
 
 float ButiEngine::Player::m_defaultMaxMoveSpeed = 0.15f;
-float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.25f;
+float ButiEngine::Player::m_overheatMaxMoveSpeed = 0.3f;
 float ButiEngine::Player::m_acceleration = 0.04f;
 float ButiEngine::Player::m_deceleration = 0.1f;
 

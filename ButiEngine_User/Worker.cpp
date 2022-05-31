@@ -29,14 +29,14 @@
 #include "ShockWave.h"
 
 float ButiEngine::Worker::m_nearBorder = 2.0f;
-float ButiEngine::Worker::m_maxVibration = 150.0f;
+float ButiEngine::Worker::m_maxVibration = 130.0f;
 float ButiEngine::Worker::m_minVibration = 20.0f;
 float ButiEngine::Worker::m_vibrationIncrease = 0.21f;
-float ButiEngine::Worker::m_vibrationDecrease = 0.2f;
+float ButiEngine::Worker::m_vibrationDecrease = 0.19f;
 float ButiEngine::Worker::m_maxScaleRate = 2.0f;
 float ButiEngine::Worker::m_initVibrationForce = 0.1f;
 float ButiEngine::Worker::m_maxVibrationMagnification = 3.0f;
-float ButiEngine::Worker::m_spawnParticleSpeed = 0.6f;
+float ButiEngine::Worker::m_spawnParticleSpeed = 0.5f;
 
 void ButiEngine::Worker::OnUpdate()
 {
