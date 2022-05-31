@@ -45,6 +45,7 @@ namespace ButiEngine {
 		std::int32_t GetClearPoint() { return m_clearPoint; }
 		std::int32_t GetNowEnemyCount() { return m_enemySpawnCount - m_point; }
 		std::int32_t GetPoint() { return m_point; }
+		float GetProgress() { return m_point / m_clearPoint; }
 
 		static void SetRetryPoint(const std::int32_t arg_retryPoint) { m_retryPoint = arg_retryPoint; }
 		static std::int32_t GetRetryPoint() { return m_retryPoint; }

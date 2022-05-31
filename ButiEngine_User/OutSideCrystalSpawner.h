@@ -32,7 +32,7 @@ namespace ButiEngine {
 		static float m_startAngle;
 		static float m_spawnRadius;
 		static std::int32_t m_phaseCount;
-		static std::vector<std::int32_t> m_vec_phaseActivePoints;
+		static std::vector<float> m_vec_phaseActiveProgress;
 
 		std::vector<std::vector<Value_weak_ptr<OutsideCrystal>>> m_vec_crystals;
 		Value_weak_ptr<WaveManager> m_vwp_waveManager;

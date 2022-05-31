@@ -38,10 +38,13 @@ void ButiEngine::Enemy::OnUpdate()
 	{
 		return;
 	}
+
+#ifdef DEBUG
 	if (GameDevice::GetInput()->GetPadButtonTrigger(PadButtons::XBOX_Y))
 	{
 		RuptureStickWorker();
 	}
+#endif // DEBUG
 	//Player‚ª‹ß‚¢‚©ÕŒ‚”g‚ª“–‚½‚Á‚Ä‚¢‚½‚çU“®‚·‚é
 	if (m_vibration > 0)
 	{
@@ -244,6 +247,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		fly->Dead();		
 		DeadSound(false);
+		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
 	auto kiba = gameObject.lock()->GetGameComponent<Enemy_Kiba>();
@@ -251,6 +255,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		kiba->Dead();
 		DeadSound(true);
+		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 	auto stalker = gameObject.lock()->GetGameComponent<Enemy_Stalker>();
@@ -258,6 +263,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		stalker->Dead();
 		DeadSound(false);
+		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 9.0f);
 	}
 	auto volcano = gameObject.lock()->GetGameComponent<Enemy_Volcano>();
@@ -265,6 +271,7 @@ void ButiEngine::Enemy::Dead()
 	{
 		volcano->Dead();
 		DeadSound(true);
+		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 	}
 
@@ -311,6 +318,7 @@ void ButiEngine::Enemy::Dead()
 			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 		}
 
+		CreateProgressPointUI();
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
 		RuptureStickWorker();
 		outsideCrystal->SpawnStalker();
@@ -532,6 +540,13 @@ void ButiEngine::Enemy::DeadSound(const bool arg_isBigSound)
 		m_vwp_particleGenerater.lock()->ExplosionPolygonParticles(position, arg_isBigSound);
 	}
 
+}
+
+void ButiEngine::Enemy::CreateProgressPointUI()
+{
+	std::string name = "ProgressPointUI" + std::to_string(m_progressPoint);
+	auto progressPointUI = GetManager().lock()->AddObjectFromCereal(name);
+	progressPointUI.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 }
 
 

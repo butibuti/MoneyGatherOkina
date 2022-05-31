@@ -8,15 +8,15 @@
 #include "GameSettings.h"
 #include "WaveManager.h"
 
-std::int32_t ButiEngine::OutsideCrystal::m_progressPoint = 1000;
+std::int32_t ButiEngine::OutsideCrystal::m_progressPoint = 20;
 std::int32_t ButiEngine::OutsideCrystal::m_pocketCount = 16;
 float ButiEngine::OutsideCrystal::m_createPocketRadius = 3.0f;
-float ButiEngine::OutsideCrystal::m_vibrationCapacity = 300.0f;
+float ButiEngine::OutsideCrystal::m_vibrationCapacity = 25.0f;
 float ButiEngine::OutsideCrystal::m_vibrationResistance = 0.0f;
 std::int32_t ButiEngine::OutsideCrystal::m_appearIntervalFrame = 300;
 std::int32_t ButiEngine::OutsideCrystal::m_spwanStalkerCount = 3;
-float ButiEngine::OutsideCrystal::m_stalerKnockBackForce = 0.4f;
-float ButiEngine::OutsideCrystal::m_knockBackY = 1.0f;
+float ButiEngine::OutsideCrystal::m_stalerKnockBackForce = 0.2f;
+float ButiEngine::OutsideCrystal::m_knockBackY = 0.5f;
 
 void ButiEngine::OutsideCrystal::OnUpdate()
 {

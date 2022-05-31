@@ -83,6 +83,7 @@ namespace ButiEngine {
 		void KnockBack(const Vector3& arg_velocity);
 
 	private:
+		void UpdateColor();
 		void Move();
 		void MoveKnockBack();
 		void Damage();
@@ -119,6 +120,7 @@ namespace ButiEngine {
 		void SetVibrationParameter();
 
 		void StopVibUpSE();
+		void SetColor();
 
 		//à⁄ìÆ
 		static float m_defaultMaxMoveSpeed;
@@ -146,6 +148,12 @@ namespace ButiEngine {
 		std::int8_t m_life;
 		std::uint8_t m_maxWorkerCount;
 		float m_masterVolume;
+
+		//êF
+		Vector4 m_color;
+		Vector4 m_targetColor;
+		float m_colorLerpSpeed;
+		ButiEngine::List<Value_ptr<MeshDrawComponent>> m_list_vlp_meshDrawComponents;
 
 		//à⁄ìÆ
 		Value_ptr<LookAtComponent> m_vlp_lookAt;

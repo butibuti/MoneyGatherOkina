@@ -6,7 +6,7 @@
 #include "SphereExclusion.h"
 #include "WarningMark.h"
 
-std::int32_t ButiEngine::Enemy_Kiba::m_progressPoint = 100;
+std::int32_t ButiEngine::Enemy_Kiba::m_progressPoint = 5;
 std::int32_t ButiEngine::Enemy_Kiba::m_pocketCount = 8;
 float ButiEngine::Enemy_Kiba::m_createPocketRadius = 3.0f;
 float ButiEngine::Enemy_Kiba::m_vibrationCapacity = 1000.0f;

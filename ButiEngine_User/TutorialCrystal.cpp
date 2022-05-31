@@ -12,7 +12,7 @@
 std::int32_t ButiEngine::TutorialCrystal::m_progressPoint = 0;
 std::int32_t ButiEngine::TutorialCrystal::m_pocketCount = 0;
 float ButiEngine::TutorialCrystal::m_createPocketRadius = 3.0f;
-float ButiEngine::TutorialCrystal::m_vibrationCapacity = 200.0f;
+float ButiEngine::TutorialCrystal::m_vibrationCapacity = 1500.0f;
 float ButiEngine::TutorialCrystal::m_vibrationResistance = 0.0f;
 
 void ButiEngine::TutorialCrystal::OnUpdate()

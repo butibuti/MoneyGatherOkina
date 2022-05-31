@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "WorldSpeedManager.h"
+#include "ProgressPointUI.h"
 
 ButiEngine::Value_ptr<ButiEngine::Timer> ButiEngine::WorldSpeedManager::m_vlp_timer;
 bool ButiEngine::WorldSpeedManager::m_isChangeSpeed;
@@ -28,6 +29,8 @@ void ButiEngine::WorldSpeedManager::OnShowUI()
 
 void ButiEngine::WorldSpeedManager::Start()
 {
+	ProgressPointUI::ResetZShift();
+
 	m_vlp_timer = ObjectFactory::Create<AbsoluteTimer>(0);
 }
 

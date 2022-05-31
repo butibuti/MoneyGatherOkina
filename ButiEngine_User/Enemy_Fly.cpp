@@ -6,7 +6,7 @@
 #include "SphereExclusion.h"
 #include "ShakeComponent.h"
 
-std::int32_t ButiEngine::Enemy_Fly::m_progressPoint = 10;
+std::int32_t ButiEngine::Enemy_Fly::m_progressPoint = 1;
 std::int32_t ButiEngine::Enemy_Fly::m_pocketCount = 3;
 float ButiEngine::Enemy_Fly::m_createPocketRadius = 1.5f;
 float ButiEngine::Enemy_Fly::m_vibrationCapacity = 10.0f;

@@ -37,10 +37,10 @@ std::int32_t ButiEngine::Player::m_invincibleFrame = 60;
 float ButiEngine::Player::m_overheatMaxVibration = 400.0f;
 std::int32_t ButiEngine::Player::m_overheatFrame = 600;
 float ButiEngine::Player::m_vibrationIncrease = 0.21f;
-float ButiEngine::Player::m_vibrationDecrease = 0.02f;
-float ButiEngine::Player::m_initVibrationForce = 1.0f;
-float ButiEngine::Player::m_overheatVibrationForce = 10.0f;
-float ButiEngine::Player::m_maxVibrationMagnification = 5.0f;
+float ButiEngine::Player::m_vibrationDecrease = 0.1f;
+float ButiEngine::Player::m_initVibrationForce = 6.0f;
+float ButiEngine::Player::m_overheatVibrationForce = 20.0f;
+float ButiEngine::Player::m_maxVibrationMagnification = 10.0f;
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -49,15 +49,17 @@ void ButiEngine::Player::OnUpdate()
 		return;
 	}
 
+#ifdef DEBUG
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		GetManager().lock()->AddObjectFromCereal("PikinUI");
 	}
 
-	//if (InputManager::IsTriggerBombKey())
-	//{
-	//	BombStart();
-	//}
+	if (GameDevice::GetInput()->TriggerKey(Keys::V))
+	{
+		StartOverheatEffect();
+	}
+#endif // DEBUG
 
 	VibrationUpdate();
 
@@ -110,6 +112,9 @@ void ButiEngine::Player::OnUpdate()
 	VibrationPowerDrawUpdate();
 	VibrationController();
 	ShakeDrawObject();
+
+	UpdateColor();
+	SetColor();
 }
 
 void ButiEngine::Player::OnSet()
@@ -214,6 +219,9 @@ void ButiEngine::Player::Start()
 
 	m_defaultScale = gameObject.lock()->transform->GetLocalScale();
 	m_life = 3;
+	m_color = GameSettings::PLAYER_COLOR;
+	m_targetColor = GameSettings::PLAYER_COLOR;
+	m_colorLerpSpeed = 0.3f;
 
 	m_maxWorkerCount = 20;
 
@@ -372,6 +380,11 @@ void ButiEngine::Player::KnockBack(const Vector3& arg_velocity)
 	m_knockBackVelocity.Normalize();
 }
 
+void ButiEngine::Player::UpdateColor()
+{
+	m_color = MathHelper::LerpPosition(m_color, m_targetColor, m_colorLerpSpeed * GameDevice::WorldSpeed);
+}
+
 void ButiEngine::Player::Move()
 {
 	m_prevPos = gameObject.lock()->transform->GetLocalPosition();
@@ -516,6 +529,8 @@ void ButiEngine::Player::IncreaseVibration()
 	if (m_isOverheat) { return; }
 	if (m_isOverheatEffect) { return; }
 
+	m_targetColor = ButiColor::White();
+
 	//モブハチから振動値を受け取る
 	float vibrationIncrease = CalculateVibrationIncrease();
 	m_vibration += vibrationIncrease;
@@ -574,6 +589,8 @@ void ButiEngine::Player::DecreaseVibration()
 	if (!m_isVibrate) { return; }
 	if (m_isOverheat) { return; }
 	if (m_isOverheatEffect) { return; }
+
+	m_targetColor = GameSettings::PLAYER_COLOR;
 
 	m_vibration -= m_vibrationDecrease * GameDevice::WorldSpeed;
 
@@ -808,12 +825,7 @@ void ButiEngine::Player::StartOverheat()
 	camera.lock()->GetGameComponent<CameraShakeComponent>()->ShakeStart(4, 30);
 	camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(3);
 
-	auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(0);
-	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
-	meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(1);
-	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
-	meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(2);
-	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
+	m_targetColor = GameSettings::PLAYER_ATTACK_COLOR;
 
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
 
@@ -849,12 +861,7 @@ void ButiEngine::Player::Overheat()
 
 		if (m_vwp_tiltFloatObject.lock())
 		{
-			auto meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(0);
-			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
-			meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(1);
-			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
-			meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(2);
-			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
+			m_targetColor = GameSettings::PLAYER_COLOR;
 		}
 	
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
@@ -975,7 +982,7 @@ void ButiEngine::Player::CreateDamageEffect(Value_weak_ptr<GameObject> arg_vwp_o
 
 float ButiEngine::Player::CalculateVibrationIncrease()
 {
-	float increase = m_vibrationIncrease * m_vec_nearWorkers.size() * GameDevice::WorldSpeed;
+	float increase = m_vibrationIncrease * GameDevice::WorldSpeed;
 	if (m_isHitShockWave_Worker)
 	{
 		increase = m_vibrationIncrease * GameDevice::WorldSpeed;
@@ -990,6 +997,8 @@ void ButiEngine::Player::CreateDrawObject()
 	m_vwp_tiltFloatObject.lock()->GetGameComponent<TiltMotion>()->SetParent(gameObject);
 	auto drawObject = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("Player");
 	drawObject.lock()->GetGameComponent<WingAnimation>()->SetParent(gameObject);
+
+	m_list_vlp_meshDrawComponents = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponents<MeshDrawComponent>();
 }
 
 void ButiEngine::Player::CreateSensorObject()
@@ -1044,5 +1053,13 @@ void ButiEngine::Player::StopVibUpSE()
 		auto indexNum = m_vwp_soundPlayerComponent.lock()->GetLoopIndex(m_gameObjectName);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->DestroyControllableSE(indexNum);
 		m_vwp_soundPlayerComponent.lock()->DestroyLoopIndex(m_gameObjectName); //ループ中のインデックスを削除
+	}
+}
+
+void ButiEngine::Player::SetColor()
+{
+	for (auto& drawComponent : m_list_vlp_meshDrawComponents)
+	{
+		drawComponent->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = m_color;
 	}
 }

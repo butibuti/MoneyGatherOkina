@@ -15,8 +15,8 @@
 #include "SoundPlayerComponent.h"
 #include "WorkerSpawner.h"
 
-std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 10000;
-std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 10000;
+std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 300;
+std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 1000;
 std::int32_t ButiEngine::WaveManager::m_retryPoint = 0;
 
 void ButiEngine::WaveManager::OnUpdate()

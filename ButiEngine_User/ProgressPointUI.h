@@ -20,15 +20,17 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		static void ResetStartPosition() { m_position = m_startPosition; }
+		static void ResetZShift() { m_ZShift = m_startZShift; }
 	private:
-		static float m_startPosition;
-		static float m_position;
+		static float m_startZShift;
+		static float m_ZShift;
 
 		Value_ptr<Timer> m_vlp_animatoinTimer;
 		Value_ptr<Timer> m_vlp_deadTimer;
 		Vector3 m_startScale;
 		Vector3 m_targetScale;
+		Vector3 m_worldPos;
+		float m_positionZ;
 
 		bool m_isDead;
 	};

@@ -5,16 +5,16 @@
 
 std::int32_t ButiEngine::OutsideCrystalSpawner::m_startCrystalCount = 3;
 float ButiEngine::OutsideCrystalSpawner::m_startAngle = 0.0f;
-float ButiEngine::OutsideCrystalSpawner::m_spawnRadius = 30.0f;
+float ButiEngine::OutsideCrystalSpawner::m_spawnRadius = 35.0f;
 std::int32_t ButiEngine::OutsideCrystalSpawner::m_phaseCount = 3;
-std::vector<std::int32_t> ButiEngine::OutsideCrystalSpawner::m_vec_phaseActivePoints = { 0, 1000, 2000 };
+std::vector<float> ButiEngine::OutsideCrystalSpawner::m_vec_phaseActiveProgress = { 0.0f, 0.2f, 0.5f };
 
 void ButiEngine::OutsideCrystalSpawner::OnUpdate()
 {
-	std::uint8_t size = m_vec_phaseActivePoints.size();
+	std::uint8_t size = m_vec_phaseActiveProgress.size();
 	for (std::uint8_t i = 0; i < size; i++)
 	{
-		if (m_vec_phaseActivePoints[i] <= m_vwp_waveManager.lock()->GetPoint())
+		if (m_vec_phaseActiveProgress[i] <= m_vwp_waveManager.lock()->GetProgress())
 		{
 			ActivePhase(i);
 		}
@@ -43,13 +43,13 @@ void ButiEngine::OutsideCrystalSpawner::OnShowUI()
 	GUI::BulletText(u8"フェーズの数");
 	GUI::DragInt("##phaseCount", &m_phaseCount, 1, 1, 10);
 
-	auto end = m_vec_phaseActivePoints.end();
+	auto end = m_vec_phaseActiveProgress.end();
 	std::uint8_t phase = 1;
-	for (auto itr = m_vec_phaseActivePoints.begin(); itr != end; ++itr)
+	for (auto itr = m_vec_phaseActiveProgress.begin(); itr != end; ++itr)
 	{
-		GUI::BulletText(u8"フェーズ%dに移行するポイント", phase);
+		GUI::BulletText(u8"フェーズ%dに移行する進捗(0.0~1.0)", phase);
 		std::string str = "##phase" + std::to_string(phase);
-		GUI::DragInt(str, *itr, 1, 0, 1000000);
+		GUI::DragFloat(str, *itr, 0.01f, 0.0f, 1.0f);
 
 		phase++;
 	}
@@ -60,7 +60,7 @@ void ButiEngine::OutsideCrystalSpawner::Start()
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_vec_crystals.resize(m_phaseCount);
-	m_vec_phaseActivePoints.resize(m_phaseCount);
+	m_vec_phaseActiveProgress.resize(m_phaseCount);
 	CreateCrystals();
 }
 
