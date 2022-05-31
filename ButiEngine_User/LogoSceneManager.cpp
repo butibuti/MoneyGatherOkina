@@ -19,7 +19,7 @@ void ButiEngine::LogoSceneManager::OnUpdate()
 #ifndef DEBUG
         app->GetResourceContainer()->WaitLoading();
 #endif
-        std::string sceneName = gameObject.lock()->GetApplication().lock()->GetAppInitData()->initSceneName;
+        std::string sceneName = "StageSelect";
         app->GetSceneManager()->RemoveScene(sceneName);
         app->GetSceneManager()->LoadScene(sceneName);
         app->GetSceneManager()->ChangeScene(sceneName);
