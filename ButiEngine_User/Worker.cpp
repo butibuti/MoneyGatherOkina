@@ -254,6 +254,8 @@ void ButiEngine::Worker::Spawn()
 	spawnEffect.lock()->transform->SetLocalScale(2.0f);
 	spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
 
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Beam.wav"));
+
 	Vector3 pos = gameObject.lock()->transform->GetLocalPosition();
 	Vector3 front = gameObject.lock()->transform->GetFront();
 	front.y = 0.0f;

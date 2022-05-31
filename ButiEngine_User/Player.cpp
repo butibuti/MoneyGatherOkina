@@ -52,6 +52,7 @@ void ButiEngine::Player::OnUpdate()
 	if (GameDevice::GetInput()->TriggerKey(Keys::O))
 	{
 		GetManager().lock()->AddObjectFromCereal("PikinUI");
+		StartOverheatEffect();
 	}
 
 	//if (InputManager::IsTriggerBombKey())
@@ -92,6 +93,10 @@ void ButiEngine::Player::OnUpdate()
 		{
 			m_masterVolume -= 0.1f;
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(m_masterVolume);
+		}
+		else
+		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 		}
 	}
 	else
@@ -340,6 +345,8 @@ void ButiEngine::Player::Spawn()
 	spawnEffectComponent->SetColor(GameSettings::PLAYER_COLOR);
 	spawnEffectComponent->SetLife(10);
 
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Beam.wav"));
+
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");
 	deadEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
@@ -501,7 +508,7 @@ void ButiEngine::Player::VibrationController()
 	//float vibrationPower = m_vibration / m_maxVibration;
 	if (m_isOverheat)
 	{
-		InputManager::VibrationStart(1.0f);
+		InputManager::VibrationStart_Rough(1.0f);
 	}
 	else
 	{
@@ -538,15 +545,19 @@ void ButiEngine::Player::IncreaseVibration()
 	//	(*itr).lock()->RemoveVibration(removeVibration);
 	//}
 
+	bool isSound = false;
+
 	//“`”À
 	if (m_vibration >= m_strongestNearWorkerVibration)
 	{
 		m_vibration = m_strongestNearWorkerVibration;
 		m_controllerVibration = 0.0f;
+		StopVibUpSE();
+		isSound = true;
 	}
 	m_vibration = min(m_vibration, m_maxVibration);
 
-	if (!m_isVibUpSE)
+	if (!m_isVibUpSE && !isSound)
 	{
 		m_isVibUpSE = true;
 
@@ -660,7 +671,7 @@ void ButiEngine::Player::VibrationEffectOverheat()
 			float vibrationRate = m_vibration / m_maxVibration;
 			m_vwp_vibrationEffectOverheatComponent.lock()->SetVibrationViolent(vibrationRate, true);
 			m_vwp_vibrationEffectOverheatComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
-			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
+			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate * 1.25f);
 		}
 
 		if (m_vwp_vibrationEffect.lock())
@@ -816,6 +827,7 @@ void ButiEngine::Player::StartOverheat()
 	meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_ATTACK_COLOR;
 
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Start.wav"));
+	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM3.wav"));
 
 	m_isOverheat = true;
 	m_isInvincible = true;
@@ -856,8 +868,11 @@ void ButiEngine::Player::Overheat()
 			meshDraw = m_vwp_tiltFloatObject.lock()->GetGameComponent<SeparateDrawObject>()->GetDrawObject().lock()->GetGameComponent<MeshDrawComponent>(2);
 			meshDraw->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::PLAYER_COLOR;
 		}
+
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 	
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
+		m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM1.wav"));
 
 		m_isOverheat = false;
 		m_isInvincible = false;
@@ -867,7 +882,7 @@ void ButiEngine::Player::Overheat()
 void ButiEngine::Player::StartOverheatEffect()
 {
 	//Ëß·°Ý
-	m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/Kazan_HIt.wav"));
+	m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/VibrationMax.wav"));
 	GetManager().lock()->AddObjectFromCereal("PikinUI");
 
 	auto camera = GetManager().lock()->GetGameObject("Camera");

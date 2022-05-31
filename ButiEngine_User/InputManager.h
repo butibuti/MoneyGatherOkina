@@ -36,6 +36,7 @@ namespace ButiEngine {
 		static bool IsPushAnyGameKey();
 
 		static void VibrationStart(const float arg_vibPower);
+		static void VibrationStart_Rough(const float arg_vibPower);
 		static void VibrationStop();
 
 		//ゲームプレイシーンのみ

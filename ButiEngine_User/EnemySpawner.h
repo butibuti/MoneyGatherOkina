@@ -35,7 +35,6 @@ namespace ButiEngine {
 
 		Value_weak_ptr<WaveManager> m_waveManagerComponent;
 		Value_ptr<Timer> m_vlp_spawnTimer;
-		Value_ptr<Timer> m_vlp_waitTimer;
 		Value_ptr<Timer> m_vlp_changeTimer;
 		
 		std::int32_t m_maxEnemyFieldCount;

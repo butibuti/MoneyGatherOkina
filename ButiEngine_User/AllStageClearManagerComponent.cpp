@@ -86,6 +86,8 @@ void ButiEngine::AllStageClearManagerComponent::AddUI()
 		auto crossBeamEffect = GetManager().lock()->AddObjectFromCereal("CrossBeamEffect").lock()->GetGameComponent<CrossBeamEffectComponent>();
 		endPosition.z -= (float)m_uiCount * 0.001f;
 		crossBeamEffect->SetPosition(endPosition);
+
+		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/Beam.wav"));
 	}
 	else if (m_uiCount == 13)
 	{

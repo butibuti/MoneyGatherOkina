@@ -207,7 +207,6 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 
 	if (InputManager::IsTriggerDecideKey())
 	{
-		m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 		m_isInput = false;
 		m_isSelectAnimation = true;
 		m_vlp_selectAnimationTimer->Start();
@@ -216,6 +215,12 @@ void ButiEngine::GameOverManagerComponent::InputSelect()
 			Vector3 position = Vector3(-410, -330, -10);
 			auto crossBeamEffect = GetManager().lock()->AddObjectFromCereal("CrossBeamEffect").lock()->GetGameComponent<CrossBeamEffectComponent>();
 			crossBeamEffect->SetPosition(position);
+
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/Beam.wav"));
+		}
+		else
+		{
+			m_vwp_soundPlayerComponent.lock()->PlayIsolateSE(SoundTag("Sound/UI_Enter.wav"));
 		}
 	}
 }

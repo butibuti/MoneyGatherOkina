@@ -157,6 +157,7 @@ void ButiEngine::WaveManager::OnShowUI()
 	GUI::InputInt("##TutorialClearPoint", m_tutorialClearPoint);
 	GUI::BulletText("StageClearPoint");
 	GUI::InputInt("##StageClearPoint", m_stageClearPoint);
+	GUI::BulletText("Point:%d", m_point);
 }
 
 void ButiEngine::WaveManager::AddPoint(const std::int32_t arg_progressPoint)

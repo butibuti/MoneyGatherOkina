@@ -14,7 +14,7 @@ void ButiEngine::EnemySpawner::OnUpdate()
 	}
 
 	//出現開始まで待機
-	if (!m_vlp_waitTimer->Update_continue() || m_startWaitFrame < 0)
+	if (m_startWaitFrame < 0 || m_waveManagerComponent.lock()->GetPoint() < m_startWaitFrame)
 	{
 		return;
 	}
@@ -56,7 +56,6 @@ void ButiEngine::EnemySpawner::OnUpdate()
 void ButiEngine::EnemySpawner::OnSet()
 {
 	m_vlp_spawnTimer = ObjectFactory::Create<RelativeTimer>();
-	m_vlp_waitTimer = ObjectFactory::Create<RelativeTimer>();
 	m_vlp_changeTimer = ObjectFactory::Create<RelativeTimer>();
 	m_stageNumber = "0";
 	m_spawnType = 0;
@@ -66,7 +65,6 @@ void ButiEngine::EnemySpawner::OnSet()
 void ButiEngine::EnemySpawner::Start()
 {
 	m_vlp_spawnTimer->Start();
-	m_vlp_waitTimer->Start();
 	m_vlp_changeTimer->Start();
 	m_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	m_maxEnemyFieldCount = 0;
@@ -140,13 +138,9 @@ void ButiEngine::EnemySpawner::OnShowUI()
 	GUI::BulletText("MaxFieldSpawnCount");
 	GUI::InputInt("##maxFieldCount", m_maxEnemyFieldCount);
 
-	GUI::BulletText("StartWaitFrame");
-	if (GUI::DragFloat("##StartWaitFrame", m_startWaitFrame, 10,-10, 12000))
+	GUI::BulletText("StartWaitPoint");
+	if (GUI::DragFloat("##StartWaitPoint", m_startWaitFrame, 5,-5, 3000))
 	{
-		if (m_startWaitFrame > 0)
-		{
-			m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
-		}
 		FixShorteningFrame();
 	}
 
@@ -272,7 +266,7 @@ void ButiEngine::EnemySpawner::OnceUpdate()
 
 	SetRandomSpawnFrame();
 
-	m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
+	//m_vlp_waitTimer->ChangeCountFrame(m_startWaitFrame);
 	m_vlp_changeTimer->ChangeCountFrame(m_changeInterval);
 }
 
