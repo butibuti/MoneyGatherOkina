@@ -82,18 +82,26 @@ void ButiEngine::OutsideCrystalSpawner::ActivePhase(const std::int32_t arg_index
 
 void ButiEngine::OutsideCrystalSpawner::CreateCrystals()
 {
+	float spawnRadius = m_spawnRadius;
+	std::uint16_t startCrystalCount = m_startCrystalCount;
+	if (m_vwp_waveManager.lock()->IsTutorial())
+	{
+		startCrystalCount = 3;
+		spawnRadius = 20.0f;
+	}
+
 	auto crystalCenter = gameObject.lock()->transform->Clone();
 	auto crystalTransform = ObjectFactory::Create<Transform>();
 	crystalTransform->SetBaseTransform(crystalCenter);
-	crystalTransform->SetLocalPosition(Vector3(0.0f, 0.0f, m_spawnRadius));
+	crystalTransform->SetLocalPosition(Vector3(0.0f, 0.0f, spawnRadius));
 	crystalCenter->RollLocalRotationY_Degrees(m_startAngle);
 
 	Vector3 centerScale = crystalCenter->GetLocalScale();
 
 	for (std::uint8_t i = 0; i < m_phaseCount; i++)
 	{
-		std::uint8_t crystalCount = i * m_startCrystalCount;
-		crystalCount = max(crystalCount, m_startCrystalCount);
+		std::uint8_t crystalCount = i * startCrystalCount;
+		crystalCount = max(crystalCount, startCrystalCount);
 
 		float rollAngle = 360.0f / crystalCount;
 

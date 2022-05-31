@@ -52,7 +52,15 @@ void ButiEngine::TutorialCrystal::OnShowUI()
 
 void ButiEngine::TutorialCrystal::Start()
 {
-	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject("TutorialCrystal");
+	std::string name = "OutsideCrystal";
+	m_color = GameSettings::ENEMY_COLOR;
+	if (m_isLast)
+	{
+		name = "TutorialCrystal";
+		m_color = GameSettings::WORKER_COLOR;
+	}
+
+	gameObject.lock()->GetGameComponent<SeparateDrawObject>()->CreateDrawObject(name);
 	gameObject.lock()->GetGameComponent<SphereExclusion>()->SetWeight(1000.0f);
 
 	m_vwp_crystalSpawner = GetManager().lock()->GetGameObject("TutorialCrystalSpawner").lock()->GetGameComponent<TutorialCrystalSpawner>();

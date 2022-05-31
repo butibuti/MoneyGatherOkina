@@ -25,6 +25,7 @@ namespace ButiEngine {
 
 		void Dead();
 		void SetIsLast(const bool arg_isLast) { m_isLast = arg_isLast; }
+		Vector4 GetColor() { return m_color; }
 	private:
 		void SetEnemyParameter();
 
@@ -37,6 +38,7 @@ namespace ButiEngine {
 		Value_weak_ptr<TutorialCrystalSpawner> m_vwp_crystalSpawner;
 
 		bool m_isLast;
+		Vector4 m_color;
 	};
 
 }
