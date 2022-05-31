@@ -155,10 +155,6 @@ void ButiEngine::StageSelectManagerComponent::NextScene()
 	//std::string sceneName = "GamePlay";
 	std::string sceneName = "Stage_" + std::to_string(m_stageNum);
 	GUI::Console("Stage_" + std::to_string(m_stageNum)+"‚Ö‚ÌˆÚ“®");
-	if (m_stageNum == 0)
-	{
-		m_stageNum++;
-	}
 	m_stageNum = min(m_stageNum, m_maxStageNum);
 	sceneManager->RemoveScene(sceneName);
 	sceneManager->LoadScene(sceneName);
@@ -177,6 +173,11 @@ void ButiEngine::StageSelectManagerComponent::BackScene()
 std::int16_t ButiEngine::StageSelectManagerComponent::GetStageNum()
 {
 	return m_stageNum;
+}
+
+void ButiEngine::StageSelectManagerComponent::AddStageNum()
+{
+	m_stageNum++;
 }
 
 void ButiEngine::StageSelectManagerComponent::FixStageNum()

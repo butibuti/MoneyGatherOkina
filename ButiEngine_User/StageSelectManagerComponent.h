@@ -32,6 +32,8 @@ public:
 	void BackScene();
 	std::int16_t GetStageNum();
 
+	static void AddStageNum();
+
 private:
 	void FixStageNum();
 	void ScaleRateUpdate();
