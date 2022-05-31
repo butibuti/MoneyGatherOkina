@@ -543,6 +543,7 @@ void ButiEngine::Enemy::CreateProgressPointUI()
 	std::string name = "ProgressPointUI" + std::to_string(m_progressPoint);
 	auto progressPointUI = GetManager().lock()->AddObjectFromCereal(name);
 	progressPointUI.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
+	progressPointUI.lock()->transform->SetWorldPostionY(1.0f);
 }
 
 

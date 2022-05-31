@@ -638,6 +638,7 @@ void ButiEngine::Player::VibrationEffect()
 			auto transform = gameObject.lock()->transform;
 			m_vwp_vibrationEffect = GetManager().lock()->AddObjectFromCereal("VibrationEffect");
 			m_vwp_vibrationEffect.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+			m_vwp_vibrationEffect.lock()->transform->SetLocalPositionY(0.5f);
 			m_vwp_vibrationEffect.lock()->transform->SetLocalScale(0.0f);
 
 			auto meshDraw = m_vwp_vibrationEffect.lock()->GetGameComponent<MeshDrawComponent>();
@@ -651,7 +652,9 @@ void ButiEngine::Player::VibrationEffect()
 			auto transform = gameObject.lock()->transform;
 			float vibrationRate = m_vibration / m_maxVibration;
 			m_vwp_vibrationEffectComponent.lock()->SetVibrationViolent(vibrationRate, true);
-			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
+			Vector3 pos = transform->GetLocalPosition();
+			pos.y = 0.5f;
+			m_vwp_vibrationEffectComponent.lock()->SetEffectPosition(pos);
 			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate);
 		}
 
@@ -682,6 +685,7 @@ void ButiEngine::Player::VibrationEffectOverheat()
 			auto transform = gameObject.lock()->transform;
 			m_vwp_vibrationEffectOverheat = GetManager().lock()->AddObjectFromCereal("VibrationEffect_Overheat");
 			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalPosition(transform->GetLocalPosition());
+			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalPositionY(0.5f);
 			m_vwp_vibrationEffectOverheat.lock()->transform->SetLocalScale(0.0f);
 
 			auto meshDraw = m_vwp_vibrationEffectOverheat.lock()->GetGameComponent<MeshDrawComponent>();
@@ -695,7 +699,9 @@ void ButiEngine::Player::VibrationEffectOverheat()
 			auto transform = gameObject.lock()->transform;
 			float vibrationRate = m_vibration / m_maxVibration;
 			m_vwp_vibrationEffectOverheatComponent.lock()->SetVibrationViolent(vibrationRate, true);
-			m_vwp_vibrationEffectOverheatComponent.lock()->SetEffectPosition(transform->GetLocalPosition());
+			Vector3 pos = transform->GetLocalPosition();
+			pos.y = 0.5f;
+			m_vwp_vibrationEffectOverheatComponent.lock()->SetEffectPosition(pos);
 			m_vwp_shockWave.lock()->GetGameComponent<ShockWave>()->SetScale(vibrationRate * 1.25f);
 		}
 
