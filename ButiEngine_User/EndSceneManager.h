@@ -30,6 +30,10 @@ namespace ButiEngine {
 		Value_ptr<Timer> m_vlp_nextTimer;
 		Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
 		Value_weak_ptr<GameObject> m_vwp_endRollUI;
+		Value_weak_ptr<GameObject> m_vwp_buttonUI;
+
+		Vector3 m_buttonScale;
+		Vector3 m_endScale;
 
 		bool m_isNext;
 		bool m_isOnce;
