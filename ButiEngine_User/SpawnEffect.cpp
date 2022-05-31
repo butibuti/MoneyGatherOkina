@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "SpawnEffect.h"
+#include "SoundPlayerComponent.h"
 #include "SpriteParticleGenerator.h"
 
 void ButiEngine::SpawnEffect::OnUpdate()

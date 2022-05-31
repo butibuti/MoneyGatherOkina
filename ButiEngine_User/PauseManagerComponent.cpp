@@ -55,6 +55,11 @@ void ButiEngine::PauseManagerComponent::OnUpdate()
 		}
 	}
 
+	if (m_isPause)
+	{
+		InputManager::VibrationStop();
+	}
+
 	//ポーズ画面のUIを順々に追加していく処理がまとめられた関数
 	PauseUI();
 
