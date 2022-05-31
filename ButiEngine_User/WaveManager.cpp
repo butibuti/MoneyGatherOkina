@@ -15,6 +15,7 @@
 #include "SoundPlayerComponent.h"
 #include "WorkerSpawner.h"
 #include "StageSelectManagerComponent.h"
+#include "TutorialUI.h"
 
 std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 300;
 std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 1000;
@@ -80,10 +81,12 @@ void ButiEngine::WaveManager::OnUpdate()
 		m_isClear = true;
 	}
 
+#ifdef DEBUG
 	if (GameDevice::GetInput()->TriggerKey(Keys::L))
 	{
 		m_isClear = true;
 	}
+#endif // DEBUG
 
 	StageClearAnimation();
 	GameOverAnimation();
@@ -416,6 +419,10 @@ void ButiEngine::WaveManager::SpawnAnimation()
 		{
 			//エネミースポナーをスポーンさせる
 			SpawnEnemySpawner();
+		}
+		else
+		{
+			GetManager().lock()->GetGameObject("TutorialUI_Move").lock()->GetGameComponent<TutorialUI>()->Appear();
 		}
 	}
 }

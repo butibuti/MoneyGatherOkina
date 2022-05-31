@@ -354,7 +354,7 @@ void ButiEngine::Player::Spawn()
 	spawnEffectComponent->SetColor(GameSettings::PLAYER_COLOR);
 	spawnEffectComponent->SetLife(10);
 
-	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Beam.wav"));
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Beam.wav"), 3.0f);
 
 	auto transform = gameObject.lock()->transform;
 	auto deadEffect = GetManager().lock()->AddObjectFromCereal("SplashEffect");

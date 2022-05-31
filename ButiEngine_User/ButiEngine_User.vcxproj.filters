@@ -106,6 +106,7 @@
     <ClCompile Include="TutorialCrystalSpawner.cpp" />
     <ClCompile Include="AbsoluteAnimationRemoverComponent.cpp" />
     <ClCompile Include="AllStageClearManagerComponent.cpp" />
+    <ClCompile Include="TutorialUI.cpp" />
     <ClCompile Include="EndSceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +214,7 @@
     <ClInclude Include="AbsoluteAnimationRemoverComponent.h" />
     <ClInclude Include="AllStageClearManagerComponent.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="TutorialUI.h" />
     <ClInclude Include="EndSceneManager.h" />
   </ItemGroup>
   <ItemGroup>

@@ -36,13 +36,13 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 	else if (m_stageNum == 1)
 	{
 		m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_leftPosition);
-		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(0);
+		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(2);
 		m_vwp_explanSpriteAnimComponent.lock()->SetHorizontalAnim(0);
 	}
 	else
 	{
 		m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_rightPosition);
-		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(2);
+		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(0);
 		m_vwp_explanSpriteAnimComponent.lock()->SetHorizontalAnim(2);
 	}
 
@@ -135,7 +135,10 @@ void ButiEngine::StageSelectManagerComponent::Start()
 
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM2.wav"));
 
-	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform);
+	//竹渕が書いたブルーム用カメラにmainを親としてセットする処理
+	GetCamera("BloomSource")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
+	GetCamera("IsolateEffect")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
+	GetCamera("IsolateEffectBloom")->vlp_transform->SetBaseTransform(GetCamera("main")->vlp_transform,true);
 	
 }
 
