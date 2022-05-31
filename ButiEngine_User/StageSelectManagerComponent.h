@@ -33,6 +33,7 @@ public:
 	std::int16_t GetStageNum();
 
 	static void AddStageNum();
+	static void SetStageNum(const std::int16_t arg_stageNum) { m_stageNum = arg_stageNum; }
 
 private:
 	void FixStageNum();
