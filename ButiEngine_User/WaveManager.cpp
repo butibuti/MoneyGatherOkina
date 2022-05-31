@@ -247,7 +247,8 @@ void ButiEngine::WaveManager::StageClearAnimation()
 			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 			std::string sceneName = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetSceneInformation()->GetSceneName();
 			sceneManager->RemoveScene(sceneName);
-			sceneName = "StageSelect";
+			sceneName = "EndScene";
+			sceneManager->LoadScene(sceneName);
 			sceneManager->ChangeScene(sceneName);
 
 			m_retryPoint = 0;

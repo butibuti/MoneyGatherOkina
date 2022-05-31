@@ -41,6 +41,7 @@ void ButiEngine::GameOverManagerComponent::OnUpdate()
 			progressBarInline.lock()->transform->SetLocalPosition(Vector3(0, -100, -0.12f));
 			m_vwp_progressUIComponent = progressBarInline.lock()->GetGameComponent<StageProgressUIComponent>();
 			m_vwp_progressUIComponent.lock()->SetRate(0);
+			m_vwp_progressUIComponent.lock()->SetColor(GameSettings::PLAYER_COLOR);
 
 			auto restratNumber = GetManager().lock()->AddObjectFromCereal("NumberManager");
 			restratNumber.lock()->transform->SetLocalPosition(Vector3(-550, -230, -50));
@@ -161,7 +162,7 @@ void ButiEngine::GameOverManagerComponent::AppearProgressBarUI()
 	auto progressUIComponent = progressBarInline.lock()->GetGameComponent<StageProgressUIComponent>();
 	m_vwp_waveManagerComponent = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 	float rate = (float)m_vwp_waveManagerComponent.lock()->GetPoint() / (float)m_vwp_waveManagerComponent.lock()->GetClearPoint();
-	progressUIComponent->SetColor(Vector4(1, 0, 0.23f, 1));
+	progressUIComponent->SetColor(GameSettings::ENEMY_COLOR);
 	progressUIComponent->SetRate(rate);
 	m_progressRate = (std::int8_t)(rate * 50.0f);
 	float retryRate = (float)m_vwp_waveManagerComponent.lock()->GetRetryPoint() / (float)m_vwp_waveManagerComponent.lock()->GetClearPoint();
@@ -175,6 +176,18 @@ void ButiEngine::GameOverManagerComponent::AppearProgressBarUI()
 	progressBarInline_moveAnimation->SetStartPosition(Vector3(0, -1000, -0.11f));
 	progressBarInline_moveAnimation->SetIsActive(true);
 	progressBarInline_moveAnimation->SetSpeed(0.5f);
+
+	float scaleX = progressBarInline.lock()->transform->GetLocalScale().x;
+	float posX = scaleX * rate;
+	scaleX *= -0.5f;
+	posX = scaleX + posX;
+	auto beeIcon = GetManager().lock()->AddObjectFromCereal("BeeIconUI");
+	beeIcon.lock()->transform->SetLocalPosition(Vector3(posX, -1000, -0.13f));
+	auto beeIcon_moveAnimation = beeIcon.lock()->GetGameComponent<MoveAnimationComponent>();
+	beeIcon_moveAnimation->SetEndPosition(Vector3(posX, -100, -0.13f));
+	beeIcon_moveAnimation->SetStartPosition(Vector3(posX, -1000, -0.13f));
+	beeIcon_moveAnimation->SetIsActive(true);
+	beeIcon_moveAnimation->SetSpeed(0.5f);
 }
 
 void ButiEngine::GameOverManagerComponent::AppearSelectUI()

@@ -536,6 +536,7 @@ cd ..\</Command>
     <ClCompile Include="Crystal.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="DrawObject.cpp" />
+    <ClCompile Include="EndSceneManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyScaleAnimationComponent.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
@@ -645,6 +646,7 @@ cd ..\</Command>
     <ClInclude Include="CrossBeamEffectComponent.h" />
     <ClInclude Include="Crystal.h" />
     <ClInclude Include="DrawObject.h" />
+    <ClInclude Include="EndSceneManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyScaleAnimationComponent.h" />
     <ClInclude Include="EnemySpawner.h" />

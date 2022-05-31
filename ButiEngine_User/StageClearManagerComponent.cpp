@@ -85,6 +85,7 @@ void ButiEngine::StageClearManagerComponent::AddUI()
 	else if (m_uiCount == 8)
 	{
 		auto backToSelectUI = GetManager().lock()->AddObjectFromCereal("BackToSelectUI");
+		backToSelectUI.lock()->transform->SetLocalRotationZ_Degrees(15);
 		auto position = backToSelectUI.lock()->transform->GetLocalPosition();
 		auto moveAnimationComponent = backToSelectUI.lock()->GetGameComponent<MoveAnimationComponent>();
 		auto endPosition = Vector3(500, -180, position.z);

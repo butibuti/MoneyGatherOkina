@@ -191,6 +191,7 @@ void ButiEngine::Worker::Start()
 	m_vwp_waveManager = GetManager().lock()->GetGameObject("WaveManager").lock()->GetGameComponent<WaveManager>();
 
 	m_isTutorialVibrationObject = gameObject.lock()->HasGameObjectTag(GameObjectTag("VibrationObject"));
+	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 
 	if (m_isTutorialVibrationObject)
 	{
@@ -206,6 +207,7 @@ void ButiEngine::Worker::Start()
 		auto spawnEffect = GetManager().lock()->AddObjectFromCereal("SpawnEffect");
 		spawnEffect.lock()->transform->SetLocalPosition(gameObject.lock()->transform->GetLocalPosition());
 		spawnEffect.lock()->GetGameComponent<SpawnEffect>()->SetColor(GameSettings::WORKER_COLOR);
+		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Beam.wav"));
 	}
 	else
 	{
@@ -229,7 +231,7 @@ void ButiEngine::Worker::Start()
 	m_vwp_particleGenerater = GetManager().lock()->GetGameObject("BillBoardParticleController").lock()->GetGameComponent<ParticleGenerater>();
 	m_vwp_spriteParticleGenerator = GetManager().lock()->GetGameObject("SpriteAnimationParticleController").lock()->GetGameComponent<SpriteParticleGenerator>();
 	m_vwp_sphereParticleGenerator = GetManager().lock()->GetGameObject("SphereParticleController_NoBloom").lock()->GetGameComponent<SpriteParticleGenerator>();
-	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
+
 
 	m_vlp_attackFlashTimer = ObjectFactory::Create<RelativeTimer>(6);
 }

@@ -882,6 +882,8 @@ void ButiEngine::Player::Overheat()
 		{
 			auto camera = GetManager().lock()->GetGameObject("Camera");
 			camera.lock()->GetGameComponent<CameraComponent>()->SetZoomOperationNum(2);
+
+			m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM1.wav"));
 		}
 
 		//StopVibrationEffect();
@@ -894,7 +896,6 @@ void ButiEngine::Player::Overheat()
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 	
 		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/VibrationMax_Exit.wav"));
-		m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM1.wav"));
 
 		m_isOverheat = false;
 		m_isInvincible = false;

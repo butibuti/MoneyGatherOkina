@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class SpriteAnimationComponent;
+	class PauseManagerComponent;
 
 	class VibrationEffectComponent :public GameComponent
 	{
@@ -31,6 +32,7 @@ namespace ButiEngine {
 		void Animation();
 
 		Value_weak_ptr<SpriteAnimationComponent> m_vwp_spriteAnimationComponent;
+		Value_weak_ptr<PauseManagerComponent> m_vwp_pauseManagerComponent;
 		Value_ptr<Timer> m_vlp_animationTimer;
 
 		Vector3 m_defaultScale;
