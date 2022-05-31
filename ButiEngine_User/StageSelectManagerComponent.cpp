@@ -30,21 +30,27 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 	if (m_stageNum == 0)
 	{
 		m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_centerPosition);
+		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(1);
+		m_vwp_explanSpriteAnimComponent.lock()->SetHorizontalAnim(2);
 	}
 	else if (m_stageNum == 1)
 	{
 		m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_leftPosition);
+		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(0);
+		m_vwp_explanSpriteAnimComponent.lock()->SetHorizontalAnim(1);
 	}
 	else
 	{
 		m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_rightPosition);
+		m_vwp_modeSpriteAnimComponent.lock()->SetHorizontalAnim(2);
+		m_vwp_explanSpriteAnimComponent.lock()->SetHorizontalAnim(0);
 	}
 
 	m_vwp_enemyScaleAnimationComponent.lock()->SetMaxPlusScale(m_kibaScaleRate);
 	m_vwp_crystalScaleAnimationComponent.lock()->SetMaxPlusScale(m_crystalScaleRate);
 	m_vwp_endGameScaleAnimationComponent.lock()->SetMaxPlusScale(m_endGameScaleRate);
 
-	if (!m_waitTimer->Update_continue()) { return; }
+	if (!m_vlp_waitTimer->Update_continue()) { return; }
 	if (InputManager::IsTriggerDecideKey() && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()&&!m_isSceneChange)
 	{
 		m_vwp_gamePlayChangeAnimation.lock()->SceneEnd();
@@ -55,14 +61,18 @@ void ButiEngine::StageSelectManagerComponent::OnUpdate()
 	if (m_isSceneChange && !m_vwp_gamePlayChangeAnimation.lock()->IsAnimation()) 
 	{
 		//ŽŸ‚ÌƒV[ƒ“‚Ö
-		NextScene();
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
+		if (m_vlp_nextTimer->Update())
+		{
+			NextScene();
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
+		}
 	}
 }
 
 void ButiEngine::StageSelectManagerComponent::OnSet()
 {
-	m_waitTimer = ObjectFactory::Create<AbsoluteTimer>(60);
+	m_vlp_waitTimer = ObjectFactory::Create<AbsoluteTimer>(60);
+	m_vlp_nextTimer = ObjectFactory::Create<AbsoluteTimer>(4);
 }
 
 void ButiEngine::StageSelectManagerComponent::OnShowUI()
@@ -71,7 +81,8 @@ void ButiEngine::StageSelectManagerComponent::OnShowUI()
 
 void ButiEngine::StageSelectManagerComponent::Start()
 {
-	m_waitTimer->Start();
+	m_vlp_waitTimer->Start();
+	m_vlp_nextTimer->Start();
 	m_maxStageNum = 2;
 	m_kibaScaleRate = 0;
 	m_crystalScaleRate = 0;
@@ -89,6 +100,12 @@ void ButiEngine::StageSelectManagerComponent::Start()
 	m_vwp_gamePlayChangeAnimation.lock()->SceneStart();
 	m_vwp_soundPlayerComponent = GetManager().lock()->GetGameObject("SoundPlayer").lock()->GetGameComponent<SoundPlayerComponent>();
 	
+	auto titleLogo = GetManager().lock()->GetGameObject("TitleLogo").lock()->GetGameComponent<FloatMotionComponent>();
+	titleLogo->SetAmplitude(15.0f);
+	titleLogo->SetMotionSpeed(0.03f);
+	titleLogo->SetIsRandomSpeed(false);
+	titleLogo->SetIsAbsolute(true);
+
 	m_vwp_moveParent = GetManager().lock()->GetGameObject("MoveParent");
 	m_vwp_moveAnimationComponent = m_vwp_moveParent.lock()->GetGameComponent<MoveAnimationComponent>();
 	m_vwp_moveAnimationComponent.lock()->SetEndPosition(m_centerPosition);
@@ -112,6 +129,9 @@ void ButiEngine::StageSelectManagerComponent::Start()
 	m_vwp_endGameScaleAnimationComponent = m_vwp_endGame.lock()->GetGameComponent<EnemyScaleAnimationComponent>();
 	m_vwp_endGameScaleAnimationComponent.lock()->SetMaxPlusScale(1.0f);
 	m_vwp_endGameScaleAnimationComponent.lock()->SetScaleRate(1.0f);
+
+	m_vwp_modeSpriteAnimComponent = GetManager().lock()->GetGameObject("GameModeText").lock()->GetGameComponent<SpriteAnimationComponent>();
+	m_vwp_explanSpriteAnimComponent = GetManager().lock()->GetGameObject("GameExplanationText").lock()->GetGameComponent<SpriteAnimationComponent>();
 
 	m_vwp_soundPlayerComponent.lock()->PlayBGM(SoundTag("Sound/BGM2.wav"));
 

@@ -8,6 +8,7 @@ class TitleManagerComponent;
 class SoundPlayerComponent;
 class EnemyScaleAnimationComponent;
 class MoveAnimationComponent;
+class SpriteAnimationComponent;
 
 class StageSelectManagerComponent : public GameComponent
 {
@@ -38,7 +39,8 @@ private:
 	static std::int16_t m_stageNum;
 
 	std::int16_t m_maxStageNum;
-	Value_ptr<Timer> m_waitTimer;
+	Value_ptr<Timer> m_vlp_waitTimer;
+	Value_ptr<Timer> m_vlp_nextTimer;
 	Value_weak_ptr<SceneChangeAnimationComponent> m_vwp_gamePlayChangeAnimation;
 	Value_weak_ptr<TitleManagerComponent> m_vwp_title;
 	Value_weak_ptr<SoundPlayerComponent> m_vwp_soundPlayerComponent;
@@ -46,6 +48,8 @@ private:
 	Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_crystalScaleAnimationComponent;
 	Value_weak_ptr<EnemyScaleAnimationComponent> m_vwp_endGameScaleAnimationComponent;
 	Value_weak_ptr<MoveAnimationComponent> m_vwp_moveAnimationComponent;
+	Value_weak_ptr<SpriteAnimationComponent> m_vwp_modeSpriteAnimComponent;
+	Value_weak_ptr<SpriteAnimationComponent> m_vwp_explanSpriteAnimComponent;
 	Value_weak_ptr<GameObject> m_vwp_kiba;
 	Value_weak_ptr<GameObject> m_vwp_crystal;
 	Value_weak_ptr<GameObject> m_vwp_endGame;
