@@ -48,8 +48,9 @@ void ButiEngine::StageClearManagerComponent::Start()
 	}
 
 	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
-	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
-	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+	m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Enemy_Big.wav"));
+	//m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+	//m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 
 	m_uiCount = 0;
 }

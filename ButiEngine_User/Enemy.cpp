@@ -277,9 +277,10 @@ void ButiEngine::Enemy::Dead()
 	if (tutorialCrystal)
 	{
 		tutorialCrystal->Dead();
-		m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+		DeadSound(true);
+		//m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
-		deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = GameSettings::WORKER_COLOR;
+		deadEffect.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ButiRendering::ObjectInformation>("ObjectInformation")->Get().color = tutorialCrystal->GetColor();
 	}
 
 	//auto boss = gameObject.lock()->GetGameComponent<Enemy_Boss>();
@@ -313,7 +314,8 @@ void ButiEngine::Enemy::Dead()
 		m_vwp_shakeComponent = Value_weak_ptr<ShakeComponent>();
 		if (!m_vwp_waveManager.lock()->IsClearAnimation())
 		{
-			m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+			//m_vwp_soundPlayerComponent.lock()->PlaySE(SoundTag("Sound/Defeat_Crystal.wav"));
+			DeadSound(true);
 		}
 
 		deadEffect.lock()->transform->SetLocalScale(m_defaultScale * 6.0f);
