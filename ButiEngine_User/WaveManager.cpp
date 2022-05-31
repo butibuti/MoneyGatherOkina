@@ -14,6 +14,7 @@
 #include "CameraComponent.h"
 #include "SoundPlayerComponent.h"
 #include "WorkerSpawner.h"
+#include "StageSelectManagerComponent.h"
 
 std::int32_t ButiEngine::WaveManager::m_tutorialClearPoint = 300;
 std::int32_t ButiEngine::WaveManager::m_stageClearPoint = 1000;
@@ -280,6 +281,8 @@ void ButiEngine::WaveManager::StageClearAnimation()
 			sceneManager->ChangeScene(sceneName);
 
 			m_retryPoint = 0;
+
+			StageSelectManagerComponent::AddStageNum();
 
 			m_vwp_worldSpeedManagerComponent.lock()->SetSpeed(1.0f);
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->SetMasterVolume(1.0f);
