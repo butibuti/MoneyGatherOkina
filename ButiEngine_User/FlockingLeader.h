@@ -24,7 +24,11 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void SetIsTutorialStart(const bool arg_isTutorialStart) { m_isTutorialStart = arg_isTutorialStart; }
+		void TutorialStart()
+		{
+			m_isTutorialStart = true;
+			m_isGather = false;
+		}
 
 		float GetMoveSpeed() { return (m_pos - m_prevPos).GetLength(); }
 		bool IsGather() { return m_isGather; }

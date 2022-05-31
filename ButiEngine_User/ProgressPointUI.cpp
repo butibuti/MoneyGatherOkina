@@ -6,10 +6,10 @@ float ButiEngine::ProgressPointUI::m_ZShift = 10.0f;
 
 void ButiEngine::ProgressPointUI::OnUpdate()
 {
-	Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_worldPos);
-	screenPosition.z = m_positionZ;
+	//Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_worldPos);
+	//screenPosition.z = m_positionZ;
 
-	gameObject.lock()->transform->SetLocalPosition(screenPosition);
+	//gameObject.lock()->transform->SetLocalPosition(screenPosition);
 
 	if (!m_isDead)
 	{
@@ -51,15 +51,15 @@ void ButiEngine::ProgressPointUI::Start()
 	m_vlp_animatoinTimer->Start();
 	m_vlp_deadTimer = ObjectFactory::Create<RelativeTimer>(30);
 
-	m_ZShift -= 0.0001f;
+	//m_ZShift -= 0.0001f;
 
-	m_worldPos = gameObject.lock()->transform->GetLocalPosition();
+	//m_worldPos = gameObject.lock()->transform->GetLocalPosition();
 
-	Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_worldPos);
-	screenPosition.z = m_ZShift;
+	//Vector3 screenPosition = GetCamera("main")->WorldToScreen(m_worldPos);
+	//screenPosition.z = m_ZShift;
 
-	gameObject.lock()->transform->SetLocalPosition(screenPosition);
-	m_positionZ = m_ZShift;
+	//gameObject.lock()->transform->SetLocalPosition(screenPosition);
+	//m_positionZ = m_ZShift;
 
 	m_startScale = Vector3Const::Zero;
 	m_targetScale = gameObject.lock()->transform->GetLocalScale();

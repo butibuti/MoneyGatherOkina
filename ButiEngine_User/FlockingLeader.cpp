@@ -75,12 +75,16 @@ void ButiEngine::FlockingLeader::Start()
 	m_pos = gameObject.lock()->transform->GetWorldPosition();
 	m_prevPos = m_pos;
 
-	m_isDraw = false;
-	m_isGather = true;
-
 	m_isTutorial = m_vwp_waveManager.lock()->IsTutorial();
 	m_isTutorialStart = false;
 	m_isTutorialEnemySpawn = false;
+
+	m_isDraw = false;
+	m_isGather = false;
+	if (m_isTutorial)
+	{
+		m_isGather = true;
+	}
 }
 
 ButiEngine::Value_ptr<ButiEngine::GameComponent> ButiEngine::FlockingLeader::Clone()
