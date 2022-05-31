@@ -20,6 +20,8 @@ float ButiEngine::OutsideCrystal::m_knockBackY = 0.5f;
 
 void ButiEngine::OutsideCrystal::OnUpdate()
 {
+	gameObject.lock()->transform->RollLocalRotationY_Degrees(1.0f);
+
 	if (!m_isAppear)
 	{
 		Wait();
